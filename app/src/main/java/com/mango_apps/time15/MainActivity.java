@@ -3,10 +3,16 @@ package com.mango_apps.time15;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Calendar cal = new GregorianCalendar();
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        String date = df.format(cal.getTime());
+        setTitle(date);
         setContentView(R.layout.activity_main);
     }
 
