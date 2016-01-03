@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mango_apps.time15.storage.PrefStorage;
+import com.mango_apps.time15.util.TimeUtils;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Calendar cal = new GregorianCalendar();
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        String date = df.format(cal.getTime());
+        PrefStorage storage = new PrefStorage();
+
+        String date = TimeUtils.createID();
+
         setTitle(date);
         setContentView(R.layout.activity_main);
     }
