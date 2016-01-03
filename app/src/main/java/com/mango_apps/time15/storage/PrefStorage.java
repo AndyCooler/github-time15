@@ -31,7 +31,11 @@ public class PrefStorage {
         SharedPreferences sharedPref = activity.getSharedPreferences(
                 getFilename(id), Context.MODE_PRIVATE);
 
-        DaysData data = DaysData.fromString(id, sharedPref.getString(id, null));
+        String s = sharedPref.getString(id, null);
+        if (s == null) {
+            return null;
+        }
+        DaysData data = DaysData.fromString(id, s);
 
         return data;
     }

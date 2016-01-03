@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         String date = TimeUtils.createID();
 
+        // TODO load from storage if possible
+
         setTitle(date);
         setContentView(R.layout.activity_main);
     }
