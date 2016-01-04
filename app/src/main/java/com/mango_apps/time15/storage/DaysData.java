@@ -88,8 +88,8 @@ public class DaysData {
 
     @Override
     public String toString() {
-        String s = String.valueOf(begin) + SEP + String.valueOf(begin15) +
-                String.valueOf(end) + SEP + String.valueOf(end15) +
+        String s = String.valueOf(begin) + SEP + String.valueOf(begin15) + SEP +
+                String.valueOf(end) + SEP + String.valueOf(end15) + SEP +
                 String.valueOf(pause) + SEP + day.toString();
         return s;
     }
