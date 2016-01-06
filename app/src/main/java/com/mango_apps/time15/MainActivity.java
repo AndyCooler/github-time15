@@ -1,5 +1,6 @@
 package com.mango_apps.time15;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mango_apps.time15.storage.DaysData;
+import com.mango_apps.time15.storage.ExternalFileStorage;
+import com.mango_apps.time15.storage.KindOfDay;
 import com.mango_apps.time15.storage.PrefStorage;
+import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.text.DateFormat;
@@ -19,6 +24,13 @@ import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private StorageFacade storage;
+
+    private DaysData previousData;
+
+    private String id = null;
+    private String previousId = null;
     private Integer beginnTime = null;
     private Integer endeTime = null;
     private Integer pauseTime = null;
@@ -33,15 +45,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PrefStorage storage = new PrefStorage();
+        storage = new ExternalFileStorage();
 
-        String date = TimeUtils.createID();
-
-        // TODO load from storage if possible
-
-        setTitle(date);
         setContentView(R.layout.activity_main);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        switchToID(TimeUtils.createID());
+    }
+
+    private void switchToID(String newId) {
+        id = newId;
+        setTitle(id);
+        DaysData data = storage.loadDaysData(this, id);
+        resetView();
+        if (data != null) {
+            modelToView(data); // not working yet, because view items are not set to selection bg color
+            TextView total = (TextView) findViewById(R.id.total);
+            total.setTextColor(Color.rgb(0, 100, 0)); // dark green
+        }
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,9 +136,11 @@ public class MainActivity extends AppCompatActivity {
         TextView total = (TextView) findViewById(R.id.total);
         int difference = 0;
         int difference15 = 0;
+        boolean timeSelectionComplete = false;
         if (endeTime != null && beginnTime != null) {
             difference = endeTime - beginnTime;
             if (beginn15 != null && ende15 != null) {
+                timeSelectionComplete = true;
                 difference15 = ende15 - beginn15;
                 if (difference15 < 0) {
                     difference--;
@@ -119,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (pauseTime != null) {
+                Integer oldPauseTime = pauseTime;
                 while (pauseTime > 60) {
                     difference--;
                     pauseTime -= 60;
@@ -128,11 +158,53 @@ public class MainActivity extends AppCompatActivity {
                     difference--;
                     difference15 = 60 + difference15;
                 }
+                pauseTime = oldPauseTime;
             }
         }
 
         total.setText(zweiZiffern(difference) + ":" + zweiZiffern(difference15));
-        total.setTextColor(Color.rgb(30,144,255));
+        total.setTextColor(Color.rgb(30,144,255)); // dark blue
+
+        if (timeSelectionComplete) {
+            if (storage.saveDaysData(this, viewToModel())) {
+                total.setTextColor(Color.rgb(0,100,0)); // dark green
+            } else {
+                total.setTextColor(Color.DKGRAY);
+            }
+        }
+    }
+
+    private DaysData viewToModel() {
+        DaysData data = new DaysData(id);
+        data.setBegin(beginnTime);
+        data.setBegin15(beginn15);
+        data.setEnd(endeTime);
+        data.setEnd15(ende15);
+        data.setPause(pauseTime);
+        data.setDay(KindOfDay.WORKDAY); // TODO kindOfDay
+        return data;
+    }
+
+    private void modelToView(DaysData data) {
+        beginnTime = data.getBegin();
+        beginn15 = data.getBegin();
+        endeTime = data.getEnd();
+        ende15 = data.getEnd();
+        pauseTime = data.getPause();
+        // TODO kindOfDay
+    }
+
+    private void resetView() {
+        beginnTime = null;
+        beginn15 = null;
+        endeTime = null;
+        ende15 = null;
+        pauseTime = null;
+        previousSelectionPauseTime = null;
+        previousSelectionEnde15 = null;
+        previousSelectionEndeTime = null;
+        previousSelectionBeginnTime = null;
+        previousSelectionBeginn15 = null;
     }
 
     private String zweiZiffern(int difference) {

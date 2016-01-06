@@ -88,21 +88,23 @@ public class DaysData {
 
     @Override
     public String toString() {
-        String s = String.valueOf(begin) + SEP + String.valueOf(begin15) + SEP +
+        String s = id + SEP + day.toString() + SEP + String.valueOf(begin) + SEP + String.valueOf(begin15) + SEP +
                 String.valueOf(end) + SEP + String.valueOf(end15) + SEP +
-                String.valueOf(pause) + SEP + day.toString();
+                String.valueOf(pause);
         return s;
     }
 
-    public static DaysData fromString(String id, String s) {
-        DaysData data = new DaysData(id);
+    public static DaysData fromString(String s) {
+
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
+        DaysData data = new DaysData(tokenizer.nextToken());
+        data.setDay(KindOfDay.fromString(tokenizer.nextToken()));
         data.setBegin(nextIntToken(tokenizer));
         data.setBegin15(nextIntToken(tokenizer));
         data.setEnd(nextIntToken(tokenizer));
         data.setEnd15(nextIntToken(tokenizer));
         data.setPause(nextIntToken(tokenizer));
-        data.setDay(KindOfDay.fromString(tokenizer.nextToken()));
+
         return data;
     }
 

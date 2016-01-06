@@ -13,7 +13,7 @@ import junit.framework.TestCase;
  * Created by andreas on 04.01.16.
  */
 
-@SmallTest
+
 public class DaysDataTest extends TestCase {
 
     public void testToFromString() {
@@ -26,15 +26,37 @@ public class DaysDataTest extends TestCase {
         data.setPause(60);
 
         String s = data.toString();
-        assertEquals("10#15#16#45#60#CHILDCAREDAY", s);
+        assertEquals("ID#CHILDCAREDAY#10#15#16#45#60", s);
 
-        DaysData copy = DaysData.fromString("ID", s);
+        DaysData copy = DaysData.fromString(s);
         assertEquals("ID", copy.getId());
         assertEquals(new Integer(10), copy.getBegin());
         assertEquals(new Integer(15), copy.getBegin15());
         assertEquals(new Integer(16), copy.getEnd());
         assertEquals(new Integer(45), copy.getEnd15());
         assertEquals(new Integer(60), copy.getPause());
+        assertEquals(KindOfDay.CHILDCAREDAY, copy.getDay());
+    }
+
+    public void testToFromStringPauseNull() {
+        DaysData data = new DaysData("ID");
+        data.setDay(KindOfDay.CHILDCAREDAY);
+        data.setBegin(10);
+        data.setBegin15(15);
+        data.setEnd(16);
+        data.setEnd15(45);
+        data.setPause(null);
+
+        String s = data.toString();
+        assertEquals("ID#CHILDCAREDAY#10#15#16#45#null", s);
+
+        DaysData copy = DaysData.fromString(s);
+        assertEquals("ID", copy.getId());
+        assertEquals(new Integer(10), copy.getBegin());
+        assertEquals(new Integer(15), copy.getBegin15());
+        assertEquals(new Integer(16), copy.getEnd());
+        assertEquals(new Integer(45), copy.getEnd15());
+        assertEquals(null, copy.getPause());
         assertEquals(KindOfDay.CHILDCAREDAY, copy.getDay());
     }
 }

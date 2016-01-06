@@ -18,6 +18,6 @@ public final class TimeUtils {
     }
 
     public static String getMonthYearOfID(String id) {
-        return id.substring(3);
+        return id.substring(6) + "_" + id.substring(3,5);
     }
 }
