@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.mango_apps.time15.storage.DaysData;
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
+import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.storage.PrefStorage;
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.util.TimeUtils;
@@ -21,6 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,19 +44,39 @@ public class MainActivity extends AppCompatActivity {
     private Integer ende15 = null;
     private Integer previousSelectionBeginn15 = null;
     private Integer previousSelectionEnde15 = null;
+    private HashMap<Integer, Integer> mapValueToViewId = new HashMap<Integer, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = new ExternalFileStorage();
-
+        //storage = new NoopStorage();
         setContentView(R.layout.activity_main);
+
+        initMapWithIds(R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
+        initMapWithIds(R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
+        initMapWithIds(R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
+        initMapWithIds(R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
+        initMapWithIds(R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
+
+        Log.i(getClass().getName(), "onCreate() finished.");
+    }
+
+    private void initMapWithIds(int... viewIds) {
+        for (int viewId : viewIds) {
+            TextView view = (TextView) findViewById(viewId);
+            Integer value = Integer.valueOf((String) view.getText());
+            mapValueToViewId.put(value, viewId);
+            Log.i(getClass().getName(), "initMap: " + value + " -> " + viewId);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(getClass().getName(), "onResume() started.");
         switchToID(TimeUtils.createID());
+        Log.i(getClass().getName(), "onResume() finished.");
     }
 
     private void switchToID(String newId) {
@@ -192,7 +215,19 @@ public class MainActivity extends AppCompatActivity {
         ende15 = data.getEnd();
         pauseTime = data.getPause();
         // TODO kindOfDay
+
+        previousSelectionPauseTime = getViewIdByValue(pauseTime);
+        previousSelectionEnde15 = getViewIdByValue(ende15);
+        previousSelectionEndeTime = getViewIdByValue(endeTime);
+        previousSelectionBeginnTime = getViewIdByValue(beginnTime);
+        previousSelectionBeginn15 = getViewIdByValue(beginn15);
     }
+
+    private Integer getViewIdByValue(Integer value) {
+
+        return mapValueToViewId.get(value);
+    }
+
 
     private void resetView() {
         beginnTime = null;
