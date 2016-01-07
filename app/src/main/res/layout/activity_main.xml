@@ -21,21 +21,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Beginn"
+                android:text="&lt;-- Beginn"
                 android:id="@+id/beginnView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
-                android:gravity="left" />
+                android:gravity="left"
+                android:onClick="dateBackwards" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Ende"
+                android:text="Ende  -->"
                 android:id="@+id/endeView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
-                android:gravity="right" />
+                android:gravity="right"
+                android:onClick="dateForwards" />
 
         </LinearLayout>
 

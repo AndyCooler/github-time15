@@ -1,10 +1,8 @@
 package com.mango_apps.time15;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,17 +10,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mango_apps.time15.storage.DaysData;
-import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
 import com.mango_apps.time15.storage.NoopStorage;
-import com.mango_apps.time15.storage.PrefStorage;
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.util.TimeUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,10 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     private StorageFacade storage;
 
-    private DaysData previousData;
+    private int selectionBg = Color.rgb(173, 216, 230);
 
     private String id = null;
-    private String previousId = null;
     private Integer beginnTime = null;
     private Integer endeTime = null;
     private Integer pauseTime = null;
@@ -49,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage = new ExternalFileStorage();
-        //storage = new NoopStorage();
+        //storage = new ExternalFileStorage();
+        storage = new NoopStorage();
         setContentView(R.layout.activity_main);
 
         initMapWithIds(R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
@@ -85,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         DaysData data = storage.loadDaysData(this, id);
         resetView();
         if (data != null) {
-            modelToView(data); // not working yet, because view items are not set to selection bg color
+            modelToView(data);
             TextView total = (TextView) findViewById(R.id.total);
             total.setTextColor(Color.rgb(0, 100, 0)); // dark green
         }
@@ -115,9 +106,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void dateForwards(View v) {
+        Log.i(getClass().getName(), "dateForwards() started.");
+        switchToID(TimeUtils.dateForwards(id));
+        Log.i(getClass().getName(), "dateForwards() finished.");
+    }
+
+    public void dateBackwards(View v) {
+        Log.i(getClass().getName(), "dateBackwards() started.");
+        switchToID(TimeUtils.dateBackwards(id));
+        Log.i(getClass().getName(), "dateBackwards() finished.");
+
+    }
+
     public void verarbeiteKlick(View v) {
 
-        int selectionBg = Color.rgb(173, 216, 230);
         TextView view = (TextView) v;
         int viewId = view.getId();
         boolean isBeginnTime = viewId == R.id.beginnA || viewId == R.id.beginnB || viewId == R.id.beginnC || viewId == R.id.beginnD;
@@ -126,31 +129,31 @@ public class MainActivity extends AppCompatActivity {
         boolean isEnde15 = viewId == R.id.ende00|| viewId == R.id.ende15 || viewId == R.id.ende30|| viewId == R.id.ende45;
         boolean isPauseTime = viewId == R.id.pauseA|| viewId == R.id.pauseB || viewId == R.id.pauseC|| viewId == R.id.pauseD;
         if (isBeginnTime) {
-            setPreviousSelectionTransparent(previousSelectionBeginnTime);
+            setTransparent(previousSelectionBeginnTime);
             view.setBackgroundColor(selectionBg);
             beginnTime = Integer.valueOf((String) view.getText());
             previousSelectionBeginnTime = viewId;
         }
         if (isEndeTime) {
-            setPreviousSelectionTransparent(previousSelectionEndeTime);
+            setTransparent(previousSelectionEndeTime);
             view.setBackgroundColor(selectionBg);
             endeTime = Integer.valueOf((String) view.getText());
             previousSelectionEndeTime = viewId;
         }
         if (isBeginn15) {
-            setPreviousSelectionTransparent(previousSelectionBeginn15);
+            setTransparent(previousSelectionBeginn15);
             view.setBackgroundColor(selectionBg);
             beginn15 = Integer.valueOf((String) view.getText());
             previousSelectionBeginn15 = viewId;
         }
         if (isEnde15) {
-            setPreviousSelectionTransparent(previousSelectionEnde15);
+            setTransparent(previousSelectionEnde15);
             view.setBackgroundColor(selectionBg);
             ende15 = Integer.valueOf((String) view.getText());
             previousSelectionEnde15 = viewId;
         }
         if (isPauseTime) {
-            setPreviousSelectionTransparent(previousSelectionPauseTime);
+            setTransparent(previousSelectionPauseTime);
             view.setBackgroundColor(selectionBg);
             pauseTime = Integer.valueOf((String) view.getText());
             previousSelectionPauseTime = viewId;
@@ -210,9 +213,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void modelToView(DaysData data) {
         beginnTime = data.getBegin();
-        beginn15 = data.getBegin();
+        beginn15 = data.getBegin15();
         endeTime = data.getEnd();
-        ende15 = data.getEnd();
+        ende15 = data.getEnd15();
         pauseTime = data.getPause();
         // TODO kindOfDay
 
@@ -221,6 +224,13 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionEndeTime = getViewIdByValue(endeTime);
         previousSelectionBeginnTime = getViewIdByValue(beginnTime);
         previousSelectionBeginn15 = getViewIdByValue(beginn15);
+
+        setSelected(previousSelectionPauseTime);
+        setSelected(previousSelectionEnde15);
+        setSelected(previousSelectionEndeTime);
+        setSelected(previousSelectionBeginnTime);
+        setSelected(previousSelectionBeginn15);
+
     }
 
     private Integer getViewIdByValue(Integer value) {
@@ -230,6 +240,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void resetView() {
+
+        setTransparent(previousSelectionPauseTime);
+        setTransparent(previousSelectionEnde15);
+        setTransparent(previousSelectionEndeTime);
+        setTransparent(previousSelectionBeginnTime);
+        setTransparent(previousSelectionBeginn15);
+
         beginnTime = null;
         beginn15 = null;
         endeTime = null;
@@ -247,10 +264,17 @@ public class MainActivity extends AppCompatActivity {
         return result.length() < 2 ? "0" + result : result;
     }
 
-    private void setPreviousSelectionTransparent(Integer previousSelectionId) {
-        if (previousSelectionId != null) {
-            TextView previousView = (TextView) findViewById(previousSelectionId);
+    private void setTransparent(Integer viewId) {
+        if (viewId != null) {
+            TextView previousView = (TextView) findViewById(viewId);
             previousView.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
+
+    private void setSelected(Integer viewId) {
+        if (viewId != null) {
+            TextView previousView = (TextView) findViewById(viewId);
+            previousView.setBackgroundColor(selectionBg);
         }
     }
 }

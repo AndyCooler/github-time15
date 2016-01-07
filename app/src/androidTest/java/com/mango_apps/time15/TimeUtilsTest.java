@@ -20,4 +20,13 @@ public class TimeUtilsTest extends TestCase {
     public void testGetMonthYearOfID() {
         assertEquals("2016_01", TimeUtils.getMonthYearOfID("05.01.2016"));
     }
+
+    public void testDateBackwards() {
+        assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
+    }
+
+    public void testDateForwards() {
+        assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
+    }
+
 }
