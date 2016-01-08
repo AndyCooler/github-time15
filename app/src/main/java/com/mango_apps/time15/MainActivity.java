@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mango_apps.time15.storage.DaysData;
+import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
 import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,29 +37,33 @@ public class MainActivity extends AppCompatActivity {
     private Integer ende15 = null;
     private Integer previousSelectionBeginn15 = null;
     private Integer previousSelectionEnde15 = null;
-    private HashMap<Integer, Integer> mapValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mapBeginn15ValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //storage = new ExternalFileStorage();
-        storage = new NoopStorage();
+        storage = new ExternalFileStorage();
+        //storage = new NoopStorage();
         setContentView(R.layout.activity_main);
 
-        initMapWithIds(R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-        initMapWithIds(R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
-        initMapWithIds(R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
-        initMapWithIds(R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
-        initMapWithIds(R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
+        initMapWithIds(mapBeginnValueToViewId, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
+        initMapWithIds(mapEndeValueToViewId, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
+        initMapWithIds(mapBeginn15ValueToViewId, R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
+        initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
+        initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
         Log.i(getClass().getName(), "onCreate() finished.");
     }
 
-    private void initMapWithIds(int... viewIds) {
+    private void initMapWithIds(Map map, int... viewIds) {
         for (int viewId : viewIds) {
             TextView view = (TextView) findViewById(viewId);
             Integer value = Integer.valueOf((String) view.getText());
-            mapValueToViewId.put(value, viewId);
+            map.put(value, viewId);
             Log.i(getClass().getName(), "initMap: " + value + " -> " + viewId);
         }
     }
@@ -77,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         resetView();
         if (data != null) {
             modelToView(data);
+        }
+        aktualisiereTotal(false);
+        if (data != null) {
             TextView total = (TextView) findViewById(R.id.total);
             total.setTextColor(Color.rgb(0, 100, 0)); // dark green
         }
@@ -124,10 +133,10 @@ public class MainActivity extends AppCompatActivity {
         TextView view = (TextView) v;
         int viewId = view.getId();
         boolean isBeginnTime = viewId == R.id.beginnA || viewId == R.id.beginnB || viewId == R.id.beginnC || viewId == R.id.beginnD;
-        boolean isEndeTime = viewId == R.id.endeA|| viewId == R.id.endeB || viewId == R.id.endeC|| viewId == R.id.endeD;
+        boolean isEndeTime = viewId == R.id.endeA || viewId == R.id.endeB || viewId == R.id.endeC || viewId == R.id.endeD;
         boolean isBeginn15 = viewId == R.id.beginn00 || viewId == R.id.beginn15 || viewId == R.id.beginn30 || viewId == R.id.beginn45;
-        boolean isEnde15 = viewId == R.id.ende00|| viewId == R.id.ende15 || viewId == R.id.ende30|| viewId == R.id.ende45;
-        boolean isPauseTime = viewId == R.id.pauseA|| viewId == R.id.pauseB || viewId == R.id.pauseC|| viewId == R.id.pauseD;
+        boolean isEnde15 = viewId == R.id.ende00 || viewId == R.id.ende15 || viewId == R.id.ende30 || viewId == R.id.ende45;
+        boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
         if (isBeginnTime) {
             setTransparent(previousSelectionBeginnTime);
             view.setBackgroundColor(selectionBg);
@@ -158,7 +167,9 @@ public class MainActivity extends AppCompatActivity {
             pauseTime = Integer.valueOf((String) view.getText());
             previousSelectionPauseTime = viewId;
         }
-
+        aktualisiereTotal(true);
+    }
+     private void aktualisiereTotal(boolean mitSpeichern) {
         TextView total = (TextView) findViewById(R.id.total);
         int difference = 0;
         int difference15 = 0;
@@ -191,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         total.setText(zweiZiffern(difference) + ":" + zweiZiffern(difference15));
         total.setTextColor(Color.rgb(30,144,255)); // dark blue
 
-        if (timeSelectionComplete) {
+        if (mitSpeichern && timeSelectionComplete) {
             if (storage.saveDaysData(this, viewToModel())) {
                 total.setTextColor(Color.rgb(0,100,0)); // dark green
             } else {
@@ -219,11 +230,11 @@ public class MainActivity extends AppCompatActivity {
         pauseTime = data.getPause();
         // TODO kindOfDay
 
-        previousSelectionPauseTime = getViewIdByValue(pauseTime);
-        previousSelectionEnde15 = getViewIdByValue(ende15);
-        previousSelectionEndeTime = getViewIdByValue(endeTime);
-        previousSelectionBeginnTime = getViewIdByValue(beginnTime);
-        previousSelectionBeginn15 = getViewIdByValue(beginn15);
+        previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
+        previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
+        previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
+        previousSelectionBeginnTime = mapBeginnValueToViewId.get(beginnTime);
+        previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
 
         setSelected(previousSelectionPauseTime);
         setSelected(previousSelectionEnde15);
@@ -232,12 +243,6 @@ public class MainActivity extends AppCompatActivity {
         setSelected(previousSelectionBeginn15);
 
     }
-
-    private Integer getViewIdByValue(Integer value) {
-
-        return mapValueToViewId.get(value);
-    }
-
 
     private void resetView() {
 
