@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchToID(String newId) {
         id = newId;
-        setTitle(id);
+        setTitle(TimeUtils.dayOfWeek(id)
+                + ", " +id);
         DaysData data = storage.loadDaysData(this, id);
         resetView();
         if (data != null) {

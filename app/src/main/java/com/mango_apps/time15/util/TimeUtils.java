@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * This class provides utilities for formatting operations for days.
@@ -27,21 +28,28 @@ public final class TimeUtils {
     }
 
     public static String dateForwards(String id) {
-        int year = Integer.valueOf(id.substring(6));
-        int month = Integer.valueOf(id.substring(3,5)) - 1;
-        int day = Integer.valueOf(id.substring(0,2));
-        GregorianCalendar cal = new GregorianCalendar(year, month, day);
-
+        GregorianCalendar cal = toCalendar(id);
         cal.add(GregorianCalendar.DAY_OF_YEAR, 1);
         return createID(cal);
     }
 
     public static String dateBackwards(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+        return createID(cal);
+    }
+
+    public static String dayOfWeek(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.GERMANY);
+    }
+
+    private static GregorianCalendar toCalendar(String id) {
         int year = Integer.valueOf(id.substring(6));
         int month = Integer.valueOf(id.substring(3,5)) - 1;
         int day = Integer.valueOf(id.substring(0,2));
         GregorianCalendar cal = new GregorianCalendar(year, month, day);
-        cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
-        return createID(cal);
+
+        return  cal;
     }
 }
