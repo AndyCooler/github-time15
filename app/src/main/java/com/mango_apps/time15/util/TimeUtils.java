@@ -4,8 +4,10 @@ import android.text.format.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -51,5 +53,16 @@ public final class TimeUtils {
         GregorianCalendar cal = new GregorianCalendar(year, month, day);
 
         return  cal;
+    }
+
+    public static List<String> getListOfIdsOfMonth(String id) {
+        ArrayList<String> result = new ArrayList<String>();
+        GregorianCalendar cal = toCalendar(id);
+        for (int i = 1; i < 32; i++) {
+            cal.set(Calendar.DAY_OF_MONTH, i);
+            result.add(createID(cal));
+        }
+
+        return result;
     }
 }

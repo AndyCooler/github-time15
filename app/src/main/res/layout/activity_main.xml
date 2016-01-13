@@ -293,6 +293,15 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="0"
+                android:id="@+id/balance"
+                android:layout_weight="4"
+                android:gravity="top|center_horizontal" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
                 android:id="@+id/autor"

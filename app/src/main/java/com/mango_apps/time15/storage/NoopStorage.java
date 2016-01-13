@@ -3,6 +3,8 @@ package com.mango_apps.time15.storage;
 import android.app.Activity;
 import android.util.Log;
 
+import com.mango_apps.time15.types.DaysData;
+
 import java.util.HashMap;
 
 /**
@@ -27,5 +29,10 @@ public class NoopStorage implements StorageFacade {
             Log.i(getClass().getName(), "Loaded data " + cache.get(id));
         }
         return cache.get(id);
+    }
+
+    @Override
+    public int loadBalance(Activity activity, String id) {
+        return 0;
     }
 }

@@ -2,6 +2,8 @@ package com.mango_apps.time15.storage;
 
 import android.app.Activity;
 
+import com.mango_apps.time15.types.DaysData;
+
 /**
  * Storage facade to load and save a day's data.
  */
@@ -22,4 +24,13 @@ public interface StorageFacade {
      * @return the day's data
      */
     DaysData loadDaysData(Activity activity, String id);
+
+    /**
+     * Load all day's data of the id's month and calculate the balance.
+     *
+     * @param activity parent activity
+     * @param id id in a certain month
+     * @return balance of month
+     */
+    int loadBalance(Activity activity, String id);
 }

@@ -9,11 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mango_apps.time15.storage.DaysData;
+import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
-import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.storage.StorageFacade;
+import com.mango_apps.time15.types.TimeDifference;
+import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.HashMap;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
+    private int balanceValue;
+    private DaysData originalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         initMapWithIds(mapBeginn15ValueToViewId, R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
         initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
+
+        balanceValue = storage.loadBalance(this, TimeUtils.createID());
 
         Log.i(getClass().getName(), "onCreate() finished.");
     }
@@ -73,14 +78,21 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.i(getClass().getName(), "onResume() started.");
         switchToID(TimeUtils.createID());
+        updateBalance();
         Log.i(getClass().getName(), "onResume() finished.");
+    }
+
+    private void updateBalance() {
+        TextView balance = (TextView) findViewById(R.id.balance);
+        balance.setText(TimeDifference.fromMinutes(balanceValue).toDisplayString());
     }
 
     private void switchToID(String newId) {
         id = newId;
         setTitle(TimeUtils.dayOfWeek(id)
-                + ", " +id);
+                + ", " + id);
         DaysData data = storage.loadDaysData(this, id);
+        originalData = data;
         resetView();
         if (data != null) {
             modelToView(data);
@@ -91,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
             total.setTextColor(Color.rgb(0, 100, 0)); // dark green
         }
     }
-
 
 
     @Override
@@ -170,42 +181,32 @@ public class MainActivity extends AppCompatActivity {
         }
         aktualisiereTotal(true);
     }
-     private void aktualisiereTotal(boolean mitSpeichern) {
+
+    private void aktualisiereTotal(boolean mitSpeichern) {
         TextView total = (TextView) findViewById(R.id.total);
-        int difference = 0;
-        int difference15 = 0;
+        TimeDifference totalTime = DaysDataUtils.calculateTotal(beginnTime, beginn15, endeTime, ende15, pauseTime);
         boolean timeSelectionComplete = false;
+
         if (endeTime != null && beginnTime != null) {
-            difference = endeTime - beginnTime;
             if (beginn15 != null && ende15 != null) {
                 timeSelectionComplete = true;
-                difference15 = ende15 - beginn15;
-                if (difference15 < 0) {
-                    difference--;
-                    difference15 = 60 + difference15;
-                }
-            }
-            if (pauseTime != null) {
-                Integer oldPauseTime = pauseTime;
-                while (pauseTime > 60) {
-                    difference--;
-                    pauseTime -= 60;
-                }
-                difference15 -= pauseTime;
-                if (difference15 < 0) {
-                    difference--;
-                    difference15 = 60 + difference15;
-                }
-                pauseTime = oldPauseTime;
             }
         }
 
-        total.setText(zweiZiffern(difference) + ":" + zweiZiffern(difference15));
-        total.setTextColor(Color.rgb(30,144,255)); // dark blue
+        total.setText(totalTime.toDisplayString());
+        total.setTextColor(Color.rgb(30, 144, 255)); // dark blue
 
         if (mitSpeichern && timeSelectionComplete) {
-            if (storage.saveDaysData(this, viewToModel())) {
-                total.setTextColor(Color.rgb(0,100,0)); // dark green
+            DaysData modifiedData = viewToModel();
+            if (originalData == null) {
+                balanceValue -= 8 * 60;
+            } else {
+                balanceValue -= DaysDataUtils.calculateTotal(originalData).toMinutes();
+            }
+            balanceValue += DaysDataUtils.calculateTotal(modifiedData).toMinutes();
+            updateBalance();
+            if (storage.saveDaysData(this, modifiedData)) {
+                total.setTextColor(Color.rgb(0, 100, 0)); // dark green
             } else {
                 total.setTextColor(Color.DKGRAY);
             }
@@ -263,11 +264,6 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionEndeTime = null;
         previousSelectionBeginnTime = null;
         previousSelectionBeginn15 = null;
-    }
-
-    private String zweiZiffern(int difference) {
-        String result = String.valueOf(difference);
-        return result.length() < 2 ? "0" + result : result;
     }
 
     private void setTransparent(Integer viewId) {

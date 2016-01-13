@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.mango_apps.time15.R;
+import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.util.TimeUtils;
 
 /**
@@ -40,6 +40,11 @@ public class PrefStorage implements StorageFacade {
         DaysData data = DaysData.fromString(s);
 
         return data;
+    }
+
+    @Override
+    public int loadBalance(Activity activity, String id) {
+        return 0;
     }
 
 

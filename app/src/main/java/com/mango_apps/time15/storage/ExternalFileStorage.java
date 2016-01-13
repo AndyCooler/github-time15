@@ -1,11 +1,12 @@
 package com.mango_apps.time15.storage;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import com.mango_apps.time15.R;
+import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.TimeDifference;
+import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.io.BufferedReader;
@@ -13,9 +14,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class uses external files to store the start, end and pause values for each day.
@@ -99,6 +101,37 @@ public class ExternalFileStorage implements StorageFacade {
         }
 
         return data;
+    }
+
+    @Override
+    public int loadBalance(Activity activity, String id) {
+
+        if (!initialized && !init()) {
+            return 0;
+        }
+
+        File file = new File(storageDir, getFilename(id));
+        if (!file.exists()) {
+            return 0;
+        }
+
+        int dueDays = 0;
+        final int dueHoursPerDay = 8;
+        int dueTotalMinutes = 0;
+        int actualTotalMinutes = 0;
+        List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
+        for (String currentId : idList) {
+            DaysData data = loadDaysData(activity, currentId);
+            if (data != null) {
+                // TODO only if kindOfDay==WORKDAY
+                TimeDifference actual = DaysDataUtils.calculateTotal(data);
+                actualTotalMinutes += actual.getDifference() * 60;
+                actualTotalMinutes += actual.getDifference15();
+                dueDays++;
+            }
+        }
+        dueTotalMinutes = dueDays * dueHoursPerDay * 60;
+        return actualTotalMinutes - dueTotalMinutes;
     }
 
     private boolean init() {

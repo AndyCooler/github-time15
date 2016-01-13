@@ -1,7 +1,7 @@
-package com.mango_apps.time15.storage;
+package com.mango_apps.time15.types;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.mango_apps.time15.storage.KindOfDay;
+
 import java.util.StringTokenizer;
 
 /**

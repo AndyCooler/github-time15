@@ -1,8 +1,6 @@
 package com.mango_apps.time15;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
-import com.mango_apps.time15.storage.DaysData;
+import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.storage.KindOfDay;
 
 import junit.framework.TestCase;
