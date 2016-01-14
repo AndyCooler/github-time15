@@ -2,7 +2,7 @@ package com.mango_apps.time15;
 
 import com.mango_apps.time15.storage.KindOfDay;
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.types.TimeDifference;
+import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
 
 import junit.framework.TestCase;
@@ -21,9 +21,9 @@ public class DaysDataUtilsTest extends TestCase {
         data.setEnd15(45);
         data.setPause(60);
 
-        TimeDifference total = DaysDataUtils.calculateTotal(data);
-        assertEquals(5, total.getDifference());
-        assertEquals(30, total.getDifference15());
+        Time15 total = DaysDataUtils.calculateTotal(data);
+        assertEquals(5, total.getHours());
+        assertEquals(30, total.getMinutes());
     }
 
     public void testDifferenceWithoutPause() {
@@ -35,9 +35,9 @@ public class DaysDataUtilsTest extends TestCase {
         data.setEnd15(45);
         data.setPause(null);
 
-        TimeDifference total = DaysDataUtils.calculateTotal(data);
-        assertEquals(6, total.getDifference());
-        assertEquals(30, total.getDifference15());
+        Time15 total = DaysDataUtils.calculateTotal(data);
+        assertEquals(6, total.getHours());
+        assertEquals(30, total.getMinutes());
     }
 
     public void testDifferenceWithout15s() {
@@ -49,9 +49,9 @@ public class DaysDataUtilsTest extends TestCase {
         data.setEnd15(null);
         data.setPause(null);
 
-        TimeDifference total = DaysDataUtils.calculateTotal(data);
-        assertEquals(6, total.getDifference());
-        assertEquals(0, total.getDifference15());
+        Time15 total = DaysDataUtils.calculateTotal(data);
+        assertEquals(6, total.getHours());
+        assertEquals(0, total.getMinutes());
     }
 
     public void testDifferenceIncomplete() {
@@ -63,9 +63,9 @@ public class DaysDataUtilsTest extends TestCase {
         data.setEnd15(null);
         data.setPause(null);
 
-        TimeDifference total = DaysDataUtils.calculateTotal(data);
-        assertEquals(0, total.getDifference());
-        assertEquals(0, total.getDifference15());
+        Time15 total = DaysDataUtils.calculateTotal(data);
+        assertEquals(0, total.getHours());
+        assertEquals(0, total.getMinutes());
     }
 
     public void testDifferenceIncomplete15() {
@@ -77,8 +77,8 @@ public class DaysDataUtilsTest extends TestCase {
         data.setEnd15(0);
         data.setPause(null);
 
-        TimeDifference total = DaysDataUtils.calculateTotal(data);
-        assertEquals(6, total.getDifference());
-        assertEquals(0, total.getDifference15());
+        Time15 total = DaysDataUtils.calculateTotal(data);
+        assertEquals(6, total.getHours());
+        assertEquals(0, total.getMinutes());
     }
 }

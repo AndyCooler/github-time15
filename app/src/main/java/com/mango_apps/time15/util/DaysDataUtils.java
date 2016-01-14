@@ -1,18 +1,18 @@
 package com.mango_apps.time15.util;
 
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.types.TimeDifference;
+import com.mango_apps.time15.types.Time15;
 
 /**
  * This class provides utilities for tasks on day's data.
  */
 public final class DaysDataUtils {
 
-    public static TimeDifference calculateTotal(DaysData data) {
+    public static Time15 calculateTotal(DaysData data) {
         return calculateTotal(data.getBegin(), data.getBegin15(), data.getEnd(), data.getEnd15(), data.getPause());
     }
 
-    public static TimeDifference calculateTotal(Integer begin, Integer begin15, Integer end, Integer end15, Integer pause) {
+    public static Time15 calculateTotal(Integer begin, Integer begin15, Integer end, Integer end15, Integer pause) {
         int difference = 0;
         int difference15 = 0;
         if (end != null && begin != null) {
@@ -37,7 +37,7 @@ public final class DaysDataUtils {
                 }
             }
         }
-        return new TimeDifference(difference, difference15);
+        return new Time15(difference, difference15);
     }
 
 

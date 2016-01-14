@@ -13,7 +13,7 @@ import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
 import com.mango_apps.time15.storage.StorageFacade;
-import com.mango_apps.time15.types.TimeDifference;
+import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
@@ -84,7 +84,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBalance() {
         TextView balance = (TextView) findViewById(R.id.balance);
-        balance.setText(TimeDifference.fromMinutes(balanceValue).toDisplayString());
+        String balanceText = Time15.fromMinutes(balanceValue).toDisplayString();
+        if (balanceValue > 0) {
+            balanceText = "+" + balanceText;
+        }
+        balance.setText("(" + balanceText + ")");
     }
 
     private void switchToID(String newId) {
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void aktualisiereTotal(boolean mitSpeichern) {
         TextView total = (TextView) findViewById(R.id.total);
-        TimeDifference totalTime = DaysDataUtils.calculateTotal(beginnTime, beginn15, endeTime, ende15, pauseTime);
+        Time15 totalTime = DaysDataUtils.calculateTotal(beginnTime, beginn15, endeTime, ende15, pauseTime);
         boolean timeSelectionComplete = false;
 
         if (endeTime != null && beginnTime != null) {
@@ -204,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 balanceValue -= DaysDataUtils.calculateTotal(originalData).toMinutes();
             }
             balanceValue += DaysDataUtils.calculateTotal(modifiedData).toMinutes();
+            originalData = modifiedData;
             updateBalance();
             if (storage.saveDaysData(this, modifiedData)) {
                 total.setTextColor(Color.rgb(0, 100, 0)); // dark green
