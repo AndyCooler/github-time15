@@ -9,11 +9,11 @@ public enum KindOfDay {
 
     HOLIDAY,
 
-    VACATIONDAY,
+    VACATION,
 
     SICKDAY,
 
-    CHILDCAREDAY;
+    KIDSICKDAY;
 
     @Override
     public String toString() {
@@ -24,6 +24,16 @@ public enum KindOfDay {
         for (KindOfDay day : KindOfDay.values()) {
             if (day.toString().equals(value)) {
                 return day;
+            }
+        }
+        return null;
+    }
+
+    public static String toggle(String value) {
+        KindOfDay[] values = KindOfDay.values();
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].toString().equals(value)) {
+                return values[(i+1)%values.length].toString();
             }
         }
         return null;

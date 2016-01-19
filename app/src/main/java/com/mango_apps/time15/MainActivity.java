@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
@@ -22,11 +23,17 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Colors
+    private static final int DARK_BLUE_DEFAULT = Color.rgb(30, 144, 255);
+    private static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(0, 100, 0);
+    private static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
+    private static final int SELECTION_NONE_BG = Color.TRANSPARENT;
+    private static final int SELECTION_BG = Color.rgb(173, 216, 230);
 
+    // Storage
     private StorageFacade storage;
 
-    private int selectionBg = Color.rgb(173, 216, 230);
-
+    // View state and view state management
     private String id = null;
     private Integer beginnTime = null;
     private Integer endeTime = null;
@@ -36,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Integer previousSelectionPauseTime = null;
     private Integer beginn15 = null;
     private Integer ende15 = null;
+    private String kindOfDay = KindOfDay.WORKDAY.toString();
     private Integer previousSelectionBeginn15 = null;
     private Integer previousSelectionEnde15 = null;
     private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<Integer, Integer>();
@@ -104,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         aktualisiereTotal(false);
         if (data != null) {
             TextView total = (TextView) findViewById(R.id.total);
-            total.setTextColor(Color.rgb(0, 100, 0)); // dark green
+            total.setTextColor(DARK_GREEN_SAVE_SUCCESS);
         }
     }
 
@@ -133,15 +141,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void dateForwards(View v) {
         Log.i(getClass().getName(), "dateForwards() started.");
+        saveKindOfDay();
         switchToID(TimeUtils.dateForwards(id));
         Log.i(getClass().getName(), "dateForwards() finished.");
     }
 
     public void dateBackwards(View v) {
         Log.i(getClass().getName(), "dateBackwards() started.");
+        saveKindOfDay();
         switchToID(TimeUtils.dateBackwards(id));
         Log.i(getClass().getName(), "dateBackwards() finished.");
+    }
 
+    private void saveKindOfDay() {
+        if (!KindOfDay.WORKDAY.toString().equals(kindOfDay)) {
+            DaysData modifiedData = viewToModel();
+            TextView day = (TextView) findViewById(R.id.kindOfDay);
+            if (storage.saveDaysData(this, modifiedData)) {
+                day.setTextColor(DARK_GREEN_SAVE_SUCCESS);
+            } else {
+                day.setTextColor(DARK_GREY_SAVE_ERROR);
+            }
+        }
+    }
+
+    public void toggleKindOfDay(View v) {
+        Log.i(getClass().getName(), "toggleKindOfDay() started.");
+        TextView view = (TextView) v;
+        kindOfDay = KindOfDay.toggle(kindOfDay);
+        view.setText(kindOfDay.toLowerCase());
+        Log.i(getClass().getName(), "toggleKindOfDay() finished.");
     }
 
     public void verarbeiteKlick(View v) {
@@ -155,31 +184,31 @@ public class MainActivity extends AppCompatActivity {
         boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
         if (isBeginnTime) {
             setTransparent(previousSelectionBeginnTime);
-            view.setBackgroundColor(selectionBg);
+            view.setBackgroundColor(SELECTION_BG);
             beginnTime = Integer.valueOf((String) view.getText());
             previousSelectionBeginnTime = viewId;
         }
         if (isEndeTime) {
             setTransparent(previousSelectionEndeTime);
-            view.setBackgroundColor(selectionBg);
+            view.setBackgroundColor(SELECTION_BG);
             endeTime = Integer.valueOf((String) view.getText());
             previousSelectionEndeTime = viewId;
         }
         if (isBeginn15) {
             setTransparent(previousSelectionBeginn15);
-            view.setBackgroundColor(selectionBg);
+            view.setBackgroundColor(SELECTION_BG);
             beginn15 = Integer.valueOf((String) view.getText());
             previousSelectionBeginn15 = viewId;
         }
         if (isEnde15) {
             setTransparent(previousSelectionEnde15);
-            view.setBackgroundColor(selectionBg);
+            view.setBackgroundColor(SELECTION_BG);
             ende15 = Integer.valueOf((String) view.getText());
             previousSelectionEnde15 = viewId;
         }
         if (isPauseTime) {
             setTransparent(previousSelectionPauseTime);
-            view.setBackgroundColor(selectionBg);
+            view.setBackgroundColor(SELECTION_BG);
             pauseTime = Integer.valueOf((String) view.getText());
             previousSelectionPauseTime = viewId;
         }
@@ -198,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         total.setText(totalTime.toDisplayString());
-        total.setTextColor(Color.rgb(30, 144, 255)); // dark blue
+        total.setTextColor(DARK_BLUE_DEFAULT);
 
         if (mitSpeichern && timeSelectionComplete) {
             DaysData modifiedData = viewToModel();
@@ -211,9 +240,9 @@ public class MainActivity extends AppCompatActivity {
             originalData = modifiedData;
             updateBalance();
             if (storage.saveDaysData(this, modifiedData)) {
-                total.setTextColor(Color.rgb(0, 100, 0)); // dark green
+                total.setTextColor(DARK_GREEN_SAVE_SUCCESS);
             } else {
-                total.setTextColor(Color.DKGRAY);
+                total.setTextColor(DARK_GREY_SAVE_ERROR);
             }
         }
     }
@@ -225,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         data.setEnd(endeTime);
         data.setEnd15(ende15);
         data.setPause(pauseTime);
-        data.setDay(KindOfDay.WORKDAY); // TODO kindOfDay
+        data.setDay(KindOfDay.fromString(kindOfDay));
         return data;
     }
 
@@ -235,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         endeTime = data.getEnd();
         ende15 = data.getEnd15();
         pauseTime = data.getPause();
-        // TODO kindOfDay
+        kindOfDay = data.getDay().toString();
 
         previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
         previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
@@ -249,6 +278,9 @@ public class MainActivity extends AppCompatActivity {
         setSelected(previousSelectionBeginnTime);
         setSelected(previousSelectionBeginn15);
 
+        TextView day = (TextView) findViewById(R.id.kindOfDay);
+        day.setText(kindOfDay.toLowerCase());
+        day.setTextColor(DARK_GREEN_SAVE_SUCCESS);
     }
 
     private void resetView() {
@@ -264,6 +296,10 @@ public class MainActivity extends AppCompatActivity {
         endeTime = null;
         ende15 = null;
         pauseTime = null;
+        kindOfDay = KindOfDay.WORKDAY.toString();
+        TextView day = (TextView) findViewById(R.id.kindOfDay);
+        day.setText(kindOfDay.toLowerCase());
+        day.setTextColor(DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;
         previousSelectionEnde15 = null;
         previousSelectionEndeTime = null;
@@ -274,14 +310,14 @@ public class MainActivity extends AppCompatActivity {
     private void setTransparent(Integer viewId) {
         if (viewId != null) {
             TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(Color.TRANSPARENT);
+            previousView.setBackgroundColor(SELECTION_NONE_BG);
         }
     }
 
     private void setSelected(Integer viewId) {
         if (viewId != null) {
             TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(selectionBg);
+            previousView.setBackgroundColor(SELECTION_BG);
         }
     }
 }

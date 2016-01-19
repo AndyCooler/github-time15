@@ -33,6 +33,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="workday"
+                android:id="@+id/kindOfDay"
+                android:layout_weight="1"
+                android:textColor="#1E90FF"
+                android:gravity="center" android:clickable="true"
+                android:onClick="toggleKindOfDay" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Ende  -->"
                 android:id="@+id/endeView"
                 android:layout_weight="1"
