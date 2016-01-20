@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private Integer previousSelectionBeginnTime = null;
     private Integer previousSelectionEndeTime = null;
     private Integer previousSelectionPauseTime = null;
+    private String previousSelectionKindOfDays = null;
     private Integer beginn15 = null;
     private Integer ende15 = null;
     private String kindOfDay = KindOfDay.WORKDAY.toString();
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveKindOfDay() {
-        if (!KindOfDay.WORKDAY.toString().equals(kindOfDay)) {
+        if (!previousSelectionKindOfDays.equals(kindOfDay)) {
             DaysData modifiedData = viewToModel();
             TextView day = (TextView) findViewById(R.id.kindOfDay);
             if (storage.saveDaysData(this, modifiedData)) {
@@ -167,10 +168,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void toggleKindOfDay(View v) {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
-        TextView view = (TextView) v;
+        TextView day = (TextView) v;
         kindOfDay = KindOfDay.toggle(kindOfDay);
-        view.setText(kindOfDay.toLowerCase());
+        aktualisiereKindOfDay(DARK_BLUE_DEFAULT);
+
         Log.i(getClass().getName(), "toggleKindOfDay() finished.");
+    }
+
+    private void aktualisiereKindOfDay(int color) {
+        TextView day = (TextView) findViewById(R.id.kindOfDay);
+        day.setText(KindOfDay.fromString(kindOfDay).getDisplayString());
+        day.setTextColor(color);
     }
 
     public void verarbeiteKlick(View v) {
@@ -271,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
         previousSelectionBeginnTime = mapBeginnValueToViewId.get(beginnTime);
         previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
+        previousSelectionKindOfDays = kindOfDay;
 
         setSelected(previousSelectionPauseTime);
         setSelected(previousSelectionEnde15);
@@ -278,9 +287,7 @@ public class MainActivity extends AppCompatActivity {
         setSelected(previousSelectionBeginnTime);
         setSelected(previousSelectionBeginn15);
 
-        TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText(kindOfDay.toLowerCase());
-        day.setTextColor(DARK_GREEN_SAVE_SUCCESS);
+        aktualisiereKindOfDay(DARK_GREEN_SAVE_SUCCESS);
     }
 
     private void resetView() {
@@ -297,14 +304,13 @@ public class MainActivity extends AppCompatActivity {
         ende15 = null;
         pauseTime = null;
         kindOfDay = KindOfDay.WORKDAY.toString();
-        TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText(kindOfDay.toLowerCase());
-        day.setTextColor(DARK_BLUE_DEFAULT);
+        aktualisiereKindOfDay(DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;
         previousSelectionEnde15 = null;
         previousSelectionEndeTime = null;
         previousSelectionBeginnTime = null;
         previousSelectionBeginn15 = null;
+        previousSelectionKindOfDays = kindOfDay;
     }
 
     private void setTransparent(Integer viewId) {

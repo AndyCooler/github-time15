@@ -121,8 +121,7 @@ public class ExternalFileStorage implements StorageFacade {
         List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
         for (String currentId : idList) {
             DaysData data = loadDaysData(activity, currentId);
-            if (data != null) {
-                // TODO only if kindOfDay==WORKDAY
+            if (data != null && KindOfDay.WORKDAY.equals(data.getDay())) {
                 Time15 actual = DaysDataUtils.calculateTotal(data);
                 actualTotalMinutes += actual.getHours() * 60;
                 actualTotalMinutes += actual.getMinutes();

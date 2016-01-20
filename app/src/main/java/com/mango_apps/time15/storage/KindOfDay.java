@@ -5,19 +5,30 @@ package com.mango_apps.time15.storage;
  */
 public enum KindOfDay {
 
-    WORKDAY,
+    WORKDAY("Arbeit"),
 
-    HOLIDAY,
+    HOLIDAY("Feiertag"),
 
-    VACATION,
+    VACATION("Urlaub"),
 
-    SICKDAY,
+    SICKDAY("Krank"),
 
-    KIDSICKDAY;
+    KIDSICKDAY("Kind krank");
 
-    @Override
-    public String toString() {
-        return name();
+    private final String displayString;
+
+    private KindOfDay(String displayString) {
+        this.displayString = displayString;
+    }
+
+    public static String toggle(String value) {
+        KindOfDay[] values = KindOfDay.values();
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].toString().equals(value)) {
+                return values[(i + 1) % values.length].toString();
+            }
+        }
+        return null;
     }
 
     public static KindOfDay fromString(String value) {
@@ -29,13 +40,12 @@ public enum KindOfDay {
         return null;
     }
 
-    public static String toggle(String value) {
-        KindOfDay[] values = KindOfDay.values();
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].toString().equals(value)) {
-                return values[(i+1)%values.length].toString();
-            }
-        }
-        return null;
+    @Override
+    public String toString() {
+        return name();
+    }
+
+    public String getDisplayString() {
+        return displayString;
     }
 }
