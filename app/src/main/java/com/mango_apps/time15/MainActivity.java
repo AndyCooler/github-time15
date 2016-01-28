@@ -1,8 +1,10 @@
 package com.mango_apps.time15;
 
 import android.graphics.Color;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +23,8 @@ import com.mango_apps.time15.util.TimeUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+// before material design toolbar: was extends AppCompatActivity
+public class MainActivity extends ActionBarActivity {
 
     // Colors
     private static final int DARK_BLUE_DEFAULT = Color.rgb(30, 144, 255);
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         storage = new ExternalFileStorage();
         //storage = new NoopStorage();
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         initMapWithIds(mapBeginnValueToViewId, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
         initMapWithIds(mapEndeValueToViewId, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
@@ -73,13 +78,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "onCreate() finished.");
     }
 
-    private void initMapWithIds(Map map, int... viewIds) {
-        for (int viewId : viewIds) {
-            TextView view = (TextView) findViewById(viewId);
-            Integer value = Integer.valueOf((String) view.getText());
-            map.put(value, viewId);
-            Log.i(getClass().getName(), "initMap: " + value + " -> " + viewId);
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
@@ -89,6 +92,30 @@ public class MainActivity extends AppCompatActivity {
         switchToID(TimeUtils.createID());
         updateBalance();
         Log.i(getClass().getName(), "onResume() finished.");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initMapWithIds(Map map, int... viewIds) {
+        for (int viewId : viewIds) {
+            TextView view = (TextView) findViewById(viewId);
+            Integer value = Integer.valueOf((String) view.getText());
+            map.put(value, viewId);
+            Log.i(getClass().getName(), "initMap: " + value + " -> " + viewId);
+        }
     }
 
     private void updateBalance() {
@@ -117,28 +144,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void dateForwards(View v) {
         Log.i(getClass().getName(), "dateForwards() started.");
