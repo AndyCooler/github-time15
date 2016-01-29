@@ -2,6 +2,7 @@ package com.mango_apps.time15.types;
 
 import com.mango_apps.time15.storage.KindOfDay;
 
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 /**
@@ -22,6 +23,11 @@ public class DaysData {
     private Integer pause;
 
     private KindOfDay day;
+
+    /**
+     * Number of hours spent in other activity.
+     */
+    private Integer otherHours;
 
     private static final String SEP = "#";
 
@@ -78,6 +84,14 @@ public class DaysData {
         this.pause = pause;
     }
 
+    public Integer getOtherHours() {
+        return otherHours;
+    }
+
+    public void setOtherHours(Integer otherHours) {
+        this.otherHours = otherHours;
+    }
+
     public KindOfDay getDay() {
         return day;
     }
@@ -90,7 +104,7 @@ public class DaysData {
     public String toString() {
         String s = id + SEP + day.toString() + SEP + String.valueOf(begin) + SEP + String.valueOf(begin15) + SEP +
                 String.valueOf(end) + SEP + String.valueOf(end15) + SEP +
-                String.valueOf(pause);
+                String.valueOf(pause) + SEP + String.valueOf(otherHours);
         return s;
     }
 
@@ -104,12 +118,18 @@ public class DaysData {
         data.setEnd(nextIntToken(tokenizer));
         data.setEnd15(nextIntToken(tokenizer));
         data.setPause(nextIntToken(tokenizer));
+        data.setOtherHours(nextIntToken(tokenizer));
 
         return data;
     }
 
     private static Integer nextIntToken(StringTokenizer tokenizer) {
-        String token = tokenizer.nextToken();
+        String token = null;
+        try {
+            token = tokenizer.nextToken();
+        } catch (NoSuchElementException e) {
+            return null; // noop migration: allow self-repair of data next time it's saved
+        }
         if (token == null || "null".equals(token)) {
             return null;
         }

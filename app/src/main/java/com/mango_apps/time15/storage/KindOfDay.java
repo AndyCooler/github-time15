@@ -13,7 +13,9 @@ public enum KindOfDay {
 
     SICKDAY("Krank"),
 
-    KIDSICKDAY("Kind krank");
+    KIDSICKDAY("Kind krank"),
+
+    WORKDAY_SOME_VACATION("Arbeit / Urlaub");
 
     private final String displayString;
 
