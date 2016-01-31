@@ -65,4 +65,13 @@ public final class TimeUtils {
 
         return result;
     }
+
+    public static boolean isSameMonth(String idA, String idB) {
+        if (idA == null || idB == null) {
+            return false;
+        }
+        Calendar calA = toCalendar(idA);
+        Calendar calB = toCalendar(idB);
+        return calA.get(Calendar.MONTH) == calB.get(Calendar.MONTH) && calA.get(Calendar.YEAR) == calB.get(Calendar.YEAR);
+    }
 }

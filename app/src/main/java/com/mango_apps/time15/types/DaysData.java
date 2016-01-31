@@ -98,14 +98,19 @@ public class DaysData {
 
     public void setDay(KindOfDay day) {
         this.day = day;
+        otherHours = KindOfDay.WORKDAY_SOME_VACATION.equals(day) ? 4 : null;
     }
 
     @Override
     public String toString() {
-        String s = id + SEP + day.toString() + SEP + String.valueOf(begin) + SEP + String.valueOf(begin15) + SEP +
-                String.valueOf(end) + SEP + String.valueOf(end15) + SEP +
-                String.valueOf(pause) + SEP + String.valueOf(otherHours);
+        String s = id + SEP + day.toString() + SEP + valueOf(begin) + SEP + valueOf(begin15) + SEP +
+                valueOf(end) + SEP + valueOf(end15) + SEP +
+                valueOf(pause) + SEP + valueOf(otherHours);
         return s;
+    }
+
+    private String valueOf(Integer value) {
+        return (value == null) ? "-" : String.valueOf(value);
     }
 
     public static DaysData fromString(String s) {
@@ -130,7 +135,7 @@ public class DaysData {
         } catch (NoSuchElementException e) {
             return null; // noop migration: allow self-repair of data next time it's saved
         }
-        if (token == null || "null".equals(token)) {
+        if (token == null || "null".equals(token) || "-".equals(token)) {
             return null;
         }
         return Integer.valueOf(token);

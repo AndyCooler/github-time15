@@ -2,7 +2,6 @@ package com.mango_apps.time15;
 
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,9 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.KindOfDay;
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.types.Time15;
@@ -89,7 +88,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         Log.i(getClass().getName(), "onResume() started.");
-        switchToID(TimeUtils.createID());
+        switchToID(null, TimeUtils.createID());
         updateBalance();
         Log.i(getClass().getName(), "onResume() finished.");
     }
@@ -127,13 +126,17 @@ public class MainActivity extends ActionBarActivity {
         balance.setText("(" + balanceText + ")");
     }
 
-    private void switchToID(String newId) {
-        id = newId;
+    private void switchToID(String fromId, String toId) {
+        id = toId;
         setTitle(TimeUtils.dayOfWeek(id)
-                + ", " + id);
+                + ", " + toId);
         DaysData data = storage.loadDaysData(this, id);
         originalData = data;
         resetView();
+        if (!TimeUtils.isSameMonth(fromId, id)) {
+            balanceValue = storage.loadBalance(this, id);
+            updateBalance();
+        }
         if (data != null) {
             modelToView(data);
         }
@@ -148,14 +151,14 @@ public class MainActivity extends ActionBarActivity {
     public void dateForwards(View v) {
         Log.i(getClass().getName(), "dateForwards() started.");
         saveKindOfDay();
-        switchToID(TimeUtils.dateForwards(id));
+        switchToID(id, TimeUtils.dateForwards(id));
         Log.i(getClass().getName(), "dateForwards() finished.");
     }
 
     public void dateBackwards(View v) {
         Log.i(getClass().getName(), "dateBackwards() started.");
         saveKindOfDay();
-        switchToID(TimeUtils.dateBackwards(id));
+        switchToID(id, TimeUtils.dateBackwards(id));
         Log.i(getClass().getName(), "dateBackwards() finished.");
     }
 
@@ -245,11 +248,12 @@ public class MainActivity extends ActionBarActivity {
         if (mitSpeichern && timeSelectionComplete) {
             DaysData modifiedData = viewToModel();
             if (originalData == null) {
-                balanceValue -= 8 * 60;
+                balanceValue += DaysDataUtils.calculateBalance(modifiedData);
             } else {
-                balanceValue -= DaysDataUtils.calculateTotal(originalData).toMinutes();
+                balanceValue -= DaysDataUtils.calculateBalance(originalData);
+                balanceValue += DaysDataUtils.calculateBalance(modifiedData);
             }
-            balanceValue += DaysDataUtils.calculateTotal(modifiedData).toMinutes();
+
             originalData = modifiedData;
             updateBalance();
             if (storage.saveDaysData(this, modifiedData)) {

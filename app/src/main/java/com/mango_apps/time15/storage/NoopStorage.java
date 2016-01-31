@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.util.DaysDataUtils;
+import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by andreas on 07.01.16.
@@ -33,6 +36,13 @@ public class NoopStorage implements StorageFacade {
 
     @Override
     public int loadBalance(Activity activity, String id) {
-        return 0;
+        int balance = 0;
+
+        List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
+        for (String currentId : idList) {
+            DaysData data = loadDaysData(activity, currentId);
+            balance += DaysDataUtils.calculateBalance(data);
+        }
+        return balance;
     }
 }

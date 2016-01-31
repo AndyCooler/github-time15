@@ -24,7 +24,7 @@ public class DaysDataTest extends TestCase {
         data.setPause(60);
 
         String s = data.toString();
-        assertEquals("ID#KIDSICKDAY#10#15#16#45#60#null", s);
+        assertEquals("ID#KIDSICKDAY#10#15#16#45#60#-", s);
 
         DaysData copy = DaysData.fromString(s);
         assertEquals("ID", copy.getId());
@@ -34,6 +34,7 @@ public class DaysDataTest extends TestCase {
         assertEquals(new Integer(45), copy.getEnd15());
         assertEquals(new Integer(60), copy.getPause());
         assertEquals(KindOfDay.KIDSICKDAY, copy.getDay());
+        assertEquals(null, copy.getOtherHours());
     }
 
     public void testToFromStringPauseNull() {
@@ -46,7 +47,7 @@ public class DaysDataTest extends TestCase {
         data.setPause(null);
 
         String s = data.toString();
-        assertEquals("ID#KIDSICKDAY#10#15#16#45#null#null", s);
+        assertEquals("ID#KIDSICKDAY#10#15#16#45#-#-", s);
 
         DaysData copy = DaysData.fromString(s);
         assertEquals("ID", copy.getId());
@@ -56,6 +57,7 @@ public class DaysDataTest extends TestCase {
         assertEquals(new Integer(45), copy.getEnd15());
         assertEquals(null, copy.getPause());
         assertEquals(KindOfDay.KIDSICKDAY, copy.getDay());
+        assertEquals(null, copy.getOtherHours());
     }
 
     public void testToFromStringCombinationWorkdayVacationPauseNull() {
@@ -68,7 +70,7 @@ public class DaysDataTest extends TestCase {
         data.setOtherHours(4);
 
         String s = data.toString();
-        assertEquals("ID#WORKDAY_SOME_VACATION#10#15#16#45#null#4", s);
+        assertEquals("ID#WORKDAY_SOME_VACATION#10#15#16#45#-#4", s);
 
         DaysData copy = DaysData.fromString(s);
         assertEquals("ID", copy.getId());

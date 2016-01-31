@@ -70,7 +70,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testDifferenceIncomplete15() {
         DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY);
+        data.setDay(KindOfDay.WORKDAY_SOME_VACATION);
         data.setBegin(10);
         data.setBegin15(null);
         data.setEnd(16);

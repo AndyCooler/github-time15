@@ -114,22 +114,14 @@ public class ExternalFileStorage implements StorageFacade {
             return 0;
         }
 
-        int dueDays = 0;
-        final int dueHoursPerDay = 8;
-        int dueTotalMinutes = 0;
-        int actualTotalMinutes = 0;
+        int balance = 0;
+
         List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
         for (String currentId : idList) {
             DaysData data = loadDaysData(activity, currentId);
-            if (data != null && KindOfDay.WORKDAY.equals(data.getDay())) {
-                Time15 actual = DaysDataUtils.calculateTotal(data);
-                actualTotalMinutes += actual.getHours() * 60;
-                actualTotalMinutes += actual.getMinutes();
-                dueDays++;
-            }
+            balance += DaysDataUtils.calculateBalance(data);
         }
-        dueTotalMinutes = dueDays * dueHoursPerDay * 60;
-        return actualTotalMinutes - dueTotalMinutes;
+        return balance;
     }
 
     private boolean init() {

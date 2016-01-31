@@ -50,4 +50,8 @@ public enum KindOfDay {
     public String getDisplayString() {
         return displayString;
     }
+
+    public static boolean isDueDay(KindOfDay day) {
+        return KindOfDay.WORKDAY.equals(day) || KindOfDay.WORKDAY_SOME_VACATION.equals(day);
+    }
 }
