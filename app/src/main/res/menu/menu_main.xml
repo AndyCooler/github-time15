@@ -3,4 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item
+        android:id="@+id/action_backwards"
+        android:orderInCategory="200"
+        android:title="Search"
+        android:icon="@android:drawable/ic_media_rew"
+        app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/action_forwards"
+        android:orderInCategory="200"
+        android:title="Search"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_media_ff"></item>
+
 </menu>

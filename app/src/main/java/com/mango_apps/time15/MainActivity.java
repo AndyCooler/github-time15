@@ -104,6 +104,14 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_backwards) {
+            dateBackwards();
+            return true;
+        }
+        if (id == R.id.action_forwards) {
+            dateForwards();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -147,15 +155,14 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-
-    public void dateForwards(View v) {
+    public void dateForwards() {
         Log.i(getClass().getName(), "dateForwards() started.");
         saveKindOfDay();
         switchToID(id, TimeUtils.dateForwards(id));
         Log.i(getClass().getName(), "dateForwards() finished.");
     }
 
-    public void dateBackwards(View v) {
+    public void dateBackwards() {
         Log.i(getClass().getName(), "dateBackwards() started.");
         saveKindOfDay();
         switchToID(id, TimeUtils.dateBackwards(id));

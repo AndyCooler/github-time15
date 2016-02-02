@@ -7,7 +7,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ff6d7fe2"
+        android:background="#1E90FF"
+        app:theme="@style/ToolBarStyle"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"></android.support.v7.widget.Toolbar>
 
@@ -28,13 +29,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="&lt;-- Beginn"
+                android:text="Beginn"
                 android:id="@+id/beginnView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
-                android:gravity="left"
-                android:clickable="true"
-                android:onClick="dateBackwards" />
+                android:gravity="left" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,13 +50,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Ende  -->"
+                android:text="Ende"
                 android:id="@+id/endeView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
-                android:gravity="right"
-                android:clickable="true"
-                android:onClick="dateForwards" />
+                android:gravity="right" />
 
         </LinearLayout>
 
