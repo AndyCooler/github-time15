@@ -11,9 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mango_apps.time15.storage.ExternalFileStorage;
-import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.storage.KindOfDay;
+import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;

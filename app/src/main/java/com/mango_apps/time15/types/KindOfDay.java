@@ -1,4 +1,4 @@
-package com.mango_apps.time15.storage;
+package com.mango_apps.time15.types;
 
 /**
  * Describes what kind of day is stored in a DaysData.

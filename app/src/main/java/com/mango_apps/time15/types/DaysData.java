@@ -1,7 +1,5 @@
 package com.mango_apps.time15.types;
 
-import com.mango_apps.time15.storage.KindOfDay;
-
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 

@@ -1,7 +1,7 @@
 package com.mango_apps.time15;
 
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.storage.KindOfDay;
+import com.mango_apps.time15.types.KindOfDay;
 
 import junit.framework.TestCase;
 
