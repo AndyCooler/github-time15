@@ -5,11 +5,15 @@
     class = "java.util.ArrayList">
     <statePointEntry>
       <state      
-        class = "com.android.tools.idea.editors.navigation.model.ActivityState"      
+        class = "com.android.tools.idea.editors.navigation.model.ActivityState"
+          className="com.mango_apps.time15.MonthOverviewActivity" />
+      <point x="1620" y="96" />
+    </statePointEntry>
+    <statePointEntry>
+      <state class="com.android.tools.idea.editors.navigation.model.ActivityState"
         className = "com.mango_apps.time15.MainActivity"/>
       <point      
-        x = "360"      
-        y = "84"/>
+        x = "360" y="88" />
     </statePointEntry>
   </locations>
 </navigationModel>

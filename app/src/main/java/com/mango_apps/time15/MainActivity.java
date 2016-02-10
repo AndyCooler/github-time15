@@ -1,5 +1,6 @@
 package com.mango_apps.time15;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mango_apps.time15.storage.ExternalFileStorage;
+import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.storage.StorageFacade;
@@ -21,8 +23,13 @@ import com.mango_apps.time15.util.TimeUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-// before material design toolbar: was extends AppCompatActivity
+
+/**
+ * Main activity lets the user choose the time they start working and the time they stop working.
+ * They can also choose the kind of day: work day, vacation, holiday etc.
+ */
 public class MainActivity extends ActionBarActivity {
+// before material design toolbar: was extends AppCompatActivity
 
     // Colors
     private static final int DARK_BLUE_DEFAULT = Color.rgb(30, 144, 255);
@@ -30,6 +37,9 @@ public class MainActivity extends ActionBarActivity {
     private static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
     private static final int SELECTION_NONE_BG = Color.TRANSPARENT;
     private static final int SELECTION_BG = Color.rgb(173, 216, 230);
+
+    // Navigation
+    public final static String EXTRA_MESSAGE = "com.mango_apps.time15.MESSAGE";
 
     // Storage
     private StorageFacade storage;
@@ -59,8 +69,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        storage = new ExternalFileStorage();
-        //storage = new NoopStorage();
+        Log.i(getClass().getName(), "onCreate() started.");
+        storage = ExternalFileStorage.getInstance();
+        //storage = NoopStorage.getInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,8 +122,18 @@ public class MainActivity extends ActionBarActivity {
             dateForwards();
             return true;
         }
+        if (id == R.id.action_month) {
+            sendMessage();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void sendMessage() {
+        Intent intent = new Intent(this, MonthOverviewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, id);
+        startActivity(intent);
     }
 
     private void initMapWithIds(Map map, int... viewIds) {

@@ -6,14 +6,19 @@
     <item
         android:id="@+id/action_backwards"
         android:orderInCategory="200"
-        android:title="Search"
+        android:title="Zurück"
         android:icon="@android:drawable/ic_media_rew"
         app:showAsAction="ifRoom"></item>
     <item
         android:id="@+id/action_forwards"
         android:orderInCategory="200"
-        android:title="Search"
+        android:title="Vorwärts"
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_media_ff"></item>
-
+    <item
+        android:id="@+id/action_month"
+        android:orderInCategory="200"
+        android:title="Monat"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_month"></item>
 </menu>
