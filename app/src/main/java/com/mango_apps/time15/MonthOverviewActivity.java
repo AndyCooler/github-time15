@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -27,6 +29,9 @@ import java.util.List;
  * day each day was.
  */
 public class MonthOverviewActivity extends ActionBarActivity {
+
+    // Navigation
+    public final static String EXTRA_MESSAGE = "com.mango_apps.time15.MESSAGE";
 
     // Storage
     private StorageFacade storage;
@@ -56,7 +61,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         Log.i(getClass().getName(), "onResume() started.");
-        setTitle(TimeUtils.getMonthYearOfID(id));
+        setTitle(TimeUtils.getMonthYearDisplayString(id));
 
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
         ArrayList<String> overviewItemList = new ArrayList<String>();
@@ -76,10 +81,24 @@ public class MonthOverviewActivity extends ActionBarActivity {
         }
 
         String[] overviewItemTextArray = overviewItemList.toArray(new String[0]);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, overviewItemTextArray);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_month_list, R.id.textrow, overviewItemTextArray);
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
+        final String fromId = id;
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                String item = (String) adapter.getItem(position);
+                String day = item.substring(0, 2);
+                String rest = fromId.substring(2);
+                String gotoId = day + rest;
+                startMainActivity(gotoId);
+            }
+
+        });
 
         Log.i(getClass().getName(), "onResume() finished.");
     }
@@ -103,9 +122,17 @@ public class MonthOverviewActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_day) {
-            // TODO back navigation
+            startMainActivity(this.id);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void startMainActivity(String withId) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, withId);
+        startActivity(intent);
+    }
+
 }

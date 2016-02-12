@@ -11,6 +11,6 @@
         android:id="@+id/action_day"
         android:orderInCategory="200"
         android:title="Day"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_day"></item>
 </menu>

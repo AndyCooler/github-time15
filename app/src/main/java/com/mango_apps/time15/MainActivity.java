@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.NoopStorage;
+import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.storage.StorageFacade;
@@ -28,15 +30,8 @@ import java.util.Map;
  * Main activity lets the user choose the time they start working and the time they stop working.
  * They can also choose the kind of day: work day, vacation, holiday etc.
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 // before material design toolbar: was extends AppCompatActivity
-
-    // Colors
-    private static final int DARK_BLUE_DEFAULT = Color.rgb(30, 144, 255);
-    private static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(0, 100, 0);
-    private static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
-    private static final int SELECTION_NONE_BG = Color.TRANSPARENT;
-    private static final int SELECTION_BG = Color.rgb(173, 216, 230);
 
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mango_apps.time15.MESSAGE";
@@ -69,7 +64,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(getClass().getName(), "onCreate() started.");
+        String intentsId = getIntentsId();
+        Log.i(getClass().getName(), "onCreate() started with id " + intentsId);
         storage = ExternalFileStorage.getInstance();
         //storage = NoopStorage.getInstance();
         setContentView(R.layout.activity_main);
@@ -82,9 +78,21 @@ public class MainActivity extends ActionBarActivity {
         initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
-        balanceValue = storage.loadBalance(this, TimeUtils.createID());
+        balanceValue = storage.loadBalance(this, intentsId);
 
         Log.i(getClass().getName(), "onCreate() finished.");
+    }
+
+    private String getIntentsId() {
+        String result = TimeUtils.createID();
+        Intent intent = getIntent();
+        if (intent != null) {
+            String withId = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+            if (withId != null) {
+                result = withId;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -97,8 +105,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(getClass().getName(), "onResume() started.");
-        switchToID(null, TimeUtils.createID());
+        String intentsId = getIntentsId();
+        Log.i(getClass().getName(), "onResume() started with id " + intentsId);
+        switchToID(null, intentsId);
         updateBalance();
         Log.i(getClass().getName(), "onResume() finished.");
     }
@@ -123,14 +132,14 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_month) {
-            sendMessage();
+            startMonthOverviewActivity();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage() {
+    public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
         startActivity(intent);
@@ -156,12 +165,11 @@ public class MainActivity extends ActionBarActivity {
 
     private void switchToID(String fromId, String toId) {
         id = toId;
-        setTitle(TimeUtils.dayOfWeek(id)
-                + ", " + toId);
+        setTitle(TimeUtils.dayOfWeek(id) + ", " + id);
         DaysData data = storage.loadDaysData(this, id);
         originalData = data;
         resetView();
-        if (!TimeUtils.isSameMonth(fromId, id)) {
+        if (fromId != null && !TimeUtils.isSameMonth(fromId, id)) {
             balanceValue = storage.loadBalance(this, id);
             updateBalance();
         }
@@ -171,7 +179,7 @@ public class MainActivity extends ActionBarActivity {
         aktualisiereTotal(false);
         if (data != null) {
             TextView total = (TextView) findViewById(R.id.total);
-            total.setTextColor(DARK_GREEN_SAVE_SUCCESS);
+            total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
         }
     }
 
@@ -194,9 +202,9 @@ public class MainActivity extends ActionBarActivity {
             DaysData modifiedData = viewToModel();
             TextView day = (TextView) findViewById(R.id.kindOfDay);
             if (storage.saveDaysData(this, modifiedData)) {
-                day.setTextColor(DARK_GREEN_SAVE_SUCCESS);
+                day.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
             } else {
-                day.setTextColor(DARK_GREY_SAVE_ERROR);
+                day.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
             }
         }
     }
@@ -205,7 +213,7 @@ public class MainActivity extends ActionBarActivity {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
         TextView day = (TextView) v;
         kindOfDay = KindOfDay.toggle(kindOfDay);
-        aktualisiereKindOfDay(DARK_BLUE_DEFAULT);
+        aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
 
         Log.i(getClass().getName(), "toggleKindOfDay() finished.");
     }
@@ -227,31 +235,31 @@ public class MainActivity extends ActionBarActivity {
         boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
         if (isBeginnTime) {
             setTransparent(previousSelectionBeginnTime);
-            view.setBackgroundColor(SELECTION_BG);
+            view.setBackgroundColor(ColorsUI.SELECTION_BG);
             beginnTime = Integer.valueOf((String) view.getText());
             previousSelectionBeginnTime = viewId;
         }
         if (isEndeTime) {
             setTransparent(previousSelectionEndeTime);
-            view.setBackgroundColor(SELECTION_BG);
+            view.setBackgroundColor(ColorsUI.SELECTION_BG);
             endeTime = Integer.valueOf((String) view.getText());
             previousSelectionEndeTime = viewId;
         }
         if (isBeginn15) {
             setTransparent(previousSelectionBeginn15);
-            view.setBackgroundColor(SELECTION_BG);
+            view.setBackgroundColor(ColorsUI.SELECTION_BG);
             beginn15 = Integer.valueOf((String) view.getText());
             previousSelectionBeginn15 = viewId;
         }
         if (isEnde15) {
             setTransparent(previousSelectionEnde15);
-            view.setBackgroundColor(SELECTION_BG);
+            view.setBackgroundColor(ColorsUI.SELECTION_BG);
             ende15 = Integer.valueOf((String) view.getText());
             previousSelectionEnde15 = viewId;
         }
         if (isPauseTime) {
             setTransparent(previousSelectionPauseTime);
-            view.setBackgroundColor(SELECTION_BG);
+            view.setBackgroundColor(ColorsUI.SELECTION_BG);
             pauseTime = Integer.valueOf((String) view.getText());
             previousSelectionPauseTime = viewId;
         }
@@ -270,7 +278,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         total.setText(totalTime.toDisplayString());
-        total.setTextColor(DARK_BLUE_DEFAULT);
+        total.setTextColor(ColorsUI.DARK_BLUE_DEFAULT);
 
         if (mitSpeichern && timeSelectionComplete) {
             DaysData modifiedData = viewToModel();
@@ -284,9 +292,9 @@ public class MainActivity extends ActionBarActivity {
             originalData = modifiedData;
             updateBalance();
             if (storage.saveDaysData(this, modifiedData)) {
-                total.setTextColor(DARK_GREEN_SAVE_SUCCESS);
+                total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
             } else {
-                total.setTextColor(DARK_GREY_SAVE_ERROR);
+                total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
             }
         }
     }
@@ -323,7 +331,7 @@ public class MainActivity extends ActionBarActivity {
         setSelected(previousSelectionBeginnTime);
         setSelected(previousSelectionBeginn15);
 
-        aktualisiereKindOfDay(DARK_GREEN_SAVE_SUCCESS);
+        aktualisiereKindOfDay(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
     }
 
     private void resetView() {
@@ -340,7 +348,7 @@ public class MainActivity extends ActionBarActivity {
         ende15 = null;
         pauseTime = null;
         kindOfDay = KindOfDay.WORKDAY.toString();
-        aktualisiereKindOfDay(DARK_BLUE_DEFAULT);
+        aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;
         previousSelectionEnde15 = null;
         previousSelectionEndeTime = null;
@@ -352,14 +360,14 @@ public class MainActivity extends ActionBarActivity {
     private void setTransparent(Integer viewId) {
         if (viewId != null) {
             TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(SELECTION_NONE_BG);
+            previousView.setBackgroundColor(ColorsUI.SELECTION_NONE_BG);
         }
     }
 
     private void setSelected(Integer viewId) {
         if (viewId != null) {
             TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(SELECTION_BG);
+            previousView.setBackgroundColor(ColorsUI.SELECTION_BG);
         }
     }
 }

@@ -2,18 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.mango_apps.time15.MonthOverviewActivity">
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.Android.com/apk/res-auto"
         android:id="@+id/toolbarMonth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1E90FF"
-        app:theme="@style/ToolBarStyle"
+        android:theme="@style/ToolbarTheme"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"></android.support.v7.widget.Toolbar>
 

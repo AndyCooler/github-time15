@@ -8,17 +8,17 @@
         android:orderInCategory="200"
         android:title="Zurück"
         android:icon="@android:drawable/ic_media_rew"
-        app:showAsAction="ifRoom"></item>
+        app:showAsAction="always"></item>
     <item
         android:id="@+id/action_forwards"
         android:orderInCategory="200"
         android:title="Vorwärts"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@android:drawable/ic_media_ff"></item>
     <item
         android:id="@+id/action_month"
         android:orderInCategory="200"
         android:title="Monat"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_month"></item>
 </menu>

@@ -29,6 +29,11 @@ public final class TimeUtils {
         return id.substring(6) + "_" + id.substring(3,5);
     }
 
+    public static String getMonthYearDisplayString(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMANY) + " " + cal.get(Calendar.YEAR);
+    }
+
     public static String dateForwards(String id) {
         GregorianCalendar cal = toCalendar(id);
         cal.add(GregorianCalendar.DAY_OF_YEAR, 1);
