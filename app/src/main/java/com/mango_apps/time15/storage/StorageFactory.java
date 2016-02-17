@@ -15,7 +15,7 @@ public class StorageFactory {
     }
 
     private static StorageFacade createStorage() {
-        //return new ExternalFileStorage();
-        return new NoopStorage();
+        return new ExternalFileStorage();
+        //return new NoopStorage();
     }
 }
