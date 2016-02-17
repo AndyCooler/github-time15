@@ -15,15 +15,6 @@ import java.util.List;
  */
 public class NoopStorage implements StorageFacade {
 
-    static NoopStorage INSTANCE;
-
-    public static NoopStorage getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new NoopStorage();
-        }
-        return INSTANCE;
-    }
-
     HashMap<String, DaysData> cache = new HashMap<String, DaysData>();
 
     @Override

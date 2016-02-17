@@ -26,18 +26,9 @@ public class ExternalFileStorage implements StorageFacade {
 
     public static final String STORAGE_DIR = "Time15";
 
-    static ExternalFileStorage INSTANCE;
-
     private boolean initialized = false;
 
     private File storageDir;
-
-    public static ExternalFileStorage getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ExternalFileStorage();
-        }
-        return INSTANCE;
-    }
 
     @Override
     public boolean saveDaysData(Activity activity, DaysData data) {

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.NoopStorage;
+import com.mango_apps.time15.storage.StorageFactory;
 import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.KindOfDay;
@@ -66,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String intentsId = getIntentsId();
         Log.i(getClass().getName(), "onCreate() started with id " + intentsId);
-        storage = ExternalFileStorage.getInstance();
-        //storage = NoopStorage.getInstance();
+        storage = StorageFactory.getStorage();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

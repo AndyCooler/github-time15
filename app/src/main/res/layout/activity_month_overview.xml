@@ -32,16 +32,17 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="fill_parent">
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
-                android:id="@+id/autor2" />
+                android:id="@+id/autor2"
+                android:gravity="bottom" />
         </LinearLayout>
     </LinearLayout>
 

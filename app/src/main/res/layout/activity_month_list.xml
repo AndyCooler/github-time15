@@ -9,5 +9,5 @@
         android:layout_height="wrap_content"
         android:text="@+id/textrow"
         android:textColor="#1E90FF"
-        android:textAppearance="?android:attr/textAppearanceMedium"></TextView>
+        android:textAppearance="?android:attr/textAppearanceListItem"></TextView>
 </LinearLayout>

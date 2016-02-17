@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.mango_apps.time15.storage.ExternalFileStorage;
 import com.mango_apps.time15.storage.NoopStorage;
 import com.mango_apps.time15.storage.StorageFacade;
+import com.mango_apps.time15.storage.StorageFactory;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.util.DaysDataUtils;
@@ -45,8 +46,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         Log.i(getClass().getName(), "onCreate() started.");
         setContentView(R.layout.activity_month_overview);
 
-        storage = ExternalFileStorage.getInstance();
-        //storage = NoopStorage.getInstance();
+        storage = StorageFactory.getStorage();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMonth);
         setSupportActionBar(toolbar);
