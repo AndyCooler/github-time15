@@ -79,4 +79,9 @@ public final class TimeUtils {
         Calendar calB = toCalendar(idB);
         return calA.get(Calendar.MONTH) == calB.get(Calendar.MONTH) && calA.get(Calendar.YEAR) == calB.get(Calendar.YEAR);
     }
+
+    public static int getWeekOfYear(String id) {
+        Calendar cal = toCalendar(id);
+        return cal.get(Calendar.WEEK_OF_YEAR);
+    }
 }

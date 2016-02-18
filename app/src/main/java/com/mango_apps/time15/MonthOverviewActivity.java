@@ -70,18 +70,14 @@ public class MonthOverviewActivity extends ActionBarActivity {
         setTitle(TimeUtils.getMonthYearDisplayString(id));
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
-        TableRow row = new TableRow(this);
-        row.addView(createTextView("---"));
-        row.addView(createTextView("---"));
-        row.addView(createTextView("--------------------------------------------------"));
-        row.addView(createTextView("-----"));
-        row.addView(createTextView("-----"));
-        row.addView(createTextView("-----"));
-        row.addView(createTextView("-----"));
-        table.addView(row);
+        table.setColumnShrinkable(3, true);
+        table.setColumnStretchable(3, true);
+        TableRow row = null;
 
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
-        for (String dayId : listOfIds) {
+        int lastWeekOfYear = -1;
+        boolean sameWeek = true;
+        for (final String dayId : listOfIds) {
             DaysData data = storage.loadDaysData(this, dayId);
             if (data != null) {
                 String hours = "";
@@ -108,30 +104,38 @@ public class MonthOverviewActivity extends ActionBarActivity {
                         rowColor = ColorsUI.DARK_GREY_SAVE_ERROR;
                         break;
                 }
-                row.addView(createTextView(dayId.substring(0, 2), rowColor));
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId), rowColor));
+                row.addView(createTextView(dayId.substring(0, 2), rowColor));
                 row.addView(createTextView(data.getDay().getDisplayString(), rowColor));
                 row.addView(createTextView(hours, rowColor));
                 row.addView(createTextView(extraVacationHours, rowColor));
-                row.addView(createTextView("     ", rowColor));
-                row.addView(createTextView("     ", rowColor));
+
+                TextView view = new TextView(this);
+                view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                //view.setText(String.valueOf(weekOfYear));
+                row.addView(view);
+
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startMainActivity(dayId);
+                    }
+                });
+
+                int weekOfYear = TimeUtils.getWeekOfYear(dayId);
+                if (weekOfYear != lastWeekOfYear) {
+                    if (lastWeekOfYear != -1) {
+                        View line = new View(this);
+                        line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
+                        line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
+                        table.addView(line);
+                    }
+                    lastWeekOfYear = weekOfYear;
+                }
+
                 table.addView(row);
             }
         }
-
-
-        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-        //  @Override
-        //  public void onItemClick(AdapterView<?> parent, final View view,
-        //                          int position, long id) {
-        //      String item = (String) adapter.getItem(position);
-        //      String day = item.substring(0, 2);
-        //      String rest = fromId.substring(2);
-        //      String gotoId = day + rest;
-        //      startMainActivity(gotoId);
-        //  }
-
         Log.i(getClass().getName(), "onResume() finished.");
     }
 
@@ -139,8 +143,8 @@ public class MonthOverviewActivity extends ActionBarActivity {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(color);
-        textView.setGravity(Gravity.CENTER);
-        textView.setPadding(5, 5, 5, 5);
+        textView.setGravity(Gravity.LEFT);
+        textView.setPadding(15, 5, 15, 5);
         return textView;
     }
 
