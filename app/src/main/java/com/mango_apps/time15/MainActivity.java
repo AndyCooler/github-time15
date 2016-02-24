@@ -131,6 +131,10 @@ public class MainActivity extends AppCompatActivity {
             dateForwards();
             return true;
         }
+        if (id == R.id.action_today) {
+            dateToday();
+            return true;
+        }
         if (id == R.id.action_month) {
             startMonthOverviewActivity();
             return true;
@@ -165,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchToID(String fromId, String toId) {
         id = toId;
-        setTitle(TimeUtils.dayOfWeek(id) + ", " + id);
+        setTitle(TimeUtils.getMainTitleString(id));
         DaysData data = storage.loadDaysData(this, id);
         originalData = data;
         resetView();
@@ -195,6 +199,14 @@ public class MainActivity extends AppCompatActivity {
         saveKindOfDay();
         switchToID(id, TimeUtils.dateBackwards(id));
         Log.i(getClass().getName(), "dateBackwards() finished.");
+    }
+
+    public void dateToday() {
+        Log.i(getClass().getName(), "dateToday() started.");
+        saveKindOfDay();
+        switchToID(id, TimeUtils.createID());
+        Log.i(getClass().getName(), "dateToday() finished.");
+
     }
 
     private void saveKindOfDay() {

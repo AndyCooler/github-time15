@@ -84,4 +84,8 @@ public final class TimeUtils {
         Calendar cal = toCalendar(id);
         return cal.get(Calendar.WEEK_OF_YEAR);
     }
+
+    public static String getMainTitleString(String id) {
+        return TimeUtils.dayOfWeek(id) + ", " + id.substring(0, 6);
+    }
 }

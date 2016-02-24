@@ -11,8 +11,10 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -30,6 +32,7 @@ import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
@@ -145,6 +148,8 @@ public class MonthOverviewActivity extends ActionBarActivity {
         textView.setTextColor(color);
         textView.setGravity(Gravity.LEFT);
         textView.setPadding(15, 5, 15, 5);
+        //textView.setBackgroundColor(new Random().nextInt());
+        //textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         return textView;
     }
 

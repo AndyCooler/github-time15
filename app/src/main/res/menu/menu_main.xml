@@ -10,6 +10,12 @@
         android:icon="@android:drawable/ic_media_rew"
         app:showAsAction="always"></item>
     <item
+        android:id="@+id/action_today"
+        android:orderInCategory="200"
+        android:title="Heute"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_today"></item>
+    <item
         android:id="@+id/action_forwards"
         android:orderInCategory="200"
         android:title="Vorwärts"
