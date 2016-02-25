@@ -33,18 +33,7 @@
                 android:id="@+id/beginnView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
-                android:gravity="left" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="workday"
-                android:id="@+id/kindOfDay"
-                android:layout_weight="1"
-                android:textColor="#1E90FF"
-                android:gravity="center" android:clickable="true"
-                android:onClick="toggleKindOfDay" />
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,7 +43,7 @@
                 android:id="@+id/endeView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
-                android:gravity="right" />
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
@@ -330,12 +319,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="workday"
+                android:id="@+id/kindOfDay"
+                android:layout_weight="4"
+                android:textColor="#1E90FF"
+                android:gravity="bottom|center_horizontal"
+                android:clickable="true"
+                android:onClick="toggleKindOfDay" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="00:00"
                 android:id="@+id/total"
                 android:textSize="48sp"
                 android:textStyle="bold"
-                android:gravity="bottom|center_horizontal"
-                android:layout_weight="4"
+                android:gravity="center"
+                android:layout_weight="2"
                 android:textColor="#1E90FF" />
 
             <TextView
