@@ -311,52 +311,96 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="fill_vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="workday"
+                    android:id="@+id/kindOfDay"
+                    android:layout_weight="4"
+                    android:textColor="#1E90FF"
+                    android:gravity="bottom|center_horizontal"
+                    android:clickable="true"
+                    android:onClick="toggleKindOfDay" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="00:00"
+                    android:id="@+id/total"
+                    android:textSize="48sp"
+                    android:gravity="center"
+                    android:layout_weight="2"
+                    android:textColor="#1E90FF" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="(0)"
+                    android:id="@+id/balance"
+                    android:layout_weight="4"
+                    android:gravity="top|center_horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:id="@+id/button2" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="workday"
-                android:id="@+id/kindOfDay"
-                android:layout_weight="4"
-                android:textColor="#1E90FF"
-                android:gravity="bottom|center_horizontal"
-                android:clickable="true"
-                android:onClick="toggleKindOfDay" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom">
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="00:00"
-                android:id="@+id/total"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_weight="2"
-                android:textColor="#1E90FF" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
+                    android:id="@+id/autor"
+                    android:gravity="bottom" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="(0)"
-                android:id="@+id/balance"
-                android:layout_weight="4"
-                android:gravity="top|center_horizontal" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
-                android:id="@+id/autor"
-                android:gravity="bottom"
-                android:layout_weight="1" />
         </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
