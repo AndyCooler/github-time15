@@ -27,11 +27,14 @@ import com.mango_apps.time15.storage.StorageFactory;
 import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.KindOfDay;
+import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -76,13 +79,23 @@ public class MonthOverviewActivity extends ActionBarActivity {
         table.setColumnShrinkable(3, true);
         table.setColumnStretchable(3, true);
         TableRow row = null;
+        TableRow previousRow = null;
 
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
-        int lastWeekOfYear = -1;
-        boolean sameWeek = true;
+        int previousWeekOfYear = -1;
+
+        Map<Integer, Integer> weeksBalanceMap = new HashMap<Integer, Integer>();
         for (final String dayId : listOfIds) {
             DaysData data = storage.loadDaysData(this, dayId);
             if (data != null) {
+                int weekOfYear = TimeUtils.getWeekOfYear(dayId);
+                int balanceInMinutes = DaysDataUtils.calculateBalance(data);
+                Integer current = weeksBalanceMap.get(weekOfYear);
+                if (current == null) {
+                    weeksBalanceMap.put(weekOfYear, balanceInMinutes);
+                } else {
+                    weeksBalanceMap.put(weekOfYear, current + balanceInMinutes);
+                }
                 String hours = "";
                 String extraVacationHours = "";
                 if (KindOfDay.isDueDay(data.getDay())) {
@@ -91,6 +104,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
                         extraVacationHours = " (+" + data.getOtherHours() + " h)";
                     }
                 }
+                previousRow = row;
                 row = new TableRow(this);
                 int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
                 switch (data.getDay()) {
@@ -113,11 +127,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 row.addView(createTextView(hours, rowColor));
                 row.addView(createTextView(extraVacationHours, rowColor));
 
-                TextView view = new TextView(this);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                //view.setText(String.valueOf(weekOfYear));
-                row.addView(view);
-
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -125,15 +134,24 @@ public class MonthOverviewActivity extends ActionBarActivity {
                     }
                 });
 
-                int weekOfYear = TimeUtils.getWeekOfYear(dayId);
-                if (weekOfYear != lastWeekOfYear) {
-                    if (lastWeekOfYear != -1) {
+                if (weekOfYear != previousWeekOfYear) {
+                    if (previousWeekOfYear != -1) {
+                        TextView view = new TextView(this);
+                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
+                        int weeksBalance = weeksBalanceMap.get(previousWeekOfYear);
+                        String balanceText = Time15.fromMinutes(weeksBalance).toDisplayString();
+                        if (weeksBalance > 0) {
+                            balanceText = "+" + balanceText;
+                        }
+                        view.setText(balanceText);
+                        previousRow.addView(view);
                         View line = new View(this);
                         line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
                         line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
                         table.addView(line);
                     }
-                    lastWeekOfYear = weekOfYear;
+                    previousWeekOfYear = weekOfYear;
                 }
 
                 table.addView(row);
