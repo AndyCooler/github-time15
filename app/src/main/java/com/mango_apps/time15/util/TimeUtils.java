@@ -88,4 +88,14 @@ public final class TimeUtils {
     public static String getMainTitleString(String id) {
         return TimeUtils.dayOfWeek(id) + ", " + id.substring(0, 6);
     }
+
+    public static boolean isWeekend(String id) {
+        Calendar cal = toCalendar(id);
+        switch (cal.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.SATURDAY:
+            case Calendar.SUNDAY:
+                return true;
+        }
+        return false;
+    }
 }

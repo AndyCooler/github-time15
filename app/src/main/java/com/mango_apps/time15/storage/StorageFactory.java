@@ -7,6 +7,8 @@ import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
+import java.util.List;
+
 /**
  * Created by andreas on 14.02.16.
  */
@@ -32,127 +34,12 @@ public class StorageFactory {
     }
 
     private static void createTestData(String id, StorageFacade storage) {
-        DaysData data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(8);
-        data1.setBegin15(0);
-        data1.setEnd(16);
-        data1.setEnd15(0);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY_SOME_VACATION);
-        data1.setBegin(11);
-        data1.setBegin15(0);
-        data1.setEnd(16);
-        data1.setEnd15(30);
-        data1.setOtherHours(4);
-        storage.saveDaysData(null, data1);
-
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.HOLIDAY);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
-
-        id = TimeUtils.dateBackwards(id);
-        data1 = new DaysData(id);
-        data1.setDay(KindOfDay.WORKDAY);
-        data1.setBegin(9);
-        data1.setBegin15(0);
-        data1.setEnd(17);
-        data1.setEnd15(30);
-        storage.saveDaysData(null, data1);
+        List<String> ids = TimeUtils.getListOfIdsOfMonth(id);
+        for (String currentId : ids) {
+            if (!TimeUtils.isWeekend(currentId)) {
+                DaysData data1 = TestDataFactory.newRandom(currentId);
+                storage.saveDaysData(null, data1);
+            }
+        }
     }
 }

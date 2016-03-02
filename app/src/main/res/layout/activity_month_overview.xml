@@ -20,6 +20,11 @@
         android:layout_below="@+id/toolbarMonth"
         android:layout_centerInParent="true">
 
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -32,6 +37,7 @@
                 android:stretchColumns="1"></TableLayout>
 
         </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
             android:orientation="horizontal"
