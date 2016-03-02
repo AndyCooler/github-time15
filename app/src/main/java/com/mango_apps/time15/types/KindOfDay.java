@@ -19,7 +19,7 @@ public enum KindOfDay {
 
     private final String displayString;
 
-    private KindOfDay(String displayString) {
+    KindOfDay(String displayString) {
         this.displayString = displayString;
     }
 

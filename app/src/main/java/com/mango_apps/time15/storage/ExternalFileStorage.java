@@ -5,7 +5,6 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
@@ -168,7 +167,7 @@ public class ExternalFileStorage implements StorageFacade {
     public File createStorageDir() {
 
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + File.separator +  STORAGE_DIR);
+                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
         if (file.mkdirs()) {
             Log.i(getClass().getName(), "Storage dir created: " + file.getAbsolutePath());
         } else {

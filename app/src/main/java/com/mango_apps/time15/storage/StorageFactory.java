@@ -3,8 +3,6 @@ package com.mango_apps.time15.storage;
 import android.os.Build;
 
 import com.mango_apps.time15.types.DaysData;
-import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.List;

@@ -1,7 +1,5 @@
 package com.mango_apps.time15.util;
 
-import android.text.format.DateUtils;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public final class TimeUtils {
     }
 
     public static String getMonthYearOfID(String id) {
-        return id.substring(6) + "_" + id.substring(3,5);
+        return id.substring(6) + "_" + id.substring(3, 5);
     }
 
     public static String getMonthYearDisplayString(String id) {
@@ -53,11 +51,11 @@ public final class TimeUtils {
 
     private static GregorianCalendar toCalendar(String id) {
         int year = Integer.valueOf(id.substring(6));
-        int month = Integer.valueOf(id.substring(3,5)) - 1;
-        int day = Integer.valueOf(id.substring(0,2));
+        int month = Integer.valueOf(id.substring(3, 5)) - 1;
+        int day = Integer.valueOf(id.substring(0, 2));
         GregorianCalendar cal = new GregorianCalendar(year, month, day);
 
-        return  cal;
+        return cal;
     }
 
     public static List<String> getListOfIdsOfMonth(String id) {

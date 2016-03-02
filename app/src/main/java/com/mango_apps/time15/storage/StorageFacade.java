@@ -11,16 +11,18 @@ public interface StorageFacade {
 
     /**
      * Save a day's data.
+     *
      * @param activity parent activity
-     * @param data the data to save
+     * @param data     the data to save
      * @return
      */
     boolean saveDaysData(Activity activity, DaysData data);
 
     /**
      * Load a day's data.
+     *
      * @param activity parent activity
-     * @param id id of data to load
+     * @param id       id of data to load
      * @return the day's data
      */
     DaysData loadDaysData(Activity activity, String id);
@@ -29,7 +31,7 @@ public interface StorageFacade {
      * Load all day's data of the id's month and calculate the balance.
      *
      * @param activity parent activity
-     * @param id id in a certain month
+     * @param id       id in a certain month
      * @return balance of month
      */
     int loadBalance(Activity activity, String id);

@@ -1,8 +1,6 @@
 package com.mango_apps.time15;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,13 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mango_apps.time15.storage.ExternalFileStorage;
-import com.mango_apps.time15.storage.NoopStorage;
+import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.storage.StorageFactory;
 import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private String kindOfDay = KindOfDay.WORKDAY.toString();
     private Integer previousSelectionBeginn15 = null;
     private Integer previousSelectionEnde15 = null;
-    private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<>();
     private HashMap<Integer, Integer> mapBeginn15ValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
