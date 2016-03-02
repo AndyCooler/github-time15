@@ -44,6 +44,18 @@ public final class TimeUtils {
         return createID(cal);
     }
 
+    public static String monthForwards(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        cal.add(GregorianCalendar.MONTH, 1);
+        return createID(cal);
+    }
+
+    public static String monthBackwards(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        cal.add(GregorianCalendar.MONTH, -1);
+        return createID(cal);
+    }
+
     public static String dayOfWeek(String id) {
         GregorianCalendar cal = toCalendar(id);
         return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.GERMANY);

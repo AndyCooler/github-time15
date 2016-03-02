@@ -61,10 +61,19 @@ public class MonthOverviewActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(getClass().getName(), "onResume() started.");
+        Log.i(getClass().getName(), "onResume() started with id " + id);
+
+        initialize();
+
+        Log.i(getClass().getName(), "onResume() finished.");
+    }
+
+    private void initialize() {
+        Log.i(getClass().getName(), "initialize() started with id " + id);
         setTitle(TimeUtils.getMonthYearDisplayString(id));
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
+        table.removeAllViews();
         table.setColumnShrinkable(3, true);
         table.setColumnStretchable(3, true);
         TableRow row = null;
@@ -90,7 +99,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 if (KindOfDay.isDueDay(data.getDay())) {
                     hours += DaysDataUtils.calculateTotal(data).toDisplayString() + " h";
                     if (KindOfDay.WORKDAY_SOME_VACATION.equals(data.getDay())) {
-                        extraVacationHours = " (+" + data.getOtherHours() + " h)";
+                        extraVacationHours = " +" + data.getOtherHours() + " h";
                     }
                 }
                 previousRow = row;
@@ -146,7 +155,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 table.addView(row);
             }
         }
-        Log.i(getClass().getName(), "onResume() finished.");
+        Log.i(getClass().getName(), "initialize() finished.");
     }
 
     private TextView createTextView(String text, int color) {
@@ -184,6 +193,16 @@ public class MonthOverviewActivity extends ActionBarActivity {
         }
         if (id == R.id.action_day) {
             startMainActivity(this.id);
+            return true;
+        }
+        if (id == R.id.action_month_backwards) {
+            this.id = TimeUtils.monthBackwards(this.id);
+            initialize();
+            return true;
+        }
+        if (id == R.id.action_month_forwards) {
+            this.id = TimeUtils.monthForwards(this.id);
+            initialize();
             return true;
         }
 

@@ -8,6 +8,18 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_month_backwards"
+        android:orderInCategory="200"
+        android:title="Zurück"
+        android:icon="@android:drawable/ic_media_rew"
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/action_month_forwards"
+        android:orderInCategory="200"
+        android:title="Vorwärts"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_media_ff"></item>
+    <item
         android:id="@+id/action_day"
         android:orderInCategory="200"
         android:title="Day"
