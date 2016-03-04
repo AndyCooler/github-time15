@@ -73,7 +73,8 @@ public final class TimeUtils {
     public static List<String> getListOfIdsOfMonth(String id) {
         ArrayList<String> result = new ArrayList<String>();
         GregorianCalendar cal = toCalendar(id);
-        for (int i = 1; i < 32; i++) {
+        int max = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+        for (int i = 1; i <= max; i++) {
             cal.set(Calendar.DAY_OF_MONTH, i);
             result.add(createID(cal));
         }

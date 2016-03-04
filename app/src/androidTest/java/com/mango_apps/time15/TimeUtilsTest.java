@@ -6,6 +6,8 @@ import com.mango_apps.time15.util.TimeUtils;
 
 import junit.framework.TestCase;
 
+import java.util.List;
+
 /**
  * Created by andreas on 05.01.16.
  */
@@ -29,4 +31,27 @@ public class TimeUtilsTest extends TestCase {
         assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
     }
 
+    public void testListOfIdsOfMonth() {
+
+        checkMonth("05.01.2016", 31);
+        checkMonth("05.02.2016", 29);
+        checkMonth("05.03.2016", 31);
+        checkMonth("05.04.2016", 30);
+        checkMonth("05.05.2016", 31);
+        checkMonth("05.06.2016", 30);
+        checkMonth("05.07.2016", 31);
+        checkMonth("05.08.2016", 31);
+        checkMonth("05.09.2016", 30);
+        checkMonth("05.10.2016", 31);
+        checkMonth("05.11.2016", 30);
+        checkMonth("05.12.2016", 31);
+    }
+
+    private void checkMonth(String id, int daysInMonth) {
+        List<String> list = TimeUtils.getListOfIdsOfMonth(id);
+        String firstId = list.get(0);
+        String lastId = list.get(list.size() - 1);
+        assertEquals("01" + id.substring(2), firstId);
+        assertEquals(daysInMonth + id.substring(2), lastId);
+    }
 }
