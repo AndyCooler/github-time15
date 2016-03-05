@@ -109,4 +109,15 @@ public final class TimeUtils {
         }
         return false;
     }
+
+    public static boolean isLastWorkDayOfMonth(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        int max = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+        cal.set(Calendar.DAY_OF_MONTH, max);
+        String maxId = createID(cal);
+        while (isWeekend(maxId)) {
+            maxId = dateBackwards(maxId);
+        }
+        return id.equals(maxId);
+    }
 }

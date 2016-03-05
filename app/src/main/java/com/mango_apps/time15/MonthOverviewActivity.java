@@ -98,7 +98,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
                     row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
-                    previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, previousRow);
+                    previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, row, previousRow);
                     table.addView(row);
                 }
             } else {
@@ -142,7 +142,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
                         startMainActivity(dayId);
                     }
                 });
-                previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, previousRow);
+                previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, row, previousRow);
                 table.addView(row);
             }
 
@@ -150,29 +150,38 @@ public class MonthOverviewActivity extends ActionBarActivity {
         Log.i(getClass().getName(), "initialize() finished.");
     }
 
-    private int addWeekSeparatorLine(String dayId, Map<Integer, Integer> weeksBalanceMap, TableLayout table, int previousWeekOfYear, ViewGroup previousRow) {
+    private int addWeekSeparatorLine(String dayId, Map<Integer, Integer> weeksBalanceMap, TableLayout table, int previousWeekOfYear, ViewGroup row, ViewGroup previousRow) {
         int weekOfYear = TimeUtils.getWeekOfYear(dayId);
         int newPreviousWeekOfYear = previousWeekOfYear;
         if (weekOfYear != previousWeekOfYear) {
             if (previousWeekOfYear != -1) {
-                TextView view = new TextView(this);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
-                int weeksBalance = weeksBalanceMap.get(previousWeekOfYear) == null ? 0 : weeksBalanceMap.get(previousWeekOfYear);
-                String balanceText = Time15.fromMinutes(weeksBalance).toDisplayString();
-                if (weeksBalance > 0) {
-                    balanceText = "+" + balanceText;
-                }
-                view.setText(balanceText);
-                previousRow.addView(view);
+                TextView balanceView = createBalanceView(weeksBalanceMap, previousWeekOfYear);
+                previousRow.addView(balanceView);
                 View line = new View(this);
                 line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
                 line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
                 table.addView(line);
             }
             newPreviousWeekOfYear = weekOfYear;
+        } else if (TimeUtils.isLastWorkDayOfMonth(dayId)) { // if id is last in month
+            // add text view with balance to current row
+            TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear);
+            row.addView(balanceView);
         }
         return newPreviousWeekOfYear;
+    }
+
+    private TextView createBalanceView(Map<Integer, Integer> weeksBalanceMap, int weekOfYear) {
+        TextView balanceView = new TextView(this);
+        balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
+        //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
+        int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
+        String balanceText = Time15.fromMinutes(weeksBalance).toDisplayString();
+        if (weeksBalance > 0) {
+            balanceText = "+" + balanceText;
+        }
+        balanceView.setText(balanceText);
+        return balanceView;
     }
 
     private void addToBalance(DaysData data, Map<Integer, Integer> weeksBalanceMap) {
