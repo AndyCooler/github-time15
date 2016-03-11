@@ -24,6 +24,9 @@ public class DaysDataUtilsTest extends TestCase {
         Time15 total = DaysDataUtils.calculateTotal(data);
         assertEquals(5, total.getHours());
         assertEquals(30, total.getMinutes());
+
+        int balance = DaysDataUtils.calculateBalance(data);
+        assertEquals(-150, balance);
     }
 
     public void testDifferenceWithoutPause() {
@@ -38,6 +41,9 @@ public class DaysDataUtilsTest extends TestCase {
         Time15 total = DaysDataUtils.calculateTotal(data);
         assertEquals(6, total.getHours());
         assertEquals(30, total.getMinutes());
+
+        int balance = DaysDataUtils.calculateBalance(data);
+        assertEquals(-90, balance);
     }
 
     public void testDifferenceWithout15s() {
@@ -52,6 +58,9 @@ public class DaysDataUtilsTest extends TestCase {
         Time15 total = DaysDataUtils.calculateTotal(data);
         assertEquals(6, total.getHours());
         assertEquals(0, total.getMinutes());
+
+        int balance = DaysDataUtils.calculateBalance(data);
+        assertEquals(-120, balance); // 6h - 8h = -2h  d.h. -120
     }
 
     public void testDifferenceIncomplete() {
@@ -66,6 +75,9 @@ public class DaysDataUtilsTest extends TestCase {
         Time15 total = DaysDataUtils.calculateTotal(data);
         assertEquals(0, total.getHours());
         assertEquals(0, total.getMinutes());
+
+        int balance = DaysDataUtils.calculateBalance(data);
+        assertEquals(-480, balance); // soll: 480, ist: 0 d.h. balance = -480
     }
 
     public void testDifferenceIncomplete15() {
@@ -80,5 +92,21 @@ public class DaysDataUtilsTest extends TestCase {
         Time15 total = DaysDataUtils.calculateTotal(data);
         assertEquals(6, total.getHours());
         assertEquals(0, total.getMinutes());
+
+        int balance = DaysDataUtils.calculateBalance(data);
+        assertEquals(120, balance); // 6h + 4h other hours = 10h d.h. +2h = 120 min
     }
+
+    public void testHoliday() {
+        DaysData data = new DaysData("ID");
+        data.setDay(KindOfDay.HOLIDAY);
+
+        Time15 total = DaysDataUtils.calculateTotal(data);
+        assertEquals(0, total.getHours());
+        assertEquals(0, total.getMinutes());
+
+        int balance = DaysDataUtils.calculateBalance(data);
+        assertEquals(0, balance);
+    }
+
 }

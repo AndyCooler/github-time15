@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     // View state and view state management
     private String id = null;
+    private int taskNo = 0;
     private Integer beginnTime = null;
     private Integer endeTime = null;
     private Integer pauseTime = null;
