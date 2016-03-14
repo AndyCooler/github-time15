@@ -8,6 +8,10 @@ import java.util.StringTokenizer;
  */
 public class TimeTask implements Task {
 
+    public static final int DUE_HOURS_PER_DAY = 8;
+
+    public static final int DUE_TOTAL_MINUTES = DUE_HOURS_PER_DAY * 60;
+
     private static final String SEP = "#";
 
     private Integer begin;
@@ -74,16 +78,55 @@ public class TimeTask implements Task {
 
     @Override
     public Time15 getTotal() {
-        return null;
+        int difference = 0;
+        int difference15 = 0;
+        if (end != null && begin != null) {
+            difference = end - begin;
+            if (begin15 != null && end15 != null) {
+                difference15 = end15 - begin15;
+                if (difference15 < 0) {
+                    difference--;
+                    difference15 = 60 + difference15;
+                }
+            }
+            if (pause != null) {
+                int pauseTemp = pause;
+                while (pauseTemp > 60) {
+                    difference--;
+                    pauseTemp -= 60;
+                }
+                difference15 -= pauseTemp;
+                if (difference15 < 0) {
+                    difference--;
+                    difference15 = 60 + difference15;
+                }
+            }
+        }
+        return new Time15(difference, difference15);
     }
 
     @Override
     public int getBalance() {
-        return 0;
+        if (!KindOfDay.isDueDay(day)) {
+            return 0;
+        }
+
+        int actualTotalMinutes = 0;
+
+        Time15 actual = getTotal();
+        actualTotalMinutes += actual.toMinutes();
+        if (KindOfDay.WORKDAY_SOME_VACATION.equals(day)) {
+            //TODO remove after migration actualTotalMinutes += 4 * 60;
+        }
+        return actualTotalMinutes - DUE_TOTAL_MINUTES;
     }
 
     @Override
     public String toString() {
+        // TODO remove after migration:
+        if (day.equals(KindOfDay.WORKDAY_SOME_VACATION)) {
+            throw new IllegalStateException("WORKDAY_SOME_VACATION migration problem!");
+        }
         return SEP + day.toString() + SEP + valueOf(begin) + SEP + valueOf(begin15) + SEP +
                 valueOf(end) + SEP + valueOf(end15) + SEP +
                 valueOf(pause);
@@ -98,6 +141,10 @@ public class TimeTask implements Task {
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         TimeTask timeTask = new TimeTask();
         timeTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
+        // TODO remove after migration:
+        if (timeTask.getKindOfDay().equals(KindOfDay.WORKDAY_SOME_VACATION)) {
+            timeTask.setKindOfDay(KindOfDay.WORKDAY);
+        }
         timeTask.setBegin(nextIntToken(tokenizer));
         timeTask.setBegin15(nextIntToken(tokenizer));
         timeTask.setEnd(nextIntToken(tokenizer));

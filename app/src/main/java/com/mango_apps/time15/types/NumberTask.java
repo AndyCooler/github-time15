@@ -40,20 +40,28 @@ public class NumberTask implements Task {
 
     @Override
     public String toString() {
-        return SEP + valueOf(total);
+        return SEP + day.toString() + SEP + valueOf(total);
     }
 
     private String valueOf(Time15 value) {
-        return (value == null) ? "-" : String.valueOf(value.toMinutes());
+        return (value == null) ? "-" : String.valueOf(value.getHours());
     }
 
     public static NumberTask fromString(String s) {
 
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         NumberTask numberTask = new NumberTask();
-        numberTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
-        Integer totalInteger = nextIntToken(tokenizer);
-        numberTask.setTotal(Time15.fromMinutes(totalInteger == null ? 0 : totalInteger));
+        String token = tokenizer.nextToken();
+        numberTask.setKindOfDay(KindOfDay.fromString(token));
+        // TODO remove after migration
+        Integer totalInteger = null;
+        if (null == numberTask.getKindOfDay()) {
+            numberTask.setKindOfDay(KindOfDay.VACATION);
+            totalInteger = nextIntToken0(token);
+        } else {
+            totalInteger = nextIntToken(tokenizer);
+        }
+        numberTask.setTotal(new Time15(totalInteger == null ? 0 : totalInteger, 0));
 
         return numberTask;
     }
@@ -65,6 +73,10 @@ public class NumberTask implements Task {
         } catch (NoSuchElementException e) {
             return null; // noop migration: allow self-repair of data next time it's saved
         }
+        return nextIntToken0(token);
+    }
+
+    private static Integer nextIntToken0(String token) {
         if (token == null || "null".equals(token) || "-".equals(token)) {
             return null;
         }

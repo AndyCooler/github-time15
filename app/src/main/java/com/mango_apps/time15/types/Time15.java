@@ -9,24 +9,16 @@ public class Time15 {
     private int minutes;
 
     public Time15(int hours, int minutes) {
-        this.hours = hours;
-        this.minutes = minutes;
+        this.hours = hours; // mit Vorzeichen
+        this.minutes = minutes; // ohne Vorzeichen
     }
 
     public int getHours() {
         return hours;
     }
 
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
-
     public int getMinutes() {
         return minutes;
-    }
-
-    public void setMinutes(int minutes) {
-        this.minutes = minutes;
     }
 
     public String toDisplayString() {
@@ -34,7 +26,7 @@ public class Time15 {
     }
 
     public int toMinutes() {
-        return hours * 60 + minutes;
+        return hours * 60 + (hours >= 0 ? minutes : -minutes);
     }
 
     public static Time15 fromMinutes(int totalMinutes) {

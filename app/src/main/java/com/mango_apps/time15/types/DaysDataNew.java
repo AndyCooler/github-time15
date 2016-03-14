@@ -33,8 +33,16 @@ public class DaysDataNew {
         tasks.add(task);
     }
 
-    public void getTask(int taskNo) {
-        tasks.get(taskNo);
+    public Task getTask(int taskNo) {
+        return tasks.get(taskNo);
+    }
+
+    public int getBalance() {
+        int balance = 0;
+        for (Task task : tasks) {
+            balance += task.getBalance();
+        }
+        return balance;
     }
 
     @Override
@@ -45,7 +53,6 @@ public class DaysDataNew {
         }
         return s;
     }
-
 
     public static DaysDataNew fromString(String s) {
 
@@ -58,10 +65,11 @@ public class DaysDataNew {
                 SEP + tokenizer.nextToken());
         data.addTask(timeTask);
         if (tokenizer.hasMoreElements()) {
-            NumberTask numberTask = NumberTask.fromString(tokenizer.nextToken() +
-                    SEP + tokenizer.nextToken());
+            NumberTask numberTask = NumberTask.fromString(tokenizer.nextToken() + (tokenizer.hasMoreElements() ? (SEP + tokenizer.nextToken()) : ""));
             data.addTask(numberTask);
         }
+
+        // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen TimeTask oder NumberTask einlesen
         return data;
     }
 }
