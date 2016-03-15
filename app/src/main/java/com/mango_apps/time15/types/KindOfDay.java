@@ -15,6 +15,7 @@ public enum KindOfDay {
 
     KIDSICKDAY("Kind krank"),
 
+    @Deprecated
     WORKDAY_SOME_VACATION("Arbeit / Urlaub");
 
     private final String displayString;

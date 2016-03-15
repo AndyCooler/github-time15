@@ -155,6 +155,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void updateMapWithIds(Map map, int newBeginValue, int... viewIds) {
+        Integer value = newBeginValue;
+        for (int viewId : viewIds) {
+            TextView view = (TextView) findViewById(viewId);
+            Integer oldValue = Integer.valueOf((String) view.getText());
+            view.setText(value < 10 ? "0" + String.valueOf(value) : String.valueOf(value));
+            map.remove(oldValue);
+            map.put(value, viewId);
+            Log.i(getClass().getName(), "updateMap: " + value + " -> " + viewId);
+            value++;
+        }
+    }
+
     private void updateBalance() {
         TextView balance = (TextView) findViewById(R.id.balance);
         String balanceText = Time15.fromMinutes(balanceValue).toDisplayString();
@@ -204,6 +217,46 @@ public class MainActivity extends AppCompatActivity {
         switchToID(id, TimeUtils.createID());
         Log.i(getClass().getName(), "dateToday() finished.");
 
+    }
+
+    public void beginEarlier(View view) {
+        Log.i(getClass().getName(), "beginEarlier() started.");
+        TextView textView = (TextView) findViewById(R.id.beginnA);
+        Integer newBeginValue = Integer.valueOf((String) textView.getText()) - 1;
+        if (newBeginValue >= 0) {
+            resetView();
+            updateMapWithIds(mapBeginnValueToViewId, newBeginValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
+            modelToView(originalData); // TODO currentData gibt es noch nicht
+            Log.i(getClass().getName(), "beginEarlier() finished. Now starts at " + newBeginValue);
+        } else {
+            Log.i(getClass().getName(), "beginEarlier() finished. No change.");
+        }
+    }
+
+    public void beginLater(View view) {
+        Log.i(getClass().getName(), "beginLater() started.");
+        TextView textView = (TextView) findViewById(R.id.beginnA);
+        Integer newBeginValue = Integer.valueOf((String) textView.getText()) + 1;
+        if (newBeginValue < 21) {
+            resetView();
+            updateMapWithIds(mapBeginnValueToViewId, newBeginValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
+            modelToView(originalData); // TODO currentData gibt es noch nicht
+            Log.i(getClass().getName(), "beginLater() finished. Now starts at " + newBeginValue);
+        } else {
+            Log.i(getClass().getName(), "beginLater() finished. No change.");
+        }
+    }
+
+    public void endEarlier(View view) {
+        Log.i(getClass().getName(), "endEarlier() started.");
+
+        Log.i(getClass().getName(), "endEarlier() finished.");
+    }
+
+    public void endLater(View view) {
+        Log.i(getClass().getName(), "endLater() started.");
+
+        Log.i(getClass().getName(), "endLater() finished.");
     }
 
     private void saveKindOfDay() {
