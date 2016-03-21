@@ -157,11 +157,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateMapWithIds(Map map, int newBeginValue, int... viewIds) {
         Integer value = newBeginValue;
+        map.clear();
         for (int viewId : viewIds) {
             TextView view = (TextView) findViewById(viewId);
-            Integer oldValue = Integer.valueOf((String) view.getText());
             view.setText(value < 10 ? "0" + String.valueOf(value) : String.valueOf(value));
-            map.remove(oldValue);
             map.put(value, viewId);
             Log.i(getClass().getName(), "updateMap: " + value + " -> " + viewId);
             value++;
@@ -222,40 +221,83 @@ public class MainActivity extends AppCompatActivity {
     public void beginEarlier(View view) {
         Log.i(getClass().getName(), "beginEarlier() started.");
         TextView textView = (TextView) findViewById(R.id.beginnA);
-        Integer newBeginValue = Integer.valueOf((String) textView.getText()) - 1;
-        if (newBeginValue >= 0) {
-            resetView();
-            updateMapWithIds(mapBeginnValueToViewId, newBeginValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-            modelToView(originalData); // TODO currentData gibt es noch nicht
-            Log.i(getClass().getName(), "beginEarlier() finished. Now starts at " + newBeginValue);
-        } else {
-            Log.i(getClass().getName(), "beginEarlier() finished. No change.");
-        }
+        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
+        updateMapToBeginAt(intoRange(hour));
+        Log.i(getClass().getName(), "beginEarlier() finished.");
     }
 
     public void beginLater(View view) {
         Log.i(getClass().getName(), "beginLater() started.");
         TextView textView = (TextView) findViewById(R.id.beginnA);
-        Integer newBeginValue = Integer.valueOf((String) textView.getText()) + 1;
-        if (newBeginValue < 21) {
-            resetView();
-            updateMapWithIds(mapBeginnValueToViewId, newBeginValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-            modelToView(originalData); // TODO currentData gibt es noch nicht
-            Log.i(getClass().getName(), "beginLater() finished. Now starts at " + newBeginValue);
-        } else {
-            Log.i(getClass().getName(), "beginLater() finished. No change.");
+        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
+        updateMapToBeginAt(intoRange(hour));
+        Log.i(getClass().getName(), "beginLater() finished.");
+    }
+
+    public void beginAt(Integer hour) {
+        Log.i(getClass().getName(), "beginAt() started." + hour);
+        if (hour == null || beginHourVisible(hour)) {
+            return;
         }
+        updateMapToBeginAt(intoRange(hour));
+        Log.i(getClass().getName(), "beginAt() finished.");
+    }
+
+    public void endAt(Integer hour) {
+        Log.i(getClass().getName(), "endAt() started." + hour);
+        if (hour == null || endHourVisible(hour)) {
+            return;
+        }
+        updateMapToEndAt(intoRange(hour));
+        Log.i(getClass().getName(), "endAt() finished.");
+    }
+
+    private void updateMapToEndAt(Integer newValue) {
+        resetView();
+        updateMapWithIds(mapEndeValueToViewId, newValue, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
+        modelToView(originalData); // TODO currentData gibt es noch nicht
+    }
+
+    private boolean beginHourVisible(int hour) {
+        return mapBeginnValueToViewId.get(hour) != null;
+    }
+
+    private boolean endHourVisible(int hour) {
+        return mapEndeValueToViewId.get(hour) != null;
+    }
+
+    private void updateMapToBeginAt(Integer newValue) {
+        resetView();
+        updateMapWithIds(mapBeginnValueToViewId, newValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
+        if (originalData != null) {
+            modelToView(originalData); // TODO currentData gibt es noch nicht
+        }
+    }
+
+    private Integer intoRange(int hour) {
+        Integer newValue = hour < 0 ? 0 : hour;
+        if (hour < 0) {
+            newValue = 0;
+        }
+        if (hour > 20) {
+            newValue = 20;
+        }
+        return newValue;
     }
 
     public void endEarlier(View view) {
         Log.i(getClass().getName(), "endEarlier() started.");
-
+        TextView textView = (TextView) findViewById(R.id.endeA);
+        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
+        updateMapToEndAt(intoRange(hour));
         Log.i(getClass().getName(), "endEarlier() finished.");
     }
 
     public void endLater(View view) {
         Log.i(getClass().getName(), "endLater() started.");
-
+        TextView textView = (TextView) findViewById(R.id.endeA);
+        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
+        updateMapToEndAt(intoRange(hour));
         Log.i(getClass().getName(), "endLater() finished.");
     }
 
@@ -379,6 +421,9 @@ public class MainActivity extends AppCompatActivity {
         ende15 = data.getEnd15();
         pauseTime = data.getPause();
         kindOfDay = data.getDay().toString();
+
+        beginAt(beginnTime);
+        endAt(endeTime);
 
         previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
         previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
