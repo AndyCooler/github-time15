@@ -27,7 +27,7 @@
             android:layout_height="wrap_content">
 
             <ImageButton
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/beginEarlierButton"
                 android:src="@android:drawable/arrow_up_float"
@@ -35,27 +35,18 @@
                 android:clickable="true"
                 android:onClick="beginEarlier" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/beginLaterButton"
-                android:src="@android:drawable/arrow_down_float"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:onClick="beginLater" />
-
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Beginn"
                 android:id="@+id/beginnView"
                 android:textColor="#1E90FF"
                 android:gravity="center_horizontal"
-                android:layout_weight="3" />
+                android:layout_weight="1" />
 
             <ImageButton
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/endEarlierButton"
                 android:src="@android:drawable/arrow_up_float"
@@ -63,24 +54,15 @@
                 android:clickable="true"
                 android:onClick="endEarlier" />
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/endLaterButton"
-                android:src="@android:drawable/arrow_down_float"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:onClick="endLater" />
-
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Ende"
                 android:id="@+id/endeView"
                 android:textColor="#1E90FF"
                 android:gravity="center_horizontal"
-                android:layout_weight="3" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 
@@ -291,14 +273,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/beginLaterButton"
+                android:src="@android:drawable/arrow_down_float"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="beginLater" />
+
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Pause"
                 android:id="@+id/pauseView"
                 android:layout_weight="1"
                 android:textColor="#1E90FF"
+                android:gravity="center_horizontal" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/endLaterButton"
+                android:src="@android:drawable/arrow_down_float"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="endLater" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/spaceView"
+                android:layout_weight="1"
                 android:gravity="center_horizontal" />
         </LinearLayout>
 
