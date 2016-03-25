@@ -45,6 +45,12 @@ public final class DaysDataUtils {
     }
 
 
+    /**
+     * @param data
+     * @return
+     * @deprecated use DaysDataNew#getBalance()
+     */
+    @Deprecated
     public static int calculateBalance(DaysData data) {
 
         if (data == null || !KindOfDay.isDueDay(data.getDay())) {

@@ -1,12 +1,11 @@
 package com.mango_apps.time15.types;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.util.TimerTask;
 
 /**
  * Created by andreas on 12.03.16.
+ * TODO in migration to DaysDataNew from DaysData, remove KindOfDay.WORKDAY_SOME_VACATION!!
  */
 public class DaysDataNew {
 
@@ -43,6 +42,14 @@ public class DaysDataNew {
             balance += task.getBalance();
         }
         return balance;
+    }
+
+    public Time15 getTotal() {
+        Time15 total = new Time15(0, 0);
+        for (Task task : tasks) {
+            total.plus(task.getTotal());
+        }
+        return total;
     }
 
     @Override

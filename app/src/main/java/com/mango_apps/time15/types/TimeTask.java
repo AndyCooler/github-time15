@@ -116,7 +116,8 @@ public class TimeTask implements Task {
         Time15 actual = getTotal();
         actualTotalMinutes += actual.toMinutes();
         if (KindOfDay.WORKDAY_SOME_VACATION.equals(day)) {
-            //TODO remove after migration actualTotalMinutes += 4 * 60;
+            //TODO remove after migration
+            actualTotalMinutes += 4 * 60;
         }
         return actualTotalMinutes - DUE_TOTAL_MINUTES;
     }

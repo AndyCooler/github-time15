@@ -39,4 +39,12 @@ public class Time15 {
         String result = String.valueOf(difference);
         return result.length() < 2 ? "0" + result : result;
     }
+
+    public void plus(Time15 toAdd) {
+        int total = toMinutes();
+        int addMinutes = toAdd.toMinutes();
+        Time15 newValue = fromMinutes(total + addMinutes);
+        hours = newValue.getHours();
+        minutes = newValue.getMinutes();
+    }
 }
