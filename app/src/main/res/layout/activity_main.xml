@@ -369,7 +369,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="workday"
+                    android:text="Arbeit"
                     android:id="@+id/kindOfDay"
                     android:layout_weight="4"
                     android:textColor="#1E90FF"
