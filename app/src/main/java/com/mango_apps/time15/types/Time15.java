@@ -5,46 +5,58 @@ package com.mango_apps.time15.types;
  */
 public class Time15 {
 
-    private int hours;
-    private int minutes;
+    private int totalMinutes;
 
     public Time15(int hours, int minutes) {
-        this.hours = hours; // mit Vorzeichen
-        this.minutes = minutes; // ohne Vorzeichen
+        // hours mit Vorzeichen
+        // minutes ohne Vorzeichen
+        totalMinutes = hours > 0 ? hours * 60 + minutes : hours * 60 - minutes;
     }
 
+    public Time15(int totalMinutes) {
+        // hours mit Vorzeichen
+        // minutes ohne Vorzeichen
+        this.totalMinutes = totalMinutes;
+    }
+
+
     public int getHours() {
-        return hours;
+        return totalMinutes / 60;
     }
 
     public int getMinutes() {
-        return minutes;
+        return Math.abs(totalMinutes % 60);
     }
 
     public String toDisplayString() {
-        return formatWithTwoDigits(hours) + ":" + formatWithTwoDigits(minutes);
+        return formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
     }
 
     public int toMinutes() {
-        return hours * 60 + (hours >= 0 ? minutes : -minutes);
+        return totalMinutes;
     }
 
     public static Time15 fromMinutes(int totalMinutes) {
-        int hours = totalMinutes / 60;
-        int minutes = Math.abs(totalMinutes % 60);
-        return new Time15(hours, minutes);
+        return new Time15(totalMinutes);
     }
 
     private String formatWithTwoDigits(int difference) {
-        String result = String.valueOf(difference);
+        String result = String.valueOf(Math.abs(difference));
         return result.length() < 2 ? "0" + result : result;
     }
 
     public void plus(Time15 toAdd) {
-        int total = toMinutes();
-        int addMinutes = toAdd.toMinutes();
-        Time15 newValue = fromMinutes(total + addMinutes);
-        hours = newValue.getHours();
-        minutes = newValue.getMinutes();
+        totalMinutes += toAdd.toMinutes();
+    }
+
+    public String toDisplayStringWithSign() {
+        String s = "";
+        if (totalMinutes > 0) {
+            s += "+";
+        } else if (totalMinutes < 0) {
+            s += "-";
+        }
+        s += formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
+        return s;
     }
 }

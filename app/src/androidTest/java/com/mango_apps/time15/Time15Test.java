@@ -31,6 +31,20 @@ public class Time15Test extends TestCase {
         assertEquals(-150, t.toMinutes());
     }
 
+    public void testToMinutesPosSmall() {
+        Time15 t = Time15.fromMinutes(15);
+        assertEquals(0, t.getHours());
+        assertEquals(15, t.getMinutes());
+        assertEquals(15, t.toMinutes());
+    }
+
+    public void testToMinutesNegSmall() {
+        Time15 t = Time15.fromMinutes(-15);
+        assertEquals(0, t.getHours());
+        assertEquals(15, t.getMinutes());
+        assertEquals(-15, t.toMinutes());
+    }
+
     public void testPlusPos() {
         Time15 t = Time15.fromMinutes(150);
         Time15 add = new Time15(2, 45);

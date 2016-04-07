@@ -176,10 +176,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
         //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
         int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
-        String balanceText = Time15.fromMinutes(weeksBalance).toDisplayString();
-        if (weeksBalance > 0) {
-            balanceText = "+" + balanceText;
-        }
+        String balanceText = Time15.fromMinutes(weeksBalance).toDisplayStringWithSign();
         balanceView.setText(balanceText);
         return balanceView;
     }
