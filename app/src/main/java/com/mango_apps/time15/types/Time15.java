@@ -14,8 +14,7 @@ public class Time15 {
     }
 
     public Time15(int totalMinutes) {
-        // hours mit Vorzeichen
-        // minutes ohne Vorzeichen
+        // totalMinutes mit Vorzeichen
         this.totalMinutes = totalMinutes;
     }
 
@@ -58,5 +57,9 @@ public class Time15 {
         }
         s += formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
         return s;
+    }
+
+    public void minus(int minutes) {
+        totalMinutes -= minutes;
     }
 }

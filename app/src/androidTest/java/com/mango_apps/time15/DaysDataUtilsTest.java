@@ -1,10 +1,10 @@
 package com.mango_apps.time15;
 
+import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.Time15;
-import com.mango_apps.time15.types.TimeTask;
 import com.mango_apps.time15.util.DaysDataUtils;
 
 import junit.framework.TestCase;
@@ -16,7 +16,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testDifferenceWithPause() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY);
         task.setBegin(10);
@@ -52,7 +52,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testDifferenceWithoutPause() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY);
         task.setBegin(10);
@@ -88,7 +88,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testDifferenceWithout15s() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY);
         task.setBegin(10);
@@ -124,7 +124,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testDifferenceIncomplete() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY);
         task.setBegin(10);
@@ -160,7 +160,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testDifferenceIncomplete15() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY_SOME_VACATION);
         task.setBegin(10);
@@ -197,7 +197,7 @@ public class DaysDataUtilsTest extends TestCase {
 
     public void testHoliday() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.HOLIDAY);
 

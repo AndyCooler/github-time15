@@ -61,7 +61,10 @@ public class NumberTask implements Task {
         } else {
             totalInteger = nextIntToken(tokenizer);
         }
-        numberTask.setTotal(new Time15(totalInteger == null ? 0 : totalInteger, 0));
+        if (totalInteger == null) {
+            totalInteger = 0;
+        }
+        numberTask.setTotal(Time15.fromMinutes(totalInteger * 60));
 
         return numberTask;
     }

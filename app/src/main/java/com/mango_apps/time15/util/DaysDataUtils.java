@@ -17,31 +17,26 @@ public final class DaysDataUtils {
     }
 
     public static Time15 calculateTotal(Integer begin, Integer begin15, Integer end, Integer end15, Integer pause) {
-        int difference = 0;
-        int difference15 = 0;
-        if (end != null && begin != null) {
-            difference = end - begin;
-            if (begin15 != null && end15 != null) {
-                difference15 = end15 - begin15;
-                if (difference15 < 0) {
-                    difference--;
-                    difference15 = 60 + difference15;
-                }
-            }
-            if (pause != null) {
-                int pauseTemp = pause;
-                while (pauseTemp > 60) {
-                    difference--;
-                    pauseTemp -= 60;
-                }
-                difference15 -= pauseTemp;
-                if (difference15 < 0) {
-                    difference--;
-                    difference15 = 60 + difference15;
-                }
-            }
+
+        if (begin == null || end == null) {
+            return Time15.fromMinutes(0);
         }
-        return new Time15(difference, difference15);
+
+        Time15 beginTime = new Time15(begin, begin15 == null ? 0 : begin15);
+        Time15 endTime = new Time15(end, end15 == null ? 0 : end15);
+
+        if (beginTime.toMinutes() > endTime.toMinutes()) {
+            throw new IllegalStateException("Begin time must be before end time!");
+        }
+
+        endTime.minus(beginTime.toMinutes());
+        endTime.minus(pause == null ? 0 : pause);
+
+        if (endTime.toMinutes() < 0) {
+            throw new IllegalStateException("Negative time difference!");
+        }
+
+        return endTime;
     }
 
 

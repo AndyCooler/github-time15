@@ -1,12 +1,11 @@
 package com.mango_apps.time15;
 
+import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.types.NumberTask;
-import com.mango_apps.time15.types.Task;
 import com.mango_apps.time15.types.Time15;
-import com.mango_apps.time15.types.TimeTask;
 import com.mango_apps.time15.util.DaysDataUtils;
 
 import junit.framework.TestCase;
@@ -48,7 +47,7 @@ public class DaysDataTest extends TestCase {
 
     public void testToFromString() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY);
         task.setBegin(10);
@@ -62,7 +61,7 @@ public class DaysDataTest extends TestCase {
 
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
-        TimeTask copyTask = (TimeTask) copy.getTask(0);
+        BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
         assertEquals(new Integer(10), copyTask.getBegin());
         assertEquals(new Integer(15), copyTask.getBegin15());
         assertEquals(new Integer(16), copyTask.getEnd());
@@ -99,7 +98,7 @@ public class DaysDataTest extends TestCase {
 
     public void testToFromStringPauseNull() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.KIDSICKDAY);
         task.setBegin(10);
@@ -113,7 +112,7 @@ public class DaysDataTest extends TestCase {
 
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
-        TimeTask copyTask = (TimeTask) copy.getTask(0);
+        BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
         assertEquals(new Integer(10), copyTask.getBegin());
         assertEquals(new Integer(15), copyTask.getBegin15());
         assertEquals(new Integer(16), copyTask.getEnd());
@@ -151,7 +150,7 @@ public class DaysDataTest extends TestCase {
 
     public void testToFromStringCombinationWorkdayVacationPauseNull() {
         DaysDataNew data = new DaysDataNew("ID");
-        TimeTask task = new TimeTask();
+        BeginEndTask task = new BeginEndTask();
         data.addTask(task);
         task.setKindOfDay(KindOfDay.WORKDAY);
         task.setBegin(10);
@@ -170,7 +169,7 @@ public class DaysDataTest extends TestCase {
 
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
-        TimeTask copyTask = (TimeTask) copy.getTask(0);
+        BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
         assertEquals(new Integer(10), copyTask.getBegin());
         assertEquals(new Integer(15), copyTask.getBegin15());
         assertEquals(new Integer(16), copyTask.getEnd());
@@ -192,7 +191,7 @@ public class DaysDataTest extends TestCase {
 
         DaysDataNew copy = DaysDataNew.fromString("ID#WORKDAY_SOME_VACATION#10#15#16#45#-#4");
         assertEquals("ID", copy.getId());
-        TimeTask copyTask = (TimeTask) copy.getTask(0);
+        BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
         assertEquals(new Integer(10), copyTask.getBegin());
         assertEquals(new Integer(15), copyTask.getBegin15());
         assertEquals(new Integer(16), copyTask.getEnd());

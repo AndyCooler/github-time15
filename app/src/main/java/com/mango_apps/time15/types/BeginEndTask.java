@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 /**
  * Created by andreas on 11.03.16.
  */
-public class TimeTask implements Task {
+public class BeginEndTask implements Task {
 
     public static final int DUE_HOURS_PER_DAY = 8;
 
@@ -137,22 +137,22 @@ public class TimeTask implements Task {
         return (value == null) ? "-" : String.valueOf(value);
     }
 
-    public static TimeTask fromString(String s) {
+    public static BeginEndTask fromString(String s) {
 
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
-        TimeTask timeTask = new TimeTask();
-        timeTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
+        BeginEndTask beginEndTask = new BeginEndTask();
+        beginEndTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
         // TODO remove after migration:
-        if (timeTask.getKindOfDay().equals(KindOfDay.WORKDAY_SOME_VACATION)) {
-            timeTask.setKindOfDay(KindOfDay.WORKDAY);
+        if (beginEndTask.getKindOfDay().equals(KindOfDay.WORKDAY_SOME_VACATION)) {
+            beginEndTask.setKindOfDay(KindOfDay.WORKDAY);
         }
-        timeTask.setBegin(nextIntToken(tokenizer));
-        timeTask.setBegin15(nextIntToken(tokenizer));
-        timeTask.setEnd(nextIntToken(tokenizer));
-        timeTask.setEnd15(nextIntToken(tokenizer));
-        timeTask.setPause(nextIntToken(tokenizer));
+        beginEndTask.setBegin(nextIntToken(tokenizer));
+        beginEndTask.setBegin15(nextIntToken(tokenizer));
+        beginEndTask.setEnd(nextIntToken(tokenizer));
+        beginEndTask.setEnd15(nextIntToken(tokenizer));
+        beginEndTask.setPause(nextIntToken(tokenizer));
 
-        return timeTask;
+        return beginEndTask;
     }
 
     private static Integer nextIntToken(StringTokenizer tokenizer) {

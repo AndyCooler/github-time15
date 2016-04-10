@@ -45,7 +45,7 @@ public class DaysDataNew {
     }
 
     public Time15 getTotal() {
-        Time15 total = new Time15(0, 0);
+        Time15 total = Time15.fromMinutes(0);
         for (Task task : tasks) {
             total.plus(task.getTotal());
         }
@@ -66,17 +66,17 @@ public class DaysDataNew {
         // TODO das ist erstmal nur fuer 1 bis 2 Tasks pro DaysData
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         DaysDataNew data = new DaysDataNew(tokenizer.nextToken());
-        TimeTask timeTask = TimeTask.fromString(tokenizer.nextToken() +
+        BeginEndTask beginEndTask = BeginEndTask.fromString(tokenizer.nextToken() +
                 SEP + tokenizer.nextToken() + SEP + tokenizer.nextToken() +
                 SEP + tokenizer.nextToken() + SEP + tokenizer.nextToken() +
                 SEP + tokenizer.nextToken());
-        data.addTask(timeTask);
+        data.addTask(beginEndTask);
         if (tokenizer.hasMoreElements()) {
             NumberTask numberTask = NumberTask.fromString(tokenizer.nextToken() + (tokenizer.hasMoreElements() ? (SEP + tokenizer.nextToken()) : ""));
             data.addTask(numberTask);
         }
 
-        // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen TimeTask oder NumberTask einlesen
+        // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen BeginEndTask oder NumberTask einlesen
         return data;
     }
 }
