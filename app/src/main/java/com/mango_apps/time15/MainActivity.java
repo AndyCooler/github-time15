@@ -169,10 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBalance() {
         TextView balance = (TextView) findViewById(R.id.balance);
-        String balanceText = Time15.fromMinutes(balanceValue).toDisplayString();
-        if (balanceValue > 0) {
-            balanceText = "+" + balanceText;
-        }
+        String balanceText = Time15.fromMinutes(balanceValue).toDisplayStringWithSign();
         balance.setText("(" + balanceText + ")");
     }
 

@@ -31,6 +31,17 @@ public class Time15 {
         return formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
     }
 
+    public String toDisplayStringWithSign() {
+        String s = "";
+        if (totalMinutes > 0) {
+            s += "+";
+        } else if (totalMinutes < 0) {
+            s += "-";
+        }
+        s += formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
+        return s;
+    }
+
     public int toMinutes() {
         return totalMinutes;
     }
@@ -46,17 +57,6 @@ public class Time15 {
 
     public void plus(Time15 toAdd) {
         totalMinutes += toAdd.toMinutes();
-    }
-
-    public String toDisplayStringWithSign() {
-        String s = "";
-        if (totalMinutes > 0) {
-            s += "+";
-        } else if (totalMinutes < 0) {
-            s += "-";
-        }
-        s += formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
-        return s;
     }
 
     public void minus(int minutes) {
