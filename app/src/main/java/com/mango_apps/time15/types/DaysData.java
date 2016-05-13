@@ -138,4 +138,38 @@ public class DaysData {
         }
         return Integer.valueOf(token);
     }
+
+    public boolean isEqualToNewData(DaysDataNew dataNew) {
+        boolean result = false;
+        if (!(dataNew.getTask(0) instanceof BeginEndTask)) {
+            return false;
+        }
+
+        BeginEndTask task0 = (BeginEndTask) dataNew.getTask(0);
+
+        result |= begin.equals(task0.getBegin());
+        result |= begin15.equals(task0.getBegin15());
+        result |= end.equals(task0.getEnd());
+        result |= end15.equals(task0.getEnd15());
+
+        if (otherHours != null && otherHours > 0) {
+            if (day.equals(KindOfDay.WORKDAY_SOME_VACATION)) {
+                if (dataNew.getTask(1) == null || !(dataNew.getTask(1) instanceof NumberTask)) {
+                    return false;
+                }
+                NumberTask task1 = (NumberTask) dataNew.getTask(1);
+                result |= KindOfDay.VACATION.equals(task1.getKindOfDay());
+                result |= otherHours * 60 == task1.getTotal().toMinutes();
+            } else {
+                return false;
+            }
+        } else {
+            result |= day.equals(task0.getKindOfDay());
+            if (dataNew.getTask(1) != null) {
+                return false;
+            }
+        }
+
+        return result;
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
@@ -15,12 +16,12 @@ import java.util.List;
  */
 public class NoopStorage implements StorageFacade {
 
-    HashMap<String, DaysData> cache = new HashMap<String, DaysData>();
+    HashMap<String, String> cache = new HashMap<String, String>();
 
     @Override
     public boolean saveDaysData(Activity activity, DaysData data) {
         Log.i(getClass().getName(), "Saved data: " + data);
-        cache.put(data.getId(), data);
+        cache.put(data.getId(), data.toString());
         return true;
     }
 
@@ -31,8 +32,19 @@ public class NoopStorage implements StorageFacade {
         } else {
             Log.i(getClass().getName(), "Loaded data " + cache.get(id));
         }
-        return cache.get(id);
+        return cache.get(id) == null ? null : DaysData.fromString(cache.get(id));
     }
+
+    @Override
+    public DaysDataNew loadDaysDataNew(Activity activity, String id) {
+        if (cache.get(id) == null) {
+            Log.i(getClass().getName(), "No data with id " + id);
+        } else {
+            Log.i(getClass().getName(), "Loaded data " + cache.get(id));
+        }
+        return cache.get(id) == null ? null : DaysDataNew.fromString(cache.get(id));
+    }
+
 
     @Override
     public int loadBalance(Activity activity, String id) {

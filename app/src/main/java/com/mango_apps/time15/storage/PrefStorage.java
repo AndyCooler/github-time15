@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.TimeUtils;
 
 /**
@@ -38,6 +39,20 @@ public class PrefStorage implements StorageFacade {
             return null;
         }
         DaysData data = DaysData.fromString(s);
+
+        return data;
+    }
+
+    @Override
+    public DaysDataNew loadDaysDataNew(Activity activity, String id) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                getFilename(id), Context.MODE_PRIVATE);
+
+        String s = sharedPref.getString(id, null);
+        if (s == null) {
+            return null;
+        }
+        DaysDataNew data = DaysDataNew.fromString(s);
 
         return data;
     }

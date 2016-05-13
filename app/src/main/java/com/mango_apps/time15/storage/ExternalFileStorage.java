@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
@@ -93,6 +94,51 @@ public class ExternalFileStorage implements StorageFacade {
                 Log.i(getClass().getName(), "No data with id " + id);
             } else {
                 data = DaysData.fromString(candidate);
+            }
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "Error loading data with id " + id, e);
+        }
+
+        return data;
+    }
+
+
+    @Override
+    public DaysDataNew loadDaysDataNew(Activity activity, String id) {
+        if (!initialized && !init()) {
+            return null;
+        }
+
+        File file = new File(storageDir, getFilename(id));
+        if (!file.exists()) {
+            return null;
+        }
+
+        DaysDataNew data = null;
+        try {
+            FileInputStream fis = new FileInputStream(file);
+
+            InputStreamReader isr;
+            isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr, 8192);    // 2nd arg is buffer size
+
+            String test = null;
+            String candidate = null;
+            while (true) {
+                test = br.readLine();
+
+                if (test == null) break;
+                if (test.startsWith(id)) {
+                    candidate = test;
+                }
+            }
+            isr.close();
+            fis.close();
+            br.close();
+            if (candidate == null) {
+                Log.i(getClass().getName(), "No data with id " + id);
+            } else {
+                data = DaysDataNew.fromString(candidate);
             }
         } catch (IOException e) {
             Log.e(getClass().getName(), "Error loading data with id " + id, e);
