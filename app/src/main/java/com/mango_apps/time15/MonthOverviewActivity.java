@@ -118,27 +118,14 @@ public class MonthOverviewActivity extends ActionBarActivity {
                     }
                 }
 
-                int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
-                switch (task0.getKindOfDay()) {
-                    case WORKDAY:
-                    case WORKDAY_SOME_VACATION:
-                        rowColor = ColorsUI.DARK_BLUE_DEFAULT;
-                        break;
-                    case HOLIDAY:
-                    case VACATION:
-                        rowColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
-                        break;
-                    case SICKDAY:
-                    case KIDSICKDAY:
-                        rowColor = ColorsUI.DARK_GREY_SAVE_ERROR;
-                        break;
-                }
-                row.addView(createTextView(TimeUtils.dayOfWeek(dayId), rowColor));
-                row.addView(createTextView(dayId.substring(0, 2), rowColor));
-                row.addView(createTextView(task0.getKindOfDay().getDisplayString(), rowColor));
-                row.addView(createTextView(hours, rowColor));
-                row.addView(createTextView(task1 == null ? "" : task1.getKindOfDay().getDisplayString(), rowColor));
-                row.addView(createTextView(extraVacationHours, rowColor));
+                row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
+                row.addView(createTextView(dayId.substring(0, 2)));
+                int itemColor = calcItemColor(task0.getKindOfDay());
+                row.addView(createTextView(task0.getKindOfDay().getDisplayString(), itemColor));
+                row.addView(createTextView(hours, itemColor));
+                itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay());
+                row.addView(createTextView(task1 == null ? "" : task1.getKindOfDay().getDisplayString(), itemColor));
+                row.addView(createTextView(extraVacationHours, itemColor));
 
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -152,6 +139,26 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
         }
         Log.i(getClass().getName(), "initialize() finished.");
+    }
+
+    private int calcItemColor(KindOfDay kindOfDay) {
+
+        int itemColor = ColorsUI.DARK_BLUE_DEFAULT;
+        switch (kindOfDay) {
+            case WORKDAY:
+            case WORKDAY_SOME_VACATION:
+                itemColor = ColorsUI.DARK_BLUE_DEFAULT;
+                break;
+            case HOLIDAY:
+            case VACATION:
+                itemColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
+                break;
+            case SICKDAY:
+            case KIDSICKDAY:
+                itemColor = ColorsUI.DARK_GREY_SAVE_ERROR;
+                break;
+        }
+        return itemColor;
     }
 
     private int addWeekSeparatorLine(String dayId, Map<Integer, Integer> weeksBalanceMap, TableLayout table, int previousWeekOfYear, ViewGroup row, ViewGroup previousRow) {
