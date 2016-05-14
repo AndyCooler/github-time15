@@ -14,6 +14,8 @@ import junit.framework.TestCase;
  */
 public class StorageFacadeTest extends TestCase {
 
+    // save old DaysData, load old DaysData:
+
     public void testNoopStorageSaveLoad() {
         StorageFacade storage = new NoopStorage();
 
@@ -29,6 +31,8 @@ public class StorageFacadeTest extends TestCase {
         DaysData loaded = storage.loadDaysData(null, data.getId());
         assertEquals(data.toString(), loaded.toString());
     }
+
+    // save old DaysData, load new DaysDataNew:
 
     public void testNoopStorageMigrationSaveLoad1() {
         DaysData data = DaysData.fromString("ID#WORKDAY_SOME_VACATION#10#15#16#45#-#4");
@@ -61,4 +65,5 @@ public class StorageFacadeTest extends TestCase {
         assertEquals("ID#KIDSICKDAY#10#15#16#45#-", loaded.toString());
     }
 
+    // TODO save new DaysDataNew, load new DaysDataNew:
 }

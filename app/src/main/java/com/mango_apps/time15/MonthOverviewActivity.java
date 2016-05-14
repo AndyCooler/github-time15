@@ -16,11 +16,12 @@ import android.widget.TextView;
 
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.storage.StorageFactory;
+import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.ColorsUI;
-import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
+import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
-import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.HashMap;
@@ -85,7 +86,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
         Map<Integer, Integer> weeksBalanceMap = new HashMap<Integer, Integer>();
         for (final String dayId : listOfIds) {
-            DaysData data = storage.loadDaysData(this, dayId);
+            DaysDataNew data = storage.loadDaysDataNew(this, dayId);
 
 
             if (data == null) {
@@ -108,15 +109,17 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
                 String hours = "";
                 String extraVacationHours = "";
-                if (KindOfDay.isDueDay(data.getDay())) {
-                    hours += DaysDataUtils.calculateTotal(data).toDisplayString() + " h";
-                    if (KindOfDay.WORKDAY_SOME_VACATION.equals(data.getDay())) {
-                        extraVacationHours = " +" + data.getOtherHours() + " h";
+                BeginEndTask task0 = (BeginEndTask) data.getTask(0);
+                NumberTask task1 = (NumberTask) data.getTask(1);
+                if (KindOfDay.isDueDay(task0.getKindOfDay())) {
+                    hours += task0.getTotal().toDisplayString() + " h";
+                    if (task1 != null) {
+                        extraVacationHours = task1.getTotal().toDisplayString() + " h";
                     }
                 }
 
                 int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
-                switch (data.getDay()) {
+                switch (task0.getKindOfDay()) {
                     case WORKDAY:
                     case WORKDAY_SOME_VACATION:
                         rowColor = ColorsUI.DARK_BLUE_DEFAULT;
@@ -132,8 +135,9 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 }
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId), rowColor));
                 row.addView(createTextView(dayId.substring(0, 2), rowColor));
-                row.addView(createTextView(data.getDay().getDisplayString(), rowColor));
+                row.addView(createTextView(task0.getKindOfDay().getDisplayString(), rowColor));
                 row.addView(createTextView(hours, rowColor));
+                row.addView(createTextView(task1 == null ? "" : task1.getKindOfDay().getDisplayString(), rowColor));
                 row.addView(createTextView(extraVacationHours, rowColor));
 
                 row.setOnClickListener(new View.OnClickListener() {
@@ -181,9 +185,9 @@ public class MonthOverviewActivity extends ActionBarActivity {
         return balanceView;
     }
 
-    private void addToBalance(DaysData data, Map<Integer, Integer> weeksBalanceMap) {
+    private void addToBalance(DaysDataNew data, Map<Integer, Integer> weeksBalanceMap) {
         int weekOfYear = TimeUtils.getWeekOfYear(data.getId());
-        int balanceInMinutes = DaysDataUtils.calculateBalance(data);
+        int balanceInMinutes = data.getBalance();
         Integer current = weeksBalanceMap.get(weekOfYear);
         if (current == null) {
             weeksBalanceMap.put(weekOfYear, balanceInMinutes);
@@ -197,7 +201,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         textView.setText(text);
         textView.setTextColor(color);
         textView.setGravity(Gravity.LEFT);
-        textView.setPadding(15, 5, 15, 5);
+        textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
         //textView.setBackgroundColor(new Random().nextInt());
         //textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         return textView;

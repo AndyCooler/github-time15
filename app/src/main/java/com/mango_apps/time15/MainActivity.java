@@ -12,8 +12,9 @@ import android.widget.TextView;
 
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.storage.StorageFactory;
+import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.ColorsUI;
-import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
-    private DaysData originalData;
+    private DaysDataNew originalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
     private void switchToID(String fromId, String toId) {
         id = toId;
         setTitle(TimeUtils.getMainTitleString(id));
-        DaysData data = storage.loadDaysData(this, id);
+        DaysDataNew data = storage.loadDaysDataNew(this, id);
         originalData = data;
         resetView();
         if (fromId != null && !TimeUtils.isSameMonth(fromId, id)) {
@@ -300,19 +301,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveKindOfDay() {
         if (!previousSelectionKindOfDays.equals(kindOfDay)) {
-            DaysData modifiedData = viewToModel();
+            DaysDataNew modifiedData = viewToModel();
             TextView day = (TextView) findViewById(R.id.kindOfDay);
-            if (storage.saveDaysData(this, modifiedData)) {
-                day.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-            } else {
+            // TODO saveDaysDataNew!!!
+            //if (storage.saveDaysData(this, modifiedData)) {
+            //    day.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+            //} else {
                 day.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
-            }
+            //}
         }
     }
 
     public void toggleKindOfDay(View v) {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
-        TextView day = (TextView) v;
         kindOfDay = KindOfDay.toggle(kindOfDay);
         aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
 
@@ -382,42 +383,47 @@ public class MainActivity extends AppCompatActivity {
         total.setTextColor(ColorsUI.DARK_BLUE_DEFAULT);
 
         if (mitSpeichern && timeSelectionComplete) {
-            DaysData modifiedData = viewToModel();
+            DaysDataNew modifiedData = viewToModel();
             if (originalData == null) {
-                balanceValue += DaysDataUtils.calculateBalance(modifiedData);
+                balanceValue += modifiedData.getBalance();
             } else {
-                balanceValue -= DaysDataUtils.calculateBalance(originalData);
-                balanceValue += DaysDataUtils.calculateBalance(modifiedData);
+                balanceValue -= originalData.getBalance();
+                balanceValue += modifiedData.getBalance();
             }
 
             originalData = modifiedData;
             updateBalance();
-            if (storage.saveDaysData(this, modifiedData)) {
-                total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-            } else {
-                total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
-            }
+// TODO saveDaysDataNew!!!
+            //if (storage.saveDaysData(this, modifiedData)) {
+            //    total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+            //} else {
+            //    total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+            //}
         }
     }
 
-    private DaysData viewToModel() {
-        DaysData data = new DaysData(id);
-        data.setBegin(beginnTime);
-        data.setBegin15(beginn15);
-        data.setEnd(endeTime);
-        data.setEnd15(ende15);
-        data.setPause(pauseTime);
-        data.setDay(KindOfDay.fromString(kindOfDay));
+    private DaysDataNew viewToModel() {
+        DaysDataNew data = new DaysDataNew(id);
+
+        BeginEndTask task0 = new BeginEndTask();
+        task0.setBegin(beginnTime);
+        task0.setBegin15(beginn15);
+        task0.setEnd(endeTime);
+        task0.setEnd15(ende15);
+        task0.setPause(pauseTime);
+        task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
+        data.addTask(task0);
         return data;
     }
 
-    private void modelToView(DaysData data) {
-        beginnTime = data.getBegin();
-        beginn15 = data.getBegin15();
-        endeTime = data.getEnd();
-        ende15 = data.getEnd15();
-        pauseTime = data.getPause();
-        kindOfDay = data.getDay().toString();
+    private void modelToView(DaysDataNew data) {
+        BeginEndTask task0 = (BeginEndTask) data.getTask(0);
+        beginnTime = task0.getBegin();
+        beginn15 = task0.getBegin15();
+        endeTime = task0.getEnd();
+        ende15 = task0.getEnd15();
+        pauseTime = task0.getPause();
+        kindOfDay = task0.getKindOfDay().toString();
 
         beginAt(beginnTime);
         endAt(endeTime);
