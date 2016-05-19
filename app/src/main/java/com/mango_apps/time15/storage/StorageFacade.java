@@ -20,6 +20,16 @@ public interface StorageFacade {
     boolean saveDaysData(Activity activity, DaysData data);
 
     /**
+     * Save a day's data.
+     *
+     * @param activity parent activity
+     * @param data     the data to save
+     * @return
+     */
+    boolean saveDaysDataNew(Activity activity, DaysDataNew data);
+
+
+    /**
      * Load a day's data.
      *
      * @param activity parent activity

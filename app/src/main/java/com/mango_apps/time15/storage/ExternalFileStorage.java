@@ -59,6 +59,34 @@ public class ExternalFileStorage implements StorageFacade {
     }
 
     @Override
+    public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
+        if (!initialized && !init()) {
+            return false;
+        }
+
+        String s = data.toString();
+
+        File file = new File(storageDir, getFilename(data.getId()));
+
+        boolean result = false;
+        try {
+            FileOutputStream fos = new FileOutputStream(file, true);
+
+            PrintWriter pw = new PrintWriter(fos);
+            pw.println(s);
+            pw.flush();
+            pw.close();
+            fos.close();
+
+            Log.i(getClass().getName(), "Saved data with id " + data.getId());
+            result = true;
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "Error saving data with id " + data.getId() + " to file " + file.getAbsolutePath(), e);
+        }
+        return result;
+    }
+
+    @Override
     public DaysData loadDaysData(Activity activity, String id) {
         if (!initialized && !init()) {
             return null;

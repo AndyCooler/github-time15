@@ -29,6 +29,19 @@ public class PrefStorage implements StorageFacade {
     }
 
     @Override
+    public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
+        SharedPreferences sharedPref = activity.getSharedPreferences(
+                getFilename(data.getId()), Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        editor.putString(data.getId(), data.toString());
+        editor.commit();
+
+        return true;
+    }
+
+    @Override
     public DaysData loadDaysData(Activity activity, String id) {
 
         SharedPreferences sharedPref = activity.getSharedPreferences(

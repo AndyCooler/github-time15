@@ -26,6 +26,13 @@ public class NoopStorage implements StorageFacade {
     }
 
     @Override
+    public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
+        Log.i(getClass().getName(), "Saved data: " + data);
+        cache.put(data.getId(), data.toString());
+        return true;
+    }
+
+    @Override
     public DaysData loadDaysData(Activity activity, String id) {
         if (cache.get(id) == null) {
             Log.i(getClass().getName(), "No data with id " + id);

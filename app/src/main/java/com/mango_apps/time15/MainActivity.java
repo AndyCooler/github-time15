@@ -303,12 +303,11 @@ public class MainActivity extends AppCompatActivity {
         if (!previousSelectionKindOfDays.equals(kindOfDay)) {
             DaysDataNew modifiedData = viewToModel();
             TextView day = (TextView) findViewById(R.id.kindOfDay);
-            // TODO saveDaysDataNew!!!
-            //if (storage.saveDaysData(this, modifiedData)) {
-            //    day.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-            //} else {
+            if (storage.saveDaysDataNew(this, modifiedData)) {
+                day.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+            } else {
                 day.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
-            //}
+            }
         }
     }
 
@@ -393,12 +392,11 @@ public class MainActivity extends AppCompatActivity {
 
             originalData = modifiedData;
             updateBalance();
-// TODO saveDaysDataNew!!!
-            //if (storage.saveDaysData(this, modifiedData)) {
-            //    total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-            //} else {
-            //    total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
-            //}
+            if (storage.saveDaysDataNew(this, modifiedData)) {
+                total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+            } else {
+                total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+            }
         }
     }
 
@@ -413,6 +411,9 @@ public class MainActivity extends AppCompatActivity {
         task0.setPause(pauseTime);
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
         data.addTask(task0);
+
+        // TODO unbedingt task1 hinzufuegen, wen der auh geladen wurde, sonst geht der
+        // beim SPeichern verloren!!!
         return data;
     }
 

@@ -28,7 +28,11 @@ public enum KindOfDay {
         KindOfDay[] values = KindOfDay.values();
         for (int i = 0; i < values.length; i++) {
             if (values[i].toString().equals(value)) {
-                return values[(i + 1) % values.length].toString();
+                KindOfDay result = values[(i + 1) % values.length];
+                if (result == KindOfDay.WORKDAY_SOME_VACATION) {
+                    result = values[(i + 2) % values.length];
+                }
+                return result.toString();
             }
         }
         return null;
