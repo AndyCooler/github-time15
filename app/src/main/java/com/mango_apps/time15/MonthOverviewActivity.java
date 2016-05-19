@@ -3,6 +3,7 @@ package com.mango_apps.time15;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import com.mango_apps.time15.util.TimeUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
@@ -42,6 +45,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
     // View state and view state management
     private String id;
+    private Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,10 +80,12 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
         table.removeAllViews();
-        table.setColumnShrinkable(3, true);
-        table.setColumnStretchable(3, true);
+        //table.setColumnShrinkable(7, true);
+        //table.setColumnStretchable(7, true);
+        table.setColumnStretchable(6, true);
         TableRow row = null;
         TableRow previousRow = null;
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
         int previousWeekOfYear = -1;
@@ -94,8 +100,10 @@ public class MonthOverviewActivity extends ActionBarActivity {
                     int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
                     previousRow = row;
                     row = new TableRow(this);
+                    row.setLayoutParams(lp);
                     row.addView(createTextView(TimeUtils.dayOfWeek(dayId), rowColor));
                     row.addView(createTextView(dayId.substring(0, 2), rowColor));
+                    row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
@@ -105,6 +113,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
             } else {
                 previousRow = row;
                 row = new TableRow(this);
+                row.setLayoutParams(lp);
                 addToBalance(data, weeksBalanceMap);
 
                 String hours = "";
@@ -166,7 +175,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         int newPreviousWeekOfYear = previousWeekOfYear;
         if (weekOfYear != previousWeekOfYear) {
             if (previousWeekOfYear != -1) {
-                TextView balanceView = createBalanceView(weeksBalanceMap, previousWeekOfYear);
+                TextView balanceView = createBalanceView(weeksBalanceMap, previousWeekOfYear, true);
                 previousRow.addView(balanceView);
                 View line = new View(this);
                 line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
@@ -176,19 +185,31 @@ public class MonthOverviewActivity extends ActionBarActivity {
             newPreviousWeekOfYear = weekOfYear;
         } else if (TimeUtils.isLastWorkDayOfMonth(dayId)) { // if id is last in month
             // add text view with balance to current row
-            TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear);
+            TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, true);
             row.addView(balanceView);
+        } else {
+            //TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, false);
+            //previousRow.addView(balanceView);
         }
         return newPreviousWeekOfYear;
     }
 
-    private TextView createBalanceView(Map<Integer, Integer> weeksBalanceMap, int weekOfYear) {
+    private TextView createBalanceView(Map<Integer, Integer> weeksBalanceMap, int weekOfYear, boolean show) {
         TextView balanceView = new TextView(this);
-        balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
+        //balanceView.setWidth(0);
+        balanceView.setGravity(Gravity.RIGHT);
+        //balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
+        balanceView.setPadding(5, 5, 10, 5);
+        balanceView.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+
         //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
-        int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
-        String balanceText = Time15.fromMinutes(weeksBalance).toDisplayStringWithSign();
-        balanceView.setText(balanceText);
+        if (show) {
+            int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
+            String balanceText = Time15.fromMinutes(weeksBalance).toDisplayStringWithSign();
+            balanceView.setText(balanceText);
+        } else {
+            balanceView.setText("");
+        }
         return balanceView;
     }
 
@@ -207,8 +228,13 @@ public class MonthOverviewActivity extends ActionBarActivity {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(color);
+        textView.setBackgroundColor(random.nextInt(4));
+        //textView.requestLayout();
+        //textView.setWidth(0);
         textView.setGravity(Gravity.LEFT);
+        //textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
+        textView.setPadding(10, 5, 5, 5);
         //textView.setBackgroundColor(new Random().nextInt());
         //textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         return textView;
