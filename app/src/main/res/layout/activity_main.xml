@@ -365,7 +365,18 @@
                 android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"></LinearLayout>
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:id="@+id/switchTasksButton"
+                    android:onClick="switchTasks"
+                    android:clickable="true" />
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -419,7 +430,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="+"
-                    android:id="@+id/button2" />
+                    android:id="@+id/addTaskButton"
+                    android:onClick="addTask"
+                    android:clickable="true" />
             </LinearLayout>
 
         </LinearLayout>

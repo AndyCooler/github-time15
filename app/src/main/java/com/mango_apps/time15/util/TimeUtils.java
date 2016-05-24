@@ -97,7 +97,7 @@ public final class TimeUtils {
     }
 
     public static String getMainTitleString(String id) {
-        return TimeUtils.dayOfWeek(id) + ", " + id.substring(0, 6);
+        return TimeUtils.dayOfWeek(id) + " " + id.substring(0, 6);
     }
 
     public static boolean isWeekend(String id) {

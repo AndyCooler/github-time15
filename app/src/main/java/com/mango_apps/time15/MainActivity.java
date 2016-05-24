@@ -16,6 +16,8 @@ import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
+import com.mango_apps.time15.types.NumberTask;
+import com.mango_apps.time15.types.Task;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
     private DaysDataNew originalData;
+    private Integer numberTaskHours = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,8 +324,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void aktualisiereKindOfDay(int color) {
         TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText(KindOfDay.fromString(kindOfDay).getDisplayString());
+        day.setText(KindOfDay.fromString(kindOfDay).getDisplayString() + ">>");
         day.setTextColor(color);
+    }
+
+    public void addTask(View v) {
+        // TODO add task
+    }
+
+    public void switchTasks(View v) {
+        Log.i(getClass().getName(), "switchTasks() started at task #" + taskNo);
+        if (originalData != null) {
+            resetView();
+            taskNo = (taskNo + 1) % originalData.getNumberOfTasks();
+            modelToView(originalData);
+
+            aktualisiereTotal(false);
+            TextView total = (TextView) findViewById(R.id.total);
+            total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        }
+        Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
     }
 
     public void verarbeiteKlick(View v) {
@@ -369,15 +390,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void aktualisiereTotal(boolean mitSpeichern) {
         TextView total = (TextView) findViewById(R.id.total);
-        Time15 totalTime = DaysDataUtils.calculateTotal(beginnTime, beginn15, endeTime, ende15, pauseTime);
+        Time15 totalTime = null;
         boolean timeSelectionComplete = false;
+        if (numberTaskHours == null) {
+            totalTime = DaysDataUtils.calculateTotal(beginnTime, beginn15, endeTime, ende15, pauseTime);
 
-        if (endeTime != null && beginnTime != null) {
-            if (beginn15 != null && ende15 != null) {
-                timeSelectionComplete = true;
+            if (endeTime != null && beginnTime != null) {
+                if (beginn15 != null && ende15 != null) {
+                    timeSelectionComplete = true;
+                }
             }
+        } else {
+            totalTime = Time15.fromMinutes(numberTaskHours * 60);
+            // TODO timeSelectionComplete hier erstmal false => kein SPeichern möglich bei Anzeige des NumberTask
         }
-
         total.setText(totalTime.toDisplayString());
         total.setTextColor(ColorsUI.DARK_BLUE_DEFAULT);
 
@@ -401,7 +427,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private DaysDataNew viewToModel() {
-        DaysDataNew data = new DaysDataNew(id);
+        DaysDataNew data = new DaysDataNew(id); // TODO besser Task als Rückgabe mit Einbettung in
+        // eine modifiedData-Member-Variable an Position taskNo
 
         BeginEndTask task0 = new BeginEndTask();
         task0.setBegin(beginnTime);
@@ -417,31 +444,40 @@ public class MainActivity extends AppCompatActivity {
         return data;
     }
 
-    private void modelToView(DaysDataNew data) {
-        BeginEndTask task0 = (BeginEndTask) data.getTask(0);
-        beginnTime = task0.getBegin();
-        beginn15 = task0.getBegin15();
-        endeTime = task0.getEnd();
-        ende15 = task0.getEnd15();
-        pauseTime = task0.getPause();
-        kindOfDay = task0.getKindOfDay().toString();
+    private void modelToView(DaysDataNew data) { // TODO besser mit Parameter Task und modifiedData-Member-Variable
+        Task task = data.getTask(taskNo);
 
-        beginAt(beginnTime);
-        endAt(endeTime);
+        if (task instanceof BeginEndTask) {
+            BeginEndTask task0 = (BeginEndTask) task;
+            beginnTime = task0.getBegin();
+            beginn15 = task0.getBegin15();
+            endeTime = task0.getEnd();
+            ende15 = task0.getEnd15();
+            pauseTime = task0.getPause();
 
-        previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
-        previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
-        previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
-        previousSelectionBeginnTime = mapBeginnValueToViewId.get(beginnTime);
-        previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
+            beginAt(beginnTime);
+            endAt(endeTime);
+
+            previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
+            previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
+            previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
+            previousSelectionBeginnTime = mapBeginnValueToViewId.get(beginnTime);
+            previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
+
+            setSelected(previousSelectionPauseTime);
+            setSelected(previousSelectionEnde15);
+            setSelected(previousSelectionEndeTime);
+            setSelected(previousSelectionBeginnTime);
+            setSelected(previousSelectionBeginn15);
+        } else if (task instanceof NumberTask) {
+            NumberTask task1 = (NumberTask) task;
+            numberTaskHours = task1.getTotal().getHours();
+        } else {
+            throw new IllegalStateException(id + " : unknown type of task : " + task == null ? "null" : task.getClass().getName());
+        }
+
+        kindOfDay = task.getKindOfDay().toString();
         previousSelectionKindOfDays = kindOfDay;
-
-        setSelected(previousSelectionPauseTime);
-        setSelected(previousSelectionEnde15);
-        setSelected(previousSelectionEndeTime);
-        setSelected(previousSelectionBeginnTime);
-        setSelected(previousSelectionBeginn15);
-
         aktualisiereKindOfDay(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
     }
 
@@ -466,6 +502,7 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionBeginnTime = null;
         previousSelectionBeginn15 = null;
         previousSelectionKindOfDays = kindOfDay;
+        numberTaskHours = null;
     }
 
     private void setTransparent(Integer viewId) {

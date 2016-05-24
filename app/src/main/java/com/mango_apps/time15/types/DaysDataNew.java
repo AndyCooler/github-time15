@@ -82,4 +82,8 @@ public class DaysDataNew {
         // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen BeginEndTask oder NumberTask einlesen
         return data;
     }
+
+    public int getNumberOfTasks() {
+        return tasks.size();
+    }
 }
