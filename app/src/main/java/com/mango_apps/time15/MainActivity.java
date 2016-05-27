@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.mango_apps.time15.storage.StorageFacade;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
     private DaysDataNew originalData;
+    private DaysDataNew modifyableData;
     private Integer numberTaskHours = null;
 
     @Override
@@ -182,13 +184,18 @@ public class MainActivity extends AppCompatActivity {
         setTitle(TimeUtils.getMainTitleString(id));
         DaysDataNew data = storage.loadDaysDataNew(this, id);
         originalData = data;
+        modifyableData = DaysDataNew.copy(data);
+        if (modifyableData == null) {
+            modifyableData = new DaysDataNew(id);
+        }
+        taskNo = 0;
         resetView();
         if (fromId != null && !TimeUtils.isSameMonth(fromId, id)) {
             balanceValue = storage.loadBalance(this, id);
             updateBalance();
         }
         if (data != null) {
-            modelToView(data);
+            modelToView();
         }
         aktualisiereTotal(false);
         if (data != null) {
@@ -256,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateMapToEndAt(Integer newValue) {
         resetView();
         updateMapWithIds(mapEndeValueToViewId, newValue, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
-        modelToView(originalData); // TODO currentData gibt es noch nicht
+        modelToView();
     }
 
     private boolean beginHourVisible(int hour) {
@@ -270,9 +277,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateMapToBeginAt(Integer newValue) {
         resetView();
         updateMapWithIds(mapBeginnValueToViewId, newValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-        if (originalData != null) {
-            modelToView(originalData); // TODO currentData gibt es noch nicht
-        }
+        modelToView();
     }
 
     private Integer intoRange(int hour) {
@@ -304,9 +309,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveKindOfDay() {
         if (!previousSelectionKindOfDays.equals(kindOfDay)) {
-            DaysDataNew modifiedData = viewToModel();
+            viewToModel();
             TextView day = (TextView) findViewById(R.id.kindOfDay);
-            if (storage.saveDaysDataNew(this, modifiedData)) {
+            if (storage.saveDaysDataNew(this, modifyableData)) {
                 day.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
             } else {
                 day.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
@@ -334,14 +339,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchTasks(View v) {
         Log.i(getClass().getName(), "switchTasks() started at task #" + taskNo);
-        if (originalData != null) {
+        if (modifyableData.getNumberOfTasks() > 0) {
             resetView();
-            taskNo = (taskNo + 1) % originalData.getNumberOfTasks();
-            modelToView(originalData);
+            taskNo = (taskNo + 1) % modifyableData.getNumberOfTasks();
+            modelToView();
 
             aktualisiereTotal(false);
             TextView total = (TextView) findViewById(R.id.total);
             total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+
+            Button switchTasksButton = (Button) findViewById(R.id.switchTasksButton);
+            switchTasksButton.setText(String.valueOf(taskNo + 1));
         }
         Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
     }
@@ -408,44 +416,66 @@ public class MainActivity extends AppCompatActivity {
         total.setTextColor(ColorsUI.DARK_BLUE_DEFAULT);
 
         if (mitSpeichern && timeSelectionComplete) {
-            DaysDataNew modifiedData = viewToModel();
-            if (originalData == null) {
-                balanceValue += modifiedData.getBalance();
-            } else {
-                balanceValue -= originalData.getBalance();
-                balanceValue += modifiedData.getBalance();
-            }
-
-            originalData = modifiedData;
-            updateBalance();
-            if (storage.saveDaysDataNew(this, modifiedData)) {
-                total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-            } else {
-                total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
-            }
+            save();
         }
     }
 
-    private DaysDataNew viewToModel() {
-        DaysDataNew data = new DaysDataNew(id); // TODO besser Task als Rückgabe mit Einbettung in
-        // eine modifiedData-Member-Variable an Position taskNo
+    public void save() {
+        viewToModel();
+        TextView total = (TextView) findViewById(R.id.total);
+        if (originalData == null) {
+            balanceValue += modifyableData.getBalance();
+        } else {
+            balanceValue -= originalData.getBalance();
+            balanceValue += modifyableData.getBalance();
+        }
 
-        BeginEndTask task0 = new BeginEndTask();
-        task0.setBegin(beginnTime);
-        task0.setBegin15(beginn15);
-        task0.setEnd(endeTime);
-        task0.setEnd15(ende15);
-        task0.setPause(pauseTime);
-        task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
-        data.addTask(task0);
+        if (storage.saveDaysDataNew(this, modifyableData)) {
+            total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        } else {
+            total.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+        }
 
-        // TODO unbedingt task1 hinzufuegen, wen der auh geladen wurde, sonst geht der
-        // beim SPeichern verloren!!!
-        return data;
+        originalData = modifyableData;
+        modifyableData = DaysDataNew.copy(originalData);
+        modelToView(); // TODO klappt das
+        updateBalance();
     }
 
-    private void modelToView(DaysDataNew data) { // TODO besser mit Parameter Task und modifiedData-Member-Variable
-        Task task = data.getTask(taskNo);
+    private void viewToModel() {
+        Log.i(getClass().getName(), "viewToModel() started.");
+        Task task = modifyableData.getTask(taskNo);
+        if (task == null) {
+            // TODO erstmal werden nur neue BeginEndTask im Modell gespeichert:
+            task = new BeginEndTask();
+            modifyableData.addTask(task);
+        } else {
+            task = modifyableData.getTask(taskNo);
+        }
+
+        if (task instanceof BeginEndTask) {
+            BeginEndTask task0 = (BeginEndTask) task;
+            task0.setBegin(beginnTime);
+            task0.setBegin15(beginn15);
+            task0.setEnd(endeTime);
+            task0.setEnd15(ende15);
+            task0.setPause(pauseTime);
+            task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
+        } else if (task instanceof NumberTask) {
+            NumberTask task1 = (NumberTask) task;
+            task1.setTotal(Time15.fromMinutes(numberTaskHours == null ? 0 : numberTaskHours * 60));
+            task1.setKindOfDay(KindOfDay.fromString(kindOfDay));
+        }
+        Log.i(getClass().getName(), "viewToModel() finished.");
+    }
+
+    private void modelToView() {
+        Log.i(getClass().getName(), "modelToView() started.");
+        if (modifyableData.getTask(taskNo) == null) {
+            return;
+        }
+        Task task = modifyableData.getTask(taskNo);
+
 
         if (task instanceof BeginEndTask) {
             BeginEndTask task0 = (BeginEndTask) task;
@@ -479,6 +509,7 @@ public class MainActivity extends AppCompatActivity {
         kindOfDay = task.getKindOfDay().toString();
         previousSelectionKindOfDays = kindOfDay;
         aktualisiereKindOfDay(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        Log.i(getClass().getName(), "modelToView() finished.");
     }
 
     private void resetView() {

@@ -43,6 +43,14 @@ public class NumberTask implements Task {
         return SEP + day.toString() + SEP + valueOf(total);
     }
 
+    @Override
+    public Task copy() {
+        NumberTask copy = new NumberTask();
+        copy.setKindOfDay(day);
+        copy.setTotal(Time15.fromMinutes(total.toMinutes()));
+        return copy;
+    }
+
     private String valueOf(Time15 value) {
         return (value == null) ? "-" : String.valueOf(value.getHours());
     }

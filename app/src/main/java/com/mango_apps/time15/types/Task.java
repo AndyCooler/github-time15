@@ -14,4 +14,6 @@ public interface Task {
     KindOfDay getKindOfDay();
 
     String toString();
+
+    Task copy();
 }

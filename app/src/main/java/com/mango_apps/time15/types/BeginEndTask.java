@@ -133,6 +133,18 @@ public class BeginEndTask implements Task {
                 valueOf(pause);
     }
 
+    @Override
+    public Task copy() {
+        BeginEndTask copy = new BeginEndTask();
+        copy.setKindOfDay(day);
+        copy.setBegin(begin);
+        copy.setEnd(end);
+        copy.setBegin15(begin15);
+        copy.setEnd15(end15);
+        copy.setPause(pause);
+        return copy;
+    }
+
     private String valueOf(Integer value) {
         return (value == null) ? "-" : String.valueOf(value);
     }

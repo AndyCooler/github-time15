@@ -20,6 +20,32 @@ public class DaysDataNew {
         this.tasks = new ArrayList<Task>();
     }
 
+    /**
+     * Copy constructor.
+     *
+     * @param data original data
+     */
+    public DaysDataNew(DaysDataNew data) {
+        this(data.getId());
+        if (data.getNumberOfTasks() > 0) {
+            for (int i = 0; i < data.getNumberOfTasks(); i++) {
+                tasks.add(data.getTask(i).copy());
+            }
+        }
+    }
+
+    /**
+     * Copy method.
+     *
+     * @param data original data
+     */
+    public static DaysDataNew copy(DaysDataNew data) {
+        if (data == null) {
+            return null;
+        }
+        return new DaysDataNew(data);
+    }
+
     public String getId() {
         return id;
     }
