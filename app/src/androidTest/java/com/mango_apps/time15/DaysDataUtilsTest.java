@@ -33,23 +33,6 @@ public class DaysDataUtilsTest extends TestCase {
         assertEquals(-150, balance);
     }
 
-    public void testDifferenceWithPauseOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY);
-        data.setBegin(10);
-        data.setBegin15(15);
-        data.setEnd(16);
-        data.setEnd15(45);
-        data.setPause(60);
-
-        Time15 total = DaysDataUtils.calculateTotal(data);
-        assertEquals(5, total.getHours());
-        assertEquals(30, total.getMinutes());
-
-        int balance = DaysDataUtils.calculateBalance(data);
-        assertEquals(-150, balance);
-    }
-
     public void testDifferenceWithoutPause() {
         DaysDataNew data = new DaysDataNew("ID");
         BeginEndTask task = new BeginEndTask();
@@ -66,23 +49,6 @@ public class DaysDataUtilsTest extends TestCase {
         assertEquals(30, total.getMinutes());
 
         int balance = data.getBalance();
-        assertEquals(-90, balance);
-    }
-
-    public void testDifferenceWithoutPauseOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY);
-        data.setBegin(10);
-        data.setBegin15(15);
-        data.setEnd(16);
-        data.setEnd15(45);
-        data.setPause(null);
-
-        Time15 total = DaysDataUtils.calculateTotal(data);
-        assertEquals(6, total.getHours());
-        assertEquals(30, total.getMinutes());
-
-        int balance = DaysDataUtils.calculateBalance(data);
         assertEquals(-90, balance);
     }
 
@@ -105,23 +71,6 @@ public class DaysDataUtilsTest extends TestCase {
         assertEquals(-120, balance); // 6h - 8h = -2h  d.h. -120
     }
 
-    public void testDifferenceWithout15sOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY);
-        data.setBegin(10);
-        data.setBegin15(null);
-        data.setEnd(16);
-        data.setEnd15(null);
-        data.setPause(null);
-
-        Time15 total = DaysDataUtils.calculateTotal(data);
-        assertEquals(6, total.getHours());
-        assertEquals(0, total.getMinutes());
-
-        int balance = DaysDataUtils.calculateBalance(data);
-        assertEquals(-120, balance); // 6h - 8h = -2h  d.h. -120
-    }
-
     public void testDifferenceIncomplete() {
         DaysDataNew data = new DaysDataNew("ID");
         BeginEndTask task = new BeginEndTask();
@@ -138,23 +87,6 @@ public class DaysDataUtilsTest extends TestCase {
         assertEquals(0, total.getMinutes());
 
         int balance = data.getBalance();
-        assertEquals(-480, balance); // soll: 480, ist: 0 d.h. balance = -480
-    }
-
-    public void testDifferenceIncompleteOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY);
-        data.setBegin(10);
-        data.setBegin15(null);
-        data.setEnd(null);
-        data.setEnd15(null);
-        data.setPause(null);
-
-        Time15 total = DaysDataUtils.calculateTotal(data);
-        assertEquals(0, total.getHours());
-        assertEquals(0, total.getMinutes());
-
-        int balance = DaysDataUtils.calculateBalance(data);
         assertEquals(-480, balance); // soll: 480, ist: 0 d.h. balance = -480
     }
 
@@ -178,23 +110,6 @@ public class DaysDataUtilsTest extends TestCase {
         assertEquals(120, balance); // 6h + 4h other hours = 10h d.h. +2h = 120 min
     }
 
-    public void testDifferenceIncomplete15Old() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY_SOME_VACATION);
-        data.setBegin(10);
-        data.setBegin15(null);
-        data.setEnd(16);
-        data.setEnd15(0);
-        data.setPause(null);
-
-        Time15 total = DaysDataUtils.calculateTotal(data);
-        assertEquals(6, total.getHours());
-        assertEquals(0, total.getMinutes());
-
-        int balance = DaysDataUtils.calculateBalance(data);
-        assertEquals(120, balance); // 6h + 4h other hours = 10h d.h. +2h = 120 min
-    }
-
     public void testHoliday() {
         DaysDataNew data = new DaysDataNew("ID");
         BeginEndTask task = new BeginEndTask();
@@ -209,15 +124,4 @@ public class DaysDataUtilsTest extends TestCase {
         assertEquals(0, balance);
     }
 
-    public void testHolidayOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.HOLIDAY);
-
-        Time15 total = DaysDataUtils.calculateTotal(data);
-        assertEquals(0, total.getHours());
-        assertEquals(0, total.getMinutes());
-
-        int balance = DaysDataUtils.calculateBalance(data);
-        assertEquals(0, balance);
-    }
 }

@@ -19,32 +19,6 @@ import junit.framework.TestCase;
 
 public class DaysDataTest extends TestCase {
 
-    public void testToFromStringOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY);
-        data.setBegin(10);
-        data.setBegin15(15);
-        data.setEnd(16);
-        data.setEnd15(45);
-        data.setPause(60);
-
-        String s = data.toString();
-        assertEquals("ID#WORKDAY#10#15#16#45#60#-", s);
-
-        DaysData copy = DaysData.fromString(s);
-        assertEquals("ID", copy.getId());
-        assertEquals(new Integer(10), copy.getBegin());
-        assertEquals(new Integer(15), copy.getBegin15());
-        assertEquals(new Integer(16), copy.getEnd());
-        assertEquals(new Integer(45), copy.getEnd15());
-        assertEquals(new Integer(60), copy.getPause());
-        assertEquals(KindOfDay.WORKDAY, copy.getDay());
-        assertEquals(null, copy.getOtherHours());
-
-        // Task 1: -150 min == -2h 30 min
-        assertEquals(new Time15(-2, 30).toMinutes(), DaysDataUtils.calculateBalance(data));
-    }
-
     public void testToFromString() {
         DaysDataNew data = new DaysDataNew("ID");
         BeginEndTask task = new BeginEndTask();
@@ -73,29 +47,6 @@ public class DaysDataTest extends TestCase {
         assertEquals(new Time15(-2, 30).toMinutes(), data.getBalance());
     }
 
-    public void testToFromStringPauseNullOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.KIDSICKDAY);
-        data.setBegin(10);
-        data.setBegin15(15);
-        data.setEnd(16);
-        data.setEnd15(45);
-        data.setPause(null);
-
-        String s = data.toString();
-        assertEquals("ID#KIDSICKDAY#10#15#16#45#-#-", s);
-
-        DaysData copy = DaysData.fromString(s);
-        assertEquals("ID", copy.getId());
-        assertEquals(new Integer(10), copy.getBegin());
-        assertEquals(new Integer(15), copy.getBegin15());
-        assertEquals(new Integer(16), copy.getEnd());
-        assertEquals(new Integer(45), copy.getEnd15());
-        assertEquals(null, copy.getPause());
-        assertEquals(KindOfDay.KIDSICKDAY, copy.getDay());
-        assertEquals(null, copy.getOtherHours());
-    }
-
     public void testToFromStringPauseNull() {
         DaysDataNew data = new DaysDataNew("ID");
         BeginEndTask task = new BeginEndTask();
@@ -119,33 +70,6 @@ public class DaysDataTest extends TestCase {
         assertEquals(new Integer(45), copyTask.getEnd15());
         assertEquals(null, copyTask.getPause());
         assertEquals(KindOfDay.KIDSICKDAY, copyTask.getKindOfDay());
-    }
-
-
-    public void testToFromStringCombinationWorkdayVacationPauseNullOld() {
-        DaysData data = new DaysData("ID");
-        data.setDay(KindOfDay.WORKDAY_SOME_VACATION);
-        data.setBegin(10);
-        data.setBegin15(15);
-        data.setEnd(16);
-        data.setEnd15(45);
-        data.setOtherHours(4);
-
-        String s = data.toString();
-        assertEquals("ID#WORKDAY_SOME_VACATION#10#15#16#45#-#4", s);
-
-        DaysData copy = DaysData.fromString(s);
-        assertEquals("ID", copy.getId());
-        assertEquals(KindOfDay.WORKDAY_SOME_VACATION, copy.getDay());
-        assertEquals(new Integer(10), copy.getBegin());
-        assertEquals(new Integer(15), copy.getBegin15());
-        assertEquals(new Integer(16), copy.getEnd());
-        assertEquals(new Integer(45), copy.getEnd15());
-        assertEquals(null, copy.getPause());
-        assertEquals(new Integer(4), copy.getOtherHours());
-
-        // Task 1: -90 min, Task 2: +240 min == +150 min == +2h 30 min
-        assertEquals(new Time15(2, 30).toMinutes(), DaysDataUtils.calculateBalance(data));
     }
 
     public void testToFromStringCombinationWorkdayVacationPauseNull() {
