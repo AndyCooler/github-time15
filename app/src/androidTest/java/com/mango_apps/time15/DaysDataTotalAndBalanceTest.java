@@ -3,16 +3,14 @@ package com.mango_apps.time15;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.Time15;
-import com.mango_apps.time15.util.DaysDataUtils;
 
 import junit.framework.TestCase;
 
 /**
  * Created by andreas on 12.01.16.
  */
-public class DaysDataUtilsTest extends TestCase {
+public class DaysDataTotalAndBalanceTest extends TestCase {
 
     public void testDifferenceWithPause() {
         DaysDataNew data = new DaysDataNew("ID");

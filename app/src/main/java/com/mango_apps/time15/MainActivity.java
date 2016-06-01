@@ -21,7 +21,6 @@ import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Task;
 import com.mango_apps.time15.types.Time15;
-import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.HashMap;

@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.DaysDataNew;
-import com.mango_apps.time15.util.DaysDataUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.io.BufferedReader;
