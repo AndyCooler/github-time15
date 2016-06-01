@@ -329,10 +329,10 @@ public class MainActivity extends AppCompatActivity {
     // TODO neuer Task lässt sich noch nicht speichern, ist ein NumberTask , man kann noch keine Number eingeben!
     public void addTask(View v) {
         Log.i(getClass().getName(), "addTask() started at task #" + taskNo);
-        if (taskNo > 0) {
+        if (modifyableData.getNumberOfTasks() > 1) {
             Toast.makeText(MainActivity.this, "Nur 2 Aufgaben pro Tag!", Toast.LENGTH_SHORT).show();
         } else {
-            taskNo++;
+            taskNo = 1;
             NumberTask task1 = new NumberTask();
             task1.setKindOfDay(KindOfDay.VACATION);
             task1.setTotal(Time15.fromMinutes(0));
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchTasks(View v) {
         Log.i(getClass().getName(), "switchTasks() started at task #" + taskNo);
-        if (modifyableData.getNumberOfTasks() > 1) {
+        if (modifyableData.getNumberOfTasks() == 2) {
             resetView();
             taskNo = (taskNo + 1) % modifyableData.getNumberOfTasks();
             modelToView();
