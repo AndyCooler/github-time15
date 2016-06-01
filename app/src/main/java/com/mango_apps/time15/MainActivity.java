@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.storage.StorageFactory;
@@ -194,14 +195,7 @@ public class MainActivity extends AppCompatActivity {
             balanceValue = storage.loadBalance(this, id);
             updateBalance();
         }
-        if (data != null) {
-            modelToView();
-        }
-        aktualisiereTotal(false);
-        if (data != null) {
-            TextView total = (TextView) findViewById(R.id.total);
-            total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-        }
+        modelToView();
     }
 
     public void dateForwards() {
@@ -333,27 +327,43 @@ public class MainActivity extends AppCompatActivity {
         day.setTextColor(color);
     }
 
+    // TODO neuer Task lässt sich noch nicht speichern, ist ein NumberTask , man kann noch keine Number eingeben!
     public void addTask(View v) {
-        // TODO add task
+        Log.i(getClass().getName(), "addTask() started at task #" + taskNo);
+        if (taskNo > 0) {
+            Toast.makeText(MainActivity.this, "Nur 2 Aufgaben pro Tag!", Toast.LENGTH_SHORT).show();
+        } else {
+            taskNo++;
+            NumberTask task1 = new NumberTask();
+            task1.setKindOfDay(KindOfDay.VACATION);
+            task1.setTotal(Time15.fromMinutes(0));
+            modifyableData.addTask(task1);
+            resetView();
+            modelToView();
+        }
+        Log.i(getClass().getName(), "addTask() finished at task #" + taskNo);
     }
 
     public void switchTasks(View v) {
         Log.i(getClass().getName(), "switchTasks() started at task #" + taskNo);
-        if (modifyableData.getNumberOfTasks() > 0) {
+        if (modifyableData.getNumberOfTasks() > 1) {
             resetView();
             taskNo = (taskNo + 1) % modifyableData.getNumberOfTasks();
             modelToView();
 
-            aktualisiereTotal(false);
-            TextView total = (TextView) findViewById(R.id.total);
-            total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
-
             Button switchTasksButton = (Button) findViewById(R.id.switchTasksButton);
             switchTasksButton.setText(String.valueOf(taskNo + 1));
+        } else {
+            Toast.makeText(MainActivity.this, "Erst mit + eine Aufgabe hinzufügen!", Toast.LENGTH_SHORT).show();
         }
         Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
     }
 
+    /**
+     * Click in dialog area for begin-end task.
+     *
+     * @param v
+     */
     public void verarbeiteKlick(View v) {
 
         TextView view = (TextView) v;
@@ -393,31 +403,28 @@ public class MainActivity extends AppCompatActivity {
             pauseTime = Integer.valueOf((String) view.getText());
             previousSelectionPauseTime = viewId;
         }
-        aktualisiereTotal(true);
+
+        if (beginEndTimeSelectionComplete()) {
+            save();
+            aktualisiereTotal(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        }
     }
 
-    private void aktualisiereTotal(boolean mitSpeichern) {
-        TextView total = (TextView) findViewById(R.id.total);
-        Time15 totalTime = null;
-        boolean timeSelectionComplete = false;
-        if (numberTaskHours == null) {
-            totalTime = DaysDataUtils.calculateTotal(beginnTime, beginn15, endeTime, ende15, pauseTime);
-
-            if (endeTime != null && beginnTime != null) {
-                if (beginn15 != null && ende15 != null) {
-                    timeSelectionComplete = true;
-                }
+    private boolean beginEndTimeSelectionComplete() {
+        if (endeTime != null && beginnTime != null) {
+            if (beginn15 != null && ende15 != null) {
+                return true;
             }
-        } else {
-            totalTime = Time15.fromMinutes(numberTaskHours * 60);
-            // TODO timeSelectionComplete hier erstmal false => kein SPeichern möglich bei Anzeige des NumberTask
         }
-        total.setText(totalTime.toDisplayString());
-        total.setTextColor(ColorsUI.DARK_BLUE_DEFAULT);
+        return false;
+    }
 
-        if (mitSpeichern && timeSelectionComplete) {
-            save();
-        }
+    private void aktualisiereTotal(int color) {
+        TextView total = (TextView) findViewById(R.id.total);
+        Time15 totalTime = modifyableData.getTask(taskNo).getTotal();
+
+        total.setText(totalTime.toDisplayString());
+        total.setTextColor(color);
     }
 
     public void save() {
@@ -430,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
             balanceValue += modifyableData.getBalance();
         }
 
+        // TODO only if hasChanged d.h. if modifyableData != originalData
         if (storage.saveDaysDataNew(this, modifyableData)) {
             total.setTextColor(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
         } else {
@@ -438,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
 
         originalData = modifyableData;
         modifyableData = DaysDataNew.copy(originalData);
-        modelToView(); // TODO klappt das
+        //modelToView(); // TODO brauchen wir das?
         updateBalance();
     }
 
@@ -499,16 +507,23 @@ public class MainActivity extends AppCompatActivity {
             setSelected(previousSelectionEndeTime);
             setSelected(previousSelectionBeginnTime);
             setSelected(previousSelectionBeginn15);
+
+            aktualisiereTotal(ColorsUI.DARK_BLUE_DEFAULT);
+            setTransparent(R.id.total);
         } else if (task instanceof NumberTask) {
+
             NumberTask task1 = (NumberTask) task;
             numberTaskHours = task1.getTotal().getHours();
+
+            aktualisiereTotal(ColorsUI.DARK_BLUE_DEFAULT);
+            setSelected(R.id.total);
         } else {
             throw new IllegalStateException(id + " : unknown type of task : " + task == null ? "null" : task.getClass().getName());
         }
 
         kindOfDay = task.getKindOfDay().toString();
         previousSelectionKindOfDays = kindOfDay;
-        aktualisiereKindOfDay(ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
         Log.i(getClass().getName(), "modelToView() finished.");
     }
 
@@ -534,6 +549,7 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionBeginn15 = null;
         previousSelectionKindOfDays = kindOfDay;
         numberTaskHours = null;
+        setTransparent(R.id.total);
     }
 
     private void setTransparent(Integer viewId) {
@@ -547,6 +563,13 @@ public class MainActivity extends AppCompatActivity {
         if (viewId != null) {
             TextView previousView = (TextView) findViewById(viewId);
             previousView.setBackgroundColor(ColorsUI.SELECTION_BG);
+        }
+    }
+
+    private void setDeactivated(Integer viewId) {
+        if (viewId != null) {
+            TextView previousView = (TextView) findViewById(viewId);
+            previousView.setBackgroundColor(ColorsUI.DEACTIVATED);
         }
     }
 }

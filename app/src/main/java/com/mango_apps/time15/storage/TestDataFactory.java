@@ -1,7 +1,11 @@
 package com.mango_apps.time15.storage;
 
+import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysData;
+import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
+import com.mango_apps.time15.types.NumberTask;
+import com.mango_apps.time15.types.Time15;
 
 import java.util.Random;
 
@@ -12,29 +16,37 @@ public class TestDataFactory {
 
     public static final Random RANDOM = new Random();
 
-    public static DaysData newRandom(String id) {
-        DaysData data1 = new DaysData(id);
+    public static DaysDataNew newRandom(String id) {
+        DaysDataNew data1 = new DaysDataNew(id);
+        BeginEndTask task0 = new BeginEndTask();
         switch (RANDOM.nextInt(3)) {
             case 0:
-                data1.setDay(KindOfDay.WORKDAY);
-                data1.setBegin(8);
-                data1.setBegin15(0);
-                data1.setEnd(16);
-                data1.setEnd15(0);
+                task0.setKindOfDay(KindOfDay.WORKDAY);
+                task0.setBegin(8);
+                task0.setBegin15(0);
+                task0.setEnd(16);
+                task0.setEnd15(0);
+                data1.addTask(task0);
                 break;
             case 1:
-                data1.setDay(KindOfDay.WORKDAY_SOME_VACATION);
-                data1.setBegin(11);
-                data1.setBegin15(0);
-                data1.setEnd(16);
-                data1.setEnd15(30);
-                data1.setOtherHours(4);
+                task0.setKindOfDay(KindOfDay.WORKDAY);
+                task0.setBegin(11);
+                task0.setBegin15(0);
+                task0.setEnd(16);
+                task0.setEnd15(30);
+                data1.addTask(task0);
+                NumberTask task1 = new NumberTask();
+                task1.setKindOfDay(KindOfDay.VACATION);
+                task1.setTotal(Time15.fromMinutes(4 * 60));
+                data1.addTask(task1);
                 break;
             case 2:
-                data1.setDay(KindOfDay.HOLIDAY);
+                task0.setKindOfDay(KindOfDay.HOLIDAY);
+                data1.addTask(task0);
                 break;
             case 3:
-                data1.setDay(KindOfDay.SICKDAY);
+                task0.setKindOfDay(KindOfDay.SICKDAY);
+                data1.addTask(task0);
                 break;
         }
 

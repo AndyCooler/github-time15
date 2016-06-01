@@ -191,8 +191,10 @@ public class ExternalFileStorage implements StorageFacade {
 
         List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
         for (String currentId : idList) {
-            DaysData data = loadDaysData(activity, currentId);
-            balance += DaysDataUtils.calculateBalance(data);
+            DaysDataNew data = loadDaysDataNew(activity, currentId);
+            if (data != null) {
+                balance += data.getBalance();
+            }
         }
         return balance;
     }
