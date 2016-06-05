@@ -396,6 +396,15 @@
                     android:clickable="true"
                     android:onClick="toggleKindOfDay" />
 
+                <ImageButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/totalMoreButton"
+                    android:src="@android:drawable/arrow_up_float"
+                    android:layout_weight="2"
+                    android:clickable="true"
+                    android:onClick="totalMore" />
+
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -406,6 +415,16 @@
                     android:gravity="center"
                     android:layout_weight="2"
                     android:textColor="#1E90FF" />
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/totalLessButton"
+                    android:src="@android:drawable/arrow_down_float"
+                    android:layout_weight="2"
+                    android:clickable="true"
+                    android:onClick="totalLess"
+                    android:nestedScrollingEnabled="false" />
 
                 <TextView
                     android:layout_width="fill_parent"
