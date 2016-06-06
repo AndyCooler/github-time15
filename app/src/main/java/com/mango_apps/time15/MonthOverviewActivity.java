@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.storage.StorageFactory;
@@ -26,6 +28,8 @@ import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.TimeUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -229,14 +233,9 @@ public class MonthOverviewActivity extends ActionBarActivity {
         textView.setText(text);
         textView.setTextColor(color);
         textView.setBackgroundColor(random.nextInt(4));
-        //textView.requestLayout();
-        //textView.setWidth(0);
         textView.setGravity(Gravity.LEFT);
-        //textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
         textView.setPadding(10, 5, 5, 5);
-        //textView.setBackgroundColor(new Random().nextInt());
-        //textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         return textView;
     }
 
@@ -276,6 +275,10 @@ public class MonthOverviewActivity extends ActionBarActivity {
             initialize();
             return true;
         }
+        if (id == R.id.action_migrate) {
+            migrateDataForMonth();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -284,6 +287,37 @@ public class MonthOverviewActivity extends ActionBarActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, withId);
         startActivity(intent);
+    }
+
+
+    /**
+     * Migrates data for all days in month to a new file format,
+     * simply by loading and saving each day's data.
+     * Works because the load method is always able to load data
+     * in the old format and save always saves data in new format.
+     */
+    private void migrateDataForMonth() {
+
+        List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
+
+        String success = "Success! ";
+        ArrayList<String> good = new ArrayList<String>();
+        ArrayList<String> bad = new ArrayList<String>();
+        for (final String dayId : listOfIds) {
+            DaysDataNew data = storage.loadDaysDataNew(this, dayId);
+
+            if (data != null) {
+                if (storage.saveDaysDataNew(this, data)) {
+                    good.add(dayId.substring(0, 2));
+                } else {
+                    bad.add(dayId.substring(0, 2));
+                    success = "Fail! ";
+                }
+            }
+        }
+        String goodBad = "\n\nMonth: " + TimeUtils.getMonthYearDisplayString(id)
+                + "\n\nGood: " + TextUtils.join(",", good) + "\nBad: " + TextUtils.join(",", bad);
+        Toast.makeText(MonthOverviewActivity.this, success + goodBad, Toast.LENGTH_LONG).show();
     }
 
 }
