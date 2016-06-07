@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Environment;
 import android.util.Log;
 
-import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.TimeUtils;
 
@@ -28,34 +27,6 @@ public class ExternalFileStorage implements StorageFacade {
     private boolean initialized = false;
 
     private File storageDir;
-
-    @Override
-    public boolean saveDaysData(Activity activity, DaysData data) {
-        if (!initialized && !init()) {
-            return false;
-        }
-
-        String s = data.toString();
-
-        File file = new File(storageDir, getFilename(data.getId()));
-
-        boolean result = false;
-        try {
-            FileOutputStream fos = new FileOutputStream(file, true);
-
-            PrintWriter pw = new PrintWriter(fos);
-            pw.println(s);
-            pw.flush();
-            pw.close();
-            fos.close();
-
-            Log.i(getClass().getName(), "Saved data with id " + data.getId());
-            result = true;
-        } catch (IOException e) {
-            Log.e(getClass().getName(), "Error saving data with id " + data.getId() + " to file " + file.getAbsolutePath(), e);
-        }
-        return result;
-    }
 
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
@@ -84,51 +55,6 @@ public class ExternalFileStorage implements StorageFacade {
         }
         return result;
     }
-
-    @Override
-    public DaysData loadDaysData(Activity activity, String id) {
-        if (!initialized && !init()) {
-            return null;
-        }
-
-        File file = new File(storageDir, getFilename(id));
-        if (!file.exists()) {
-            return null;
-        }
-
-        DaysData data = null;
-        try {
-            FileInputStream fis = new FileInputStream(file);
-
-            InputStreamReader isr;
-            isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr, 8192);    // 2nd arg is buffer size
-
-            String test = null;
-            String candidate = null;
-            while (true) {
-                test = br.readLine();
-
-                if (test == null) break;
-                if (test.startsWith(id)) {
-                    candidate = test;
-                }
-            }
-            isr.close();
-            fis.close();
-            br.close();
-            if (candidate == null) {
-                Log.i(getClass().getName(), "No data with id " + id);
-            } else {
-                data = DaysData.fromString(candidate);
-            }
-        } catch (IOException e) {
-            Log.e(getClass().getName(), "Error loading data with id " + id, e);
-        }
-
-        return data;
-    }
-
 
     @Override
     public DaysDataNew loadDaysDataNew(Activity activity, String id) {

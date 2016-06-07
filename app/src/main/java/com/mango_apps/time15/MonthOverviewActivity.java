@@ -3,7 +3,6 @@ package com.mango_apps.time15;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,7 +27,6 @@ import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +156,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
         int itemColor = ColorsUI.DARK_BLUE_DEFAULT;
         switch (kindOfDay) {
             case WORKDAY:
-            case WORKDAY_SOME_VACATION:
                 itemColor = ColorsUI.DARK_BLUE_DEFAULT;
                 break;
             case HOLIDAY:

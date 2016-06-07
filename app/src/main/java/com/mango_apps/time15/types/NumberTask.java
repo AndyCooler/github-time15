@@ -61,14 +61,7 @@ public class NumberTask implements Task {
         NumberTask numberTask = new NumberTask();
         String token = tokenizer.nextToken();
         numberTask.setKindOfDay(KindOfDay.fromString(token));
-        // TODO remove after migration
-        Integer totalInteger = null;
-        if (null == numberTask.getKindOfDay()) {
-            numberTask.setKindOfDay(KindOfDay.VACATION);
-            totalInteger = nextIntToken0(token);
-        } else {
-            totalInteger = nextIntToken(tokenizer);
-        }
+        Integer totalInteger = nextIntToken(tokenizer);
         if (totalInteger == null) {
             totalInteger = 0;
         }

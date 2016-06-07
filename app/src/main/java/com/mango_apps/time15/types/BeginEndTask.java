@@ -115,19 +115,12 @@ public class BeginEndTask implements Task {
 
         Time15 actual = getTotal();
         actualTotalMinutes += actual.toMinutes();
-        if (KindOfDay.WORKDAY_SOME_VACATION.equals(day)) {
-            //TODO remove after migration
-            actualTotalMinutes += 4 * 60;
-        }
+
         return actualTotalMinutes - DUE_TOTAL_MINUTES;
     }
 
     @Override
     public String toString() {
-        // TODO remove after migration:
-        if (day.equals(KindOfDay.WORKDAY_SOME_VACATION)) {
-            throw new IllegalStateException("WORKDAY_SOME_VACATION migration problem!");
-        }
         return SEP + day.toString() + SEP + valueOf(begin) + SEP + valueOf(begin15) + SEP +
                 valueOf(end) + SEP + valueOf(end15) + SEP +
                 valueOf(pause);
@@ -154,10 +147,6 @@ public class BeginEndTask implements Task {
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         BeginEndTask beginEndTask = new BeginEndTask();
         beginEndTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
-        // TODO remove after migration:
-        if (beginEndTask.getKindOfDay().equals(KindOfDay.WORKDAY_SOME_VACATION)) {
-            beginEndTask.setKindOfDay(KindOfDay.WORKDAY);
-        }
         beginEndTask.setBegin(nextIntToken(tokenizer));
         beginEndTask.setBegin15(nextIntToken(tokenizer));
         beginEndTask.setEnd(nextIntToken(tokenizer));

@@ -319,7 +319,6 @@ public class MainActivity extends AppCompatActivity {
         day.setTextColor(color);
     }
 
-    // TODO neuer Task lässt sich noch nicht speichern, ist ein NumberTask , man kann noch keine Number eingeben!
     public void addTask(View v) {
         Log.i(getClass().getName(), "addTask() started at task #" + taskNo);
         if (modifyableData.getNumberOfTasks() > 1) {

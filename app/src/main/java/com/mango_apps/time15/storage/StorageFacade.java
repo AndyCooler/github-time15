@@ -2,7 +2,6 @@ package com.mango_apps.time15.storage;
 
 import android.app.Activity;
 
-import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.DaysDataNew;
 
 /**
@@ -17,26 +16,7 @@ public interface StorageFacade {
      * @param data     the data to save
      * @return
      */
-    boolean saveDaysData(Activity activity, DaysData data);
-
-    /**
-     * Save a day's data.
-     *
-     * @param activity parent activity
-     * @param data     the data to save
-     * @return
-     */
     boolean saveDaysDataNew(Activity activity, DaysDataNew data);
-
-
-    /**
-     * Load a day's data.
-     *
-     * @param activity parent activity
-     * @param id       id of data to load
-     * @return the day's data
-     */
-    DaysData loadDaysData(Activity activity, String id);
 
     /**
      * Load a day's data.

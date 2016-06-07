@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 
 /**
  * Created by andreas on 12.03.16.
- * TODO in migration to DaysDataNew from DaysData, remove KindOfDay.WORKDAY_SOME_VACATION!!
  */
 public class DaysDataNew {
 

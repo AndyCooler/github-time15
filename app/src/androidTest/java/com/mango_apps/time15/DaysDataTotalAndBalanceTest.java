@@ -3,6 +3,7 @@ package com.mango_apps.time15;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
+import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 
 import junit.framework.TestCase;
@@ -90,21 +91,24 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
 
     public void testDifferenceIncomplete15() {
         DaysDataNew data = new DaysDataNew("ID");
-        BeginEndTask task = new BeginEndTask();
-        data.addTask(task);
-        task.setKindOfDay(KindOfDay.WORKDAY_SOME_VACATION);
-        task.setBegin(10);
-        task.setBegin15(null);
-        task.setEnd(16);
-        task.setEnd15(0);
-        task.setPause(null);
+        BeginEndTask task0 = new BeginEndTask();
+        data.addTask(task0);
+        task0.setKindOfDay(KindOfDay.WORKDAY);
+        task0.setBegin(10);
+        task0.setBegin15(null);
+        task0.setEnd(16);
+        task0.setEnd15(0);
+        task0.setPause(null);
+        NumberTask task1 = new NumberTask();
+        task1.setKindOfDay(KindOfDay.VACATION);
+        task1.setTotal(Time15.fromMinutes(4 * 60));
+        data.addTask(task1);
 
         Time15 total = data.getTotal();
         assertEquals(6, total.getHours());
         assertEquals(0, total.getMinutes());
 
         int balance = data.getBalance(); // TODO wird nur temporaer unterstuetzt!
-        // TODO wenn WORKDAY_SOME_VACATION wegfaellt, muss hier ein 2. Task (NumberTask +4h) dazu!
         assertEquals(120, balance); // 6h + 4h other hours = 10h d.h. +2h = 120 min
     }
 

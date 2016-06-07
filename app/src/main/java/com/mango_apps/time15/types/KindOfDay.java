@@ -13,10 +13,7 @@ public enum KindOfDay {
 
     SICKDAY("Krank"),
 
-    KIDSICKDAY("Kind krank"),
-
-    @Deprecated
-    WORKDAY_SOME_VACATION("Arbeit / Urlaub");
+    KIDSICKDAY("Kind krank");
 
     private final String displayString;
 
@@ -29,9 +26,6 @@ public enum KindOfDay {
         for (int i = 0; i < values.length; i++) {
             if (values[i].toString().equals(value)) {
                 KindOfDay result = values[(i + 1) % values.length];
-                if (result == KindOfDay.WORKDAY_SOME_VACATION) {
-                    result = values[(i + 2) % values.length];
-                }
                 return result.toString();
             }
         }
@@ -57,6 +51,6 @@ public enum KindOfDay {
     }
 
     public static boolean isDueDay(KindOfDay day) {
-        return KindOfDay.WORKDAY.equals(day) || KindOfDay.WORKDAY_SOME_VACATION.equals(day);
+        return KindOfDay.WORKDAY.equals(day);
     }
 }

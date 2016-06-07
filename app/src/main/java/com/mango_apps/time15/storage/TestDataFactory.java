@@ -1,7 +1,6 @@
 package com.mango_apps.time15.storage;
 
 import com.mango_apps.time15.types.BeginEndTask;
-import com.mango_apps.time15.types.DaysData;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.types.NumberTask;

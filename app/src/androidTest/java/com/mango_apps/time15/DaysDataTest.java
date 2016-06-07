@@ -107,26 +107,4 @@ public class DaysDataTest extends TestCase {
         // Task 1: -90 min, Task 2: +240 min == +150 min == +2h 30 min
         assertEquals(new Time15(2, 30).toMinutes(), copy.getBalance());
     }
-
-    // TODO remove after migration
-    public void testToFromStringCombinationWorkdayVacationPauseNullMigration() {
-
-        DaysDataNew copy = DaysDataNew.fromString("ID#WORKDAY_SOME_VACATION#10#15#16#45#-#4");
-        assertEquals("ID", copy.getId());
-        BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
-        assertEquals(new Integer(10), copyTask.getBegin());
-        assertEquals(new Integer(15), copyTask.getBegin15());
-        assertEquals(new Integer(16), copyTask.getEnd());
-        assertEquals(new Integer(45), copyTask.getEnd15());
-        assertEquals(null, copyTask.getPause());
-        assertEquals(KindOfDay.WORKDAY, copyTask.getKindOfDay());
-
-        NumberTask copyNumberTask = (NumberTask) copy.getTask(1);
-        assertEquals(KindOfDay.VACATION, copyNumberTask.getKindOfDay());
-        assertEquals(4, copyNumberTask.getTotal().getHours());
-        assertEquals(0, copyNumberTask.getTotal().getMinutes());
-
-        // Task 1: -90 min, Task 2: +240 min == +150 min == +2h 30 min
-        assertEquals(new Time15(2, 30).toMinutes(), copy.getBalance());
-    }
 }
