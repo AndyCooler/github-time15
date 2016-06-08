@@ -20,13 +20,7 @@ import java.util.List;
  * This class uses external files to store the start, end and pause values for each day.
  * All days of a month are saved in the same file.
  */
-public class ExternalFileStorage implements StorageFacade {
-
-    public static final String STORAGE_DIR = "Time15";
-
-    private boolean initialized = false;
-
-    private File storageDir;
+public class ExternalFileStorage extends FileStorage implements StorageFacade {
 
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
@@ -122,63 +116,6 @@ public class ExternalFileStorage implements StorageFacade {
             }
         }
         return balance;
-    }
-
-    private boolean init() {
-        if (isExternalStorageWritable()) {
-            if (isStorageDirPresent()) {
-                storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-                return true;
-            } else {
-                storageDir = createStorageDir();
-                if (storageDir == null) {
-                    Log.e(getClass().getName(), "Storage NOT initialized!");
-                } else {
-                    Log.i(getClass().getName(), "Storage initialized: " + storageDir);
-                    initialized = true;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        Log.e(getClass().getName(), "Storage not writable! State: " + state);
-        return false;
-    }
-
-    private boolean isStorageDirPresent() {
-
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-        if (file.exists()) {
-            return true;
-        }
-        Log.w(getClass().getName(), "Storage dir not present! Checked " + file.getAbsolutePath());
-        return false;
-    }
-
-    public File createStorageDir() {
-
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-        if (file.mkdirs()) {
-            Log.i(getClass().getName(), "Storage dir created: " + file.getAbsolutePath());
-        } else {
-            Log.e(getClass().getName(), "Storage dir not created!");
-        }
-        if (file.exists()) {
-            return file;
-        } else {
-            return null;
-        }
     }
 
     private String getFilename(String id) {
