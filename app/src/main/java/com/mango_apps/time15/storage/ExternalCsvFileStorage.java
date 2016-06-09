@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
+import com.mango_apps.time15.types.Task;
+import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.io.File;
@@ -12,9 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.SortedMap;
 
 /**
  * Spec by example:
@@ -24,7 +25,7 @@ import java.util.SortedMap;
  */
 public class ExternalCsvFileStorage extends FileStorage implements StorageFacade {
 
-    private String csv_version = "1_0";
+    private static final String CSV_VERSION_CURRENT = "1_0";
 
     private Activity activity;
 
@@ -35,14 +36,14 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             return false;
         }
         this.activity = activity;
-        String csvHeadline = getHeadline(csv_version);
+        String csvHeadline = getHeadline(CSV_VERSION_CURRENT);
         if (csvHeadline == null) {
             return false;
         }
         List<String> csvMonth = loadWholeMonth(getFilename(data.getId()));
         List<String> csvMonthNew = new ArrayList<String>();
 
-        String newCsvLine = toCsvLine(data, csv_version);
+        String newCsvLine = toCsvLine(data, CSV_VERSION_CURRENT);
         for (String csvLine : csvMonth) {
             if (csvLine.startsWith(data.getId())) {
                 csvMonthNew.add(newCsvLine);
@@ -79,7 +80,31 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     }
 
     private String toCsvLine(DaysDataNew data, String version) {
-        return null; // TODO toCsvLine
+
+        if (CSV_VERSION_CURRENT.equals(version)) {
+            String s = data.getId() + ",";
+            for (int i = 0; i < data.getNumberOfTasks(); i++) {
+                Task task = data.getTask(i);
+                s += task.getKindOfDay();
+                if (task instanceof BeginEndTask) {
+                    BeginEndTask taskB = (BeginEndTask) task;
+                    s += new Time15(taskB.getBegin(), taskB.getBegin15()).toDisplayString() + ",";
+                    s += new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString() + ",";
+                    if (taskB.getPause() == null) {
+                        s += ",";
+                    } else {
+                        s += Time15.fromMinutes(taskB.getPause()).toDisplayString() + ",";
+                    }
+                } else {
+                    s += ",,,";
+                }
+                s += "\"" + task.getTotal().toDecimalFormat() + "\",";
+                s += ","; // reserved for future note
+            }
+            return s;
+        }
+        fatal("getHeadline", "Version " + version + " unsupported!");
+        return null;
     }
 
     public List<String> loadWholeMonth(String filename) {
@@ -88,7 +113,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     }
 
     private String getHeadline(String version) {
-        if (csv_version.equals(version)) {
+        if (CSV_VERSION_CURRENT.equals(version)) {
             return "Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note";
         }
         fatal("getHeadline", "Version " + version + " unsupported!");
@@ -113,6 +138,6 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     }
 
     private String getFilename(String id) {
-        return TimeUtils.getMonthYearOfID(id) + "__Time15__" + csv_version + ".csv";
+        return TimeUtils.getMonthYearOfID(id) + "__Time15__" + CSV_VERSION_CURRENT + ".csv";
     }
 }

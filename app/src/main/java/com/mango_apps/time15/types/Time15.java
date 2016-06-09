@@ -1,9 +1,13 @@
 package com.mango_apps.time15.types;
 
+import java.text.DecimalFormat;
+
 /**
  * Data structure for time hours in hours and minutes.
  */
 public class Time15 {
+
+    private static final DecimalFormat FORMAT = new DecimalFormat("##,##");
 
     private int totalMinutes;
 
@@ -40,6 +44,12 @@ public class Time15 {
         }
         s += formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
         return s;
+    }
+
+    public String toDecimalFormat() {
+
+        double hours = totalMinutes / 60;
+        return FORMAT.format(hours);
     }
 
     public int toMinutes() {
