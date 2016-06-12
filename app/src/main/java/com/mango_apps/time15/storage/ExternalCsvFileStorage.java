@@ -25,9 +25,11 @@ import java.util.List;
  */
 public class ExternalCsvFileStorage extends FileStorage implements StorageFacade {
 
-    private static final String CSV_VERSION_CURRENT = "1_0";
+    public static final String CSV_VERSION_CURRENT = "1_0";
 
     private Activity activity;
+
+    ExternalFileStorage redundantFileStorage = new ExternalFileStorage();
 
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
@@ -40,8 +42,11 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         if (csvHeadline == null) {
             return false;
         }
-        List<String> csvMonth = loadWholeMonth(getFilename(data.getId()));
+        //TODO List<String> csvMonth = loadWholeMonth(getFilename(data.getId()));
+        List<String> csvMonth = new ArrayList<String>();
+        csvMonth.add(data.getId());
         List<String> csvMonthNew = new ArrayList<String>();
+        csvMonthNew.add(csvHeadline);
 
         String newCsvLine = toCsvLine(data, CSV_VERSION_CURRENT);
         for (String csvLine : csvMonth) {
@@ -52,7 +57,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             }
         }
 
-        return saveWholeMonth(getFilename(data.getId()), csvMonth);
+        return saveWholeMonth(getFilename(data.getId()), csvMonthNew);
     }
 
     private boolean saveWholeMonth(String filename, List<String> csvMonth) {
@@ -79,17 +84,25 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         return result;
     }
 
-    private String toCsvLine(DaysDataNew data, String version) {
+    public String toCsvLine(DaysDataNew data, String version) {
 
         if (CSV_VERSION_CURRENT.equals(version)) {
             String s = data.getId() + ",";
             for (int i = 0; i < data.getNumberOfTasks(); i++) {
                 Task task = data.getTask(i);
-                s += task.getKindOfDay();
+                s += task.getKindOfDay() + ",";
                 if (task instanceof BeginEndTask) {
                     BeginEndTask taskB = (BeginEndTask) task;
-                    s += new Time15(taskB.getBegin(), taskB.getBegin15()).toDisplayString() + ",";
-                    s += new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString() + ",";
+                    if (taskB.getBegin() == null) {
+                        s += ",";
+                    } else {
+                        s += new Time15(taskB.getBegin(), taskB.getBegin15()).toDisplayString() + ",";
+                    }
+                    if (taskB.getEnd() == null) {
+                        s += ",";
+                    } else {
+                        s += new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString() + ",";
+                    }
                     if (taskB.getPause() == null) {
                         s += ",";
                     } else {
@@ -109,7 +122,10 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     public List<String> loadWholeMonth(String filename) {
 
-        return null; // TODO loadWholeMonth
+// TODO load
+        List<String> list = new ArrayList<String>();
+        //list.add();
+        return list;
     }
 
     private String getHeadline(String version) {
@@ -129,13 +145,16 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     @Override
     public DaysDataNew loadDaysDataNew(Activity activity, String id) {
-        return null;
+
+        return redundantFileStorage.loadDaysDataNew(activity, id);
     }
 
     @Override
     public int loadBalance(Activity activity, String id) {
-        return 0;
+
+        return redundantFileStorage.loadBalance(activity, id);
     }
+
 
     private String getFilename(String id) {
         return TimeUtils.getMonthYearOfID(id) + "__Time15__" + CSV_VERSION_CURRENT + ".csv";

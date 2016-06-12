@@ -6,6 +6,9 @@ import com.mango_apps.time15.types.Time15;
 
 import junit.framework.TestCase;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 /**
  * Created by andreas on 14.03.16.
  */
@@ -61,5 +64,17 @@ public class Time15Test extends TestCase {
         assertEquals(-5, t.getHours());
         assertEquals(15, t.getMinutes());
         assertEquals(-315, t.toMinutes());
+    }
+
+    public void testDecimalPositive() {
+        Time15 t = new Time15(1, 30);
+        String s = t.toDecimalFormat();
+        assertEquals("1.50", s);
+    }
+
+    public void testDecimalNegative() {
+        Time15 t = new Time15(-1, 30);
+        String s = t.toDecimalFormat();
+        assertEquals("-1.50", s);
     }
 }

@@ -31,7 +31,7 @@ public class StorageFactory {
             createTestData(id, storage);
             return storage;
         }
-        return new ExternalFileStorage();
+        return new ExternalCsvFileStorage();
     }
 
     private static void createTestData(String id, StorageFacade storage) {
