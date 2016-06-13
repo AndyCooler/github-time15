@@ -2,6 +2,7 @@ package com.mango_apps.time15.types;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  * Data structure for time hours in hours and minutes.
@@ -46,6 +47,47 @@ public class Time15 {
         s += formatWithTwoDigits(getHours()) + ":" + formatWithTwoDigits(getMinutes());
         return s;
     }
+
+    public static Time15 fromDisplayString(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        StringTokenizer t = new StringTokenizer(":");
+
+        if (t.countTokens() != 2) {
+            throw new IllegalArgumentException("fromDisplayString: param must be hh:mm");
+        }
+        Time15 result = null;
+        try {
+            int hours = Integer.valueOf(t.nextToken());
+            int minutes = Integer.valueOf(t.nextToken());
+            if (minutes < 0 || minutes > 59) {
+                throw new IllegalArgumentException("fromDisplayString: param must be hh:mm with 0<=mm<60");
+            }
+            result = new Time15(hours, minutes);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("fromDisplayString: param must be hh:mm", e);
+        }
+        return result;
+    }
+
+    public static Time15 fromDecimalFormat(String s) {
+        if (s == null || s.isEmpty()) {
+            return null;
+        }
+        Time15 result = null;
+        try {
+            double dec = Double.parseDouble(s) * (double) 60;
+            int totalMinutes = (int) Math.round(dec);
+            result = Time15.fromMinutes(totalMinutes);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("fromDecimalFormat: param must be x.yy", e);
+        }
+        return result;
+    }
+
 
     public String toDecimalFormat() {
         double d = (double) totalMinutes / (double) 60;

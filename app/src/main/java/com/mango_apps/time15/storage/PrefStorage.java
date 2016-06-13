@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.TimeUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class uses SharedPreferences to store the start, end and pause values for each day.
  * All days of a month are saved in the same file.
@@ -43,6 +46,27 @@ public class PrefStorage implements StorageFacade {
     @Override
     public int loadBalance(Activity activity, String id) {
         return 0;
+    }
+
+    @Override
+    public boolean saveDaysDataMonth(Activity activity, String id, List<DaysDataNew> dataList) {
+        for (DaysDataNew data : dataList) {
+            if (!saveDaysDataNew(activity, data)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<DaysDataNew> loadDaysDataMonth(Activity activity, String id) {
+
+        List<DaysDataNew> dataList = new ArrayList<DaysDataNew>();
+        for (String idCurrent : TimeUtils.getListOfIdsOfMonth(id)) {
+            DaysDataNew data = loadDaysDataNew(activity, idCurrent);
+            dataList.add(data);
+        }
+        return dataList;
     }
 
 
