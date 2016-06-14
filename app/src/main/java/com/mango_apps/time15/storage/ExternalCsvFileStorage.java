@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -34,9 +33,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     private Activity activity;
 
-    private String anyIdICurrentMonth;
+    private String currentMonthYear;
 
-    private HashMap<String, DaysDataNew> monthsData = null;
+    private HashMap<String, DaysDataNew> currentMonthsData = null;
 
     ExternalFileStorage redundantFileStorage = new ExternalFileStorage();
 
@@ -51,22 +50,27 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         if (csvHeadline == null) {
             return false;
         }
-        //if (!TimeUtils.isSameMonth(data.getId(), anyIdICurrentMonth) || monthsData == null) {
-        //    return false;
-        //}
+        String newMonthYear = TimeUtils.getMonthYearOfID(data.getId());
+
+        if (!newMonthYear.equals(currentMonthYear)) {
+            return false;
+        }
         // update cache
-        monthsData.put(data.getId(), data);
+        currentMonthsData.put(data.getId(), data);
+
+        // save to legacy storage
+        boolean success = redundantFileStorage.saveDaysDataNew(activity, data);
+
+        // save to csv storage
         List<String> csvMonth = new ArrayList<String>();
         csvMonth.add(csvHeadline);
-
         for (String idCurrent : TimeUtils.getListOfIdsOfMonth(data.getId())) {
-            DaysDataNew dataCurrent = monthsData.get(idCurrent);
+            DaysDataNew dataCurrent = currentMonthsData.get(idCurrent);
             if (dataCurrent != null) {
                 csvMonth.add(toCsvLine(dataCurrent, CSV_VERSION_CURRENT));
             }
         }
-
-        return saveWholeMonth(getFilename(data.getId()), csvMonth);
+        return success && saveWholeMonth(getFilename(data.getId()), csvMonth);
     }
 
     private boolean saveWholeMonth(String filename, List<String> csvMonth) {
@@ -228,26 +232,39 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     @Override
     public DaysDataNew loadDaysDataNew(Activity activity, String id) {
 
-        if (TimeUtils.isSameMonth(id, anyIdICurrentMonth) && monthsData != null) {
-            return monthsData.get(id);
-        }
+        String newMonthYear = TimeUtils.getMonthYearOfID(id);
 
-        List<String> csvMonth = loadWholeMonth(getFilename(id));
-        monthsData = new HashMap<String, DaysDataNew>();
-        //for (String csvCurrent : csvMonth) {
-        //    DaysDataNew data = toDaysData(csvCurrent, CSV_VERSION_CURRENT);
-        //   if (data != null) {
-        //      monthsData.put(data.getId(), data);
-        //  }
-        // }
-        for (String idCurrent : TimeUtils.getListOfIdsOfMonth(id)) {
-            DaysDataNew data = redundantFileStorage.loadDaysDataNew(activity, idCurrent);
-            if (data != null) {
-                monthsData.put(data.getId(), data);
+        if (newMonthYear.equals(currentMonthYear)) {
+            return currentMonthsData.get(id);
+        }
+        boolean success = false;
+        HashMap<String, DaysDataNew> newMonthsData = null;
+        try {
+            // load from CSV
+            // List<String> csvMonth = loadWholeMonth(getFilename(id));
+            //for (String csvCurrent : csvMonth) {
+            //    DaysDataNew data = toDaysData(csvCurrent, CSV_VERSION_CURRENT);
+            //   if (data != null) {
+            //      currentMonthsData.put(data.getId(), data);
+            //  }
+            // }
+
+            // load from legacy / redundant storage
+            newMonthsData = new HashMap<String, DaysDataNew>();
+            for (String idCurrent : TimeUtils.getListOfIdsOfMonth(id)) {
+                DaysDataNew data = redundantFileStorage.loadDaysDataNew(activity, idCurrent);
+                if (data != null) {
+                    newMonthsData.put(data.getId(), data);
+                }
+            }
+            success = true;
+        } finally {
+            if (success) {
+                currentMonthYear = newMonthYear;
+                currentMonthsData = newMonthsData;
             }
         }
-
-        return redundantFileStorage.loadDaysDataNew(activity, id);
+        return currentMonthsData == null ? null : currentMonthsData.get(id);
     }
 
     @Override
