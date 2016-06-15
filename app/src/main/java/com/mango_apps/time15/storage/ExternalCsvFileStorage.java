@@ -43,16 +43,19 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
 
         if (!initialized && !init()) {
+            Log.e(getClass().getName(), "Save failed for " + data.getId() + ": not initialized.");
             return false;
         }
         this.activity = activity;
         String csvHeadline = getHeadline(CSV_VERSION_CURRENT);
         if (csvHeadline == null) {
+            Log.e(getClass().getName(), "Save failed for " + data.getId() + ": no csv headline.");
             return false;
         }
         String newMonthYear = TimeUtils.getMonthYearOfID(data.getId());
 
         if (!newMonthYear.equals(currentMonthYear)) {
+            Log.e(getClass().getName(), "Save failed for " + data.getId() + ": not in current month " + currentMonthYear);
             return false;
         }
         // update cache
@@ -70,7 +73,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
                 csvMonth.add(toCsvLine(dataCurrent, CSV_VERSION_CURRENT));
             }
         }
-        return success && saveWholeMonth(getFilename(data.getId()), csvMonth);
+        boolean successCsvSave = saveWholeMonth(getFilename(data.getId()), csvMonth);
+        Log.i(getClass().getName(), "Save for " + data.getId() + ": success legacy: " + success + ", success csv: " + successCsvSave);
+        return success && successCsvSave;
     }
 
     private boolean saveWholeMonth(String filename, List<String> csvMonth) {
@@ -223,6 +228,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     }
 
     private void fatal(String method, String msg) {
+        Log.e(getClass().getName(), method + " : " + msg);
 
         if (activity != null) {
             Toast.makeText(activity, method + " : " + msg, Toast.LENGTH_SHORT).show();
@@ -235,6 +241,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         String newMonthYear = TimeUtils.getMonthYearOfID(id);
 
         if (newMonthYear.equals(currentMonthYear)) {
+            Log.i(getClass().getName(), "Loaded data from cache for " + id);
             return currentMonthsData.get(id);
         }
         boolean success = false;
@@ -260,8 +267,11 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             success = true;
         } finally {
             if (success) {
+                Log.i(getClass().getName(), "Cache changed from " + currentMonthYear + " to " + newMonthYear + " while loading " + id);
                 currentMonthYear = newMonthYear;
                 currentMonthsData = newMonthsData;
+            } else {
+                Log.e(getClass().getName(), "Cache error, can't load " + newMonthYear + " while loading " + id);
             }
         }
         return currentMonthsData == null ? null : currentMonthsData.get(id);
@@ -270,6 +280,17 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     @Override
     public int loadBalance(Activity activity, String id) {
 
+        String newMonthYear = TimeUtils.getMonthYearOfID(id);
+
+        if (newMonthYear.equals(currentMonthYear)) {
+            int balance = 0;
+            for (DaysDataNew data : currentMonthsData.values()) {
+                balance += data.getBalance();
+            }
+            Log.i(getClass().getName(), "Load balance from cache for " + id);
+            return balance;
+        }
+        Log.e(getClass().getName(), "Cache miss while loading balance for " + id);
         return redundantFileStorage.loadBalance(activity, id);
     }
 
