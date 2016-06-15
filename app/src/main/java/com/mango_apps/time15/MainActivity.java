@@ -341,13 +341,15 @@ public class MainActivity extends AppCompatActivity {
             resetView();
             taskNo = (taskNo + 1) % modifyableData.getNumberOfTasks();
             modelToView();
-
-            Button switchTasksButton = (Button) findViewById(R.id.switchTasksButton);
-            switchTasksButton.setText(String.valueOf(taskNo + 1));
         } else {
             Toast.makeText(MainActivity.this, "Erst mit + eine Aufgabe hinzufügen!", Toast.LENGTH_SHORT).show();
         }
         Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
+    }
+
+    public void aktualisiereTaskNo() {
+        Button switchTasksButton = (Button) findViewById(R.id.switchTasksButton);
+        switchTasksButton.setText(String.valueOf(taskNo + 1));
     }
 
     /**
@@ -531,6 +533,7 @@ public class MainActivity extends AppCompatActivity {
 
         kindOfDay = task.getKindOfDay().toString();
         previousSelectionKindOfDays = kindOfDay;
+        aktualisiereTaskNo();
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
         Log.i(getClass().getName(), "modelToView() finished.");
