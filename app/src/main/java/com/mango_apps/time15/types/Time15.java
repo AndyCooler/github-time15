@@ -52,10 +52,10 @@ public class Time15 {
         if (s == null || s.isEmpty()) {
             return null;
         }
-        StringTokenizer t = new StringTokenizer(":");
+        StringTokenizer t = new StringTokenizer(s, ":");
 
         if (t.countTokens() != 2) {
-            throw new IllegalArgumentException("fromDisplayString: param must be hh:mm");
+            throw new IllegalArgumentException("from DisplayString: param must be hh:mm");
         }
         Time15 result = null;
         try {

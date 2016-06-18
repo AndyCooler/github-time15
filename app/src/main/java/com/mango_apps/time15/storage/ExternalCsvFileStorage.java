@@ -138,53 +138,45 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         return null;
     }
 
-    private DaysDataNew toDaysData(String csvString, String version) {
+    public DaysDataNew fromCsvString(String csvString, String version) throws CsvFileLineWrongException {
         DaysDataNew data = null;
         if (CSV_VERSION_CURRENT.equals(version)) {
 
-            StringTokenizer t = new StringTokenizer(",");
+            StringTokenizer t = new StringTokenizer(csvString, ",");
+            String s = "";
 
-            // parse ID
-            if (t.hasMoreTokens()) {
-                String id = t.nextToken();
-                if ("Date".equals(id)) {
-                    return null; // headline starts with Date
-                }
-                data = new DaysDataNew(id);
-            } else {
-                fatal("toDaysData", "must start with ID: " + csvString);
-                return null;
-            }
+            s = safeGetNextToken(t, null, "Date");
+            data = new DaysDataNew(s);
+
             int taskNumber = 0;
             while (t.hasMoreTokens()) {
                 if (taskNumber == 0) {
                     BeginEndTask task0 = new BeginEndTask();
-                    // parse kindOfDay
-                    String token = t.nextToken();
-                    KindOfDay kindOfDay = KindOfDay.fromString(token);
-                    if (kindOfDay == null) {
-                        fatal("toDaysData", "unknown kind of task : '" + token + "'");
-                    }
+
+                    s = safeGetNextToken(t, null, "Task");
+                    KindOfDay kindOfDay = KindOfDay.fromString(s);
                     task0.setKindOfDay(kindOfDay);
-                    // parse beginTime
-                    Time15 beginTime = Time15.fromDisplayString(t.nextToken());
+
+                    s = safeGetNextToken(t, null, "Begin");
+                    Time15 beginTime = Time15.fromDisplayString(s);
                     if (beginTime != null) {
                         task0.setBegin(beginTime.getHours());
                         task0.setBegin15(beginTime.getMinutes());
                     }
-                    // parse endTime
-                    Time15 endTime = Time15.fromDisplayString(t.nextToken());
+                    s = safeGetNextToken(t, null, "End");
+                    Time15 endTime = Time15.fromDisplayString(s);
                     if (endTime != null) {
                         task0.setEnd(endTime.getHours());
                         task0.setEnd15(endTime.getMinutes());
                     }
-                    // parse pause
-                    Time15 pauseTime = Time15.fromDisplayString(t.nextToken());
+                    s = safeGetNextTokenOptional(t, null, "Pause");
+                    Time15 pauseTime = Time15.fromDisplayString(s);
                     if (pauseTime != null) {
                         task0.setPause(pauseTime.toMinutes());
                     }
-                    t.nextToken(); // total (ignored)
-                    t.nextToken(); // note (ignored)
+
+                    s = safeGetNextTokenOptional(t, null, "Total"); // ignored
+                    s = safeGetNextTokenOptional(t, null, "Note"); // ignored
                     data.addTask(task0);
                     taskNumber = 1;
                 } else if (taskNumber == 1) {
@@ -209,6 +201,21 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             }
         }
         return data;
+    }
+
+    private String safeGetNextTokenOptional(StringTokenizer t, String id, String expected) throws CsvFileLineWrongException {
+        if (t.hasMoreTokens()) {
+            return t.nextToken().trim();
+        }
+        return null;
+    }
+
+    private String safeGetNextToken(StringTokenizer t, String id, String expected) throws CsvFileLineWrongException {
+        if (t.hasMoreTokens()) {
+            return t.nextToken().trim();
+        }
+        Log.e(getClass().getName(), "In der csv Datei fehlt " + expected);
+        throw new CsvFileLineWrongException(id, expected);
     }
 
     public List<String> loadWholeMonth(String filename) {
