@@ -19,7 +19,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Spec by example:
@@ -31,6 +30,11 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     public static final String CSV_VERSION_CURRENT = "1_0";
 
+    private static final String CSV_ID_COLUMN = "Date";
+
+    private static final String[] CSV_TASK_COLUMNS = {"Task", "Begin", "End", "Break", "Total", "Note"};
+    private static int CSV_LINE_LENGTH_A;
+    private static int CSV_LINE_LENGTH_B;
     private Activity activity;
 
     private String currentMonthYear;
@@ -38,6 +42,11 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     private HashMap<String, DaysDataNew> currentMonthsData = null;
 
     ExternalFileStorage redundantFileStorage = new ExternalFileStorage();
+
+    public ExternalCsvFileStorage() {
+        CSV_LINE_LENGTH_A = 2 + CSV_TASK_COLUMNS.length;
+        CSV_LINE_LENGTH_B = 2 + 2 * CSV_TASK_COLUMNS.length;
+    }
 
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
@@ -138,84 +147,96 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         return null;
     }
 
-    public DaysDataNew fromCsvString(String csvString, String version) throws CsvFileLineWrongException {
+    public DaysDataNew fromCsvLine(String csvString, String version) throws CsvFileLineWrongException {
         DaysDataNew data = null;
         if (CSV_VERSION_CURRENT.equals(version)) {
 
-            StringTokenizer t = new StringTokenizer(csvString, ",");
-            String s = "";
-
-            s = safeGetNextToken(t, null, "Date");
-            data = new DaysDataNew(s);
-
-            int taskNumber = 0;
-            while (t.hasMoreTokens()) {
-                if (taskNumber == 0) {
-                    BeginEndTask task0 = new BeginEndTask();
-
-                    s = safeGetNextToken(t, null, "Task");
-                    KindOfDay kindOfDay = KindOfDay.fromString(s);
-                    task0.setKindOfDay(kindOfDay);
-
-                    s = safeGetNextToken(t, null, "Begin");
-                    Time15 beginTime = Time15.fromDisplayString(s);
-                    if (beginTime != null) {
-                        task0.setBegin(beginTime.getHours());
-                        task0.setBegin15(beginTime.getMinutes());
-                    }
-                    s = safeGetNextToken(t, null, "End");
-                    Time15 endTime = Time15.fromDisplayString(s);
-                    if (endTime != null) {
-                        task0.setEnd(endTime.getHours());
-                        task0.setEnd15(endTime.getMinutes());
-                    }
-                    s = safeGetNextTokenOptional(t, null, "Pause");
-                    Time15 pauseTime = Time15.fromDisplayString(s);
-                    if (pauseTime != null) {
-                        task0.setPause(pauseTime.toMinutes());
-                    }
-
-                    s = safeGetNextTokenOptional(t, null, "Total"); // ignored
-                    s = safeGetNextTokenOptional(t, null, "Note"); // ignored
-                    data.addTask(task0);
-                    taskNumber = 1;
-                } else if (taskNumber == 1) {
-                    NumberTask task1 = new NumberTask();
-                    // parse kindOfDay
-                    String token = t.nextToken();
-                    KindOfDay kindOfDay = KindOfDay.fromString(token);
-                    if (kindOfDay == null) {
-                        fatal("toDaysData", "unknown kind of task : '" + token + "'");
-                    }
-                    task1.setKindOfDay(kindOfDay);
-                    t.nextToken(); // begin (ignored)
-                    t.nextToken(); // end (ignored)
-                    t.nextToken(); // pause (ignored)
-
-                    // parse total
-                    token = t.nextToken();
-                    task1.setTotal(Time15.fromDecimalFormat(token));
-                    data.addTask(task1);
-                    // ignore rest of csvString
-                }
+            String[] line = csvString.split(",", -1);
+            String id = "unknown";
+            if (line.length > 0) {
+                id = line[0];
             }
+
+            if (line.length == CSV_LINE_LENGTH_A) {
+                data = new DaysDataNew(id);
+
+                BeginEndTask task0 = toBeginEndTask(id, line[1], line[2], line[3], line[4], line[5], line[6]);
+                data.addTask(task0);
+            } else if (line.length == CSV_LINE_LENGTH_B) {
+                data = new DaysDataNew(id);
+
+                BeginEndTask task0 = toBeginEndTask(id, line[1], line[2], line[3], line[4], line[5], line[6]);
+                data.addTask(task0);
+
+                NumberTask task1 = toNumberTask(id, line[7], line[8], line[9], line[10], line[11], line[12]);
+                data.addTask(task1);
+            } else {
+                String msg = "Number of columns: " + line.length + ", allowed: " + CSV_LINE_LENGTH_A + " or " + CSV_LINE_LENGTH_B;
+
+                throw new CsvFileLineWrongException(id, msg);
+            }
+
+            // ignore rest of csvString
         }
         return data;
     }
 
-    private String safeGetNextTokenOptional(StringTokenizer t, String id, String expected) throws CsvFileLineWrongException {
-        if (t.hasMoreTokens()) {
-            return t.nextToken().trim();
-        }
-        return null;
+    private NumberTask toNumberTask(String id, String kindOfTask, String begin, String end, String breakString, String total, String note) throws CsvFileLineWrongException {
+        NumberTask task = new NumberTask();
+
+        String s = safeGetNextToken(kindOfTask, id, "Task");
+        task.setKindOfDay(KindOfDay.valueOf(s));
+
+        s = safeGetNextTokenOptional(total, id, "Total");
+        task.setTotal(Time15.fromDecimalFormat(s));
+
+        return task;
     }
 
-    private String safeGetNextToken(StringTokenizer t, String id, String expected) throws CsvFileLineWrongException {
-        if (t.hasMoreTokens()) {
-            return t.nextToken().trim();
+    private BeginEndTask toBeginEndTask(String id, String kindOfTask, String begin, String end, String breakString, String total, String note) throws CsvFileLineWrongException {
+
+        BeginEndTask task = new BeginEndTask();
+
+        String s = safeGetNextToken(kindOfTask, id, "Task");
+        task.setKindOfDay(KindOfDay.valueOf(s));
+
+        s = safeGetNextToken(begin, id, "Begin");
+        Time15 beginTime = Time15.fromDisplayString(s);
+        if (beginTime != null) {
+            task.setBegin(beginTime.getHours());
+            task.setBegin15(beginTime.getMinutes());
         }
-        Log.e(getClass().getName(), "In der csv Datei fehlt " + expected);
-        throw new CsvFileLineWrongException(id, expected);
+
+        s = safeGetNextToken(end, id, "End");
+        Time15 endTime = Time15.fromDisplayString(s);
+        if (endTime != null) {
+            task.setEnd(endTime.getHours());
+            task.setEnd15(endTime.getMinutes());
+        }
+
+        s = safeGetNextTokenOptional(breakString, id, "Pause");
+        Time15 pauseTime = Time15.fromDisplayString(s);
+        if (pauseTime != null) {
+            task.setPause(pauseTime.toMinutes());
+        }
+
+        return task;
+    }
+
+    private String safeGetNextTokenOptional(String s, String id, String expected) throws CsvFileLineWrongException {
+        if (s == null || s.trim().isEmpty()) {
+            return null;
+        }
+        return s.trim();
+    }
+
+    private String safeGetNextToken(String s, String id, String expected) throws CsvFileLineWrongException {
+        if (s == null || s.isEmpty()) {
+            String msg = "load csv " + id + " missing: " + expected;
+            Log.e(getClass().getName(), msg);
+            throw new CsvFileLineWrongException(id, msg);
+        }
+        return s.trim();
     }
 
     public List<String> loadWholeMonth(String filename) {
@@ -228,7 +249,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     private String getHeadline(String version) {
         if (CSV_VERSION_CURRENT.equals(version)) {
-            return "Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note";
+            return CSV_ID_COLUMN + ","
+                    + "Task,Begin,End,Break,Total,Note" + ","
+                    + "Task,Begin,End,Break,Total,Note";
         }
         fatal("getHeadline", "Version " + version + " unsupported!");
         return null;
