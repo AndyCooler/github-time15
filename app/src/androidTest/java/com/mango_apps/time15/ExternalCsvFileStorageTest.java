@@ -24,12 +24,12 @@ public class ExternalCsvFileStorageTest extends TestCase {
         task0.setKindOfDay(KindOfDay.WORKDAY);
         task0.setBegin(10);
         task0.setBegin15(15);
-        task0.setEnd(16);
-        task0.setEnd15(45);
+        task0.setEnd(17);
+        task0.setEnd15(00);
         task0.setPause(60);
         data.addTask(task0);
         String s = storage.toCsvLine(data, ExternalCsvFileStorage.CSV_VERSION_CURRENT);
-        assertEquals("05.05.2016,WORKDAY,10:15,16:45,01:00,5.50,,", s);
+        assertEquals("05.05.2016,WORKDAY,10:15,17:00,01:00,5.75,,", s);
     }
 
     public void testToCsvLine2() {
@@ -54,7 +54,23 @@ public class ExternalCsvFileStorageTest extends TestCase {
 
     public void testFromCsvLine() throws CsvFileLineWrongException {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
-        String s = "05.05.2016,WORKDAY,10:15,16:45,01:00,5.50,,";
+        String s = "05.05.2016,WORKDAY,10:15,17:00,01:00,5.75,,";
+
+        DaysDataNew data = storage.fromCsvLine(s, ExternalCsvFileStorage.CSV_VERSION_CURRENT);
+
+        assertEquals("05.05.2016", data.getId());
+        BeginEndTask task0 = (BeginEndTask) data.getTask(0);
+        assertEquals(KindOfDay.WORKDAY, task0.getKindOfDay());
+        assertEquals(10, task0.getBegin().intValue());
+        assertEquals(15, task0.getBegin15().intValue());
+        assertEquals(17, task0.getEnd().intValue());
+        assertEquals(00, task0.getEnd15().intValue());
+        assertEquals(60, task0.getPause().intValue());
+    }
+
+    public void testFromCsvLineNoPause() throws CsvFileLineWrongException {
+        //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
+        String s = "05.05.2016,WORKDAY,10:15,16:45,,5.50,,";
 
         DaysDataNew data = storage.fromCsvLine(s, ExternalCsvFileStorage.CSV_VERSION_CURRENT);
 
@@ -65,7 +81,7 @@ public class ExternalCsvFileStorageTest extends TestCase {
         assertEquals(15, task0.getBegin15().intValue());
         assertEquals(16, task0.getEnd().intValue());
         assertEquals(45, task0.getEnd15().intValue());
-        assertEquals(60, task0.getPause().intValue());
+        assertNull(task0.getPause());
     }
 
     public void testFromCsvLine2() throws CsvFileLineWrongException {
