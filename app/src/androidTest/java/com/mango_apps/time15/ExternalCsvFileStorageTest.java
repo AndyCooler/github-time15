@@ -17,7 +17,9 @@ public class ExternalCsvFileStorageTest extends TestCase {
 
     private ExternalCsvFileStorage storage = new ExternalCsvFileStorage();
 
-    public void testToCsvLine() {
+    // TODO test for VACATION where Begin is optional!!!
+
+    public void testToCsvLineWorkday() {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         DaysDataNew data = new DaysDataNew("05.05.2016");
         BeginEndTask task0 = new BeginEndTask();
@@ -32,7 +34,7 @@ public class ExternalCsvFileStorageTest extends TestCase {
         assertEquals("05.05.2016,WORKDAY,10:15,17:00,01:00,5.75,,", s);
     }
 
-    public void testToCsvLine2() {
+    public void testToCsvLineWorkday2() {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         DaysDataNew data = new DaysDataNew("05.05.2016");
         BeginEndTask task0 = new BeginEndTask();
@@ -52,7 +54,7 @@ public class ExternalCsvFileStorageTest extends TestCase {
         assertEquals("05.05.2016,WORKDAY,10:15,16:45,01:00,5.50,,VACATION,,,,4.00,,", s);
     }
 
-    public void testFromCsvLine() throws CsvFileLineWrongException {
+    public void testFromCsvLineWorkday() throws CsvFileLineWrongException {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         String s = "05.05.2016,WORKDAY,10:15,17:00,01:00,5.75,,";
 
@@ -68,7 +70,7 @@ public class ExternalCsvFileStorageTest extends TestCase {
         assertEquals(60, task0.getPause().intValue());
     }
 
-    public void testFromCsvLineNoPause() throws CsvFileLineWrongException {
+    public void testFromCsvLineWorkdayNoPause() throws CsvFileLineWrongException {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         String s = "05.05.2016,WORKDAY,10:15,16:45,,5.50,,";
 
@@ -84,7 +86,7 @@ public class ExternalCsvFileStorageTest extends TestCase {
         assertNull(task0.getPause());
     }
 
-    public void testFromCsvLine2() throws CsvFileLineWrongException {
+    public void testFromCsvLineWorkday2() throws CsvFileLineWrongException {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         String s = "05.05.2016,WORKDAY,10:15,16:45,01:00,5.50,note,VACATION,,,,4.00,,";
 
