@@ -209,14 +209,14 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         String s = safeGetNextToken(kindOfTask, id, "Task");
         task.setKindOfDay(KindOfDay.valueOf(s));
 
-        s = safeGetNextToken(begin, id, "Begin");
+        s = safeGetNextTokenOptional(begin, id, "Begin");
         Time15 beginTime = Time15.fromDisplayString(s);
         if (beginTime != null) {
             task.setBegin(beginTime.getHours());
             task.setBegin15(beginTime.getMinutes());
         }
 
-        s = safeGetNextToken(end, id, "End");
+        s = safeGetNextTokenOptional(end, id, "End"); // TODO if begin exists then require end
         Time15 endTime = Time15.fromDisplayString(s);
         if (endTime != null) {
             task.setEnd(endTime.getHours());

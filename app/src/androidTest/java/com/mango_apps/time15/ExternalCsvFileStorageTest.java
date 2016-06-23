@@ -34,6 +34,16 @@ public class ExternalCsvFileStorageTest extends TestCase {
         assertEquals("05.05.2016,WORKDAY,10:15,17:00,01:00,5.75,,", s);
     }
 
+    public void testToCsvLineVacation() {
+        //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
+        DaysDataNew data = new DaysDataNew("05.05.2016");
+        BeginEndTask task0 = new BeginEndTask();
+        task0.setKindOfDay(KindOfDay.VACATION);
+        data.addTask(task0);
+        String s = storage.toCsvLine(data, ExternalCsvFileStorage.CSV_VERSION_CURRENT);
+        assertEquals("05.05.2016,VACATION,,,,0.00,,", s);
+    }
+
     public void testToCsvLineWorkday2() {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         DaysDataNew data = new DaysDataNew("05.05.2016");
@@ -104,5 +114,21 @@ public class ExternalCsvFileStorageTest extends TestCase {
         NumberTask task1 = (NumberTask) data.getTask(1);
         assertEquals(KindOfDay.VACATION, task1.getKindOfDay());
         assertEquals(4 * 60, task1.getTotal().toMinutes());
+    }
+
+    public void testFromCsvLineVacation() throws CsvFileLineWrongException {
+
+        String s = "05.05.2016,VACATION,,,,0.00,,";
+
+        DaysDataNew data = storage.fromCsvLine(s, ExternalCsvFileStorage.CSV_VERSION_CURRENT);
+
+        assertEquals("05.05.2016", data.getId());
+        BeginEndTask task0 = (BeginEndTask) data.getTask(0);
+        assertEquals(KindOfDay.VACATION, task0.getKindOfDay());
+        assertNull(task0.getBegin());
+        assertNull(task0.getBegin15());
+        assertNull(task0.getEnd());
+        assertNull(task0.getEnd15());
+        assertNull(task0.getPause());
     }
 }
