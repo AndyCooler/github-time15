@@ -254,13 +254,14 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             return null;
         }
 
+        Map<String, Integer> map = new HashMap<String, Integer>();
+
         File file = new File(storageDir, filename);
         if (!file.exists()) {
-            return null;
+            Log.w(getClass().getName(), "loadWholeMonth : file not found " + filename);
+            return map;
         }
 
-
-        Map<String, Integer> map = new HashMap<String, Integer>();
         List<String> idsOfMonth = TimeUtils.getListOfIdsOfMonth(id);
 
         try {
