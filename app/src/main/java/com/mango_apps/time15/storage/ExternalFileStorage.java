@@ -119,27 +119,6 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
         return balance;
     }
 
-    @Override
-    public boolean saveDaysDataMonth(Activity activity, String id, List<DaysDataNew> dataList) {
-        for (DaysDataNew data : dataList) {
-            if (!saveDaysDataNew(activity, data)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public List<DaysDataNew> loadDaysDataMonth(Activity activity, String id) {
-
-        List<DaysDataNew> dataList = new ArrayList<DaysDataNew>();
-        for (String idCurrent : TimeUtils.getListOfIdsOfMonth(id)) {
-            DaysDataNew data = loadDaysDataNew(activity, idCurrent);
-            dataList.add(data);
-        }
-        return dataList;
-    }
-
     private String getFilename(String id) {
         return TimeUtils.getMonthYearOfID(id) + ".dat";
     }

@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
             startMonthOverviewActivity();
             return true;
         }
+        if (id == R.id.action_about) {
+            Toast.makeText(MainActivity.this, "Time15 von Andreas, Version: 0.5", Toast.LENGTH_SHORT).show();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

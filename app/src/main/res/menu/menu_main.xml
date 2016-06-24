@@ -27,4 +27,10 @@
         android:title="Monat"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_month"></item>
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="Info"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_month"></item>
 </menu>

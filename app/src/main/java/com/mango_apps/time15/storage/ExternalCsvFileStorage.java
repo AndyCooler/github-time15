@@ -407,17 +407,6 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         return redundantFileStorage.loadBalance(activity, id);
     }
 
-    @Override
-    public boolean saveDaysDataMonth(Activity activity, String id, List<DaysDataNew> dataList) {
-        return false;
-    }
-
-    @Override
-    public List<DaysDataNew> loadDaysDataMonth(Activity activity, String id) {
-        return null;
-    }
-
-
     private String getFilename(String id) {
         return TimeUtils.getMonthYearOfID(id) + "__Time15__" + CSV_VERSION_CURRENT + ".csv";
     }
