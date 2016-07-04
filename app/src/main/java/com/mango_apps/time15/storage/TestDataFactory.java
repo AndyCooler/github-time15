@@ -18,7 +18,7 @@ public class TestDataFactory {
     public static DaysDataNew newRandom(String id) {
         DaysDataNew data1 = new DaysDataNew(id);
         BeginEndTask task0 = new BeginEndTask();
-        switch (RANDOM.nextInt(3)) {
+        switch (RANDOM.nextInt(4)) {
             case 0:
                 task0.setKindOfDay(KindOfDay.WORKDAY);
                 task0.setBegin(8);
@@ -40,13 +40,18 @@ public class TestDataFactory {
                 data1.addTask(task1);
                 break;
             case 2:
-                task0.setKindOfDay(KindOfDay.HOLIDAY);
+                task0.setKindOfDay(KindOfDay.VACATION);
                 data1.addTask(task0);
                 break;
             case 3:
+                task0.setKindOfDay(KindOfDay.HOLIDAY);
+                data1.addTask(task0);
+                break;
+            case 4:
                 task0.setKindOfDay(KindOfDay.SICKDAY);
                 data1.addTask(task0);
                 break;
+
         }
 
         return data1;

@@ -24,11 +24,6 @@ public class NumberTask implements Task {
     }
 
     @Override
-    public int getBalance() {
-        return total.toMinutes();
-    }
-
-    @Override
     public KindOfDay getKindOfDay() {
         return day;
     }

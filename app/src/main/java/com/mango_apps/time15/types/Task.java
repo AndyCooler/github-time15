@@ -7,13 +7,11 @@ public interface Task {
 
     Time15 getTotal();
 
-    int getBalance();
+    String toString();
+
+    Task copy();
 
     void setKindOfDay(KindOfDay day);
 
     KindOfDay getKindOfDay();
-
-    String toString();
-
-    Task copy();
 }

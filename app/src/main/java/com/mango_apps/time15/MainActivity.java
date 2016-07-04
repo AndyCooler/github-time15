@@ -429,6 +429,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save() {
+        Log.i(getClass().getName(), "saving...");
         viewToModel();
         if (originalData == null) {
             balanceValue += modifyableData.getBalance();
@@ -443,8 +444,9 @@ public class MainActivity extends AppCompatActivity {
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifyableData;
         modifyableData = DaysDataNew.copy(originalData);
-        //modelToView(); // TODO brauchen wir das?
+        //modelToView(); // TODO shouldn't be necessary
         updateBalance();
+        Log.i(getClass().getName(), "saving...done.");
     }
 
     public void totalMore(View v) {

@@ -13,6 +13,9 @@ import java.util.Locale;
  */
 public final class TimeUtils {
 
+    // TODO Idee: Cache einbauen: bei createId(cal) wird eine Map ID->cal befüllt.
+    // Diese globale statische Map wird dann in jeder Methode aktualisiert.
+
     public static String createID() {
         return createID(new GregorianCalendar());
     }

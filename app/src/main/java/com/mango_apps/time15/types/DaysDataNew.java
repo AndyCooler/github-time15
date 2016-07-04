@@ -8,6 +8,10 @@ import java.util.StringTokenizer;
  */
 public class DaysDataNew {
 
+    public static final int DUE_HOURS_PER_DAY = 8;
+
+    public static final int DUE_TOTAL_MINUTES = DUE_HOURS_PER_DAY * 60;
+
     private String id;
 
     private final ArrayList<Task> tasks;
@@ -62,12 +66,14 @@ public class DaysDataNew {
     }
 
     public int getBalance() {
-        int balance = 0;
-        for (Task task : tasks) {
-            balance += task.getBalance();
-        }
+
+        Time15 actual = getTotal();
+        int actualTotalMinutes = actual.toMinutes();
+        int balance = actualTotalMinutes - DUE_TOTAL_MINUTES;
+
         return balance;
     }
+
 
     public Time15 getTotal() {
         Time15 total = Time15.fromMinutes(0);

@@ -8,11 +8,9 @@ import java.util.StringTokenizer;
  */
 public class BeginEndTask implements Task {
 
-    public static final int DUE_HOURS_PER_DAY = 8;
-
-    public static final int DUE_TOTAL_MINUTES = DUE_HOURS_PER_DAY * 60;
-
     private static final String SEP = "#";
+
+    private KindOfDay day;
 
     private Integer begin;
 
@@ -23,8 +21,6 @@ public class BeginEndTask implements Task {
     private Integer end15;
 
     private Integer pause;
-
-    private KindOfDay day;
 
     public Integer getBegin() {
         return begin;
@@ -66,18 +62,20 @@ public class BeginEndTask implements Task {
         this.pause = pause;
     }
 
-    @Override
     public KindOfDay getKindOfDay() {
         return day;
     }
 
-    @Override
     public void setKindOfDay(KindOfDay day) {
         this.day = day;
     }
 
     @Override
     public Time15 getTotal() {
+        if (!KindOfDay.isDueDay(day)) {
+            return Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
+        }
+
         int difference = 0;
         int difference15 = 0;
         if (end != null && begin != null) {
@@ -103,20 +101,6 @@ public class BeginEndTask implements Task {
             }
         }
         return new Time15(difference, difference15);
-    }
-
-    @Override
-    public int getBalance() {
-        if (!KindOfDay.isDueDay(day)) {
-            return 0;
-        }
-
-        int actualTotalMinutes = 0;
-
-        Time15 actual = getTotal();
-        actualTotalMinutes += actual.toMinutes();
-
-        return actualTotalMinutes - DUE_TOTAL_MINUTES;
     }
 
     @Override
