@@ -13,7 +13,9 @@ public enum KindOfDay {
 
     SICKDAY("Krank"),
 
-    KIDSICKDAY("Kind krank");
+    KIDSICKDAY("Kind krank"),
+
+    PARENTAL_LEAVE("Elternzeit");
 
     private final String displayString;
 
