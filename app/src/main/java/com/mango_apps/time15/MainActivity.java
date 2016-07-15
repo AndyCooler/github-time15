@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void beginAt(Integer hour) {
         Log.i(getClass().getName(), "beginAt() started." + hour);
-        if (hour == null || beginHourVisible(hour)) {
+        if (hour == null || isBeginHourVisible(hour)) {
             return;
         }
         updateMapToBeginAt(intoRange(hour));
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void endAt(Integer hour) {
         Log.i(getClass().getName(), "endAt() started." + hour);
-        if (hour == null || endHourVisible(hour)) {
+        if (hour == null || isEndHourVisible(hour)) {
             return;
         }
         updateMapToEndAt(intoRange(hour));
@@ -262,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
         modelToView();
     }
 
-    private boolean beginHourVisible(int hour) {
+    private boolean isBeginHourVisible(int hour) {
         return mapBeginnValueToViewId.get(hour) != null;
     }
 
-    private boolean endHourVisible(int hour) {
+    private boolean isEndHourVisible(int hour) {
         return mapEndeValueToViewId.get(hour) != null;
     }
 
@@ -401,12 +401,12 @@ public class MainActivity extends AppCompatActivity {
             previousSelectionPauseTime = viewId;
         }
 
-        if (beginEndTimeSelectionComplete()) {
+        if (isBeginEndTimeSelectionComplete()) {
             save();
         }
     }
 
-    private boolean beginEndTimeSelectionComplete() {
+    private boolean isBeginEndTimeSelectionComplete() {
         if (endeTime != null && beginnTime != null) {
             if (beginn15 != null && ende15 != null) {
                 return true;
