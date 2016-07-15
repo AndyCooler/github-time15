@@ -2,6 +2,7 @@ package com.mango_apps.time15;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.mango_apps.time15.storage.StorageFactory;
 import com.mango_apps.time15.util.TimeUtils;
 
 import junit.framework.TestCase;
@@ -24,10 +25,14 @@ public class TimeUtilsTest extends TestCase {
     }
 
     public void testDateBackwards() {
+        assertEquals("03.01.2016", TimeUtils.dateBackwards("04.01.2016"));
         assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
+        assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
+        assertEquals("05.01.2016", TimeUtils.dateBackwards("06.01.2016"));
     }
 
     public void testDateForwards() {
+        assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
         assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
     }
 
@@ -45,6 +50,10 @@ public class TimeUtilsTest extends TestCase {
         checkMonth("05.10.2016", 31);
         checkMonth("05.11.2016", 30);
         checkMonth("05.12.2016", 31);
+    }
+
+    public void testCreateTestdata() {
+        StorageFactory.getStorage();
     }
 
     private void checkMonth(String id, int daysInMonth) {

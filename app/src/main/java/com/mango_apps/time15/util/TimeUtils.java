@@ -5,16 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * This class provides utilities for formatting operations for days.
  */
 public final class TimeUtils {
 
-    // TODO Idee: Cache einbauen: bei createId(cal) wird eine Map ID->cal befüllt.
-    // Diese globale statische Map wird dann in jeder Methode aktualisiert.
+    private static final Map<String, GregorianCalendar> cache = new HashMap<>();
 
     public static String createID() {
         return createID(new GregorianCalendar());
@@ -22,8 +23,9 @@ public final class TimeUtils {
 
     public static String createID(GregorianCalendar cal) {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        String date = df.format(cal.getTime());
-        return date;
+        String id = df.format(cal.getTime());
+        cache.put(id, cal); // TODO evtl ist es cleverer hier einmal cal.clone() abzulegen, statt in anderen Methoden zu clonen
+        return id;
     }
 
     public static String getMonthYearOfID(String id) {
@@ -37,24 +39,28 @@ public final class TimeUtils {
 
     public static String dateForwards(String id) {
         GregorianCalendar cal = toCalendar(id);
+        cache.remove(id);
         cal.add(GregorianCalendar.DAY_OF_YEAR, 1);
         return createID(cal);
     }
 
     public static String dateBackwards(String id) {
         GregorianCalendar cal = toCalendar(id);
+        cache.remove(id);
         cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
         return createID(cal);
     }
 
     public static String monthForwards(String id) {
         GregorianCalendar cal = toCalendar(id);
+        cache.remove(id);
         cal.add(GregorianCalendar.MONTH, 1);
         return createID(cal);
     }
 
     public static String monthBackwards(String id) {
         GregorianCalendar cal = toCalendar(id);
+        cache.remove(id);
         cal.add(GregorianCalendar.MONTH, -1);
         return createID(cal);
     }
@@ -65,12 +71,26 @@ public final class TimeUtils {
     }
 
     private static GregorianCalendar toCalendar(String id) {
+        GregorianCalendar cal = null;
+        if (cache.get(id) != null) {
+            cal = cache.get(id);
+        }
+
+        //else {
         int year = Integer.valueOf(id.substring(6));
         int month = Integer.valueOf(id.substring(3, 5)) - 1;
         int day = Integer.valueOf(id.substring(0, 2));
-        GregorianCalendar cal = new GregorianCalendar(year, month, day);
+        //cal = new GregorianCalendar(year, month, day);
+        GregorianCalendar cal2 = new GregorianCalendar(year, month, day);
+        if (cal != null && !createID(cal).equals(createID(cal2))) {
+            // TODO TimeUtils Cache: wenn keine solche Exception auftritt, kann ich mich auf den cache verlassen
+            String a = cal.get(Calendar.DAY_OF_MONTH) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR);
+            String b = cal2.get(Calendar.DAY_OF_MONTH) + "-" + cal2.get(Calendar.MONTH) + "-" + cal2.get(Calendar.YEAR);
 
-        return cal;
+            throw new IllegalStateException("!!! TimeUtils.cache error getting " + id + ":\ncal :" + a + "\ncal2:" + b);
+        }
+        //}
+        return cal2;
     }
 
     public static List<String> getListOfIdsOfMonth(String id) {
@@ -78,6 +98,7 @@ public final class TimeUtils {
         GregorianCalendar cal = toCalendar(id);
         int max = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
         for (int i = 1; i <= max; i++) {
+            cal = (GregorianCalendar) cal.clone();
             cal.set(Calendar.DAY_OF_MONTH, i);
             result.add(createID(cal));
         }
@@ -116,6 +137,7 @@ public final class TimeUtils {
     public static boolean isLastWorkDayOfMonth(String id) {
         GregorianCalendar cal = toCalendar(id);
         int max = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+        cal = (GregorianCalendar) cal.clone();
         cal.set(Calendar.DAY_OF_MONTH, max);
         String maxId = createID(cal);
         while (isWeekend(maxId)) {
