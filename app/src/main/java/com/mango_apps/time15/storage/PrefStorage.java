@@ -9,6 +9,7 @@ import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class uses SharedPreferences to store the start, end and pause values for each day.
@@ -46,6 +47,11 @@ public class PrefStorage implements StorageFacade {
     @Override
     public int loadBalance(Activity activity, String id) {
         return 0;
+    }
+
+    @Override
+    public Set<String> loadTaskNames(Activity activity, String id) {
+        return null;
     }
 
     private String getFilename(String id) {

@@ -21,8 +21,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Spec by example:
@@ -393,9 +395,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     @Override
     public int loadBalance(Activity activity, String id) {
 
-        String newMonthYear = TimeUtils.getMonthYearOfID(id);
+        String monthYear = TimeUtils.getMonthYearOfID(id);
 
-        if (newMonthYear.equals(currentMonthYear)) {
+        if (monthYear.equals(currentMonthYear)) {
             int balance = 0;
             for (DaysDataNew data : currentMonthsData.values()) {
                 balance += data.getBalance();
@@ -403,11 +405,27 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             Log.i(getClass().getName(), "Load balance from cache for " + id);
             return balance;
         }
-        Log.e(getClass().getName(), "Cache miss while loading balance for " + id);
+        Log.w(getClass().getName(), "Cache miss while loading balance for " + id);
         return redundantFileStorage.loadBalance(activity, id);
     }
 
     private String getFilename(String id) {
         return TimeUtils.getMonthYearOfID(id) + "__Time15__" + CSV_VERSION_CURRENT + ".csv";
+    }
+
+    @Override
+    public Set<String> loadTaskNames(Activity activity, String id) {
+        Set<String> taskNames = new HashSet<>();
+
+        List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
+        for (String currentId : idList) {
+            DaysDataNew data = loadDaysDataNew(activity, currentId);
+            if (data != null) {
+                for (int i = 0; i < data.getNumberOfTasks(); i++) {
+                    taskNames.add(data.getTask(i).getKindOfDay().getDisplayString());
+                }
+            }
+        }
+        return taskNames;
     }
 }

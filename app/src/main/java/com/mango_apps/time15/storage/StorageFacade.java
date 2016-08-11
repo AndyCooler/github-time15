@@ -4,7 +4,7 @@ import android.app.Activity;
 
 import com.mango_apps.time15.types.DaysDataNew;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Storage facade to load and save a day's data.
@@ -37,4 +37,9 @@ public interface StorageFacade {
      * @return balance of month
      */
     int loadBalance(Activity activity, String id);
+
+    /**
+     * Load the name of all tasks of a month identified by id.
+     */
+    Set<String> loadTaskNames(Activity activity, String id);
 }

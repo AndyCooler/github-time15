@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class uses external files to store the start, end and pause values for each day.
@@ -117,6 +118,11 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
             }
         }
         return balance;
+    }
+
+    @Override
+    public Set<String> loadTaskNames(Activity activity, String id) {
+        return null; // NOT IMPLEMENTED
     }
 
     private String getFilename(String id) {
