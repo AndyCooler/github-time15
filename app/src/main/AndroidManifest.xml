@@ -22,6 +22,28 @@
             android:name=".MonthOverviewActivity"
             android:label="Time15 Month Overview"
             android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <data
+                    android:scheme="content"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.csv" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="file"
+                    android:host="*"
+                    android:pathPattern=".*\\.csv"
+                    android:mimeType="*/*" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

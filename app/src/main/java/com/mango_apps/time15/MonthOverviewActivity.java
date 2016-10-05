@@ -1,6 +1,8 @@
 package com.mango_apps.time15;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +28,10 @@ import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.TimeUtils;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,9 +66,69 @@ public class MonthOverviewActivity extends ActionBarActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        Log.i(getClass().getName(), "intent action : " + action);
+        Log.i(getClass().getName(), "intent type   : " + type);
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            id = TimeUtils.createID();
+            if (type != null) {
+                Uri uri = intent.getData();
+                importData(uri);
+                if ("text/plain".equals(type)) {
+                    String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    if (sharedText != null && sharedText.length() > 20) {
+                        sharedText = sharedText.substring(0, 18);
+                    }
+
+                    Toast.makeText(MonthOverviewActivity.this, "yay! " + sharedText, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MonthOverviewActivity.this, "no plain text!", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(MonthOverviewActivity.this, "type is null!", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+            Toast.makeText(MonthOverviewActivity.this, "normal entry! id=" + id, Toast.LENGTH_LONG).show();
+        }
 
         Log.i(getClass().getName(), "onCreate() finished.");
+    }
+
+    private void importData(Uri data) {
+        final String scheme = data.getScheme();
+
+        if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            try {
+                ContentResolver cr = MonthOverviewActivity.this.getContentResolver();
+                InputStream is = cr.openInputStream(data);
+                if (is == null) {
+                    Toast.makeText(MonthOverviewActivity.this, "inputStream is null!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                StringBuffer buf = new StringBuffer();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                String str;
+                if (is != null) {
+                    while ((str = reader.readLine()) != null) {
+                        buf.append(str + "\n");
+                    }
+                }
+                is.close();
+
+                String s = buf.toString();
+
+                Toast.makeText(MonthOverviewActivity.this, "yay! " + s, Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(MonthOverviewActivity.this, "ex: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(MonthOverviewActivity.this, "scheme: " + scheme, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -77,7 +143,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
     private void initialize() {
         Log.i(getClass().getName(), "initialize() started with id " + id);
-        setTitle(TimeUtils.getMonthYearDisplayString(id));
+        setTitle(TimeUtils.getMonthYearDisplayStringShort(id));
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
         table.removeAllViews();

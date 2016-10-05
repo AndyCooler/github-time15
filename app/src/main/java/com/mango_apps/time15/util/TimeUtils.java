@@ -37,6 +37,11 @@ public final class TimeUtils {
         return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.GERMANY) + " " + cal.get(Calendar.YEAR);
     }
 
+    public static String getMonthYearDisplayStringShort(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        return id.substring(3, 5) + "/" + id.substring(6);
+    }
+
     public static String dateForwards(String id) {
         GregorianCalendar cal = toCalendar(id);
         cache.remove(id);
