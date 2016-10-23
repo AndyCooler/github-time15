@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mango_apps.time15.storage.ExternalCsvFileStorage;
 import com.mango_apps.time15.storage.StorageFacade;
 import com.mango_apps.time15.storage.StorageFactory;
 import com.mango_apps.time15.types.BeginEndTask;
@@ -28,9 +30,11 @@ import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
+import com.mango_apps.time15.util.EmailUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -38,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static com.mango_apps.time15.storage.FileStorage.STORAGE_DIR;
 
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
@@ -357,6 +363,13 @@ public class MonthOverviewActivity extends ActionBarActivity {
         }
         if (id == R.id.action_migrate) {
             migrateDataForMonth();
+            return true;
+        }
+        if (id == R.id.action_send) {
+            File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+            String subject = TimeUtils.getMonthYearDisplayString(this.id);
+            EmailUtils.sendEmail(this, ExternalCsvFileStorage.getFilename(this.id), storageDir, subject);
             return true;
         }
 

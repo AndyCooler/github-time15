@@ -265,7 +265,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         return redundantFileStorage.loadBalance(activity, id);
     }
 
-    private String getFilename(String id) {
+    public static String getFilename(String id) {
         return TimeUtils.getMonthYearOfID(id) + "__Time15__" + "1_0" + ".csv";
     }
 
