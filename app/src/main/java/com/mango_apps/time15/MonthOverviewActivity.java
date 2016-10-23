@@ -1,10 +1,12 @@
 package com.mango_apps.time15;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +33,6 @@ import com.mango_apps.time15.util.TimeUtils;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,18 +78,8 @@ public class MonthOverviewActivity extends ActionBarActivity {
             if (type != null) {
                 Uri uri = intent.getData();
                 importData(uri);
-                if ("text/plain".equals(type)) {
-                    String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-                    if (sharedText != null && sharedText.length() > 20) {
-                        sharedText = sharedText.substring(0, 18);
-                    }
-
-                    Toast.makeText(MonthOverviewActivity.this, "yay! " + sharedText, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(MonthOverviewActivity.this, "no plain text!", Toast.LENGTH_LONG).show();
-                }
             } else {
-                Toast.makeText(MonthOverviewActivity.this, "type is null!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MonthOverviewActivity.this, "intent type is null!", Toast.LENGTH_LONG).show();
             }
         } else {
             id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
@@ -110,6 +101,8 @@ public class MonthOverviewActivity extends ActionBarActivity {
                     return;
                 }
 
+                // TODO statt FOlgendem besser ExternalCsvStorage.loadWholeMonth rufen und
+                // parametrisieren mit dem Reader!
                 StringBuffer buf = new StringBuffer();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 String str;
@@ -120,9 +113,34 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 }
                 is.close();
 
-                String s = buf.toString();
+                final String s = buf.toString();
 
-                Toast.makeText(MonthOverviewActivity.this, "yay! " + s, Toast.LENGTH_LONG).show();
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage(R.string.dialog_message)
+                        .setTitle(R.string.dialog_title);
+
+                // Add the buttons
+                builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                        Toast.makeText(MonthOverviewActivity.this, "yay! " + s, Toast.LENGTH_LONG).show();
+                    }
+                });
+                builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                        Toast.makeText(MonthOverviewActivity.this, "nay-nay! " + s, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
             } catch (Exception e) {
                 Toast.makeText(MonthOverviewActivity.this, "ex: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
