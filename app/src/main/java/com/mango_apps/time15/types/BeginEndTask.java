@@ -66,6 +66,11 @@ public class BeginEndTask implements Task {
         return day;
     }
 
+    @Override
+    public boolean valid() {
+        return end != null && begin != null && begin15 != null && end15 != null && day != null;
+    }
+
     public void setKindOfDay(KindOfDay day) {
         this.day = day;
     }
@@ -78,15 +83,14 @@ public class BeginEndTask implements Task {
 
         int difference = 0;
         int difference15 = 0;
-        if (end != null && begin != null) {
+        if (end != null && begin != null && begin15 != null && end15 != null) {
             difference = end - begin;
-            if (begin15 != null && end15 != null) {
-                difference15 = end15 - begin15;
-                if (difference15 < 0) {
-                    difference--;
-                    difference15 = 60 + difference15;
-                }
+            difference15 = end15 - begin15;
+            if (difference15 < 0) {
+                difference--;
+                difference15 = 60 + difference15;
             }
+
             if (pause != null) {
                 int pauseTemp = pause;
                 while (pauseTemp > 60) {

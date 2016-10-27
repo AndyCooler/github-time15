@@ -46,6 +46,11 @@ public class NumberTask implements Task {
         return copy;
     }
 
+    @Override
+    public boolean valid() {
+        return total != null && day != null;
+    }
+
     private String valueOf(Time15 value) {
         return (value == null) ? "-" : String.valueOf(value.getHours());
     }

@@ -14,4 +14,6 @@ public interface Task {
     void setKindOfDay(KindOfDay day);
 
     KindOfDay getKindOfDay();
+
+    boolean valid();
 }

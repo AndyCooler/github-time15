@@ -46,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private Integer beginnTime = null;
     private Integer endeTime = null;
     private Integer pauseTime = null;
-    private Integer previousSelectionBeginnTime = null;
-    private Integer previousSelectionEndeTime = null;
-    private Integer previousSelectionPauseTime = null;
-    private String previousSelectionKindOfDays = null;
     private Integer beginn15 = null;
     private Integer ende15 = null;
     private String kindOfDay = KindOfDay.WORKDAY.toString();
+    private Integer previousSelectionBeginnTime = null;
+    private Integer previousSelectionEndeTime = null;
+    private Integer previousSelectionPauseTime = null;
     private Integer previousSelectionBeginn15 = null;
     private Integer previousSelectionEnde15 = null;
+    private String previousSelectionKindOfDays = null;
     private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<>();
     private HashMap<Integer, Integer> mapBeginn15ValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
     private DaysDataNew originalData;
-    private DaysDataNew modifyableData;
+    private DaysDataNew modifiableData;
     private Integer numberTaskHours = null;
 
     @Override
@@ -187,9 +187,9 @@ public class MainActivity extends AppCompatActivity {
         id = toId;
         setTitle(TimeUtils.getMainTitleString(id));
         originalData = storage.loadDaysDataNew(this, id);
-        modifyableData = DaysDataNew.copy(originalData);
-        if (modifyableData == null) {
-            modifyableData = new DaysDataNew(id);
+        modifiableData = DaysDataNew.copy(originalData);
+        if (modifiableData == null) {
+            modifiableData = new DaysDataNew(id);
         }
         taskNo = 0;
         resetView();
@@ -325,14 +325,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void addTask(View v) {
         Log.i(getClass().getName(), "addTask() started at task #" + taskNo);
-        if (modifyableData.getNumberOfTasks() > 1) {
+        if (modifiableData.getNumberOfTasks() > 1) {
             Toast.makeText(MainActivity.this, "Nur 2 Aufgaben pro Tag!", Toast.LENGTH_SHORT).show();
         } else {
             taskNo = 1;
             NumberTask task1 = new NumberTask();
             task1.setKindOfDay(KindOfDay.VACATION);
             task1.setTotal(Time15.fromMinutes(0));
-            modifyableData.addTask(task1);
+            modifiableData.addTask(task1);
             resetView();
             modelToView();
         }
@@ -341,9 +341,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchTasks(View v) {
         Log.i(getClass().getName(), "switchTasks() started at task #" + taskNo);
-        if (modifyableData.getNumberOfTasks() == 2) {
+        if (modifiableData.getNumberOfTasks() == 2) {
             resetView();
-            taskNo = (taskNo + 1) % modifyableData.getNumberOfTasks();
+            taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
             modelToView();
         } else {
             Toast.makeText(MainActivity.this, "Erst mit + eine Aufgabe hinzufügen!", Toast.LENGTH_SHORT).show();
@@ -370,38 +370,74 @@ public class MainActivity extends AppCompatActivity {
         boolean isBeginn15 = viewId == R.id.beginn00 || viewId == R.id.beginn15 || viewId == R.id.beginn30 || viewId == R.id.beginn45;
         boolean isEnde15 = viewId == R.id.ende00 || viewId == R.id.ende15 || viewId == R.id.ende30 || viewId == R.id.ende45;
         boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
+        boolean isDeselected = false;
         if (isBeginnTime) {
-            setTransparent(previousSelectionBeginnTime);
-            view.setBackgroundColor(ColorsUI.SELECTION_BG);
-            beginnTime = Integer.valueOf((String) view.getText());
-            previousSelectionBeginnTime = viewId;
+            if (previousSelectionBeginnTime != null && viewId == previousSelectionBeginnTime) {
+                setTransparent(viewId);
+                beginnTime = null;
+                previousSelectionBeginnTime = null;
+                isDeselected = true;
+            } else {
+                setTransparent(previousSelectionBeginnTime);
+                view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                beginnTime = Integer.valueOf((String) view.getText());
+                previousSelectionBeginnTime = viewId;
+            }
         }
         if (isEndeTime) {
-            setTransparent(previousSelectionEndeTime);
-            view.setBackgroundColor(ColorsUI.SELECTION_BG);
-            endeTime = Integer.valueOf((String) view.getText());
-            previousSelectionEndeTime = viewId;
+            if (previousSelectionEndeTime != null && viewId == previousSelectionEndeTime) {
+                setTransparent(viewId);
+                endeTime = null;
+                previousSelectionEndeTime = null;
+                isDeselected = true;
+            } else {
+                setTransparent(previousSelectionEndeTime);
+                view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                endeTime = Integer.valueOf((String) view.getText());
+                previousSelectionEndeTime = viewId;
+            }
         }
         if (isBeginn15) {
-            setTransparent(previousSelectionBeginn15);
-            view.setBackgroundColor(ColorsUI.SELECTION_BG);
-            beginn15 = Integer.valueOf((String) view.getText());
-            previousSelectionBeginn15 = viewId;
+            if (previousSelectionBeginn15 != null && viewId == previousSelectionBeginn15) {
+                setTransparent(viewId);
+                beginn15 = null;
+                previousSelectionBeginn15 = null;
+                isDeselected = true;
+            } else {
+                setTransparent(previousSelectionBeginn15);
+                view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                beginn15 = Integer.valueOf((String) view.getText());
+                previousSelectionBeginn15 = viewId;
+            }
         }
         if (isEnde15) {
-            setTransparent(previousSelectionEnde15);
-            view.setBackgroundColor(ColorsUI.SELECTION_BG);
-            ende15 = Integer.valueOf((String) view.getText());
-            previousSelectionEnde15 = viewId;
+            if (previousSelectionEnde15 != null && viewId == previousSelectionEnde15) {
+                setTransparent(viewId);
+                ende15 = null;
+                previousSelectionEnde15 = null;
+                isDeselected = true;
+            } else {
+                setTransparent(previousSelectionEnde15);
+                view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                ende15 = Integer.valueOf((String) view.getText());
+                previousSelectionEnde15 = viewId;
+            }
         }
         if (isPauseTime) {
-            setTransparent(previousSelectionPauseTime);
-            view.setBackgroundColor(ColorsUI.SELECTION_BG);
-            pauseTime = Integer.valueOf((String) view.getText());
-            previousSelectionPauseTime = viewId;
+            if (previousSelectionPauseTime != null && viewId == previousSelectionPauseTime) {
+                setTransparent(viewId);
+                pauseTime = null;
+                previousSelectionPauseTime = null;
+                isDeselected = true;
+            } else {
+                setTransparent(previousSelectionPauseTime);
+                view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                pauseTime = Integer.valueOf((String) view.getText());
+                previousSelectionPauseTime = viewId;
+            }
         }
 
-        if (isBeginEndTimeSelectionComplete()) {
+        if (isBeginEndTimeSelectionComplete() || isDeselected) {
             save();
         }
     }
@@ -418,10 +454,10 @@ public class MainActivity extends AppCompatActivity {
     private void aktualisiereTotal(int color) {
         TextView total = (TextView) findViewById(R.id.total);
         Time15 totalTime = null;
-        if (modifyableData == null || modifyableData.getTask(taskNo) == null) {
+        if (modifiableData == null || modifiableData.getTask(taskNo) == null) {
             totalTime = Time15.fromMinutes(0);
         } else {
-            totalTime = modifyableData.getTask(taskNo).getTotal();
+            totalTime = modifiableData.getTask(taskNo).getTotal();
         }
 
         total.setText(totalTime.toDisplayString());
@@ -432,25 +468,25 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "saving...");
         viewToModel();
         if (originalData == null) {
-            balanceValue += modifyableData.getBalance();
+            balanceValue += modifiableData.getBalance();
         } else {
             balanceValue -= originalData.getBalance();
-            balanceValue += modifyableData.getBalance();
+            balanceValue += modifiableData.getBalance();
         }
 
-        // TODO only if hasChanged d.h. if modifyableData != originalData
-        int totalNewColor = storage.saveDaysDataNew(this, modifyableData) ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR;
+        // TODO only if hasChanged d.h. if modifiableData != originalData
+        int totalNewColor = storage.saveDaysDataNew(this, modifiableData) ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR;
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
-        originalData = modifyableData;
-        modifyableData = DaysDataNew.copy(originalData);
+        originalData = modifiableData;
+        modifiableData = DaysDataNew.copy(originalData);
         //modelToView(); // TODO shouldn't be necessary
         updateBalance();
         Log.i(getClass().getName(), "saving...done.");
     }
 
     public void totalMore(View v) {
-        if (modifyableData != null && modifyableData.getTask(taskNo) != null) {
+        if (modifiableData != null && modifiableData.getTask(taskNo) != null) {
             if (numberTaskHours != null) {
                 numberTaskHours++;
                 save();
@@ -459,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void totalLess(View v) {
-        if (modifyableData != null && modifyableData.getTask(taskNo) != null) {
+        if (modifiableData != null && modifiableData.getTask(taskNo) != null) {
             if (numberTaskHours != null) {
                 numberTaskHours--;
                 save();
@@ -469,13 +505,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void viewToModel() {
         Log.i(getClass().getName(), "viewToModel() started.");
-        Task task = modifyableData.getTask(taskNo);
+        Task task = modifiableData.getTask(taskNo);
         if (task == null) {
             // TODO erstmal werden nur neue BeginEndTask im Modell gespeichert:
             task = new BeginEndTask();
-            modifyableData.addTask(task);
+            modifiableData.addTask(task);
         } else {
-            task = modifyableData.getTask(taskNo);
+            task = modifiableData.getTask(taskNo);
         }
 
         if (task instanceof BeginEndTask) {
@@ -496,10 +532,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void modelToView() {
         Log.i(getClass().getName(), "modelToView() started.");
-        if (modifyableData.getTask(taskNo) == null) {
+        if (modifiableData.getTask(taskNo) == null) {
             return;
         }
-        Task task = modifyableData.getTask(taskNo);
+        Task task = modifiableData.getTask(taskNo);
         boolean isLoadedData = originalData != null;
         int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 

@@ -7,7 +7,7 @@ import android.net.Uri;
 import java.io.File;
 
 /**
- * Created by andreas on 23.10.16.
+ * Utility class to send an email.
  */
 
 public final class EmailUtils {

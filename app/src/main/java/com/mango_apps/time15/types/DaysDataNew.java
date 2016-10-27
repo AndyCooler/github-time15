@@ -69,6 +69,9 @@ public class DaysDataNew {
 
         Time15 actual = getTotal();
         int actualTotalMinutes = actual.toMinutes();
+        if (actualTotalMinutes == 0) {
+            return 0;
+        }
         int balance = actualTotalMinutes - DUE_TOTAL_MINUTES;
 
         return balance;
