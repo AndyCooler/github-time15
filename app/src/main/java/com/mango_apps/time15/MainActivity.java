@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
     private DaysDataNew originalData;
     private DaysDataNew modifiableData;
     private Integer numberTaskHours = null;
-
+    private TextView total;
+    private TextView totalSemi;
+    private TextView total15;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         String intentsId = getIntentsId();
         Log.i(getClass().getName(), "onResume() started with id " + intentsId);
+
+
         switchToID(null, intentsId);
         updateBalance();
         Log.i(getClass().getName(), "onResume() finished.");
@@ -452,16 +456,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void aktualisiereTotal(int color) {
-        TextView total = (TextView) findViewById(R.id.total);
+
         Time15 totalTime = null;
         if (modifiableData == null || modifiableData.getTask(taskNo) == null) {
             totalTime = Time15.fromMinutes(0);
         } else {
             totalTime = modifiableData.getTask(taskNo).getTotal();
         }
+        total = (TextView) findViewById(R.id.total);
+        totalSemi = (TextView) findViewById(R.id.totalSemi);
+        total15 = (TextView) findViewById(R.id.total15);
 
-        total.setText(totalTime.toDisplayString());
+        total.setText(totalTime.getHoursDisplayString());
         total.setTextColor(color);
+        totalSemi.setTextColor(color);
+        total15.setText(totalTime.getMinutesDisplayString());
+        total15.setTextColor(color);
     }
 
     public void save() {
@@ -485,22 +495,20 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "saving...done.");
     }
 
-    public void totalMore(View v) {
+    public void toggleTotal(View v) {
         if (modifiableData != null && modifiableData.getTask(taskNo) != null) {
             if (numberTaskHours != null) {
                 numberTaskHours++;
+                if (numberTaskHours == 25) {
+                    numberTaskHours = 0;
+                }
                 save();
             }
         }
     }
 
-    public void totalLess(View v) {
-        if (modifiableData != null && modifiableData.getTask(taskNo) != null) {
-            if (numberTaskHours != null) {
-                numberTaskHours--;
-                save();
-            }
-        }
+    public void toggleTotal15(View v) {
+        // TODO toggleTotal15  00 - 15 - 30 - 45
     }
 
     private void viewToModel() {

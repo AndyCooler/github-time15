@@ -1,7 +1,6 @@
 package com.mango_apps.time15.storage;
 
 import android.app.Activity;
-import android.os.Environment;
 import android.util.Log;
 
 import com.mango_apps.time15.types.DaysDataNew;
@@ -14,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -91,6 +89,8 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
             }
         } catch (IOException e) {
             Log.e(getClass().getName(), "Error loading data with id " + id, e);
+        } catch (Throwable t) {
+            Log.e(getClass().getName(), "Error loading data with id " + id, t);
         }
 
         return data;

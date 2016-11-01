@@ -29,8 +29,16 @@ public class Time15 {
         return totalMinutes / 60;
     }
 
+    public String getHoursDisplayString() {
+        return formatWithTwoDigits(getHours());
+    }
+
     public int getMinutes() {
         return Math.abs(totalMinutes % 60);
+    }
+
+    public String getMinutesDisplayString() {
+        return formatWithTwoDigits(getMinutes());
     }
 
     public String toDisplayString() {

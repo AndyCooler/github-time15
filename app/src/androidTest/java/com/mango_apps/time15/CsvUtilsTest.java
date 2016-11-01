@@ -75,6 +75,7 @@ public class CsvUtilsTest extends TestCase {
         assertEquals(17, task0.getEnd().intValue());
         assertEquals(00, task0.getEnd15().intValue());
         assertEquals(60, task0.getPause().intValue());
+        assertTrue(task0.isComplete());
     }
 
     public void testFromCsvLineWorkdayNoPause() throws CsvFileLineWrongException {
@@ -91,6 +92,7 @@ public class CsvUtilsTest extends TestCase {
         assertEquals(16, task0.getEnd().intValue());
         assertEquals(45, task0.getEnd15().intValue());
         assertNull(task0.getPause());
+        assertTrue(task0.isComplete());
     }
 
     public void testFromCsvLineWorkday2() throws CsvFileLineWrongException {
@@ -111,11 +113,14 @@ public class CsvUtilsTest extends TestCase {
         NumberTask task1 = (NumberTask) data.getTask(1);
         assertEquals(KindOfDay.VACATION, task1.getKindOfDay());
         assertEquals(4 * 60, task1.getTotal().toMinutes());
+
+        assertTrue(task0.isComplete());
+        assertTrue(task1.isComplete());
     }
 
     public void testFromCsvLineVacation() throws CsvFileLineWrongException {
 
-        String s = "05.05.2016,VACATION,,,,0.00,,";
+        String s = "05.05.2016,VACATION,,,,8.00,,";
 
         DaysDataNew data = CsvUtils.fromCsvLine(s);
 
@@ -127,5 +132,23 @@ public class CsvUtilsTest extends TestCase {
         assertNull(task0.getEnd());
         assertNull(task0.getEnd15());
         assertNull(task0.getPause());
+        assertTrue(task0.isComplete());
+    }
+
+    public void testFromCsvLineWithIncompleteTask() throws CsvFileLineWrongException {
+        //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
+        String s = "05.05.2016,WORKDAY,10:15,17:_ERR_00,01:00,5.75,,";
+
+        DaysDataNew data = CsvUtils.fromCsvLine(s);
+
+        assertEquals("05.05.2016", data.getId());
+        BeginEndTask task0 = (BeginEndTask) data.getTask(0);
+        assertEquals(KindOfDay.WORKDAY, task0.getKindOfDay());
+        assertEquals(10, task0.getBegin().intValue());
+        assertEquals(15, task0.getBegin15().intValue());
+        //assertEquals(17, task0.getEnd().intValue()); // TODO sollte erkannt werden, trotz Fehler bei Minuten
+        assertEquals(null, task0.getEnd15());
+        assertEquals(60, task0.getPause().intValue());
+        assertFalse(task0.isComplete());
     }
 }

@@ -47,7 +47,7 @@ public class NumberTask implements Task {
     }
 
     @Override
-    public boolean valid() {
+    public boolean isComplete() {
         return total != null && day != null;
     }
 
@@ -56,17 +56,20 @@ public class NumberTask implements Task {
     }
 
     public static NumberTask fromString(String s) {
-
-        StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         NumberTask numberTask = new NumberTask();
-        String token = tokenizer.nextToken();
-        numberTask.setKindOfDay(KindOfDay.fromString(token));
-        Integer totalInteger = nextIntToken(tokenizer);
-        if (totalInteger == null) {
-            totalInteger = 0;
-        }
-        numberTask.setTotal(Time15.fromMinutes(totalInteger * 60));
 
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(s, SEP);
+            String token = tokenizer.nextToken();
+            numberTask.setKindOfDay(KindOfDay.fromString(token));
+            Integer totalInteger = nextIntToken(tokenizer);
+            if (totalInteger == null) {
+                totalInteger = 0;
+            }
+            numberTask.setTotal(Time15.fromMinutes(totalInteger * 60));
+        } catch (Throwable t) {
+            // error while reading task from String, might result in Task.isComplete == false
+        }
         return numberTask;
     }
 

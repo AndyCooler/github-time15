@@ -22,6 +22,8 @@ public class BeginEndTask implements Task {
 
     private Integer pause;
 
+    private Time15 total;
+
     public Integer getBegin() {
         return begin;
     }
@@ -66,13 +68,14 @@ public class BeginEndTask implements Task {
         return day;
     }
 
-    @Override
-    public boolean valid() {
-        return end != null && begin != null && begin15 != null && end15 != null && day != null;
-    }
-
     public void setKindOfDay(KindOfDay day) {
         this.day = day;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return day != null && ((end != null && begin != null && begin15 != null && end15 != null)
+                || (end == null && begin == null && begin15 == null && end15 == null && total != null));
     }
 
     @Override
@@ -104,7 +107,12 @@ public class BeginEndTask implements Task {
                 }
             }
         }
-        return new Time15(difference, difference15);
+        total = new Time15(difference, difference15); // TODO this is prep for merge of NumberTask into BeginEndTask
+        return total;
+    }
+
+    public void setTotal(Time15 total) {
+        this.total = total;
     }
 
     @Override
@@ -132,15 +140,20 @@ public class BeginEndTask implements Task {
 
     public static BeginEndTask fromString(String s) {
 
-        StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         BeginEndTask beginEndTask = new BeginEndTask();
-        beginEndTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
-        beginEndTask.setBegin(nextIntToken(tokenizer));
-        beginEndTask.setBegin15(nextIntToken(tokenizer));
-        beginEndTask.setEnd(nextIntToken(tokenizer));
-        beginEndTask.setEnd15(nextIntToken(tokenizer));
-        beginEndTask.setPause(nextIntToken(tokenizer));
 
+        try {
+            StringTokenizer tokenizer = new StringTokenizer(s, SEP);
+
+            beginEndTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
+            beginEndTask.setBegin(nextIntToken(tokenizer));
+            beginEndTask.setBegin15(nextIntToken(tokenizer));
+            beginEndTask.setEnd(nextIntToken(tokenizer));
+            beginEndTask.setEnd15(nextIntToken(tokenizer));
+            beginEndTask.setPause(nextIntToken(tokenizer));
+        } catch (Throwable t) {
+            // error while reading task from String, might result in Task.isComplete == false
+        }
         return beginEndTask;
     }
 

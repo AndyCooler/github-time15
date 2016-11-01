@@ -15,5 +15,5 @@ public interface Task {
 
     KindOfDay getKindOfDay();
 
-    boolean valid();
+    boolean isComplete();
 }
