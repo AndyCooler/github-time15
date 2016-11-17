@@ -6,7 +6,6 @@ import android.util.Log;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.TimeUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

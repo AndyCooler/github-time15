@@ -3,7 +3,6 @@ package com.mango_apps.time15;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 
 import junit.framework.TestCase;
@@ -43,7 +42,7 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
         task0.setEnd15(0);
         data.addTask(task0);
 
-        NumberTask task1 = new NumberTask();
+        BeginEndTask task1 = new BeginEndTask();
         task1.setKindOfDay(KindOfDay.VACATION);
         task1.setTotal(Time15.fromMinutes(4 * 60));
         data.addTask(task1);
@@ -80,7 +79,7 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
         task02.setEnd(16);
         task02.setEnd15(0);
         data2.addTask(task02);
-        NumberTask task12 = new NumberTask();
+        BeginEndTask task12 = new BeginEndTask();
         task12.setKindOfDay(KindOfDay.VACATION);
         task12.setTotal(Time15.fromMinutes(4 * 60));
         data2.addTask(task12);
@@ -187,7 +186,7 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
         task0.setEnd(16);
         task0.setEnd15(0);
         task0.setPause(30);
-        NumberTask task1 = new NumberTask();
+        BeginEndTask task1 = new BeginEndTask();
         task1.setKindOfDay(KindOfDay.VACATION);
         task1.setTotal(Time15.fromMinutes(4 * 60));
         data.addTask(task1);

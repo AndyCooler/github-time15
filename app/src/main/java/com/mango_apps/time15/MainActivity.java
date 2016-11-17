@@ -18,7 +18,6 @@ import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Task;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.TimeUtils;
@@ -344,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Nur 2 Aufgaben pro Tag!", Toast.LENGTH_SHORT).show();
         } else {
             taskNo = 1;
-            NumberTask task1 = new NumberTask();
+            BeginEndTask task1 = new BeginEndTask();
             task1.setKindOfDay(KindOfDay.VACATION);
             task1.setTotal(Time15.fromMinutes(0));
             modifiableData.addTask(task1);

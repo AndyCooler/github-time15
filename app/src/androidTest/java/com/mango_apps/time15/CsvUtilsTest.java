@@ -4,7 +4,6 @@ import com.mango_apps.time15.storage.CsvFileLineWrongException;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.CsvUtils;
 
@@ -52,7 +51,7 @@ public class CsvUtilsTest extends TestCase {
         task0.setEnd15(45);
         task0.setPause(60);
         data.addTask(task0);
-        NumberTask task1 = new NumberTask();
+        BeginEndTask task1 = new BeginEndTask();
         task1.setKindOfDay(KindOfDay.VACATION);
         task1.setTotal(Time15.fromMinutes(4 * 60));
         data.addTask(task1);
@@ -110,7 +109,7 @@ public class CsvUtilsTest extends TestCase {
         assertEquals(45, task0.getEnd15().intValue());
         assertEquals(60, task0.getPause().intValue());
 
-        NumberTask task1 = (NumberTask) data.getTask(1);
+        BeginEndTask task1 = (BeginEndTask) data.getTask(1);
         assertEquals(KindOfDay.VACATION, task1.getKindOfDay());
         assertEquals(4 * 60, task1.getTotal().toMinutes());
 

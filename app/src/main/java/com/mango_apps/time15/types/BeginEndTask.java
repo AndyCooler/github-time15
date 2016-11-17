@@ -113,12 +113,16 @@ public class BeginEndTask implements Task {
                     }
                 }
             }
-            total = new Time15(difference, difference15); // TODO this is prep for merge of NumberTask into BeginEndTask
+            total = new Time15(difference, difference15);
         } else if (isOnlyTotalComplete()) {
             // total is set, ok.
         } else {
-            // task is incomplete, repair assuming 8 hours
-            total = Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
+            // task is incomplete, repair assuming 8 hours if not a due day
+            if (!KindOfDay.isBeginEndType(day)) {
+                total = Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
+            } else {
+                total = Time15.fromMinutes(0);
+            }
         }
         return total;
     }

@@ -3,7 +3,6 @@ package com.mango_apps.time15.storage;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 
 import java.util.Random;
@@ -34,7 +33,7 @@ public class TestDataFactory {
                 task0.setEnd(16);
                 task0.setEnd15(30);
                 data1.addTask(task0);
-                NumberTask task1 = new NumberTask();
+                BeginEndTask task1 = new BeginEndTask();
                 task1.setKindOfDay(KindOfDay.VACATION);
                 task1.setTotal(Time15.fromMinutes(4 * 60));
                 data1.addTask(task1);

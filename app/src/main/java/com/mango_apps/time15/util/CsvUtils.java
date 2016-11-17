@@ -6,7 +6,6 @@ import com.mango_apps.time15.storage.CsvFileLineWrongException;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Task;
 import com.mango_apps.time15.types.Time15;
 
@@ -83,11 +82,12 @@ public final class CsvUtils {
 
             if (line.length >= CSV_LINE_LENGTH_B) {
                 errMsg = "Spalten H bis M sollten die Werte für den zweiten Task enthalten, falls vorhanden!";
-                NumberTask task1 = toNumberTask(id, line[7], line[8], line[9], line[10], line[11], line[12]);
+                BeginEndTask task1 = toBeginEndTask(id, line[7], line[8], line[9], line[10], line[11], line[12]);
                 data.addTask(task1);
             }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
+            Log.e(CsvUtils.class.getName(), errMsg, t);
         }
 
         // ignore rest of csvString
@@ -152,21 +152,6 @@ public final class CsvUtils {
             // ignore
         }
         return time15;
-    }
-
-    private static NumberTask toNumberTask(String id, String kindOfTask, String begin, String end, String breakString, String total, String note) throws CsvFileLineWrongException {
-        NumberTask task = new NumberTask();
-
-        try {
-            String s = safeGetNextToken(kindOfTask, id, "Task");
-            task.setKindOfDay(KindOfDay.valueOf(s));
-
-            s = safeGetNextTokenOptional(total, id, "Total");
-            task.setTotal(Time15.fromDecimalFormat(s));
-        } catch (Throwable t) {
-            // error while reading task from String, might result in Task.isComplete == false
-        }
-        return task;
     }
 
     private static String safeGetNextTokenOptional(String s, String id, String expected) throws CsvFileLineWrongException {

@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.util.TimeUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
