@@ -28,7 +28,6 @@ import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.ColorsUI;
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
-import com.mango_apps.time15.types.NumberTask;
 import com.mango_apps.time15.types.Time15;
 import com.mango_apps.time15.util.EmailUtils;
 import com.mango_apps.time15.util.TimeUtils;
@@ -210,8 +209,8 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 String hours = "";
                 String extraVacationHours = "";
                 BeginEndTask task0 = (BeginEndTask) data.getTask(0);
-                NumberTask task1 = (NumberTask) data.getTask(1);
-                if (KindOfDay.isDueDay(task0.getKindOfDay())) {
+                BeginEndTask task1 = (BeginEndTask) data.getTask(1);
+                if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
                     hours += task0.getTotal().toDisplayString() + " h";
                     if (task1 != null) {
                         extraVacationHours = task1.getTotal().toDisplayString() + " h";
@@ -220,10 +219,10 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
                 row.addView(createTextView(dayId.substring(0, 2)));
-                int itemColor = calcItemColor(task0.getKindOfDay());
+                int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 row.addView(createTextView(task0.getKindOfDay().getDisplayString(), itemColor));
                 row.addView(createTextView(hours, itemColor));
-                itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay());
+                itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
                 row.addView(createTextView(task1 == null ? "" : task1.getKindOfDay().getDisplayString(), itemColor));
                 row.addView(createTextView(extraVacationHours, itemColor));
 
@@ -241,21 +240,25 @@ public class MonthOverviewActivity extends ActionBarActivity {
         Log.i(getClass().getName(), "initialize() finished.");
     }
 
-    private int calcItemColor(KindOfDay kindOfDay) {
+    private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {
 
         int itemColor = ColorsUI.DARK_BLUE_DEFAULT;
-        switch (kindOfDay) {
-            case WORKDAY:
-                itemColor = ColorsUI.DARK_BLUE_DEFAULT;
-                break;
-            case HOLIDAY:
-            case VACATION:
-                itemColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
-                break;
-            case SICKDAY:
-            case KIDSICKDAY:
-                itemColor = ColorsUI.DARK_GREY_SAVE_ERROR;
-                break;
+        if (isComplete) {
+            switch (kindOfDay) {
+                case WORKDAY:
+                    itemColor = ColorsUI.DARK_BLUE_DEFAULT;
+                    break;
+                case HOLIDAY:
+                case VACATION:
+                    itemColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
+                    break;
+                case SICKDAY:
+                case KIDSICKDAY:
+                    itemColor = ColorsUI.DARK_GREY_SAVE_ERROR;
+                    break;
+            }
+        } else {
+            itemColor = ColorsUI.RED_FLAGGED;
         }
         return itemColor;
     }

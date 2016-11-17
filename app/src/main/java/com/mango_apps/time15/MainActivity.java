@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private DaysDataNew originalData;
     private DaysDataNew modifiableData;
     private Integer numberTaskHours = null;
+    private Integer numberTaskMinutes = null;
     private TextView total;
     private TextView totalSemi;
     private TextView total15;
@@ -316,7 +317,17 @@ public class MainActivity extends AppCompatActivity {
     public void toggleKindOfDay(View v) {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
         kindOfDay = KindOfDay.toggle(kindOfDay);
-        aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
+        if (KindOfDay.isBeginEndType(KindOfDay.valueOf(kindOfDay))) {
+            numberTaskHours = 0;
+            numberTaskMinutes = 0;
+        } else {
+            numberTaskHours = 8;
+            numberTaskMinutes = 0;
+        }
+        viewToModel();
+        resetView();
+        modelToView();
+        //aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
 
         Log.i(getClass().getName(), "toggleKindOfDay() finished.");
     }
@@ -374,6 +385,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isBeginn15 = viewId == R.id.beginn00 || viewId == R.id.beginn15 || viewId == R.id.beginn30 || viewId == R.id.beginn45;
         boolean isEnde15 = viewId == R.id.ende00 || viewId == R.id.ende15 || viewId == R.id.ende30 || viewId == R.id.ende45;
         boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
+        boolean isSelected = false;
         boolean isDeselected = false;
         if (isBeginnTime) {
             if (previousSelectionBeginnTime != null && viewId == previousSelectionBeginnTime) {
@@ -386,6 +398,7 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackgroundColor(ColorsUI.SELECTION_BG);
                 beginnTime = Integer.valueOf((String) view.getText());
                 previousSelectionBeginnTime = viewId;
+                isSelected = true;
             }
         }
         if (isEndeTime) {
@@ -399,6 +412,7 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackgroundColor(ColorsUI.SELECTION_BG);
                 endeTime = Integer.valueOf((String) view.getText());
                 previousSelectionEndeTime = viewId;
+                isSelected = true;
             }
         }
         if (isBeginn15) {
@@ -412,6 +426,7 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackgroundColor(ColorsUI.SELECTION_BG);
                 beginn15 = Integer.valueOf((String) view.getText());
                 previousSelectionBeginn15 = viewId;
+                isSelected = true;
             }
         }
         if (isEnde15) {
@@ -425,6 +440,7 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackgroundColor(ColorsUI.SELECTION_BG);
                 ende15 = Integer.valueOf((String) view.getText());
                 previousSelectionEnde15 = viewId;
+                isSelected = true;
             }
         }
         if (isPauseTime) {
@@ -438,10 +454,11 @@ public class MainActivity extends AppCompatActivity {
                 view.setBackgroundColor(ColorsUI.SELECTION_BG);
                 pauseTime = Integer.valueOf((String) view.getText());
                 previousSelectionPauseTime = viewId;
+                isSelected = true;
             }
         }
 
-        if (isBeginEndTimeSelectionComplete() || isDeselected) {
+        if (isSelected || isDeselected) {
             save();
         }
     }
@@ -522,7 +539,7 @@ public class MainActivity extends AppCompatActivity {
             task = modifiableData.getTask(taskNo);
         }
 
-        if (task instanceof BeginEndTask) {
+        if (KindOfDay.isBeginEndType(task.getKindOfDay())) {
             BeginEndTask task0 = (BeginEndTask) task;
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
@@ -530,9 +547,9 @@ public class MainActivity extends AppCompatActivity {
             task0.setEnd15(ende15);
             task0.setPause(pauseTime);
             task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
-        } else if (task instanceof NumberTask) {
-            NumberTask task1 = (NumberTask) task;
-            task1.setTotal(Time15.fromMinutes(numberTaskHours == null ? 0 : numberTaskHours * 60));
+        } else {
+            BeginEndTask task1 = (BeginEndTask) task;
+            task1.setTotal(new Time15(numberTaskHours == null ? 0 : numberTaskHours, numberTaskMinutes == null ? 0 : numberTaskMinutes));
             task1.setKindOfDay(KindOfDay.fromString(kindOfDay));
         }
         Log.i(getClass().getName(), "viewToModel() finished.");
@@ -547,7 +564,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isLoadedData = originalData != null;
         int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 
-        if (task instanceof BeginEndTask) {
+        if (KindOfDay.isBeginEndType(task.getKindOfDay())) {
             BeginEndTask task0 = (BeginEndTask) task;
             beginnTime = task0.getBegin();
             beginn15 = task0.getBegin15();
@@ -571,14 +588,17 @@ public class MainActivity extends AppCompatActivity {
             setSelected(previousSelectionBeginn15);
 
             setTransparent(R.id.total);
-        } else if (task instanceof NumberTask) {
+            setTransparent(R.id.totalSemi);
+            setTransparent(R.id.total15);
+        } else {
 
-            NumberTask task1 = (NumberTask) task;
+            BeginEndTask task1 = (BeginEndTask) task;
             numberTaskHours = task1.getTotal().getHours();
+            numberTaskMinutes = task1.getTotal().getMinutes();
 
             setSelected(R.id.total);
-        } else {
-            throw new IllegalStateException(id + " : unknown type of task : " + task == null ? "null" : task.getClass().getName());
+            setSelected(R.id.totalSemi);
+            setSelected(R.id.total15);
         }
 
         kindOfDay = task.getKindOfDay().toString();
@@ -612,7 +632,10 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionBeginn15 = null;
         previousSelectionKindOfDays = kindOfDay;
         numberTaskHours = null;
+        numberTaskMinutes = null;
         setTransparent(R.id.total);
+        setTransparent(R.id.totalSemi);
+        setTransparent(R.id.total15);
     }
 
     private void setTransparent(Integer viewId) {

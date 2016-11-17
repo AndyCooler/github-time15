@@ -52,7 +52,7 @@ public enum KindOfDay {
         return displayString;
     }
 
-    public static boolean isDueDay(KindOfDay day) {
+    public static boolean isBeginEndType(KindOfDay day) {
         return KindOfDay.WORKDAY.equals(day);
     }
 }

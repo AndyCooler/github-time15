@@ -74,40 +74,52 @@ public class BeginEndTask implements Task {
 
     @Override
     public boolean isComplete() {
-        return day != null && ((end != null && begin != null && begin15 != null && end15 != null)
-                || (end == null && begin == null && begin15 == null && end15 == null && total != null));
+        // could be named isValid()
+        return day != null && (isBeginEndTimeComplete() || isOnlyTotalComplete());
+    }
+
+    public boolean isBeginEndTimeComplete() {
+        return end != null && begin != null && begin15 != null && end15 != null;
+    }
+
+    public boolean isOnlyTotalComplete() {
+        // aka number task
+        return end == null && begin == null && begin15 == null && end15 == null && total != null;
     }
 
     @Override
     public Time15 getTotal() {
-        if (!KindOfDay.isDueDay(day)) {
-            return Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
-        }
-
-        int difference = 0;
-        int difference15 = 0;
-        if (end != null && begin != null && begin15 != null && end15 != null) {
-            difference = end - begin;
-            difference15 = end15 - begin15;
-            if (difference15 < 0) {
-                difference--;
-                difference15 = 60 + difference15;
-            }
-
-            if (pause != null) {
-                int pauseTemp = pause;
-                while (pauseTemp > 60) {
-                    difference--;
-                    pauseTemp -= 60;
-                }
-                difference15 -= pauseTemp;
+        if (isBeginEndTimeComplete() && day != null) {
+            int difference = 0;
+            int difference15 = 0;
+            if (end != null && begin != null && begin15 != null && end15 != null) {
+                difference = end - begin;
+                difference15 = end15 - begin15;
                 if (difference15 < 0) {
                     difference--;
                     difference15 = 60 + difference15;
                 }
+
+                if (pause != null) {
+                    int pauseTemp = pause;
+                    while (pauseTemp > 60) {
+                        difference--;
+                        pauseTemp -= 60;
+                    }
+                    difference15 -= pauseTemp;
+                    if (difference15 < 0) {
+                        difference--;
+                        difference15 = 60 + difference15;
+                    }
+                }
             }
+            total = new Time15(difference, difference15); // TODO this is prep for merge of NumberTask into BeginEndTask
+        } else if (isOnlyTotalComplete()) {
+            // total is set, ok.
+        } else {
+            // task is incomplete, repair assuming 8 hours
+            total = Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
         }
-        total = new Time15(difference, difference15); // TODO this is prep for merge of NumberTask into BeginEndTask
         return total;
     }
 
@@ -119,7 +131,7 @@ public class BeginEndTask implements Task {
     public String toString() {
         return SEP + day.toString() + SEP + valueOf(begin) + SEP + valueOf(begin15) + SEP +
                 valueOf(end) + SEP + valueOf(end15) + SEP +
-                valueOf(pause);
+                valueOf(pause) + SEP + (total == null ? "-" : total.toDecimalFormat());
     }
 
     @Override
@@ -151,6 +163,17 @@ public class BeginEndTask implements Task {
             beginEndTask.setEnd(nextIntToken(tokenizer));
             beginEndTask.setEnd15(nextIntToken(tokenizer));
             beginEndTask.setPause(nextIntToken(tokenizer));
+            String totalString = tokenizer.hasMoreElements() ? tokenizer.nextToken() : null;
+            if (totalString == null) {
+                beginEndTask.setTotal(null);
+            } else {
+                if (totalString.indexOf(".") > 0) {
+                    beginEndTask.setTotal(Time15.fromDecimalFormat(totalString));
+                } else {
+                    // legacy format
+                    beginEndTask.setTotal(Time15.fromMinutes(60 * Integer.valueOf(totalString)));
+                }
+            }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
         }

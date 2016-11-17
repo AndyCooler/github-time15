@@ -97,20 +97,64 @@ public class DaysDataNew {
 
     public static DaysDataNew fromString(String s) {
 
-        // TODO das ist erstmal nur fuer 1 bis 2 Tasks pro DaysData
+        // das ist fuer 1 bis 2 Tasks pro DaysDataNew
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
-        DaysDataNew data = new DaysDataNew(tokenizer.nextToken());
-        BeginEndTask beginEndTask = BeginEndTask.fromString(tokenizer.nextToken() +
-                SEP + tokenizer.nextToken() + SEP + tokenizer.nextToken() +
-                SEP + tokenizer.nextToken() + SEP + tokenizer.nextToken() +
-                SEP + tokenizer.nextToken());
-        data.addTask(beginEndTask);
+        String id = tokenizer.nextToken();
+        DaysDataNew data = new DaysDataNew(id);
+        String kindOfDay = tokenizer.nextToken();
+        String begin = tokenizer.nextToken();
+        String begin15 = tokenizer.nextToken();
+        String end = tokenizer.nextToken();
+        String end15 = tokenizer.nextToken();
+        String pause = tokenizer.nextToken();
+        String kindOfDay2 = null;
+        BeginEndTask beginEndTask = null;
+        String total = null;
         if (tokenizer.hasMoreElements()) {
-            String zweiter = tokenizer.nextToken();
-            if (!"-".equals(zweiter)) {
-                NumberTask numberTask = NumberTask.fromString(zweiter + (tokenizer.hasMoreElements() ? (SEP + tokenizer.nextToken()) : ""));
-                data.addTask(numberTask);
+            total = tokenizer.nextToken();
+            if (KindOfDay.fromString(total) == null && total != null) {
+                // BeginEndTask mit total am Ende (neu)
+                beginEndTask = BeginEndTask.fromString(kindOfDay + SEP + begin +
+                        SEP + begin15 + SEP + end +
+                        SEP + end15 + SEP + pause +
+                        SEP + (total.equals("-") ? null : total));
             }
+        }
+        if (total == null || KindOfDay.fromString(total) != null) {
+            // BeginEndTask ohne total am Ende (alt)
+            beginEndTask = BeginEndTask.fromString(kindOfDay + SEP + begin +
+                    SEP + begin15 + SEP + end +
+                    SEP + end15 + SEP + pause);
+
+        }
+        data.addTask(beginEndTask);
+
+        if (KindOfDay.fromString(total) != null) {
+            kindOfDay2 = total; // Token ist schon Teil von zweitem Task
+        }
+        if (kindOfDay2 == null && tokenizer.hasMoreElements()) {
+            kindOfDay2 = tokenizer.nextToken();
+        }
+
+        if (tokenizer.hasMoreElements()) {
+            String begin2 = tokenizer.nextToken();
+            BeginEndTask task1 = null;
+            if (tokenizer.hasMoreElements()) {
+                // akzeptiere neues Format: #VACATION#-#-#-#-#-#4.0
+                task1 = BeginEndTask.fromString(kindOfDay2 +
+                        SEP + begin2 + SEP + tokenizer.nextToken() +
+                        SEP + tokenizer.nextToken() + SEP + tokenizer.nextToken() +
+                        SEP + tokenizer.nextToken() +
+                        (tokenizer.hasMoreElements() ? (SEP + tokenizer.nextToken()) : ""));
+            } else {
+                // akzeptiere altes Format (von obsoletem NumberTask): #VACATION#4
+                final String NONE = "-";
+                task1 = BeginEndTask.fromString(kindOfDay2 +
+                        SEP + NONE + SEP + NONE +
+                        SEP + NONE + SEP + NONE +
+                        SEP + NONE + SEP + begin2);
+            }
+            data.addTask(task1);
         }
 
         // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen BeginEndTask oder NumberTask einlesen
