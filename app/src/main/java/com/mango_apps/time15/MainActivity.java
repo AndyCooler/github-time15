@@ -531,7 +531,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "viewToModel() started.");
         Task task = modifiableData.getTask(taskNo);
         if (task == null) {
-            // TODO erstmal werden nur neue BeginEndTask im Modell gespeichert:
             task = new BeginEndTask();
             modifiableData.addTask(task);
         } else {
@@ -599,9 +598,11 @@ public class MainActivity extends AppCompatActivity {
             setSelected(R.id.totalSemi);
             setSelected(R.id.total15);
         }
-
-        kindOfDay = task.getKindOfDay().toString();
         previousSelectionKindOfDays = kindOfDay;
+        kindOfDay = task.getKindOfDay().toString();
+        if (previousSelectionKindOfDays == null) {
+            previousSelectionKindOfDays = kindOfDay;
+        }
         aktualisiereTaskNo();
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
