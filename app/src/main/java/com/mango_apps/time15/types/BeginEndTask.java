@@ -89,40 +89,8 @@ public class BeginEndTask implements Task {
 
     @Override
     public Time15 getTotal() {
-        if (isBeginEndTimeComplete() && day != null) {
-            int difference = 0;
-            int difference15 = 0;
-            if (end != null && begin != null && begin15 != null && end15 != null) {
-                difference = end - begin;
-                difference15 = end15 - begin15;
-                if (difference15 < 0) {
-                    difference--;
-                    difference15 = 60 + difference15;
-                }
-
-                if (pause != null) {
-                    int pauseTemp = pause;
-                    while (pauseTemp > 60) {
-                        difference--;
-                        pauseTemp -= 60;
-                    }
-                    difference15 -= pauseTemp;
-                    if (difference15 < 0) {
-                        difference--;
-                        difference15 = 60 + difference15;
-                    }
-                }
-            }
-            total = new Time15(difference, difference15);
-        } else if (isOnlyTotalComplete()) {
-            // total is set, ok.
-        } else {
-            // task is incomplete, repair assuming 8 hours if not a due day
-            if (!KindOfDay.isBeginEndType(day)) {
-                total = Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
-            } else {
-                total = Time15.fromMinutes(0);
-            }
+        if (total == null) {
+            calcTotal();
         }
         return total;
     }
@@ -147,6 +115,7 @@ public class BeginEndTask implements Task {
         copy.setBegin15(begin15);
         copy.setEnd15(end15);
         copy.setPause(pause);
+        copy.setTotal(total == null ? null : Time15.fromMinutes(total.toMinutes()));
         return copy;
     }
 
@@ -195,5 +164,43 @@ public class BeginEndTask implements Task {
             return null;
         }
         return Integer.valueOf(token);
+    }
+
+    public void calcTotal() {
+        if (isBeginEndTimeComplete() && day != null) {
+            int difference = 0;
+            int difference15 = 0;
+            if (end != null && begin != null && begin15 != null && end15 != null) {
+                difference = end - begin;
+                difference15 = end15 - begin15;
+                if (difference15 < 0) {
+                    difference--;
+                    difference15 = 60 + difference15;
+                }
+
+                if (pause != null) {
+                    int pauseTemp = pause;
+                    while (pauseTemp > 60) {
+                        difference--;
+                        pauseTemp -= 60;
+                    }
+                    difference15 -= pauseTemp;
+                    if (difference15 < 0) {
+                        difference--;
+                        difference15 = 60 + difference15;
+                    }
+                }
+            }
+            total = new Time15(difference, difference15);
+        } else if (isOnlyTotalComplete()) {
+            // total is set, ok.
+        } else {
+            // task is incomplete, repair assuming 8 hours if not a due day
+            if (!KindOfDay.isBeginEndType(day)) {
+                total = Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
+            } else {
+                total = Time15.fromMinutes(0);
+            }
+        }
     }
 }

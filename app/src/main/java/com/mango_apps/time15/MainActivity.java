@@ -317,16 +317,20 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
         kindOfDay = KindOfDay.toggle(kindOfDay);
         if (KindOfDay.isBeginEndType(KindOfDay.valueOf(kindOfDay))) {
-            numberTaskHours = 0;
-            numberTaskMinutes = 0;
+            numberTaskHours = null;
+            numberTaskMinutes = null;
         } else {
-            numberTaskHours = 8;
+            beginnTime = null;
+            beginn15 = null;
+            endeTime = null;
+            ende15 = null;
+            pauseTime = null;
+            numberTaskHours = DaysDataNew.DUE_HOURS_PER_DAY; // TODO init with due hours per task
             numberTaskMinutes = 0;
         }
         viewToModel();
         resetView();
         modelToView();
-        //aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
 
         Log.i(getClass().getName(), "toggleKindOfDay() finished.");
     }
@@ -506,49 +510,62 @@ public class MainActivity extends AppCompatActivity {
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifiableData;
         modifiableData = DaysDataNew.copy(originalData);
-        //modelToView(); // TODO shouldn't be necessary
+        modelToView(); // TODO shouldn't be necessary
         updateBalance();
         Log.i(getClass().getName(), "saving...done.");
     }
 
     public void toggleTotal(View v) {
-        if (modifiableData != null && modifiableData.getTask(taskNo) != null) {
+        if (kindOfDay != null && !KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
             if (numberTaskHours != null) {
                 numberTaskHours++;
-                if (numberTaskHours == 25) {
+                if (numberTaskHours == 24 && numberTaskMinutes != null && numberTaskMinutes != 0) {
                     numberTaskHours = 0;
+                } else if (numberTaskHours >= 25) {
+                    numberTaskHours = 0;
+                }
+                save(); // TODO hierbei wird iwie total auf null gesetzt und dann mit calcTotal neu berechnet
+            }
+        }
+    }
+
+    public void toggleTotal15(View v) {
+        if (kindOfDay != null && !KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
+            if (numberTaskMinutes != null) {
+                if (numberTaskHours != null && numberTaskHours < 24) {
+                    numberTaskMinutes += 15;
+                    if (numberTaskMinutes >= 60) {
+                        numberTaskMinutes = 0;
+                    }
                 }
                 save();
             }
         }
     }
 
-    public void toggleTotal15(View v) {
-        // TODO toggleTotal15  00 - 15 - 30 - 45
-    }
-
     private void viewToModel() {
         Log.i(getClass().getName(), "viewToModel() started.");
-        Task task = modifiableData.getTask(taskNo);
-        if (task == null) {
-            task = new BeginEndTask();
-            modifiableData.addTask(task);
-        } else {
-            task = modifiableData.getTask(taskNo);
+        BeginEndTask task0 = (BeginEndTask) modifiableData.getTask(taskNo);
+        if (task0 == null) {
+            task0 = new BeginEndTask();
+            modifiableData.addTask(task0);
         }
 
-        if (KindOfDay.isBeginEndType(task.getKindOfDay())) {
-            BeginEndTask task0 = (BeginEndTask) task;
+        task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
+        if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
             task0.setEnd(endeTime);
             task0.setEnd15(ende15);
             task0.setPause(pauseTime);
-            task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
+            task0.calcTotal();
         } else {
-            BeginEndTask task1 = (BeginEndTask) task;
-            task1.setTotal(new Time15(numberTaskHours == null ? 0 : numberTaskHours, numberTaskMinutes == null ? 0 : numberTaskMinutes));
-            task1.setKindOfDay(KindOfDay.fromString(kindOfDay));
+            task0.setBegin(null);
+            task0.setBegin15(null);
+            task0.setEnd(null);
+            task0.setEnd15(null);
+            task0.setPause(null);
+            task0.setTotal(new Time15(numberTaskHours == null ? 0 : numberTaskHours, numberTaskMinutes == null ? 0 : numberTaskMinutes));
         }
         Log.i(getClass().getName(), "viewToModel() finished.");
     }
