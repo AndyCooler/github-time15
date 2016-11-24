@@ -466,15 +466,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isBeginEndTimeSelectionComplete() {
-        if (endeTime != null && beginnTime != null) {
-            if (beginn15 != null && ende15 != null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void aktualisiereTotal(int color) {
 
         Time15 totalTime = null;
@@ -524,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (numberTaskHours >= 25) {
                     numberTaskHours = 0;
                 }
-                save(); // TODO hierbei wird iwie total auf null gesetzt und dann mit calcTotal neu berechnet
+                save();
             }
         }
     }
