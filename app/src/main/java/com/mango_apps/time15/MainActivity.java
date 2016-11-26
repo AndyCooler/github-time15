@@ -339,6 +339,7 @@ public class MainActivity extends AppCompatActivity {
         TextView day = (TextView) findViewById(R.id.kindOfDay);
         day.setText(KindOfDay.fromString(kindOfDay).getDisplayString() + ">>");
         day.setTextColor(color);
+        setSelected(R.id.kindOfDay);
     }
 
     public void addTask(View v) {
@@ -651,22 +652,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void setTransparent(Integer viewId) {
         if (viewId != null) {
-            TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(ColorsUI.SELECTION_NONE_BG);
+            TextView view = (TextView) findViewById(viewId);
+            view.setBackgroundColor(ColorsUI.SELECTION_NONE_BG);
         }
     }
 
     private void setSelected(Integer viewId) {
         if (viewId != null) {
-            TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(ColorsUI.SELECTION_BG);
+            TextView view = (TextView) findViewById(viewId);
+            view.setBackgroundColor(ColorsUI.SELECTION_BG);
         }
     }
 
     private void setDeactivated(Integer viewId) {
         if (viewId != null) {
-            TextView previousView = (TextView) findViewById(viewId);
-            previousView.setBackgroundColor(ColorsUI.DEACTIVATED);
+            TextView view = (TextView) findViewById(viewId);
+            view.setBackgroundColor(ColorsUI.DEACTIVATED);
         }
     }
 }
