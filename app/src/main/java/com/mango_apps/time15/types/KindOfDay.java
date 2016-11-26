@@ -52,6 +52,10 @@ public enum KindOfDay {
         return displayString;
     }
 
+    public static boolean isBeginEndType(String day) {
+        return KindOfDay.WORKDAY.equals(KindOfDay.fromString(day));
+    }
+
     public static boolean isBeginEndType(KindOfDay day) {
         return KindOfDay.WORKDAY.equals(day);
     }

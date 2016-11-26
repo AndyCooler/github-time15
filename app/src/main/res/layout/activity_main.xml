@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -392,9 +393,12 @@
                     android:id="@+id/kindOfDay"
                     android:layout_weight="4"
                     android:textColor="#1E90FF"
-                    android:gravity="bottom|center_horizontal"
+                    android:gravity="center_vertical|center_horizontal"
                     android:clickable="true"
-                    android:onClick="toggleKindOfDay" />
+                    android:onClick="toggleKindOfDay"
+                    android:maxLength="12"
+                    android:singleLine="true"
+                    android:paddingBottom="2dp" />
 
                 <LinearLayout
                     android:orientation="horizontal"

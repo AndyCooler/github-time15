@@ -381,6 +381,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public void verarbeiteKlick(View v) {
 
+        if (KindOfDay.isBeginEndType(kindOfDay)) {
+
         TextView view = (TextView) v;
         int viewId = view.getId();
         boolean isBeginnTime = viewId == R.id.beginnA || viewId == R.id.beginnB || viewId == R.id.beginnC || viewId == R.id.beginnD;
@@ -464,6 +466,7 @@ public class MainActivity extends AppCompatActivity {
         if (isSelected || isDeselected) {
             save();
         }
+        }
     }
 
     private void aktualisiereTotal(int color) {
@@ -507,7 +510,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toggleTotal(View v) {
-        if (kindOfDay != null && !KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
+        if (!KindOfDay.isBeginEndType(kindOfDay)) {
             if (numberTaskHours != null) {
                 numberTaskHours++;
                 if (numberTaskHours == 24 && numberTaskMinutes != null && numberTaskMinutes != 0) {
@@ -521,7 +524,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toggleTotal15(View v) {
-        if (kindOfDay != null && !KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
+        if (!KindOfDay.isBeginEndType(kindOfDay)) {
             if (numberTaskMinutes != null) {
                 if (numberTaskHours != null && numberTaskHours < 24) {
                     numberTaskMinutes += 15;
