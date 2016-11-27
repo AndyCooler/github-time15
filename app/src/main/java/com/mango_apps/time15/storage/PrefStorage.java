@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.mango_apps.time15.types.DaysDataNew;
+import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.util.Set;
@@ -50,6 +51,11 @@ public class PrefStorage implements StorageFacade {
     @Override
     public Set<String> loadTaskNames(Activity activity, String id) {
         return null;
+    }
+
+    @Override
+    public int loadTaskSum(Activity activity, String id, KindOfDay task) {
+        return 0;
     }
 
     private String getFilename(String id) {

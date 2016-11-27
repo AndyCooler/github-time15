@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.mango_apps.time15.types.DaysDataNew;
+import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.util.CsvUtils;
 import com.mango_apps.time15.util.TimeUtils;
 
@@ -283,5 +284,21 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             }
         }
         return taskNames;
+    }
+
+    @Override
+    public int loadTaskSum(Activity activity, String id, KindOfDay task) {
+        int sum = 0;
+
+        List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
+        for (String currentId : idList) {
+            DaysDataNew data = loadDaysDataNew(activity, currentId);
+            if (data != null) {
+                for (int i = 0; i < data.getNumberOfTasks(); i++) {
+                    sum += task.equals(data.getTask(i).getKindOfDay()) ? data.getTask(i).getTotal().toMinutes() : 0;
+                }
+            }
+        }
+        return sum;
     }
 }

@@ -150,4 +150,9 @@ public final class TimeUtils {
         }
         return id.equals(maxId);
     }
+
+    public static String getYearDisplayString(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        return "" + cal.get(Calendar.YEAR);
+    }
 }

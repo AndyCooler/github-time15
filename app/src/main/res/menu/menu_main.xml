@@ -33,4 +33,11 @@
         android:title="Info"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_month"></item>
+    <item
+        android:id="@+id/action_year"
+        android:orderInCategory="100"
+        android:title="Jahr"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_agenda"></item>
+
 </menu>

@@ -147,15 +147,24 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_about) {
-            Toast.makeText(MainActivity.this, "Time15 von Andreas, Version: 0.5", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Time15 von Andreas, Version: 0.6", Toast.LENGTH_SHORT).show();
             return true;
         }
-
+        if (id == R.id.action_year) {
+            startYearOverviewActivity();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, id);
+        startActivity(intent);
+    }
+
+    public void startYearOverviewActivity() {
+        Intent intent = new Intent(this, YearOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
         startActivity(intent);
     }

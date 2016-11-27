@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.mango_apps.time15.types.DaysDataNew;
+import com.mango_apps.time15.types.KindOfDay;
 import com.mango_apps.time15.util.TimeUtils;
 
 import java.io.BufferedReader;
@@ -123,6 +124,11 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
     @Override
     public Set<String> loadTaskNames(Activity activity, String id) {
         return null; // NOT IMPLEMENTED
+    }
+
+    @Override
+    public int loadTaskSum(Activity activity, String id, KindOfDay task) {
+        return 0;
     }
 
     private String getFilename(String id) {

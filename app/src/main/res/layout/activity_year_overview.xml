@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mango_apps.time15.YearOverviewActivity">
+
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.Android.com/apk/res-auto"
+        android:id="@+id/toolbarYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ToolbarTheme"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"></android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbarYear"
+        android:layout_centerInParent="true">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableLayout
+                    android:id="@+id/tableViewYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"></TableLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
+                android:id="@+id/autor2"
+                android:gravity="bottom" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -3,6 +3,7 @@ package com.mango_apps.time15.storage;
 import android.app.Activity;
 
 import com.mango_apps.time15.types.DaysDataNew;
+import com.mango_apps.time15.types.KindOfDay;
 
 import java.util.Set;
 
@@ -42,4 +43,9 @@ public interface StorageFacade {
      * Load the name of all tasks of a month identified by id.
      */
     Set<String> loadTaskNames(Activity activity, String id);
+
+    /**
+     * Load the name of all tasks of a month identified by id.
+     */
+    int loadTaskSum(Activity activity, String id, KindOfDay task);
 }
