@@ -35,12 +35,12 @@ public final class CsvUtils {
             s += task.getKindOfDay() + ",";
             if (task instanceof BeginEndTask) {
                 BeginEndTask taskB = (BeginEndTask) task;
-                if (taskB.getBegin() == null) {
+                if (taskB.getBegin() == null || taskB.getBegin15() == null) {
                     s += ",";
                 } else {
                     s += new Time15(taskB.getBegin(), taskB.getBegin15()).toDisplayString() + ",";
                 }
-                if (taskB.getEnd() == null) {
+                if (taskB.getEnd() == null || taskB.getEnd15() == null) {
                     s += ",";
                 } else {
                     s += new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString() + ",";
