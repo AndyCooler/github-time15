@@ -210,11 +210,11 @@ public class MonthOverviewActivity extends ActionBarActivity {
                 String extraVacationHours = "";
                 BeginEndTask task0 = (BeginEndTask) data.getTask(0);
                 BeginEndTask task1 = (BeginEndTask) data.getTask(1);
-                if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
-                    hours += task0.getTotal().toDisplayString() + " h";
-                    if (task1 != null) {
-                        extraVacationHours = task1.getTotal().toDisplayString() + " h";
-                    }
+                //if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
+                hours += task0.getTotal().toDisplayString() + " h";
+
+                if (task1 != null) {
+                    extraVacationHours = task1.getTotal().toDisplayString() + " h";
                 }
 
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));

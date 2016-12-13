@@ -39,5 +39,10 @@
         android:title="Jahr"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_agenda"></item>
-
+    <item
+        android:id="@+id/action_delete"
+        android:orderInCategory="100"
+        android:title="Löschen"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_delete"></item>
 </menu>

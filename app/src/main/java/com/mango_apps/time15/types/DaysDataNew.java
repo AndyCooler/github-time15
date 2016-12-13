@@ -61,6 +61,10 @@ public class DaysDataNew {
         tasks.add(task);
     }
 
+    public void deleteTask(Task task) {
+        tasks.remove(task);
+    }
+
     public Task getTask(int taskNo) {
         return taskNo < tasks.size() ? tasks.get(taskNo) : null;
     }

@@ -218,9 +218,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
                     missingIds += idCurrent + " ";
                 }
             }
-            if (!missingIds.isEmpty()) {
-                warnings.add("Not loaded from csv: " + missingIds);
-            }
+            //if (!missingIds.isEmpty()) {
+            //    warnings.add("Not loaded from csv: " + missingIds);
+            //}
             if (!newMonthsData.isEmpty()) {
                 String additionalIds = "";
                 for (String idCurrent : newMonthsData.keySet()) {

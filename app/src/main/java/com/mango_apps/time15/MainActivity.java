@@ -154,7 +154,25 @@ public class MainActivity extends AppCompatActivity {
             startYearOverviewActivity();
             return true;
         }
+        if (id == R.id.action_delete) {
+            deleteTask();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteTask() {
+        Log.i(getClass().getName(), "deleteTask() started at task #" + taskNo);
+        if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
+            Toast.makeText(MainActivity.this, "Nichts zu löschen!", Toast.LENGTH_SHORT).show();
+        } else {
+            modifiableData.deleteTask(modifiableData.getTask(taskNo));
+            taskNo = 0;
+            resetView();
+            modelToView();
+            save();
+        }
+        Log.i(getClass().getName(), "deleteTask() finished at task #" + taskNo);
     }
 
     public void startMonthOverviewActivity() {
@@ -577,6 +595,7 @@ public class MainActivity extends AppCompatActivity {
     private void modelToView() {
         Log.i(getClass().getName(), "modelToView() started.");
         if (modifiableData.getTask(taskNo) == null) {
+            Log.e(getClass().getName(), "modelToView() missing task #" + taskNo);
             return;
         }
         Task task = modifiableData.getTask(taskNo);
