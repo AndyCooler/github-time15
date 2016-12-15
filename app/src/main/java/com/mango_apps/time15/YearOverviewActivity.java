@@ -2,7 +2,7 @@ package com.mango_apps.time15;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,7 +30,7 @@ import java.util.Random;
 /**
  * This activity lets the user see the sum of hours spent on tasks each month.
  */
-public class YearOverviewActivity extends ActionBarActivity {
+public class YearOverviewActivity extends AppCompatActivity {
 
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mango_apps.time15.MESSAGE";
@@ -102,7 +102,7 @@ public class YearOverviewActivity extends ActionBarActivity {
                 time15.minus(DaysDataNew.DUE_TOTAL_MINUTES);
             }
 
-            String display = " # days : " + numDays + " +  # hours : " + time15.toDecimalFormat();
+            String display = " : " + numDays + " days, " + time15.toDecimalFormat() + " hours";
 
             row = new TableRow(this);
             row.setLayoutParams(lp);
@@ -130,7 +130,7 @@ public class YearOverviewActivity extends ActionBarActivity {
             totalYear.minus(DaysDataNew.DUE_TOTAL_MINUTES);
         }
 
-        String display = " # days : " + numDays + " +  # hours : " + totalYear.toDecimalFormat();
+        String display = " : " + numDays + " days, " + totalYear.toDecimalFormat() + " hours";
 
         row = new TableRow(this);
         row.setLayoutParams(lp);
@@ -189,17 +189,6 @@ public class YearOverviewActivity extends ActionBarActivity {
         return balanceView;
     }
 
-    private void addToBalance(DaysDataNew data, Map<Integer, Integer> weeksBalanceMap) {
-        int weekOfYear = TimeUtils.getWeekOfYear(data.getId());
-        int balanceInMinutes = data.getBalance();
-        Integer current = weeksBalanceMap.get(weekOfYear);
-        if (current == null) {
-            weeksBalanceMap.put(weekOfYear, balanceInMinutes);
-        } else {
-            weeksBalanceMap.put(weekOfYear, current + balanceInMinutes);
-        }
-    }
-
     private TextView createTextView(String text, int color) {
         TextView textView = new TextView(this);
         textView.setText(text);
@@ -218,7 +207,7 @@ public class YearOverviewActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_month_overview, menu);
+        getMenuInflater().inflate(R.menu.menu_year_overview, menu);
         return true;
     }
 
