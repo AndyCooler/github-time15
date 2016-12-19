@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -30,7 +33,7 @@ import java.util.Random;
 /**
  * This activity lets the user see the sum of hours spent on tasks each month.
  */
-public class YearOverviewActivity extends AppCompatActivity {
+public class YearOverviewActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mango_apps.time15.MESSAGE";
@@ -41,6 +44,7 @@ public class YearOverviewActivity extends AppCompatActivity {
     // View state and view state management
     private String id;
     private Random random = new Random();
+    private KindOfDay selectedTask = KindOfDay.VACATION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +82,21 @@ public class YearOverviewActivity extends AppCompatActivity {
 
     private void initialize() {
         Log.i(getClass().getName(), "initialize() started with id " + id);
-        setTitle(TimeUtils.getYearDisplayString(id) + " / " + KindOfDay.VACATION.getDisplayString());
+        setTitle("Übersicht " + TimeUtils.getYearDisplayString(id));
 
+        Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.task_spinner, android.R.layout.simple_spinner_item);
+        //adapter.add("VACATION");
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearTaskSpinner.setAdapter(adapter);
+        yearTaskSpinner.setOnItemSelectedListener(this);
+
+        updateYearOverViewTable();
+
+        Log.i(getClass().getName(), "initialize() finished.");
+    }
+
+    private void updateYearOverViewTable() {
         TableLayout table = (TableLayout) findViewById(R.id.tableViewYear);
         table.removeAllViews();
 
@@ -93,7 +110,7 @@ public class YearOverviewActivity extends AppCompatActivity {
 
         Time15 totalYear = Time15.fromMinutes(0);
         for (final String month : listOfIds) {
-            int sumInMinutes = storage.loadTaskSum(this, idFirstOfMonth, KindOfDay.VACATION);
+            int sumInMinutes = storage.loadTaskSum(this, idFirstOfMonth, selectedTask);
             Time15 time15 = Time15.fromMinutes(sumInMinutes);
             totalYear.plus(time15);
             int numDays = 0;
@@ -142,7 +159,7 @@ public class YearOverviewActivity extends AppCompatActivity {
         row.addView(createTextView(""));
         row.addView(createTextView(""));
         table.addView(row);
-        Log.i(getClass().getName(), "initialize() finished.");
+        Log.i(getClass().getName(), "updateYearOverViewTable() to task " + selectedTask);
     }
 
 
@@ -235,4 +252,21 @@ public class YearOverviewActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.i(getClass().getName(), "onItemSelected() started with position " + position);
+
+        Object item = parent.getItemAtPosition(position);
+        Log.i(getClass().getName(), "item : " + item == null ? "null" : item.toString());
+        selectedTask = item == null ? KindOfDay.VACATION : KindOfDay.fromString(parent.getItemAtPosition(position).toString());
+        updateYearOverViewTable();
+        Log.i(getClass().getName(), "onItemSelected() finished.");
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        Log.i(getClass().getName(), "onNothingSelected() started.");
+        selectedTask = KindOfDay.VACATION;
+        Log.i(getClass().getName(), "onNothingSelected() finished.");
+    }
 }
