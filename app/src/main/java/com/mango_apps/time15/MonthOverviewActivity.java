@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,7 +62,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(getClass().getName(), "onCreate() started.");
         setContentView(R.layout.activity_month_overview);
 
         storage = StorageFactory.getStorage();
@@ -74,9 +72,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
-
-        Log.i(getClass().getName(), "intent action : " + action);
-        Log.i(getClass().getName(), "intent type   : " + type);
 
         if (Intent.ACTION_VIEW.equals(action)) {
             id = TimeUtils.createID();
@@ -91,7 +86,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
             Toast.makeText(MonthOverviewActivity.this, "normal entry! id=" + id, Toast.LENGTH_LONG).show();
         }
 
-        Log.i(getClass().getName(), "onCreate() finished.");
     }
 
     private void importData(Uri data) {
@@ -157,15 +151,12 @@ public class MonthOverviewActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(getClass().getName(), "onResume() started with id " + id);
 
         initialize();
 
-        Log.i(getClass().getName(), "onResume() finished.");
     }
 
     private void initialize() {
-        Log.i(getClass().getName(), "initialize() started with id " + id);
         setTitle(TimeUtils.getMonthYearDisplayStringShort(id));
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
@@ -237,7 +228,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
             }
 
         }
-        Log.i(getClass().getName(), "initialize() finished.");
     }
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {

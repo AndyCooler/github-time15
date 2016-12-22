@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String intentsId = getIntentsId();
-        Log.i(getClass().getName(), "onCreate() started with id " + intentsId);
         storage = StorageFactory.getStorage();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -84,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
         balanceValue = storage.loadBalance(this, intentsId);
-
-        Log.i(getClass().getName(), "onCreate() finished.");
     }
 
     private String getIntentsId() {
@@ -111,12 +107,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String intentsId = getIntentsId();
-        Log.i(getClass().getName(), "onResume() started with id " + intentsId);
-
 
         switchToID(null, intentsId);
         updateBalance();
-        Log.i(getClass().getName(), "onResume() finished.");
     }
 
     @Override
@@ -162,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteTask() {
-        Log.i(getClass().getName(), "deleteTask() started at task #" + taskNo);
         if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
             Toast.makeText(MainActivity.this, "Nichts zu löschen!", Toast.LENGTH_SHORT).show();
         } else {
@@ -172,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
             modelToView();
             save();
         }
-        Log.i(getClass().getName(), "deleteTask() finished at task #" + taskNo);
     }
 
     public void startMonthOverviewActivity() {
@@ -192,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
             TextView view = (TextView) findViewById(viewId);
             Integer value = Integer.valueOf((String) view.getText());
             map.put(value, viewId);
-            Log.i(getClass().getName(), "initMap: " + value + " -> " + viewId);
         }
     }
 
@@ -203,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
             TextView view = (TextView) findViewById(viewId);
             view.setText(value < 10 ? "0" + String.valueOf(value) : String.valueOf(value));
             map.put(value, viewId);
-            Log.i(getClass().getName(), "updateMap: " + value + " -> " + viewId);
             value++;
         }
     }
@@ -232,59 +221,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dateForwards() {
-        Log.i(getClass().getName(), "dateForwards() started.");
         saveKindOfDay();
         switchToID(id, TimeUtils.dateForwards(id));
-        Log.i(getClass().getName(), "dateForwards() finished.");
     }
 
     public void dateBackwards() {
-        Log.i(getClass().getName(), "dateBackwards() started.");
         saveKindOfDay();
         switchToID(id, TimeUtils.dateBackwards(id));
-        Log.i(getClass().getName(), "dateBackwards() finished.");
     }
 
     public void dateToday() {
-        Log.i(getClass().getName(), "dateToday() started.");
         saveKindOfDay();
         switchToID(id, TimeUtils.createID());
-        Log.i(getClass().getName(), "dateToday() finished.");
-
     }
 
     public void beginEarlier(View view) {
-        Log.i(getClass().getName(), "beginEarlier() started.");
         TextView textView = (TextView) findViewById(R.id.beginnA);
         Integer hour = Integer.valueOf((String) textView.getText()) - 1;
         updateMapToBeginAt(intoRange(hour));
-        Log.i(getClass().getName(), "beginEarlier() finished.");
     }
 
     public void beginLater(View view) {
-        Log.i(getClass().getName(), "beginLater() started.");
         TextView textView = (TextView) findViewById(R.id.beginnA);
         Integer hour = Integer.valueOf((String) textView.getText()) + 1;
         updateMapToBeginAt(intoRange(hour));
-        Log.i(getClass().getName(), "beginLater() finished.");
     }
 
     public void beginAt(Integer hour) {
-        Log.i(getClass().getName(), "beginAt() started." + hour);
         if (hour == null || isBeginHourVisible(hour)) {
             return;
         }
         updateMapToBeginAt(intoRange(hour));
-        Log.i(getClass().getName(), "beginAt() finished.");
     }
 
     public void endAt(Integer hour) {
-        Log.i(getClass().getName(), "endAt() started." + hour);
         if (hour == null || isEndHourVisible(hour)) {
             return;
         }
         updateMapToEndAt(intoRange(hour));
-        Log.i(getClass().getName(), "endAt() finished.");
     }
 
     private void updateMapToEndAt(Integer newValue) {
@@ -319,19 +293,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void endEarlier(View view) {
-        Log.i(getClass().getName(), "endEarlier() started.");
         TextView textView = (TextView) findViewById(R.id.endeA);
         Integer hour = Integer.valueOf((String) textView.getText()) - 1;
         updateMapToEndAt(intoRange(hour));
-        Log.i(getClass().getName(), "endEarlier() finished.");
     }
 
     public void endLater(View view) {
-        Log.i(getClass().getName(), "endLater() started.");
         TextView textView = (TextView) findViewById(R.id.endeA);
         Integer hour = Integer.valueOf((String) textView.getText()) + 1;
         updateMapToEndAt(intoRange(hour));
-        Log.i(getClass().getName(), "endLater() finished.");
     }
 
     private void saveKindOfDay() {
@@ -341,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toggleKindOfDay(View v) {
-        Log.i(getClass().getName(), "toggleKindOfDay() started.");
         kindOfDay = KindOfDay.toggle(kindOfDay);
         if (KindOfDay.isBeginEndType(KindOfDay.valueOf(kindOfDay))) {
             numberTaskHours = null;
@@ -359,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
         resetView();
         modelToView();
 
-        Log.i(getClass().getName(), "toggleKindOfDay() finished.");
     }
 
     private void aktualisiereKindOfDay(int color) {
@@ -370,7 +338,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addTask(View v) {
-        Log.i(getClass().getName(), "addTask() started at task #" + taskNo);
         if (modifiableData.getNumberOfTasks() > 1) {
             Toast.makeText(MainActivity.this, "Nur 2 Aufgaben pro Tag!", Toast.LENGTH_SHORT).show();
         } else {
@@ -382,11 +349,9 @@ public class MainActivity extends AppCompatActivity {
             resetView();
             modelToView();
         }
-        Log.i(getClass().getName(), "addTask() finished at task #" + taskNo);
     }
 
     public void switchTasks(View v) {
-        Log.i(getClass().getName(), "switchTasks() started at task #" + taskNo);
         if (modifiableData.getNumberOfTasks() == 2) {
             resetView();
             taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
@@ -394,7 +359,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(MainActivity.this, "Erst mit + eine Aufgabe hinzufügen!", Toast.LENGTH_SHORT).show();
         }
-        Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
     }
 
     public void aktualisiereTaskNo() {
@@ -517,7 +481,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save() {
-        Log.i(getClass().getName(), "saving...");
         viewToModel();
         if (originalData == null) {
             balanceValue += modifiableData.getBalance();
@@ -534,7 +497,6 @@ public class MainActivity extends AppCompatActivity {
         modifiableData = DaysDataNew.copy(originalData);
         modelToView(); // TODO shouldn't be necessary
         updateBalance();
-        Log.i(getClass().getName(), "saving...done.");
     }
 
     public void toggleTotal(View v) {
@@ -566,7 +528,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void viewToModel() {
-        Log.i(getClass().getName(), "viewToModel() started.");
         BeginEndTask task0 = (BeginEndTask) modifiableData.getTask(taskNo);
         if (task0 == null) {
             task0 = new BeginEndTask();
@@ -589,13 +550,10 @@ public class MainActivity extends AppCompatActivity {
             task0.setPause(null);
             task0.setTotal(new Time15(numberTaskHours == null ? 0 : numberTaskHours, numberTaskMinutes == null ? 0 : numberTaskMinutes));
         }
-        Log.i(getClass().getName(), "viewToModel() finished.");
     }
 
     private void modelToView() {
-        Log.i(getClass().getName(), "modelToView() started.");
         if (modifiableData.getTask(taskNo) == null) {
-            Log.e(getClass().getName(), "modelToView() missing task #" + taskNo);
             return;
         }
         Task task = modifiableData.getTask(taskNo);
@@ -646,7 +604,6 @@ public class MainActivity extends AppCompatActivity {
         aktualisiereTaskNo();
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
-        Log.i(getClass().getName(), "modelToView() finished.");
     }
 
     private void resetView() {

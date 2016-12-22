@@ -1,7 +1,6 @@
 package com.mango_apps.time15.storage;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.mango_apps.time15.types.DaysDataNew;
 import com.mango_apps.time15.types.KindOfDay;
@@ -43,10 +42,8 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
             pw.close();
             fos.close();
 
-            Log.i(getClass().getName(), "Saved data with id " + data.getId());
             result = true;
         } catch (IOException e) {
-            Log.e(getClass().getName(), "Error saving data with id " + data.getId() + " to file " + file.getAbsolutePath(), e);
         }
         return result;
     }
@@ -84,14 +81,11 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
             fis.close();
             br.close();
             if (candidate == null) {
-                Log.i(getClass().getName(), "No data with id " + id);
             } else {
                 data = DaysDataNew.fromString(candidate);
             }
         } catch (IOException e) {
-            Log.e(getClass().getName(), "Error loading data with id " + id, e);
         } catch (Throwable t) {
-            Log.e(getClass().getName(), "Error loading data with id " + id, t);
         }
 
         return data;

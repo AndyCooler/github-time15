@@ -49,7 +49,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(getClass().getName(), "onCreate() started.");
         setContentView(R.layout.activity_year_overview);
 
         storage = StorageFactory.getStorage();
@@ -61,27 +60,20 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         String action = intent.getAction();
         String type = intent.getType();
 
-        Log.i(getClass().getName(), "intent action : " + action);
-        Log.i(getClass().getName(), "intent type   : " + type);
-
         id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-        Log.i(getClass().getName(), "onCreate() finished.");
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(getClass().getName(), "onResume() started with id " + id);
 
         initialize();
 
-        Log.i(getClass().getName(), "onResume() finished.");
     }
 
     private void initialize() {
-        Log.i(getClass().getName(), "initialize() started with id " + id);
         setTitle("Übersicht " + TimeUtils.getYearDisplayString(id));
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
@@ -93,7 +85,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
         updateYearOverViewTable();
 
-        Log.i(getClass().getName(), "initialize() finished.");
     }
 
     private void updateYearOverViewTable() {
@@ -159,7 +150,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         row.addView(createTextView(""));
         row.addView(createTextView(""));
         table.addView(row);
-        Log.i(getClass().getName(), "updateYearOverViewTable() to task " + selectedTask);
     }
 
 
@@ -254,19 +244,15 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(getClass().getName(), "onItemSelected() started with position " + position);
 
         Object item = parent.getItemAtPosition(position);
         Log.i(getClass().getName(), "item : " + item == null ? "null" : item.toString());
         selectedTask = item == null ? KindOfDay.VACATION : KindOfDay.fromString(parent.getItemAtPosition(position).toString());
         updateYearOverViewTable();
-        Log.i(getClass().getName(), "onItemSelected() finished.");
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Log.i(getClass().getName(), "onNothingSelected() started.");
         selectedTask = KindOfDay.VACATION;
-        Log.i(getClass().getName(), "onNothingSelected() finished.");
     }
 }

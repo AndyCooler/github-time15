@@ -1,7 +1,5 @@
 package com.mango_apps.time15.util;
 
-import android.util.Log;
-
 import com.mango_apps.time15.storage.CsvFileLineWrongException;
 import com.mango_apps.time15.types.BeginEndTask;
 import com.mango_apps.time15.types.DaysDataNew;
@@ -87,7 +85,6 @@ public final class CsvUtils {
             }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
-            Log.e(CsvUtils.class.getName(), errMsg, t);
         }
 
         // ignore rest of csvString
@@ -164,7 +161,6 @@ public final class CsvUtils {
     private static String safeGetNextToken(String s, String id, String expected) throws CsvFileLineWrongException {
         if (s == null || s.isEmpty()) {
             String msg = "load csv " + id + " missing: " + expected;
-            Log.e(CsvUtils.class.getName(), msg);
             throw new CsvFileLineWrongException(id, msg);
         }
         return s.trim();
