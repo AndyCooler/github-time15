@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mango_apps.time15.YearOverviewActivity">
+    tools:context="com.mythosapps.time15.YearOverviewActivity">
 
     <android.support.v7.widget.Toolbar xmlns:app="http://schemas.Android.com/apk/res-auto"
         android:id="@+id/toolbarYear"
