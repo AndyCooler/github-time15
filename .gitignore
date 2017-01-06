@@ -5,3 +5,16 @@
 .DS_Store
 /build
 /captures
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the ART/Dalvik VM
+*.dex
+
+#keystore
+/keystore.properties
+/howto.txt
+
+
