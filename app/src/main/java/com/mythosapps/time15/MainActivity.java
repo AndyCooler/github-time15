@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView total;
     private TextView totalSemi;
     private TextView total15;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +87,24 @@ public class MainActivity extends AppCompatActivity {
         balanceValue = storage.loadBalance(this, intentsId);
 
         Log.i(getClass().getName(), "onCreate() finished.");
+    }
+
+    private void setBeginEndSelectionActivated(boolean activated) {
+        for (Integer viewId : mapBeginnValueToViewId.values()) {
+            setActivation(viewId, activated);
+        }
+        for (Integer viewId : mapEndeValueToViewId.values()) {
+            setActivation(viewId, activated);
+        }
+        for (Integer viewId : mapBeginn15ValueToViewId.values()) {
+            setActivation(viewId, activated);
+        }
+        for (Integer viewId : mapEnde15ValueToViewId.values()) {
+            setActivation(viewId, activated);
+        }
+        for (Integer viewId : mapPauseValueToViewId.values()) {
+            setActivation(viewId, activated);
+        }
     }
 
     private String getIntentsId() {
@@ -143,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_month) {
+            save();
             startMonthOverviewActivity();
             return true;
         }
@@ -151,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_year) {
+            save();
             startYearOverviewActivity();
             return true;
         }
@@ -603,6 +624,7 @@ public class MainActivity extends AppCompatActivity {
         int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 
         if (KindOfDay.isBeginEndType(task.getKindOfDay())) {
+            setBeginEndSelectionActivated(true);
             BeginEndTask task0 = (BeginEndTask) task;
             beginnTime = task0.getBegin();
             beginn15 = task0.getBegin15();
@@ -630,6 +652,7 @@ public class MainActivity extends AppCompatActivity {
             setTransparent(R.id.total15);
         } else {
 
+            setBeginEndSelectionActivated(false);
             BeginEndTask task1 = (BeginEndTask) task;
             numberTaskHours = task1.getTotal().getHours();
             numberTaskMinutes = task1.getTotal().getMinutes();
@@ -692,10 +715,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setDeactivated(Integer viewId) {
+    private void setActivation(Integer viewId, boolean activated) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(ColorsUI.DEACTIVATED);
+            view.setTextColor(activated ? ColorsUI.ACTIVATED : ColorsUI.DEACTIVATED);
         }
     }
 }
