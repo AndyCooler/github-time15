@@ -21,14 +21,25 @@ android {
         }
     }
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "25.0.2"
+
     defaultConfig {
         applicationId "com.mythosapps.time15"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        jackOptions {
+            enabled true
+        }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
