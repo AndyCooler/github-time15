@@ -5,3 +5,12 @@
 .DS_Store
 /build
 /captures
+
+# Built application files
+*.apk
+*.ap_
+
+# keystore
+/keystore.properties
+/howto.txt
+
