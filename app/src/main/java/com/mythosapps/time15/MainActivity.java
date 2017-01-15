@@ -20,6 +20,7 @@ import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Task;
 import com.mythosapps.time15.types.Time15;
+import com.mythosapps.time15.util.AppVersion;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_about) {
-            Toast.makeText(MainActivity.this, "Time15 von Andreas, Version: 0.6", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Time15 von Andreas, \n" + AppVersion.getVersionName(this) + "\n" + AppVersion.getVersionCode(this), Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_year) {
