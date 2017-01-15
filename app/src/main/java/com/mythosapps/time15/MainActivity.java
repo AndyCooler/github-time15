@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "deleteTask() finished at task #" + taskNo);
     }
 
+
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
@@ -548,7 +549,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO only if hasChanged d.h. if modifiableData != originalData
-        int totalNewColor = storage.saveDaysDataNew(this, modifiableData) ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR;
+        int totalNewColor = 0;
+        if (storage.saveDaysDataNew(this, modifiableData)) {
+            if (modifiableData.getNumberOfTasks() == 0) {
+                totalNewColor = ColorsUI.DARK_BLUE_DEFAULT;
+            } else {
+                totalNewColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
+            }
+        } else {
+            totalNewColor = ColorsUI.DARK_GREY_SAVE_ERROR;
+        }
+
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifiableData;
@@ -588,6 +599,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void viewToModel() {
         Log.i(getClass().getName(), "viewToModel() started.");
+        if (isInitialOrResetView()) {
+            return;
+        }
         BeginEndTask task0 = (BeginEndTask) modifiableData.getTask(taskNo);
         if (task0 == null) {
             task0 = new BeginEndTask();
@@ -616,6 +630,7 @@ public class MainActivity extends AppCompatActivity {
     private void modelToView() {
         Log.i(getClass().getName(), "modelToView() started.");
         if (modifiableData.getTask(taskNo) == null) {
+            setBeginEndSelectionActivated(true);
             Log.e(getClass().getName(), "modelToView() missing task #" + taskNo);
             return;
         }
@@ -699,6 +714,12 @@ public class MainActivity extends AppCompatActivity {
         setTransparent(R.id.total);
         setTransparent(R.id.totalSemi);
         setTransparent(R.id.total15);
+    }
+
+    private boolean isInitialOrResetView() {
+        return beginnTime == null && beginn15 == null && endeTime == null && ende15 == null
+                && pauseTime == null && kindOfDay.equals(KindOfDay.WORKDAY.toString())
+                && numberTaskHours == null && numberTaskMinutes == null;
     }
 
     private void setTransparent(Integer viewId) {

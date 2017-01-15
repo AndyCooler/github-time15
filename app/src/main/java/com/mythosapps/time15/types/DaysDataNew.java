@@ -105,6 +105,9 @@ public class DaysDataNew {
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         String id = tokenizer.nextToken();
         DaysDataNew data = new DaysDataNew(id);
+        if (!tokenizer.hasMoreTokens()) {
+            return data;
+        }
         String kindOfDay = tokenizer.nextToken();
         String begin = tokenizer.nextToken();
         String begin15 = tokenizer.nextToken();
@@ -161,7 +164,6 @@ public class DaysDataNew {
             data.addTask(task1);
         }
 
-        // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen BeginEndTask oder NumberTask einlesen
         return data;
     }
 

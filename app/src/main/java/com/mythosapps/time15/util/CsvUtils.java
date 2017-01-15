@@ -29,6 +29,9 @@ public final class CsvUtils {
 
     public static String toCsvLine(DaysDataNew data) {
 
+        if (data.getNumberOfTasks() == 0) {
+            return null;
+        }
         String s = data.getId() + ",";
         for (int i = 0; i < data.getNumberOfTasks(); i++) {
             Task task = data.getTask(i);
