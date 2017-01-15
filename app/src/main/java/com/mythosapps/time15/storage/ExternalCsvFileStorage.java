@@ -63,7 +63,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             return false;
         }
         // update cache
-        currentMonthsData.put(data.getId(), data);
+        currentMonthsData.put(data.getId(), data.getNumberOfTasks() == 0 ? null : data);
 
         // save to legacy storage
         boolean success = redundantFileStorage.saveDaysDataNew(activity, data);
