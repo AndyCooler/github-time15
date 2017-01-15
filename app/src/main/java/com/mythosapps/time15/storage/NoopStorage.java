@@ -22,7 +22,7 @@ public class NoopStorage implements StorageFacade {
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
         Log.i(getClass().getName(), "Saved data: " + data.toString());
-        cache.put(data.getId(), data.toString());
+        cache.put(data.getId(), data.getNumberOfTasks() == 0 ? null : data.toString());
         return true;
     }
 
