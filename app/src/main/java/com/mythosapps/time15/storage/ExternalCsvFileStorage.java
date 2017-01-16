@@ -74,7 +74,10 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         for (String idCurrent : TimeUtils.getListOfIdsOfMonth(data.getId())) {
             DaysDataNew dataCurrent = currentMonthsData.get(idCurrent);
             if (dataCurrent != null) {
-                csvMonth.add(CsvUtils.toCsvLine(dataCurrent));
+                String line = CsvUtils.toCsvLine(dataCurrent);
+                if (line != null) {
+                    csvMonth.add(line);
+                }
             }
         }
         boolean successCsvSave = saveWholeMonth(getFilename(data.getId()), csvMonth);

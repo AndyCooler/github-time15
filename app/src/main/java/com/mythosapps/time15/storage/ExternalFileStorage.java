@@ -87,6 +87,9 @@ public class ExternalFileStorage extends FileStorage implements StorageFacade {
                 Log.i(getClass().getName(), "No data with id " + id);
             } else {
                 data = DaysDataNew.fromString(candidate);
+                if (data.getNumberOfTasks() == 0) {
+                    data = null; // nur id in external file storage bedeutet: alle tasks deleted
+                }
             }
         } catch (IOException e) {
             Log.e(getClass().getName(), "Error loading data with id " + id, e);
