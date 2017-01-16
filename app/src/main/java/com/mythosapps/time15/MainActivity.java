@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_about) {
-            Toast.makeText(MainActivity.this, "Time15 von Andreas, \n" + AppVersion.getVersionName(this) + "\n" + AppVersion.getVersionCode(this), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Time15 von Andreas, \nVersion: " + AppVersion.getVersionName(this) + "\nBuild-ID:" + AppVersion.getVersionCode(this), Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_year) {
