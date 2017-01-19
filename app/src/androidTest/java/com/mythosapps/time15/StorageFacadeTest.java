@@ -38,6 +38,6 @@ public class StorageFacadeTest extends TestCase {
         storage.saveDaysDataNew(null, data);
 
         DaysDataNew loaded = storage.loadDaysDataNew(null, data.getId());
-        assertEquals(data.toString(), loaded.toString());
+        assertNull(loaded);
     }
 }
