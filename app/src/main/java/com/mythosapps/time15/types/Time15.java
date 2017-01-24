@@ -122,4 +122,13 @@ public class Time15 {
     public void minus(int minutes) {
         totalMinutes -= minutes;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof Time15) {
+            Time15 t = (Time15) o;
+            return totalMinutes == t.totalMinutes;
+        }
+        return false;
+    }
 }

@@ -188,7 +188,11 @@ public class MainActivity extends AppCompatActivity {
         if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
             Toast.makeText(MainActivity.this, "Nichts zu löschen!", Toast.LENGTH_SHORT).show();
         } else {
+            originalData = null;
             modifiableData.deleteTask(modifiableData.getTask(taskNo));
+            if (modifiableData.getNumberOfTasks() == 0) {
+                modifiableData = new DaysDataNew(id);
+            }
             taskNo = 0;
             resetView();
             modelToView();
@@ -540,8 +544,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void save() {
-        Log.i(getClass().getName(), "saving...");
+        Log.i(getClass().getName(), "saving..."); // + modifiableData.toString() + "(" + originalData.toString() + ")");
+
         viewToModel();
+
+        // save only if user changed something
+        if (originalData == null) {
+            if (modifiableData.isInInitialState()) {
+                Log.i(getClass().getName(), "saving...canceled: initialState");
+                return;
+            }
+        } else {
+            if (originalData.equals(modifiableData)) {
+                Log.i(getClass().getName(), "saving...canceled: equal");
+                return;
+            }
+        }
+
         if (originalData == null) {
             balanceValue += modifiableData.getBalance();
         } else {
@@ -600,9 +619,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void viewToModel() {
         Log.i(getClass().getName(), "viewToModel() started.");
-        if (isInitialOrResetView()) {
-            return;
-        }
+
         BeginEndTask task0 = (BeginEndTask) modifiableData.getTask(taskNo);
         if (task0 == null) {
             task0 = new BeginEndTask();
@@ -715,12 +732,6 @@ public class MainActivity extends AppCompatActivity {
         setTransparent(R.id.total);
         setTransparent(R.id.totalSemi);
         setTransparent(R.id.total15);
-    }
-
-    private boolean isInitialOrResetView() {
-        return beginnTime == null && beginn15 == null && endeTime == null && ende15 == null
-                && pauseTime == null && kindOfDay.equals(KindOfDay.WORKDAY.toString())
-                && numberTaskHours == null && numberTaskMinutes == null;
     }
 
     private void setTransparent(Integer viewId) {
