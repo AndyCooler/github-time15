@@ -105,6 +105,9 @@ public class DaysDataNew {
         StringTokenizer tokenizer = new StringTokenizer(s, SEP);
         String id = tokenizer.nextToken();
         DaysDataNew data = new DaysDataNew(id);
+        if (!tokenizer.hasMoreTokens()) {
+            return data;
+        }
         String kindOfDay = tokenizer.nextToken();
         String begin = tokenizer.nextToken();
         String begin15 = tokenizer.nextToken();
@@ -161,11 +164,40 @@ public class DaysDataNew {
             data.addTask(task1);
         }
 
-        // TODO Idee: erst KindOfDay einlesen, dann je nach KindOfDay einen BeginEndTask oder NumberTask einlesen
         return data;
     }
 
     public int getNumberOfTasks() {
         return tasks.size();
+    }
+
+    public boolean isInInitialState() {
+        boolean initial = getNumberOfTasks() == 0 || getNumberOfTasks() == 1 && isInInitialState(getTask(0));
+        return initial;
+    }
+
+    private boolean isInInitialState(Task task) {
+        BeginEndTask task0 = (BeginEndTask) task;
+        boolean initial = KindOfDay.WORKDAY.equals(task0.getKindOfDay()) && task0.isOnlyTotalComplete();
+        return initial;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof DaysDataNew) {
+            DaysDataNew d = (DaysDataNew) o;
+            if (d.id == null || !d.id.equals(id) || d.getNumberOfTasks() != getNumberOfTasks()) {
+                return false;
+            } else {
+                for (int i = 0; i < getNumberOfTasks(); i++) {
+                    if (!getTask(i).equals(d.getTask(i))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 }

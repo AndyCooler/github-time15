@@ -19,6 +19,7 @@ import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Task;
 import com.mythosapps.time15.types.Time15;
+import com.mythosapps.time15.util.AppVersion;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_about) {
-            Toast.makeText(MainActivity.this, "Time15 von Andreas, Version: 0.6", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Time15 von Andreas, \nVersion: " + AppVersion.getVersionName(this) + "\nBuild-ID:" + AppVersion.getVersionCode(this), Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_year) {
@@ -179,13 +180,18 @@ public class MainActivity extends AppCompatActivity {
         if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
             Toast.makeText(MainActivity.this, "Nichts zu löschen!", Toast.LENGTH_SHORT).show();
         } else {
+            originalData = null;
             modifiableData.deleteTask(modifiableData.getTask(taskNo));
+            if (modifiableData.getNumberOfTasks() == 0) {
+                modifiableData = new DaysDataNew(id);
+            }
             taskNo = 0;
             resetView();
             modelToView();
             save();
         }
     }
+
 
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
@@ -503,6 +509,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void save() {
         viewToModel();
+
+        // save only if user changed something
+        if (originalData == null) {
+            if (modifiableData.isInInitialState()) {
+                return;
+            }
+        } else {
+            if (originalData.equals(modifiableData)) {
+                return;
+            }
+        }
+
         if (originalData == null) {
             balanceValue += modifiableData.getBalance();
         } else {
@@ -511,7 +529,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO only if hasChanged d.h. if modifiableData != originalData
-        int totalNewColor = storage.saveDaysDataNew(this, modifiableData) ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR;
+        int totalNewColor = 0;
+        if (storage.saveDaysDataNew(this, modifiableData)) {
+            if (modifiableData.getNumberOfTasks() == 0) {
+                totalNewColor = ColorsUI.DARK_BLUE_DEFAULT;
+            } else {
+                totalNewColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
+            }
+        } else {
+            totalNewColor = ColorsUI.DARK_GREY_SAVE_ERROR;
+        }
+
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifiableData;
@@ -575,6 +603,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void modelToView() {
         if (modifiableData.getTask(taskNo) == null) {
+            setBeginEndSelectionActivated(true);
             return;
         }
         Task task = modifiableData.getTask(taskNo);

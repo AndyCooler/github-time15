@@ -37,8 +37,6 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     private HashMap<String, DaysDataNew> currentMonthsData = null;
 
-    ExternalFileStorage redundantFileStorage = new ExternalFileStorage();
-
     public ExternalCsvFileStorage() {
     }
 
@@ -59,10 +57,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             return false;
         }
         // update cache
-        currentMonthsData.put(data.getId(), data);
-
-        // save to legacy storage
-        boolean success = redundantFileStorage.saveDaysDataNew(activity, data);
+        currentMonthsData.put(data.getId(), data.getNumberOfTasks() == 0 ? null : data);
 
         // save to csv storage
         List<String> csvMonth = new ArrayList<String>();
@@ -70,11 +65,14 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         for (String idCurrent : TimeUtils.getListOfIdsOfMonth(data.getId())) {
             DaysDataNew dataCurrent = currentMonthsData.get(idCurrent);
             if (dataCurrent != null) {
-                csvMonth.add(CsvUtils.toCsvLine(dataCurrent));
+                String line = CsvUtils.toCsvLine(dataCurrent);
+                if (line != null) {
+                    csvMonth.add(line);
+                }
             }
         }
         boolean successCsvSave = saveWholeMonth(getFilename(data.getId()), csvMonth);
-        return success && successCsvSave;
+        return successCsvSave;
     }
 
     private boolean saveWholeMonth(String filename, List<String> csvMonth) {
@@ -170,7 +168,6 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         }
         // load month from file into cache, then get data for id from new cache
         boolean success = false;
-        HashMap<String, DaysDataNew> newMonthsDataRedundant = new HashMap<String, DaysDataNew>();
         HashMap<String, DaysDataNew> newMonthsData = new HashMap<String, DaysDataNew>();
         ArrayList<String> warnings = new ArrayList<String>();
         try {
@@ -190,33 +187,6 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
                 }
             }
 
-            // load from legacy / redundant storage
-            for (String idCurrent : TimeUtils.getListOfIdsOfMonth(id)) {
-                DaysDataNew data = redundantFileStorage.loadDaysDataNew(activity, idCurrent);
-                if (data != null) {
-                    newMonthsDataRedundant.put(data.getId(), data);
-                }
-            }
-            // (destructive!) compare csv to legacy / redundant storage
-            String missingIds = "";
-            for (String idCurrent : newMonthsDataRedundant.keySet()) {
-                if (newMonthsData.containsKey(idCurrent)) {
-                    newMonthsData.remove(idCurrent);
-                } else {
-                    missingIds += idCurrent + " ";
-                }
-            }
-            //if (!missingIds.isEmpty()) {
-            //    warnings.add("Not loaded from csv: " + missingIds);
-            //}
-            if (!newMonthsData.isEmpty()) {
-                String additionalIds = "";
-                for (String idCurrent : newMonthsData.keySet()) {
-                    additionalIds += idCurrent + " ";
-                }
-                warnings.add("Load.Compare: csv has + ids: " + additionalIds);
-            }
-
             if (!warnings.isEmpty()) {
                 String warningsMsg = "";
                 for (String msg : warnings) {
@@ -228,7 +198,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         } finally {
             if (success) {
                 currentMonthYear = newMonthYear;
-                currentMonthsData = newMonthsDataRedundant;
+                currentMonthsData = newMonthsData;
             } else {
             }
         }
@@ -240,6 +210,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
         String monthYear = TimeUtils.getMonthYearOfID(id);
 
+        loadDaysDataNew(activity, id); // update cache to month in id
         if (monthYear.equals(currentMonthYear)) {
             int balance = 0;
             for (DaysDataNew data : currentMonthsData.values()) {
@@ -247,7 +218,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             }
             return balance;
         }
-        return redundantFileStorage.loadBalance(activity, id);
+        return 0; // TODO balance berechnen!
     }
 
     public static String getFilename(String id) {

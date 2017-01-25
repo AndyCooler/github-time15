@@ -64,6 +64,50 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
         assertEquals(180, balance);
     }
 
+    public void testDifferenceTwoTasksBeginEnd() {
+        DaysDataNew data = new DaysDataNew("ID");
+
+        BeginEndTask task0 = new BeginEndTask();
+        task0.setKindOfDay(KindOfDay.WORKDAY);
+        task0.setBegin(10);
+        task0.setBegin15(0);
+        task0.setEnd(17);
+        task0.setEnd15(0);
+        data.addTask(task0);
+
+        BeginEndTask task1 = new BeginEndTask();
+        task1.setKindOfDay(KindOfDay.WORKDAY);
+        task1.setBegin(10);
+        task1.setBegin15(0);
+        task1.setEnd(18);
+        task1.setEnd15(30);
+        data.addTask(task1);
+
+        Time15 total0 = task0.getTotal();
+        assertEquals(7, total0.getHours());
+        assertEquals(0, total0.getMinutes());
+
+        Time15 total1 = task1.getTotal();
+        assertEquals(8, total1.getHours());
+        assertEquals(30, total1.getMinutes());
+
+        Time15 total = data.getTotal();
+        assertEquals(15, total.getHours());
+        assertEquals(30, total.getMinutes());
+
+        int balance = data.getBalance();
+        assertEquals(450, balance); // +7:30h => +450min
+
+        DaysDataNew copy = data.copy(data);
+        total = copy.getTotal();
+        assertEquals(15, total.getHours());
+        assertEquals(30, total.getMinutes());
+
+        balance = copy.getBalance();
+        assertEquals(450, balance); // +7:30h => +450min
+
+    }
+
     public void testDifferenceTwoDays() {
         DaysDataNew data1 = new DaysDataNew("ID");
 
@@ -102,6 +146,34 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
         int balance2 = data2.getBalance();
         assertEquals(120, balance2); // 6 + 4 = 10 => +2h (120min)
 
+    }
+
+    public void testDeleteTask() {
+
+        DaysDataNew data2 = new DaysDataNew("ID2");
+        BeginEndTask task02 = new BeginEndTask();
+        task02.setKindOfDay(KindOfDay.WORKDAY);
+        task02.setBegin(10);
+        task02.setBegin15(0);
+        task02.setEnd(16);
+        task02.setEnd15(0);
+        data2.addTask(task02);
+        BeginEndTask task12 = new BeginEndTask();
+        task12.setKindOfDay(KindOfDay.VACATION);
+        task12.setTotal(Time15.fromMinutes(4 * 60));
+        data2.addTask(task12);
+
+        data2.deleteTask(task02);
+        assertEquals(1, data2.getNumberOfTasks());
+        assertNotNull(data2.getTask(0));
+        assertNull(data2.getTask(1));
+
+        Time15 total2 = data2.getTotal();
+        assertEquals(4, total2.getHours());
+        assertEquals(0, total2.getMinutes());
+
+        int balance2 = data2.getBalance();
+        assertEquals(-240, balance2); // 4h => Balance -4h (-240min)
     }
 
     public void testTotalAndBalanceVacation() {
@@ -176,7 +248,7 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
         assertEquals(0, balance); // incomplete selection has balance 0
     }
 
-    public void testDifferenceIncomplete15() {
+    public void testDifference() {
         DaysDataNew data = new DaysDataNew("ID");
         BeginEndTask task0 = new BeginEndTask();
         data.addTask(task0);
@@ -197,6 +269,17 @@ public class DaysDataTotalAndBalanceTest extends TestCase {
 
         int balance = data.getBalance();
         assertEquals(75, balance); // 5.75h - 0.5h pause + 4h extra task = 9.25h d.h. +1.25h = +75 min
+    }
+
+    public void testNoTasks() {
+        DaysDataNew data = new DaysDataNew("ID");
+
+        Time15 total = data.getTotal();
+        assertEquals(0, total.getHours());
+        assertEquals(0, total.getMinutes());
+
+        int balance = data.getBalance();
+        assertEquals(0, balance);
     }
 
     public void testHoliday() {

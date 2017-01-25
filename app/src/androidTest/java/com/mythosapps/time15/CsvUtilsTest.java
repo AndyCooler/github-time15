@@ -15,6 +15,21 @@ import junit.framework.TestCase;
 
 public class CsvUtilsTest extends TestCase {
 
+    public void testToCsvLineDeletedTasks() {
+        //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
+        DaysDataNew data = new DaysDataNew("05.05.2016");
+        String s = CsvUtils.toCsvLine(data);
+        assertNull(s); // because no tasks!!!
+    }
+
+    public void testFromCsvLineDeletedTasks() throws CsvFileLineWrongException {
+        String s = null;
+
+        DaysDataNew data = CsvUtils.fromCsvLine(s);
+
+        assertEquals("unknown", data.getId());
+    }
+
     public void testToCsvLineWorkday() {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
         DaysDataNew data = new DaysDataNew("05.05.2016");

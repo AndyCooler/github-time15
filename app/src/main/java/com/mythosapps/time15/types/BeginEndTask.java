@@ -192,8 +192,8 @@ public class BeginEndTask implements Task {
                 }
             }
             total = new Time15(difference, difference15);
-        } else if (isOnlyTotalComplete()) {
-            // total is set, ok.
+        } else if (isOnlyTotalComplete() && !KindOfDay.isBeginEndType(day)) {
+            // total is set, thats ok except with begin-end tasks
         } else {
             // task is incomplete, repair assuming 8 hours if not a due day
             if (!KindOfDay.isBeginEndType(day)) {
@@ -202,5 +202,24 @@ public class BeginEndTask implements Task {
                 total = Time15.fromMinutes(0);
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        boolean equal = false;
+        if (o != null && o instanceof BeginEndTask) {
+            BeginEndTask b = (BeginEndTask) o;
+            equal = safeEquals(day, b.day) &&
+                    safeEquals(begin, b.begin) &&
+                    safeEquals(end, b.end) &&
+                    safeEquals(begin15, b.begin15) &&
+                    safeEquals(end15, b.end15) &&
+                    safeEquals(total, b.total);
+        }
+        return equal;
+    }
+
+    private boolean safeEquals(Object a, Object b) {
+        return a == null ? b == null : b == null ? a == null : a.equals(b);
     }
 }
