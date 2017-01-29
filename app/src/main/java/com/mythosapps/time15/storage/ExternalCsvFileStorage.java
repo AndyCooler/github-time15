@@ -235,7 +235,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         } else {
             Log.e(getClass().getName(), "Cache miss while loading balance for " + id);
         }
-        return 0;
+        return 0; // should be unreachable, balance is relevant in current month
     }
 
     public static String getFilename(String id) {

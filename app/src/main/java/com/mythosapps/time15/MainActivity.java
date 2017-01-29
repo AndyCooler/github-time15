@@ -568,7 +568,6 @@ public class MainActivity extends AppCompatActivity {
             balanceValue += modifiableData.getBalance();
         }
 
-        // TODO only if hasChanged d.h. if modifiableData != originalData
         int totalNewColor = 0;
         if (storage.saveDaysDataNew(this, modifiableData)) {
             if (modifiableData.getNumberOfTasks() == 0) {
