@@ -16,7 +16,7 @@ public class Time15 {
     public Time15(int hours, int minutes) {
         // hours mit Vorzeichen
         // minutes ohne Vorzeichen
-        totalMinutes = hours > 0 ? hours * 60 + minutes : hours * 60 - minutes;
+        totalMinutes = hours >= 0 ? hours * 60 + minutes : hours * 60 - minutes;
     }
 
     public Time15(int totalMinutes) {
