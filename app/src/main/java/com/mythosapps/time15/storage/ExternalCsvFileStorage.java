@@ -218,7 +218,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             }
             return balance;
         }
-        return 0; // TODO balance berechnen!
+        return 0; // should be unreachable, balance is relevant in current month
     }
 
     public static String getFilename(String id) {
