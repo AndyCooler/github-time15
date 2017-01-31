@@ -6,7 +6,6 @@ import com.mythosapps.time15.storage.CsvFileLineWrongException;
 import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
-import com.mythosapps.time15.types.Task;
 import com.mythosapps.time15.types.Time15;
 
 /**
@@ -34,10 +33,8 @@ public final class CsvUtils {
         }
         String s = data.getId() + ",";
         for (int i = 0; i < data.getNumberOfTasks(); i++) {
-            Task task = data.getTask(i);
-            s += task.getKindOfDay() + ",";
-            if (task instanceof BeginEndTask) {
-                BeginEndTask taskB = (BeginEndTask) task;
+            BeginEndTask taskB = data.getTask(i);
+            s += taskB.getKindOfDay() + ",";
                 if (taskB.getBegin() == null || taskB.getBegin15() == null) {
                     s += ",";
                 } else {
@@ -53,10 +50,7 @@ public final class CsvUtils {
                 } else {
                     s += Time15.fromMinutes(taskB.getPause()).toDisplayString() + ",";
                 }
-            } else {
-                s += ",,,";
-            }
-            s += task.getTotal().toDecimalFormat() + ",";
+            s += taskB.getTotal().toDecimalFormat() + ",";
             s += ","; // reserved for future note
         }
         return s;
