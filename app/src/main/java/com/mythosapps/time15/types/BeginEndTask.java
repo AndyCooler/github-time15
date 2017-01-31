@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 /**
  * Created by andreas on 11.03.16.
  */
-public class BeginEndTask implements Task {
+public class BeginEndTask {
 
     private static final String SEP = "#";
 
@@ -72,7 +72,6 @@ public class BeginEndTask implements Task {
         this.day = day;
     }
 
-    @Override
     public boolean isComplete() {
         // could be named isValid()
         return day != null && (isBeginEndTimeComplete() || isOnlyTotalComplete());
@@ -87,7 +86,6 @@ public class BeginEndTask implements Task {
         return end == null && begin == null && begin15 == null && end15 == null && total != null;
     }
 
-    @Override
     public Time15 getTotal() {
         if (total == null) {
             calcTotal();
@@ -106,8 +104,7 @@ public class BeginEndTask implements Task {
                 valueOf(pause) + SEP + (total == null ? "-" : total.toDecimalFormat());
     }
 
-    @Override
-    public Task copy() {
+    public BeginEndTask copy() {
         BeginEndTask copy = new BeginEndTask();
         copy.setKindOfDay(day);
         copy.setBegin(begin);

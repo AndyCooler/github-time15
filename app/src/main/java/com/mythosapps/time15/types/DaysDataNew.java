@@ -14,13 +14,13 @@ public class DaysDataNew {
 
     private String id;
 
-    private final ArrayList<Task> tasks;
+    private final ArrayList<BeginEndTask> tasks;
 
     private static final String SEP = "#";
 
     public DaysDataNew(String id) {
         this.id = id;
-        this.tasks = new ArrayList<Task>();
+        this.tasks = new ArrayList<BeginEndTask>();
     }
 
     /**
@@ -57,15 +57,15 @@ public class DaysDataNew {
         this.id = id;
     }
 
-    public void addTask(Task task) {
+    public void addTask(BeginEndTask task) {
         tasks.add(task);
     }
 
-    public void deleteTask(Task task) {
+    public void deleteTask(BeginEndTask task) {
         tasks.remove(task);
     }
 
-    public Task getTask(int taskNo) {
+    public BeginEndTask getTask(int taskNo) {
         return taskNo < tasks.size() ? tasks.get(taskNo) : null;
     }
 
@@ -84,7 +84,7 @@ public class DaysDataNew {
 
     public Time15 getTotal() {
         Time15 total = Time15.fromMinutes(0);
-        for (Task task : tasks) {
+        for (BeginEndTask task : tasks) {
             total.plus(task.getTotal());
         }
         return total;
@@ -93,7 +93,7 @@ public class DaysDataNew {
     @Override
     public String toString() {
         String s = id;
-        for (Task task : tasks) {
+        for (BeginEndTask task : tasks) {
             s += task.toString();
         }
         return s;
@@ -176,9 +176,8 @@ public class DaysDataNew {
         return initial;
     }
 
-    private boolean isInInitialState(Task task) {
-        BeginEndTask task0 = (BeginEndTask) task;
-        boolean initial = KindOfDay.WORKDAY.equals(task0.getKindOfDay()) && task0.isOnlyTotalComplete();
+    private boolean isInInitialState(BeginEndTask task) {
+        boolean initial = KindOfDay.WORKDAY.equals(task.getKindOfDay()) && task.isOnlyTotalComplete();
         return initial;
     }
 

@@ -17,7 +17,6 @@ import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
-import com.mythosapps.time15.types.Task;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.AppVersion;
 import com.mythosapps.time15.util.TimeUtils;
@@ -605,7 +604,7 @@ public class MainActivity extends AppCompatActivity {
             setBeginEndSelectionActivated(true);
             return;
         }
-        Task task = modifiableData.getTask(taskNo);
+        BeginEndTask task = modifiableData.getTask(taskNo);
         boolean isLoadedData = originalData != null;
         int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 
@@ -639,9 +638,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
             setBeginEndSelectionActivated(false);
-            BeginEndTask task1 = (BeginEndTask) task;
-            numberTaskHours = task1.getTotal().getHours();
-            numberTaskMinutes = task1.getTotal().getMinutes();
+            numberTaskHours = task.getTotal().getHours();
+            numberTaskMinutes = task.getTotal().getMinutes();
 
             setSelected(R.id.total);
             setSelected(R.id.totalSemi);
