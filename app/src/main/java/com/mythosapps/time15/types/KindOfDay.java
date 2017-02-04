@@ -17,6 +17,19 @@ public enum KindOfDay {
 
     PARENTAL_LEAVE("Elternzeit");
 
+    public static final String DEFAULT_WORK = "Arbeit";
+
+    public static final String DEFAULT_HOLIDAY = "Feiertag";
+
+    public static final String DEFAULT_VACATION = "Urlaub";
+
+    public static final String DEFAULT_SICKDAY = "Krank";
+
+    public static final String DEFAULT_KIDSICKDAY = "Kind krank";
+
+    public static final String DEFAULT_PARENTAL_LEAVE = "Elternzeit";
+
+
     private final String displayString;
 
     KindOfDay(String displayString) {
@@ -36,7 +49,11 @@ public enum KindOfDay {
 
     public static KindOfDay fromString(String value) {
         for (KindOfDay day : KindOfDay.values()) {
-            if (day.toString().equals(value)) {
+            if (day.name().equals(value)) {
+                return day;
+            }
+            // new: allow restore by display string
+            if (day.getDisplayString().equals(value)) {
                 return day;
             }
         }
@@ -45,8 +62,8 @@ public enum KindOfDay {
 
     @Override
     public String toString() {
-        return name();
-    }
+        return displayString;
+    } // new: now returns display string
 
     public String getDisplayString() {
         return displayString;

@@ -29,11 +29,11 @@ public class DaysDataTest extends TestCase {
         task.setTotal(task.getTotal());
 
         String s = data.toString();
-        assertEquals("ID#WORKDAY#10#15#16#45#60#5.50", s);
+        assertEquals("ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#60#5.50", s);
     }
 
     public void testFromString() {
-        String s = "ID#WORKDAY#10#15#16#45#60#5.50";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#60#5.50";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -62,11 +62,11 @@ public class DaysDataTest extends TestCase {
         task.setPause(60);
 
         String s = data.toString();
-        assertEquals("ID#WORKDAY#10#15#16#45#60#-", s);
+        assertEquals("ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#60#-", s);
     }
 
     public void testFromStringNoTotal() {
-        String s = "ID#WORKDAY#10#15#16#45#60#-";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#60#-";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -83,7 +83,7 @@ public class DaysDataTest extends TestCase {
     }
 
     public void testFromStringLegacyFormat() {
-        String s = "ID#WORKDAY#10#15#16#45#60";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#60";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -111,12 +111,12 @@ public class DaysDataTest extends TestCase {
         task.setPause(null);
 
         String s = data.toString();
-        assertEquals("ID#KIDSICKDAY#10#15#16#45#-#-", s);
+        assertEquals("ID#" + KindOfDay.DEFAULT_KIDSICKDAY + "#10#15#16#45#-#-", s);
     }
 
     public void testFromStringPauseNull() {
 
-        String s = "ID#KIDSICKDAY#10#15#16#45#-#-";
+        String s = "ID#" + KindOfDay.DEFAULT_KIDSICKDAY + "#10#15#16#45#-#-";
 
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
@@ -132,7 +132,7 @@ public class DaysDataTest extends TestCase {
 
     public void testFromStringPauseNullLegacyFormat() {
 
-        String s = "ID#KIDSICKDAY#10#15#16#45#-";
+        String s = "ID#" + KindOfDay.DEFAULT_KIDSICKDAY + "#10#15#16#45#-";
 
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
@@ -163,12 +163,12 @@ public class DaysDataTest extends TestCase {
         data.addTask(otherTask);
 
         String s = data.toString();
-        //assertEquals("ID#WORKDAY#10#15#16#45#-#VACATION#4", s);
-        assertEquals("ID#WORKDAY#10#15#16#45#-#-#VACATION#-#-#-#-#-#4.00", s);
+
+        assertEquals("ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#-#-#" + KindOfDay.DEFAULT_VACATION + "#-#-#-#-#-#4.00", s);
     }
 
     public void testFromStringCombinationWorkdayVacationPauseNull() {
-        String s = "ID#WORKDAY#10#15#16#45#-#VACATION#-#-#-#-#-#4.00";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#-#" + KindOfDay.DEFAULT_VACATION + "#-#-#-#-#-#4.00";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -191,7 +191,7 @@ public class DaysDataTest extends TestCase {
     }
 
     public void testFromStringCombinationWorkdayVacationPauseNullLegacyFormat() {
-        String s = "ID#WORKDAY#10#15#16#45#-#VACATION#4";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#16#45#-#" + KindOfDay.DEFAULT_VACATION + "#4";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -225,11 +225,11 @@ public class DaysDataTest extends TestCase {
         task.setPause(60);
 
         String s = data.toString();
-        assertEquals("ID#WORKDAY#10#15#-#45#60#-", s);
+        assertEquals("ID#" + KindOfDay.DEFAULT_WORK + "#10#15#-#45#60#-", s);
     }
 
     public void testFromStringIncomplete() {
-        String s = "ID#WORKDAY#10#15#-#45#60#-";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#-#45#60#-";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -247,7 +247,7 @@ public class DaysDataTest extends TestCase {
     }
 
     public void testFromStringIncompleteLegcyFormat() {
-        String s = "ID#WORKDAY#10#15#-#45#60";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#-#45#60";
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
         BeginEndTask copyTask = (BeginEndTask) copy.getTask(0);
@@ -266,7 +266,7 @@ public class DaysDataTest extends TestCase {
 
     public void testFromStringWithIncompleteTask() {
 
-        String s = "ID#WORKDAY#10#15#-####45#m60";
+        String s = "ID#" + KindOfDay.DEFAULT_WORK + "#10#15#-####45#m60";
 
         DaysDataNew copy = DaysDataNew.fromString(s);
         assertEquals("ID", copy.getId());
