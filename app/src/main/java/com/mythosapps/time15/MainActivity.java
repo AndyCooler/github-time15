@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     public void toggleKindOfDay(View v) {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
         kindOfDay = KindOfDay.toggle(kindOfDay);
-        if (KindOfDay.isBeginEndType(KindOfDay.valueOf(kindOfDay))) {
+        if (KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
             numberTaskHours = null;
             numberTaskMinutes = null;
         } else {

@@ -97,7 +97,7 @@ public final class CsvUtils {
         try {
             // TODO simplify
             String s = safeGetNextToken(kindOfTask, id, "Task");
-            task.setKindOfDay(KindOfDay.valueOf(s));
+            task.setKindOfDay(KindOfDay.fromString(s));
 
             s = safeGetNextTokenOptional(begin, id, "Begin");
             Time15 beginTime = toTime15(s);

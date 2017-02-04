@@ -29,6 +29,7 @@ public class StorageFacadeTest extends TestCase {
 
         DaysDataNew loaded = storage.loadDaysDataNew(null, data.getId());
         assertEquals(data.toString(), loaded.toString());
+        assertEquals(data, loaded);
     }
 
     public void testNoopStorageDeleteLoad() {
