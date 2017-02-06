@@ -368,8 +368,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void toggleKindOfDay(View v) {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
-        kindOfDay = KindOfDay.toggle(kindOfDay);
-        if (KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
+        KindOfDay newKindOfDay = KindOfDay.toggle(kindOfDay);
+        kindOfDay = newKindOfDay.getDisplayString();
+        if (newKindOfDay.isBeginEndType()) {
             numberTaskHours = null;
             numberTaskMinutes = null;
         } else {
@@ -378,8 +379,8 @@ public class MainActivity extends AppCompatActivity {
             endeTime = null;
             ende15 = null;
             pauseTime = null;
-            numberTaskHours = DaysDataNew.DUE_HOURS_PER_DAY; // TODO init with due hours per task
-            numberTaskMinutes = 0;
+            numberTaskHours = newKindOfDay.getDefaultDue().getHours();
+            numberTaskMinutes = newKindOfDay.getDefaultDue().getMinutes();
         }
         viewToModel();
         resetView();
@@ -625,7 +626,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
-        if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
+        if (task0.getKindOfDay().isBeginEndType()) {
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
             task0.setEnd(endeTime);
@@ -654,7 +655,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isLoadedData = originalData != null;
         int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 
-        if (KindOfDay.isBeginEndType(task.getKindOfDay())) {
+        if (task.getKindOfDay().isBeginEndType()) {
             setBeginEndSelectionActivated(true);
             BeginEndTask task0 = (BeginEndTask) task;
             beginnTime = task0.getBegin();

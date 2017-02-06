@@ -242,25 +242,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {
 
-        int itemColor = ColorsUI.DARK_BLUE_DEFAULT;
-        if (isComplete) {
-            switch (kindOfDay) {
-                case WORKDAY:
-                    itemColor = ColorsUI.DARK_BLUE_DEFAULT;
-                    break;
-                case HOLIDAY:
-                case VACATION:
-                    itemColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
-                    break;
-                case SICKDAY:
-                case KIDSICKDAY:
-                    itemColor = ColorsUI.DARK_GREY_SAVE_ERROR;
-                    break;
-            }
-        } else {
-            itemColor = ColorsUI.RED_FLAGGED;
-        }
-        return itemColor;
+        return isComplete ? kindOfDay.getColor() : ColorsUI.RED_FLAGGED;
     }
 
     private int addWeekSeparatorLine(String dayId, Map<Integer, Integer> weeksBalanceMap, TableLayout table, int previousWeekOfYear, ViewGroup row, ViewGroup previousRow) {

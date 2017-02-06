@@ -189,12 +189,12 @@ public class BeginEndTask {
                 }
             }
             total = new Time15(difference, difference15);
-        } else if (isOnlyTotalComplete() && !KindOfDay.isBeginEndType(day)) {
+        } else if (isOnlyTotalComplete() && !day.isBeginEndType()) {
             // total is set, thats ok except with begin-end tasks
         } else {
             // task is incomplete, repair assuming 8 hours if not a due day
-            if (!KindOfDay.isBeginEndType(day)) {
-                total = Time15.fromMinutes(DaysDataNew.DUE_TOTAL_MINUTES);
+            if (!day.isBeginEndType()) {
+                total = Time15.fromMinutes(day.getDueMinutes());
             } else {
                 total = Time15.fromMinutes(0);
             }

@@ -1,22 +1,14 @@
 package com.mythosapps.time15.types;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Describes what kind of day is stored in a DaysData.
  */
-public enum KindOfDay {
+public class KindOfDay {
 
-    WORKDAY("Arbeit"),
-
-    HOLIDAY("Feiertag"),
-
-    VACATION("Urlaub"),
-
-    SICKDAY("Krank"),
-
-    KIDSICKDAY("Kind krank"),
-
-    PARENTAL_LEAVE("Elternzeit");
-
+    // Constants for testing
     public static final String DEFAULT_WORK = "Arbeit";
 
     public static final String DEFAULT_HOLIDAY = "Feiertag";
@@ -29,30 +21,60 @@ public enum KindOfDay {
 
     public static final String DEFAULT_PARENTAL_LEAVE = "Elternzeit";
 
+    public static final List<KindOfDay> list = new ArrayList<>();
 
-    private final String displayString;
+    // Constants for testing
+    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true);
 
-    KindOfDay(String displayString) {
-        this.displayString = displayString;
+    public static final KindOfDay HOLIDAY = new KindOfDay(DEFAULT_HOLIDAY, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+
+    public static final KindOfDay VACATION = new KindOfDay(DEFAULT_VACATION, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+
+    public static final KindOfDay SICKDAY = new KindOfDay(DEFAULT_SICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, 8 * 60, false);
+
+    public static final KindOfDay KIDSICKDAY = new KindOfDay(DEFAULT_KIDSICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, 8 * 60, false);
+
+    public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+
+    static {
+        // TODO load list fro resource file
+        list.add(WORKDAY);
+        list.add(HOLIDAY);
+        list.add(VACATION);
+        list.add(SICKDAY);
+        list.add(KIDSICKDAY);
+        list.add(PARENTAL_LEAVE);
     }
 
-    public static String toggle(String value) {
-        KindOfDay[] values = KindOfDay.values();
-        for (int i = 0; i < values.length; i++) {
-            if (values[i].toString().equals(value)) {
-                KindOfDay result = values[(i + 1) % values.length];
-                return result.toString();
+    private String displayString;
+
+    private int color;
+
+    private int dueMinutes;
+
+    private boolean beginEndType;
+
+    private Time15 defaultDue;
+
+    public KindOfDay(String displayString, int color, int dueMinutes, boolean beginEndType) {
+        this.displayString = displayString;
+        this.color = color;
+        this.dueMinutes = dueMinutes;
+        this.beginEndType = beginEndType;
+        this.defaultDue = Time15.fromMinutes(dueMinutes);
+    }
+
+    public static KindOfDay toggle(String value) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getDisplayString().equals(value)) {
+                return list.get((i + 1) % list.size());
             }
         }
         return null;
     }
 
     public static KindOfDay fromString(String value) {
-        for (KindOfDay day : KindOfDay.values()) {
-            if (day.name().equals(value)) {
-                return day;
-            }
-            // new: allow restore by display string
+        for (KindOfDay day : list) {
             if (day.getDisplayString().equals(value)) {
                 return day;
             }
@@ -69,11 +91,24 @@ public enum KindOfDay {
         return displayString;
     }
 
-    public static boolean isBeginEndType(String day) {
-        return KindOfDay.WORKDAY.equals(KindOfDay.fromString(day));
+    public boolean isBeginEndType() {
+        return beginEndType;
     }
 
-    public static boolean isBeginEndType(KindOfDay day) {
-        return KindOfDay.WORKDAY.equals(day);
+    public int getColor() {
+        return color;
+    }
+
+    public int getDueMinutes() {
+        return dueMinutes;
+    }
+
+    public static boolean isBeginEndType(String kindOfDay) {
+        KindOfDay day = fromString(kindOfDay);
+        return day.isBeginEndType();
+    }
+
+    public Time15 getDefaultDue() {
+        return defaultDue;
     }
 }
