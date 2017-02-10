@@ -25,6 +25,7 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -85,8 +86,11 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         setTitle("Übersicht " + TimeUtils.getYearDisplayString(id));
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.task_spinner, android.R.layout.simple_spinner_item);
-        //adapter.add("VACATION");
+        List<CharSequence> taskNames = new ArrayList<>();
+        for (KindOfDay task : KindOfDay.list) {
+            taskNames.add(task.getDisplayString());
+        }
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, taskNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearTaskSpinner.setAdapter(adapter);
         yearTaskSpinner.setOnItemSelectedListener(this);

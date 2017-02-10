@@ -9,10 +9,5 @@
     <string name="dialog_title">Import month</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
-    <string-array name="task_spinner">
-        <item>VACATION</item>
-        <item>SICKDAY</item>
-        <item>KIDSICKDAY</item>
-    </string-array>
 
 </resources>
