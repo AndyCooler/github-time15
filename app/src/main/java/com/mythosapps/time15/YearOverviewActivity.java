@@ -52,7 +52,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         Log.i(getClass().getName(), "onCreate() started.");
         setContentView(R.layout.activity_year_overview);
 
-        storage = StorageFactory.getStorage();
+        storage = StorageFactory.getDataStorage();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarYear);
         setSupportActionBar(toolbar);

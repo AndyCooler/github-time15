@@ -66,7 +66,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         Log.i(getClass().getName(), "onCreate() started.");
         setContentView(R.layout.activity_month_overview);
 
-        storage = StorageFactory.getStorage();
+        storage = StorageFactory.getDataStorage();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMonth);
         setSupportActionBar(toolbar);

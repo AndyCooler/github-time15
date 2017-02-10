@@ -37,13 +37,13 @@ public class KindOfDay {
     public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
 
     static {
-        // TODO load list fro resource file
-        list.add(WORKDAY);
-        list.add(HOLIDAY);
-        list.add(VACATION);
-        list.add(SICKDAY);
-        list.add(KIDSICKDAY);
-        list.add(PARENTAL_LEAVE);
+        // loaded from resource file
+//        list.add(WORKDAY);
+//        list.add(HOLIDAY);
+//        list.add(VACATION);
+//        list.add(SICKDAY);
+//        list.add(KIDSICKDAY);
+//        list.add(PARENTAL_LEAVE);
     }
 
     private String displayString;

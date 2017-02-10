@@ -6,6 +6,7 @@ import android.util.Log;
 import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
+import com.mythosapps.time15.util.ConfigXmlParser;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.List;
@@ -15,13 +16,16 @@ import java.util.List;
  */
 public class StorageFactory {
 
-    private static StorageFacade INSTANCE = null;
+    private static StorageFacade INSTANCE_DATA_STORE = null;
 
-    public static StorageFacade getStorage() {
-        if (INSTANCE == null) {
-            INSTANCE = createStorage();
+    private static ConfigStorageFacade INSTANCE_CONFIG_STORE = null;
+
+
+    public static StorageFacade getDataStorage() {
+        if (INSTANCE_DATA_STORE == null) {
+            INSTANCE_DATA_STORE = createStorage();
         }
-        return INSTANCE;
+        return INSTANCE_DATA_STORE;
     }
 
     private static StorageFacade createStorage() {
@@ -95,5 +99,20 @@ public class StorageFactory {
                 storage.saveDaysDataNew(null, data1);
             }
         }
+    }
+
+    public static ConfigStorageFacade getConfigStorage() {
+        if (INSTANCE_CONFIG_STORE == null) {
+            INSTANCE_CONFIG_STORE = createConfigStorage();
+        }
+        return INSTANCE_CONFIG_STORE;
+    }
+
+    private static ConfigStorageFacade createConfigStorage() {
+        if (Build.FINGERPRINT.contains("generic")) {
+            ConfigAssetStorage storage = new ConfigAssetStorage(new ConfigXmlParser()); // running on emulator
+            return storage;
+        }
+        return new ConfigFileStorage();
     }
 }
