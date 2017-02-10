@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mythosapps.time15.storage.ConfigFileStorage;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.types.BeginEndTask;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Storage
     private StorageFacade storage;
+    private ConfigFileStorage configStorage;
 
     // View state and view state management
     private String id = null;
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         String intentsId = getIntentsId();
         Log.i(getClass().getName(), "onCreate() started with id " + intentsId);
         storage = StorageFactory.getStorage();
+        configStorage = new ConfigFileStorage();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
         balanceValue = storage.loadBalance(this, intentsId);
+
+        // TODO install default exception handler to report crashes to me
+        // TODO use ProGuard to obfuscate the code
 
         Log.i(getClass().getName(), "onCreate() finished.");
     }
