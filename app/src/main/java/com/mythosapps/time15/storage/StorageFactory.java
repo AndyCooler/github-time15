@@ -6,6 +6,7 @@ import android.util.Log;
 import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
+import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.ConfigXmlParser;
 import com.mythosapps.time15.util.TimeUtils;
 
@@ -99,6 +100,14 @@ public class StorageFactory {
                 storage.saveDaysDataNew(null, data1);
             }
         }
+        // create day in next month that has a new type of task
+        String idNext = TimeUtils.monthForwards(id);
+        DaysDataNew data1 = new DaysDataNew(idNext);
+        BeginEndTask task0 = new BeginEndTask();
+        task0.setKindOfDay(KindOfDay.TEST_NEW);
+        task0.setTotal(Time15.fromMinutes(480));
+        data1.addTask(task0);
+        storage.saveDaysDataNew(null, data1);
     }
 
     public static ConfigStorageFacade getConfigStorage() {

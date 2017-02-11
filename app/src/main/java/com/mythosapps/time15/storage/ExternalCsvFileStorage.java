@@ -18,10 +18,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -240,22 +238,6 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     public static String getFilename(String id) {
         return TimeUtils.getMonthYearOfID(id) + "__Time15__" + "1_0" + ".csv";
-    }
-
-    @Override
-    public Set<String> loadTaskNames(Activity activity, String id) {
-        Set<String> taskNames = new HashSet<>();
-
-        List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
-        for (String currentId : idList) {
-            DaysDataNew data = loadDaysDataNew(activity, currentId);
-            if (data != null) {
-                for (int i = 0; i < data.getNumberOfTasks(); i++) {
-                    taskNames.add(data.getTask(i).getKindOfDay().getDisplayString());
-                }
-            }
-        }
-        return taskNames;
     }
 
     @Override

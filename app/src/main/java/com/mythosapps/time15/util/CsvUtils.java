@@ -96,10 +96,10 @@ public final class CsvUtils {
         BeginEndTask task = new BeginEndTask();
         try {
             // TODO simplify
-            String s = safeGetNextToken(kindOfTask, id, "Task");
-            task.setKindOfDay(KindOfDay.fromString(s));
+            String displayString = safeGetNextToken(kindOfTask, id, "Task");
+            task.setKindOfDay(KindOfDay.fromString(displayString));
 
-            s = safeGetNextTokenOptional(begin, id, "Begin");
+            String s = safeGetNextTokenOptional(begin, id, "Begin");
             Time15 beginTime = toTime15(s);
             if (beginTime != null) {
                 task.setBegin(beginTime.getHours());
@@ -124,8 +124,12 @@ public final class CsvUtils {
             if (totalTime != null) {
                 task.setTotal(totalTime);
             }
+            if (task.getKindOfDay() == null) {
+                task.setKindOfDay(KindOfDay.convert(displayString, task.getBegin(), task.getEnd()));
+            }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
+            Log.e(CsvUtils.class.getName(), "Error: ", t);
         }
 
         return task;

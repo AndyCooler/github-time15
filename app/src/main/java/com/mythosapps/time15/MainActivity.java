@@ -87,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
         initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
-        balanceValue = storage.loadBalance(this, intentsId); // TODO should move to onResume() now that it's no more expensive
+        KindOfDay.initializeFromConfig(configStorage, this);
 
-        KindOfDay.list.addAll(configStorage.loadConfigXml(this));
+        balanceValue = storage.loadBalance(this, intentsId); // TODO should move to onResume() now that it's no more expensive
 
         // TODO install default exception handler to report crashes to me
         // TODO use ProGuard to obfuscate the code
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveKindOfDay() {
-        if (!previousSelectionKindOfDays.equals(kindOfDay)) {
+        if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
             save();
         }
     }

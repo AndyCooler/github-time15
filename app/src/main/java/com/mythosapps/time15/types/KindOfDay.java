@@ -1,7 +1,14 @@
 package com.mythosapps.time15.types;
 
+import android.app.Activity;
+import android.util.Log;
+
+import com.mythosapps.time15.storage.ConfigStorageFacade;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Describes what kind of day is stored in a DaysData.
@@ -22,6 +29,7 @@ public class KindOfDay {
     public static final String DEFAULT_PARENTAL_LEAVE = "Elternzeit";
 
     public static final List<KindOfDay> list = new ArrayList<>();
+    public static final Set<String> listNames = new HashSet<>();
 
     // Constants for testing
     public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true);
@@ -36,14 +44,34 @@ public class KindOfDay {
 
     public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
 
-    static {
-        // loaded from resource file
-//        list.add(WORKDAY);
-//        list.add(HOLIDAY);
-//        list.add(VACATION);
-//        list.add(SICKDAY);
-//        list.add(KIDSICKDAY);
-//        list.add(PARENTAL_LEAVE);
+    public static final KindOfDay TEST_NEW = new KindOfDay("TestNew", ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+
+
+    public static void initializeFromConfig(ConfigStorageFacade configStorage, Activity activity) {
+        list.clear();
+        listNames.clear();
+        addTaskTypes(configStorage.loadConfigXml(activity));
+    }
+
+    //TODO wird nicht mehr gebraucht weil direkt bei loadDaysDataNew neue Type of Tasks zur list geadded werden!
+    //  public static void addTaskTypesForMonth(StorageFacade storage, Activity activity, String id) {
+    //      addTaskTypes(storage.loadTaskNames(activity, id));
+    //}
+
+    public static void addTaskTypes(List<KindOfDay> types) {
+        for (KindOfDay task : types) {
+            addTaskType(task);
+        }
+    }
+
+    public static void addTaskType(KindOfDay task) {
+        if (!listNames.contains(task.getDisplayString())) {
+            list.add(task);
+            listNames.add(task.getDisplayString());
+            Log.i(KindOfDay.class.getName(), "Added task " + task.getDisplayString() + ".");
+        } else {
+            Log.i(KindOfDay.class.getName(), "Skipped task " + task.getDisplayString() + ".");
+        }
     }
 
     private String displayString;
@@ -110,5 +138,11 @@ public class KindOfDay {
 
     public Time15 getDefaultDue() {
         return defaultDue;
+    }
+
+    public static KindOfDay convert(String displayString, Integer begin, Integer end) {
+        KindOfDay newType = new KindOfDay(displayString, -14774017, 480, begin != null && end != null);
+        addTaskType(newType);
+        return newType;
     }
 }

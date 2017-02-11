@@ -1,5 +1,7 @@
 package com.mythosapps.time15.types;
 
+import android.util.Log;
+
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -127,10 +129,13 @@ public class BeginEndTask {
         try {
             StringTokenizer tokenizer = new StringTokenizer(s, SEP);
 
-            beginEndTask.setKindOfDay(KindOfDay.fromString(tokenizer.nextToken()));
-            beginEndTask.setBegin(nextIntToken(tokenizer));
+            String displayString = tokenizer.nextToken();
+            beginEndTask.setKindOfDay(KindOfDay.fromString(displayString));
+            Integer begin = nextIntToken(tokenizer);
+            beginEndTask.setBegin(begin);
             beginEndTask.setBegin15(nextIntToken(tokenizer));
-            beginEndTask.setEnd(nextIntToken(tokenizer));
+            Integer end = nextIntToken(tokenizer);
+            beginEndTask.setEnd(end);
             beginEndTask.setEnd15(nextIntToken(tokenizer));
             beginEndTask.setPause(nextIntToken(tokenizer));
             String totalString = tokenizer.hasMoreElements() ? tokenizer.nextToken() : null;
@@ -144,8 +149,12 @@ public class BeginEndTask {
                     beginEndTask.setTotal(Time15.fromMinutes(60 * Integer.valueOf(totalString)));
                 }
             }
+            if (beginEndTask.getKindOfDay() == null) {
+                beginEndTask.setKindOfDay(KindOfDay.convert(displayString, begin, end));
+            }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
+            Log.e(BeginEndTask.class.getName(), "Error: ", t);
         }
         return beginEndTask;
     }

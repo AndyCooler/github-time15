@@ -8,9 +8,7 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by andreas on 07.01.16.
@@ -49,23 +47,6 @@ public class NoopStorage implements StorageFacade {
             }
         }
         return balance;
-    }
-
-    @Override
-    public Set<String> loadTaskNames(Activity activity, String id) {
-
-        Set<String> taskNames = new HashSet<>();
-
-        List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
-        for (String currentId : idList) {
-            DaysDataNew data = loadDaysDataNew(activity, currentId);
-            if (data != null) {
-                for (int i = 0; i < data.getNumberOfTasks(); i++) {
-                    taskNames.add(data.getTask(i).getKindOfDay().getDisplayString());
-                }
-            }
-        }
-        return taskNames;
     }
 
     @Override

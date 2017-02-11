@@ -8,8 +8,6 @@ import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.util.TimeUtils;
 
-import java.util.Set;
-
 /**
  * This class uses SharedPreferences to store the start, end and pause values for each day.
  * All days of a month are saved in the same file.
@@ -46,11 +44,6 @@ public class PrefStorage implements StorageFacade {
     @Override
     public int loadBalance(Activity activity, String id) {
         return 0;
-    }
-
-    @Override
-    public Set<String> loadTaskNames(Activity activity, String id) {
-        return null;
     }
 
     @Override
