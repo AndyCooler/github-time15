@@ -64,7 +64,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_month_overview);
 
-        storage = StorageFactory.getStorage();
+        storage = StorageFactory.getDataStorage();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMonth);
         setSupportActionBar(toolbar);
@@ -232,25 +232,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {
 
-        int itemColor = ColorsUI.DARK_BLUE_DEFAULT;
-        if (isComplete) {
-            switch (kindOfDay) {
-                case WORKDAY:
-                    itemColor = ColorsUI.DARK_BLUE_DEFAULT;
-                    break;
-                case HOLIDAY:
-                case VACATION:
-                    itemColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
-                    break;
-                case SICKDAY:
-                case KIDSICKDAY:
-                    itemColor = ColorsUI.DARK_GREY_SAVE_ERROR;
-                    break;
-            }
-        } else {
-            itemColor = ColorsUI.RED_FLAGGED;
-        }
-        return itemColor;
+        return isComplete ? kindOfDay.getColor() : ColorsUI.RED_FLAGGED;
     }
 
     private int addWeekSeparatorLine(String dayId, Map<Integer, Integer> weeksBalanceMap, TableLayout table, int previousWeekOfYear, ViewGroup row, ViewGroup previousRow) {
@@ -285,7 +267,7 @@ public class MonthOverviewActivity extends ActionBarActivity {
         balanceView.setPadding(5, 5, 10, 5);
         balanceView.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
 
-        //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
+        //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
         if (show) {
             int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
             String balanceText = Time15.fromMinutes(weeksBalance).toDisplayStringWithSign();

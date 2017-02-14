@@ -25,6 +25,7 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_year_overview);
 
-        storage = StorageFactory.getStorage();
+        storage = StorageFactory.getDataStorage();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarYear);
         setSupportActionBar(toolbar);
@@ -77,8 +78,11 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         setTitle("Übersicht " + TimeUtils.getYearDisplayString(id));
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.task_spinner, android.R.layout.simple_spinner_item);
-        //adapter.add("VACATION");
+        List<CharSequence> taskNames = new ArrayList<>();
+        for (KindOfDay task : KindOfDay.list) {
+            taskNames.add(task.getDisplayString());
+        }
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, taskNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearTaskSpinner.setAdapter(adapter);
         yearTaskSpinner.setOnItemSelectedListener(this);
@@ -185,7 +189,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         balanceView.setPadding(5, 5, 10, 5);
         balanceView.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
 
-        //view.setText(String.valueOf(TimeUtils.getWeekOfYear(dayId)));
+        //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
         if (show) {
             int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
             String balanceText = Time15.fromMinutes(weeksBalance).toDisplayStringWithSign();

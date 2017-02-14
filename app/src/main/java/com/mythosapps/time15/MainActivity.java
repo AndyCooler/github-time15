@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mythosapps.time15.storage.ConfigStorageFacade;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.types.BeginEndTask;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Storage
     private StorageFacade storage;
+    private ConfigStorageFacade configStorage;
 
     // View state and view state management
     private String id = null;
@@ -71,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String intentsId = getIntentsId();
-        storage = StorageFactory.getStorage();
+        storage = StorageFactory.getDataStorage();
+        configStorage = StorageFactory.getConfigStorage();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +85,12 @@ public class MainActivity extends AppCompatActivity {
         initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
-        balanceValue = storage.loadBalance(this, intentsId);
+        KindOfDay.initializeFromConfig(configStorage, this);
+
+        balanceValue = storage.loadBalance(this, intentsId); // TODO should move to onResume() now that it's no more expensive
+
+        // TODO install default exception handler to report crashes to me
+        // TODO use ProGuard to obfuscate the code
     }
 
     private void setBeginEndSelectionActivated(boolean activated) {
@@ -331,14 +339,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveKindOfDay() {
-        if (!previousSelectionKindOfDays.equals(kindOfDay)) {
+        if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
             save();
         }
     }
 
     public void toggleKindOfDay(View v) {
-        kindOfDay = KindOfDay.toggle(kindOfDay);
-        if (KindOfDay.isBeginEndType(KindOfDay.fromString(kindOfDay))) {
+        KindOfDay newKindOfDay = KindOfDay.toggle(kindOfDay);
+        kindOfDay = newKindOfDay.getDisplayString();
+        if (newKindOfDay.isBeginEndType()) {
             numberTaskHours = null;
             numberTaskMinutes = null;
         } else {
@@ -347,8 +356,8 @@ public class MainActivity extends AppCompatActivity {
             endeTime = null;
             ende15 = null;
             pauseTime = null;
-            numberTaskHours = DaysDataNew.DUE_HOURS_PER_DAY; // TODO init with due hours per task
-            numberTaskMinutes = 0;
+            numberTaskHours = newKindOfDay.getDefaultDue().getHours();
+            numberTaskMinutes = newKindOfDay.getDefaultDue().getMinutes();
         }
         viewToModel();
         resetView();
@@ -582,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
-        if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
+        if (task0.getKindOfDay().isBeginEndType()) {
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
             task0.setEnd(endeTime);
@@ -608,7 +617,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isLoadedData = originalData != null;
         int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 
-        if (KindOfDay.isBeginEndType(task.getKindOfDay())) {
+        if (task.getKindOfDay().isBeginEndType()) {
             setBeginEndSelectionActivated(true);
             BeginEndTask task0 = (BeginEndTask) task;
             beginnTime = task0.getBegin();

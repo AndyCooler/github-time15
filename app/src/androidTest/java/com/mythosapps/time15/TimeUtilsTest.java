@@ -53,7 +53,7 @@ public class TimeUtilsTest extends TestCase {
     }
 
     public void testCreateTestdata() {
-        StorageFactory.getStorage();
+        StorageFactory.getDataStorage();
     }
 
     private void checkMonth(String id, int daysInMonth) {
