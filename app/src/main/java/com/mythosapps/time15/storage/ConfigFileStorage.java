@@ -32,19 +32,22 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
 
     public List<KindOfDay> loadConfigXml(Activity activity) {
 
+        List<KindOfDay> result = new ArrayList<>();
+
+        KindOfDay.addTaskTypes(assetStorage.loadConfigXml(activity));
+
         String filename = DEFAULT_CONFIG_FILE;
 
         if (!initialized && !init()) {
-            return null;
+            return result;
         }
 
         File file = new File(storageDir, filename);
         if (!file.exists()) {
             Log.w(getClass().getName(), "loadConfigXml : file not found " + filename);
-            return null;
+            return result;
         }
 
-        List<KindOfDay> result = new ArrayList<>();
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(file);
@@ -62,21 +65,6 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
             }
         }
         Log.i(getClass().getName(), "Loaded " + result.size() + " entries from ConfigFileStorage.");
-
-        // merge items: add items from asset config only if the are not yet present
-        List<String> configStorageNames = new ArrayList<>();
-        for (KindOfDay task : result) {
-            configStorageNames.add(task.getDisplayString());
-        }
-        List<KindOfDay> assets = assetStorage.loadConfigXml(activity);
-        for (KindOfDay task : assets) {
-            if (!configStorageNames.contains(task.getDisplayString())) {
-                result.add(task);
-                Log.i(getClass().getName(), "Added task " + task.getDisplayString() + " from AssetStorage.");
-            } else {
-                Log.i(getClass().getName(), "Skipped task " + task.getDisplayString() + " from AssetStorage.");
-            }
-        }
 
         // TODO add all tasks found in data storage to KindOfDay.list
         // TODO when we add a new task from data store, default due minutes per task cannot be determined
