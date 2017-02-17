@@ -177,7 +177,7 @@ public class DaysDataNew {
     }
 
     private boolean isInInitialState(BeginEndTask task) {
-        boolean initial = KindOfDay.WORKDAY.equals(task.getKindOfDay()) && task.isOnlyTotalComplete();
+        boolean initial = KindOfDay.WORKDAY.getDisplayString().equals(task.getKindOfDay().getDisplayString()) && task.isOnlyTotalComplete();
         return initial;
     }
 
