@@ -220,6 +220,7 @@ public class BeginEndTask {
                     safeEquals(end, b.end) &&
                     safeEquals(begin15, b.begin15) &&
                     safeEquals(end15, b.end15) &&
+                    safeEquals(pause, b.pause) &&
                     safeEquals(total, b.total);
         }
         return equal;
