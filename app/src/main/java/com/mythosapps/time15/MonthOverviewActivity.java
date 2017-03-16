@@ -73,6 +73,8 @@ public class MonthOverviewActivity extends ActionBarActivity {
         String action = intent.getAction();
         String type = intent.getType();
 
+        // importData operation is deactivated in AndroidManifest.xml at the moment
+        // by removed intent definitions
         if (Intent.ACTION_VIEW.equals(action)) {
             id = TimeUtils.createID();
             if (type != null) {
@@ -83,7 +85,6 @@ public class MonthOverviewActivity extends ActionBarActivity {
             }
         } else {
             id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-            Toast.makeText(MonthOverviewActivity.this, "normal entry! id=" + id, Toast.LENGTH_LONG).show();
         }
 
     }

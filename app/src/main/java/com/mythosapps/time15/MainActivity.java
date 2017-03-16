@@ -163,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_month) {
-            save();
+            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
+                save(false);
+            }
             startMonthOverviewActivity();
             return true;
         }
@@ -172,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_year) {
-            save();
+            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
+                save(false);
+            }
             startYearOverviewActivity();
             return true;
         }
@@ -195,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             taskNo = 0;
             resetView();
             modelToView();
-            save();
+            save(true);
         }
     }
 
@@ -340,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveKindOfDay() {
         if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
-            save();
+            save(false);
         }
     }
 
@@ -491,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (isSelected || isDeselected) {
-            save();
+            save(false);
         }
         }
     }
@@ -515,13 +519,18 @@ public class MainActivity extends AppCompatActivity {
         total15.setTextColor(color);
     }
 
-    public void save() {
-        viewToModel();
+    public void save(boolean isAfterDeleteTask) {
+        if (!isAfterDeleteTask) {
+            viewToModel();
+        }
 
         // save only if user changed something
         if (originalData == null) {
             if (modifiableData.isInInitialState()) {
-                return;
+                if (isAfterDeleteTask) {
+                } else {
+                    return;
+                }
             }
         } else {
             if (originalData.equals(modifiableData)) {
@@ -564,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (numberTaskHours >= 25) {
                     numberTaskHours = 0;
                 }
-                save();
+                save(false);
             }
         }
     }
@@ -578,7 +587,7 @@ public class MainActivity extends AppCompatActivity {
                         numberTaskMinutes = 0;
                     }
                 }
-                save();
+                save(false);
             }
         }
     }
