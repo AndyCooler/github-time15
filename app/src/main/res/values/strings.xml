@@ -9,5 +9,7 @@
     <string name="dialog_title">Import month</string>
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
+    <string name="title_activity_main_day">MainDayActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

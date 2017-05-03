@@ -1,0 +1,524 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.mythosapps.time15.DayFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/linearLayout">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/beginEarlierButton"
+                android:src="@android:drawable/arrow_up_float"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="beginEarlier" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Beginn"
+                android:id="@+id/beginnView"
+                android:textColor="#1E90FF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/endEarlierButton"
+                android:src="@android:drawable/arrow_up_float"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="endEarlier" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Ende"
+                android:id="@+id/endeView"
+                android:textColor="#1E90FF"
+                android:gravity="center_horizontal"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="08"
+                android:id="@+id/beginnA"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="00"
+                android:id="@+id/beginn00"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="16"
+                android:id="@+id/endeA"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="00"
+                android:id="@+id/ende00"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="09"
+                android:id="@+id/beginnB"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="15"
+                android:id="@+id/beginn15"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="17"
+                android:id="@+id/endeB"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="15"
+                android:id="@+id/ende15"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="10"
+                android:id="@+id/beginnC"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="30"
+                android:id="@+id/beginn30"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="18"
+                android:id="@+id/endeC"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="30"
+                android:id="@+id/ende30"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="11"
+                android:id="@+id/beginnD"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="45"
+                android:id="@+id/beginn45"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="19"
+                android:id="@+id/endeD"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="45"
+                android:id="@+id/ende45"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/beginLaterButton"
+                android:src="@android:drawable/arrow_down_float"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="beginLater" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Pause"
+                android:id="@+id/pauseView"
+                android:layout_weight="1"
+                android:textColor="#1E90FF"
+                android:gravity="center_horizontal" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/endLaterButton"
+                android:src="@android:drawable/arrow_down_float"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:onClick="endLater" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/spaceView"
+                android:layout_weight="1"
+                android:gravity="center_horizontal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="30"
+                android:id="@+id/pauseA"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="45"
+                android:id="@+id/pauseB"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="60"
+                android:id="@+id/pauseC"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="75"
+                android:id="@+id/pauseD"
+                android:layout_weight="1"
+                android:textSize="48sp"
+                android:onClick="verarbeiteKlick"
+                android:clickable="true"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="fill_vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:id="@+id/switchTasksButton"
+                    android:onClick="switchTasks"
+                    android:clickable="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Arbeit"
+                    android:id="@+id/kindOfDay"
+                    android:layout_weight="4"
+                    android:textColor="#1E90FF"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:clickable="true"
+                    android:onClick="toggleKindOfDay"
+                    android:maxLength="12"
+                    android:singleLine="true"
+                    android:paddingBottom="2dp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="00"
+                        android:id="@+id/total"
+                        android:textSize="48sp"
+                        android:gravity="left"
+                        android:layout_weight="1"
+                        android:textColor="#1E90FF"
+                        android:onClick="toggleTotal"
+                        android:clickable="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text=":"
+                        android:id="@+id/totalSemi"
+                        android:textSize="48sp"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:textColor="#1E90FF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="00"
+                        android:id="@+id/total15"
+                        android:textSize="48sp"
+                        android:gravity=""
+                        android:layout_weight="1"
+                        android:textColor="#1E90FF"
+                        android:onClick="toggleTotal15"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="(0)"
+                    android:id="@+id/balance"
+                    android:layout_weight="4"
+                    android:gravity="top|center_horizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:id="@+id/addTaskButton"
+                    android:onClick="addTask"
+                    android:clickable="true" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
+                    android:id="@+id/autor"
+                    android:gravity="bottom" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/section_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
