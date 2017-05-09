@@ -1,14 +1,18 @@
 package com.mythosapps.time15;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Integer beginn15 = null;
     private Integer ende15 = null;
     private String kindOfDay = KindOfDay.WORKDAY.toString();
+    private String kindOfDayEdited = null;
     private Integer previousSelectionBeginnTime = null;
     private Integer previousSelectionEndeTime = null;
     private Integer previousSelectionPauseTime = null;
@@ -90,6 +95,23 @@ public class MainActivity extends AppCompatActivity {
         KindOfDay.initializeFromConfig(configStorage, this);
 
         balanceValue = storage.loadBalance(this, intentsId); // TODO should move to onResume() now that it's no more expensive
+
+        TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
+
+        kindOfDayView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleKindOfDay(v);
+            }
+        });
+
+        kindOfDayView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                editKindOfDay(v);
+                return true;
+            }
+        });
 
         // TODO install default exception handler to report crashes to me
         // TODO use ProGuard to obfuscate the code
@@ -155,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            //intent.putExtra(EXTRA_MESSAGE, id);
+            startActivity(intent);
             return true;
         }
         if (id == R.id.action_backwards) {
@@ -399,6 +424,44 @@ public class MainActivity extends AppCompatActivity {
         modelToView();
 
         Log.i(getClass().getName(), "toggleKindOfDay() finished.");
+    }
+
+    public void editKindOfDay(View v) {
+        Log.i(getClass().getName(), "editKindOfDay() started.");
+
+        //Toast.makeText(MainActivity.this, "LongClick Yay!!", Toast.LENGTH_LONG).show();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Neue Aufgabe");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        builder.setView(input);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                kindOfDayEdited = input.getText().toString();
+                if (kindOfDayEdited != null) {
+                    kindOfDayEdited = kindOfDayEdited.trim();
+                }
+                if (!kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
+                    Toast.makeText(MainActivity.this, "Save Yay!!", Toast.LENGTH_LONG).show();
+                    // TODO save task to config file instead of just adding the task:
+                    // TODO extend dialog to choose color and beginEndType
+                    KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true));
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+        Log.i(getClass().getName(), "editKindOfDay() finished.");
     }
 
     private void aktualisiereKindOfDay(int color) {

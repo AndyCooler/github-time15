@@ -47,7 +47,7 @@ public class SettingsActivity extends PreferenceActivity {
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+            // NPE !! getActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
@@ -227,5 +227,9 @@ public class SettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
+    }
+
+    protected boolean isValidFragment(String fragmentName) {
+        return true;
     }
 }

@@ -395,7 +395,7 @@
                     android:textColor="#1E90FF"
                     android:gravity="center_vertical|center_horizontal"
                     android:clickable="true"
-                    android:onClick="toggleKindOfDay"
+                    android:longClickable="true"
                     android:maxLength="12"
                     android:singleLine="true"
                     android:paddingBottom="2dp" />
