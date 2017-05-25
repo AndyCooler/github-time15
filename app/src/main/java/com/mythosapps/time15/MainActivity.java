@@ -406,6 +406,12 @@ public class MainActivity extends AppCompatActivity {
     public void toggleKindOfDay(View v) {
         Log.i(getClass().getName(), "toggleKindOfDay() started.");
         KindOfDay newKindOfDay = KindOfDay.toggle(kindOfDay);
+        activateKindOfDay(newKindOfDay);
+        Log.i(getClass().getName(), "toggleKindOfDay() finished.");
+    }
+
+    private void activateKindOfDay(KindOfDay newKindOfDay) {
+        Log.i(getClass().getName(), "activateKindOfDay() started. Current active: " + kindOfDay);
         kindOfDay = newKindOfDay.getDisplayString();
         if (newKindOfDay.isBeginEndType()) {
             numberTaskHours = null;
@@ -422,8 +428,7 @@ public class MainActivity extends AppCompatActivity {
         viewToModel();
         resetView();
         modelToView();
-
-        Log.i(getClass().getName(), "toggleKindOfDay() finished.");
+        Log.i(getClass().getName(), "activateKindOfDay() finished. Now active: " + kindOfDay);
     }
 
     public void editKindOfDay(View v) {
@@ -445,10 +450,10 @@ public class MainActivity extends AppCompatActivity {
                     kindOfDayEdited = kindOfDayEdited.trim();
                 }
                 if (!kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
-                    Toast.makeText(MainActivity.this, "Save Yay!!", Toast.LENGTH_LONG).show();
                     // TODO save task to config file instead of just adding the task:
                     // TODO extend dialog to choose color and beginEndType
                     KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true));
+                    activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
                 }
             }
         });
