@@ -422,8 +422,8 @@ public class MainActivity extends AppCompatActivity {
             endeTime = null;
             ende15 = null;
             pauseTime = null;
-            numberTaskHours = newKindOfDay.getDefaultDue().getHours();
-            numberTaskMinutes = newKindOfDay.getDefaultDue().getMinutes();
+            numberTaskHours = KindOfDay.DEFAULT_DUE_TIME_PER_DAY_IN_HOURS;
+            numberTaskMinutes = 0;
         }
         viewToModel();
         resetView();
@@ -452,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
                     // TODO save task to config file instead of just adding the task:
                     // TODO extend dialog to choose color and beginEndType
-                    KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true));
+                    KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, true));
                     activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
                 }
             }

@@ -15,6 +15,11 @@ import java.util.Set;
  */
 public class KindOfDay {
 
+    // Idea is: Due hours per day is one central value (in future configurable) for all tasks.
+    public static final int DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES = 8 * 60;
+
+    public static final int DEFAULT_DUE_TIME_PER_DAY_IN_HOURS = 8;
+
     // Constants for testing
     public static final String DEFAULT_WORK = "Arbeit";
 
@@ -29,28 +34,40 @@ public class KindOfDay {
     public static final String DEFAULT_PARENTAL_LEAVE = "Elternzeit";
 
     public static final List<KindOfDay> list = new ArrayList<>();
+
     public static final Set<String> listNames = new HashSet<>();
 
     // Constants for testing
-    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true);
+    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_BLUE_DEFAULT, true);
 
-    public static final KindOfDay HOLIDAY = new KindOfDay(DEFAULT_HOLIDAY, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+    public static final KindOfDay HOLIDAY = new KindOfDay(DEFAULT_HOLIDAY, ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
 
-    public static final KindOfDay VACATION = new KindOfDay(DEFAULT_VACATION, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+    public static final KindOfDay VACATION = new KindOfDay(DEFAULT_VACATION, ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
 
-    public static final KindOfDay SICKDAY = new KindOfDay(DEFAULT_SICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, 8 * 60, false);
+    public static final KindOfDay SICKDAY = new KindOfDay(DEFAULT_SICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, false);
 
-    public static final KindOfDay KIDSICKDAY = new KindOfDay(DEFAULT_KIDSICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, 8 * 60, false);
+    public static final KindOfDay KIDSICKDAY = new KindOfDay(DEFAULT_KIDSICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, false);
 
-    public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+    public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
 
-    public static final KindOfDay TEST_NEW = new KindOfDay("TestNew", ColorsUI.DARK_GREEN_SAVE_SUCCESS, 8 * 60, false);
+    public static final KindOfDay TEST_NEW = new KindOfDay("TestNew", ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
 
 
     public static void initializeFromConfig(ConfigStorageFacade configStorage, Activity activity) {
         list.clear();
         listNames.clear();
         addTaskTypes(configStorage.loadConfigXml(activity));
+    }
+
+    public static void initializeForTests() {
+        list.clear();
+        listNames.clear();
+        list.add(WORKDAY);
+        list.add(VACATION);
+        list.add(HOLIDAY);
+        list.add(KIDSICKDAY);
+        list.add(SICKDAY);
+        list.add(PARENTAL_LEAVE);
     }
 
     //TODO wird nicht mehr gebraucht weil direkt bei loadDaysDataNew neue Type of Tasks zur list geadded werden!
@@ -78,18 +95,12 @@ public class KindOfDay {
 
     private int color;
 
-    private int dueMinutes;
-
     private boolean beginEndType;
 
-    private Time15 defaultDue;
-
-    public KindOfDay(String displayString, int color, int dueMinutes, boolean beginEndType) {
+    public KindOfDay(String displayString, int color, boolean beginEndType) {
         this.displayString = displayString;
         this.color = color;
-        this.dueMinutes = dueMinutes;
         this.beginEndType = beginEndType;
-        this.defaultDue = Time15.fromMinutes(dueMinutes);
     }
 
     public static KindOfDay toggle(String value) {
@@ -115,6 +126,27 @@ public class KindOfDay {
         return displayString;
     } // new: now returns display string
 
+    @Override
+    public boolean equals(Object o) {
+        if (o != null && o instanceof KindOfDay) {
+            KindOfDay other = (KindOfDay) o;
+            return other.beginEndType == beginEndType &&
+                    other.color == color &&
+                    ((null == other.displayString && null == displayString) ||
+                            (null != other.displayString && other.displayString.equals(displayString)) ||
+                            (null != displayString && displayString.equals(other.displayString)));
+            //Objects.equals(other.displayString, displayString); // requires higher API level
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int x = beginEndType ? 3 : 5;
+        int y = displayString == null ? 7 : displayString.hashCode();
+        return 11 * color * x * y;
+    }
+
     public String getDisplayString() {
         return displayString;
     }
@@ -128,7 +160,7 @@ public class KindOfDay {
     }
 
     public int getDueMinutes() {
-        return dueMinutes;
+        return DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES;
     }
 
     public static boolean isBeginEndType(String kindOfDay) {
@@ -136,12 +168,8 @@ public class KindOfDay {
         return day.isBeginEndType();
     }
 
-    public Time15 getDefaultDue() {
-        return defaultDue;
-    }
-
     public static KindOfDay convert(String displayString, Integer begin, Integer end) {
-        KindOfDay newType = new KindOfDay(displayString, -14774017, 480, begin != null && end != null);
+        KindOfDay newType = new KindOfDay(displayString, -14774017, begin != null && end != null);
         addTaskType(newType);
         return newType;
     }

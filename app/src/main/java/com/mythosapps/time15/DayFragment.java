@@ -390,8 +390,8 @@ public class DayFragment extends Fragment {
             endeTime = null;
             ende15 = null;
             pauseTime = null;
-            numberTaskHours = newKindOfDay.getDefaultDue().getHours();
-            numberTaskMinutes = newKindOfDay.getDefaultDue().getMinutes();
+            numberTaskHours = KindOfDay.DEFAULT_DUE_TIME_PER_DAY_IN_HOURS;
+            numberTaskMinutes = 0;
         }
         viewToModel();
         resetView();

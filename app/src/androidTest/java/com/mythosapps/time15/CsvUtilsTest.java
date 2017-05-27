@@ -9,11 +9,18 @@ import com.mythosapps.time15.util.CsvUtils;
 
 import junit.framework.TestCase;
 
+import org.testng.annotations.BeforeClass;
+
 /**
  * Created by andreas on 12.10.16.
  */
 
 public class CsvUtilsTest extends TestCase {
+
+    @BeforeClass
+    public void setUp() {
+        KindOfDay.initializeForTests();
+    }
 
     public void testToCsvLineDeletedTasks() {
         //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
@@ -194,117 +201,5 @@ public class CsvUtilsTest extends TestCase {
         assertEquals(null, task0.getEnd15());
         assertEquals(60, task0.getPause().intValue());
         assertFalse(task0.isComplete());
-    }
-
-    public void testMigrateFromOldCsvFormat() throws CsvFileLineWrongException {
-        //Date,Task,Begin,End,Break,Total,Note,Task,Begin,End,Break,Total,Note
-
-        // Work
-        String s = "05.05.2016,WORKDAY,10:15,17:00,01:00,5.75,,"; // old
-
-        DaysDataNew data = CsvUtils.fromCsvLine(s);
-
-        assertEquals("05.05.2016", data.getId());
-        BeginEndTask task0 = data.getTask(0);
-        assertEquals(KindOfDay.WORKDAY, task0.getKindOfDay());
-        assertEquals(10, task0.getBegin().intValue());
-        assertEquals(15, task0.getBegin15().intValue());
-        assertEquals(17, task0.getEnd().intValue());
-        assertEquals(00, task0.getEnd15().intValue());
-        assertEquals(60, task0.getPause().intValue());
-        assertTrue(task0.isComplete());
-
-        s = CsvUtils.toCsvLine(data);
-        assertEquals("05.05.2016," + KindOfDay.DEFAULT_WORK + ",10:15,17:00,01:00,5.75,,", s); // new
-
-        // Vacation
-        s = "05.05.2016,VACATION,,,,8.00,,"; // old
-
-        data = CsvUtils.fromCsvLine(s);
-
-        assertEquals("05.05.2016", data.getId());
-        task0 = data.getTask(0);
-        assertEquals(KindOfDay.VACATION, task0.getKindOfDay());
-        assertNull(task0.getBegin());
-        assertNull(task0.getBegin15());
-        assertNull(task0.getEnd());
-        assertNull(task0.getEnd15());
-        assertNull(task0.getPause());
-        assertTrue(task0.isComplete());
-
-        s = CsvUtils.toCsvLine(data);
-        assertEquals("05.05.2016," + KindOfDay.DEFAULT_VACATION + ",,,,8.00,,", s); // new
-
-        // Holiday
-        s = "05.05.2016,HOLIDAY,,,,8.00,,"; // old
-
-        data = CsvUtils.fromCsvLine(s);
-
-        assertEquals("05.05.2016", data.getId());
-        task0 = data.getTask(0);
-        assertEquals(KindOfDay.HOLIDAY, task0.getKindOfDay());
-        assertNull(task0.getBegin());
-        assertNull(task0.getBegin15());
-        assertNull(task0.getEnd());
-        assertNull(task0.getEnd15());
-        assertNull(task0.getPause());
-        assertTrue(task0.isComplete());
-
-        s = CsvUtils.toCsvLine(data);
-        assertEquals("05.05.2016," + KindOfDay.DEFAULT_HOLIDAY + ",,,,8.00,,", s); // new
-
-        // Sickday
-        s = "05.05.2016,SICKDAY,,,,8.00,,"; // old
-
-        data = CsvUtils.fromCsvLine(s);
-
-        assertEquals("05.05.2016", data.getId());
-        task0 = data.getTask(0);
-        assertEquals(KindOfDay.SICKDAY, task0.getKindOfDay());
-        assertNull(task0.getBegin());
-        assertNull(task0.getBegin15());
-        assertNull(task0.getEnd());
-        assertNull(task0.getEnd15());
-        assertNull(task0.getPause());
-        assertTrue(task0.isComplete());
-
-        s = CsvUtils.toCsvLine(data);
-        assertEquals("05.05.2016," + KindOfDay.DEFAULT_SICKDAY + ",,,,8.00,,", s); // new
-
-        // Kidsickday
-        s = "05.05.2016,KIDSICKDAY,,,,8.00,,"; // old
-
-        data = CsvUtils.fromCsvLine(s);
-
-        assertEquals("05.05.2016", data.getId());
-        task0 = data.getTask(0);
-        assertEquals(KindOfDay.KIDSICKDAY, task0.getKindOfDay());
-        assertNull(task0.getBegin());
-        assertNull(task0.getBegin15());
-        assertNull(task0.getEnd());
-        assertNull(task0.getEnd15());
-        assertNull(task0.getPause());
-        assertTrue(task0.isComplete());
-
-        s = CsvUtils.toCsvLine(data);
-        assertEquals("05.05.2016," + KindOfDay.DEFAULT_KIDSICKDAY + ",,,,8.00,,", s); // new
-
-        // Parental leave
-        s = "05.05.2016,PARENTAL_LEAVE,,,,8.00,,"; // old
-
-        data = CsvUtils.fromCsvLine(s);
-
-        assertEquals("05.05.2016", data.getId());
-        task0 = data.getTask(0);
-        assertEquals(KindOfDay.PARENTAL_LEAVE, task0.getKindOfDay());
-        assertNull(task0.getBegin());
-        assertNull(task0.getBegin15());
-        assertNull(task0.getEnd());
-        assertNull(task0.getEnd15());
-        assertNull(task0.getPause());
-        assertTrue(task0.isComplete());
-
-        s = CsvUtils.toCsvLine(data);
-        assertEquals("05.05.2016," + KindOfDay.DEFAULT_PARENTAL_LEAVE + ",,,,8.00,,", s); // new
     }
 }
