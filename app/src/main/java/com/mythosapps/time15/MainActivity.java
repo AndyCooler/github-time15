@@ -204,13 +204,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Time15 von Andreas, \nVersion: " + AppVersion.getVersionName(this) + "\nBuild-ID:" + AppVersion.getVersionCode(this), Toast.LENGTH_SHORT).show();
             return true;
         }
-        if (id == R.id.action_year) {
-            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
-                save(false);
-            }
-            startYearOverviewActivity();
-            return true;
-        }
         if (id == R.id.action_delete) {
             deleteTask();
             return true;
@@ -239,12 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, id);
-        startActivity(intent);
-    }
-
-    public void startYearOverviewActivity() {
-        Intent intent = new Intent(this, YearOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
         startActivity(intent);
     }

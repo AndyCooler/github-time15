@@ -1,11 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="600"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_backwards"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="Zurück"
         android:icon="@android:drawable/ic_media_rew"
         app:showAsAction="always"></item>
@@ -17,31 +20,25 @@
         android:icon="@android:drawable/ic_menu_today"></item>
     <item
         android:id="@+id/action_forwards"
-        android:orderInCategory="200"
+        android:orderInCategory="300"
         android:title="Vorwärts"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_media_ff"></item>
     <item
         android:id="@+id/action_month"
-        android:orderInCategory="200"
+        android:orderInCategory="400"
         android:title="Monat"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_month"></item>
     <item
         android:id="@+id/action_about"
-        android:orderInCategory="100"
+        android:orderInCategory="700"
         android:title="Info"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_month"></item>
     <item
-        android:id="@+id/action_year"
-        android:orderInCategory="100"
-        android:title="Jahr"
-        app:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_agenda"></item>
-    <item
         android:id="@+id/action_delete"
-        android:orderInCategory="100"
+        android:orderInCategory="500"
         android:title="Löschen"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_delete"></item>
