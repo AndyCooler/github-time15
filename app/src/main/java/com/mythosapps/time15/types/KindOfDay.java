@@ -54,8 +54,6 @@ public class KindOfDay {
 
 
     public static void initializeFromConfig(ConfigStorageFacade configStorage, Activity activity) {
-        list.clear();
-        listNames.clear();
         addTaskTypes(configStorage.loadConfigXml(activity));
     }
 
