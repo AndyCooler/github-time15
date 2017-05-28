@@ -376,6 +376,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void toggleKindOfDay(View v) {
         KindOfDay newKindOfDay = KindOfDay.toggle(kindOfDay);
+        activateKindOfDay(newKindOfDay);
+    }
+
+    private void activateKindOfDay(KindOfDay newKindOfDay) {
         kindOfDay = newKindOfDay.getDisplayString();
         if (newKindOfDay.isBeginEndType()) {
             numberTaskHours = null;
@@ -386,17 +390,15 @@ public class MainActivity extends AppCompatActivity {
             endeTime = null;
             ende15 = null;
             pauseTime = null;
-            numberTaskHours = newKindOfDay.getDefaultDue().getHours();
-            numberTaskMinutes = newKindOfDay.getDefaultDue().getMinutes();
+            numberTaskHours = KindOfDay.DEFAULT_DUE_TIME_PER_DAY_IN_HOURS;
+            numberTaskMinutes = 0;
         }
         viewToModel();
         resetView();
         modelToView();
-
     }
 
     public void editKindOfDay(View v) {
-        Log.i(getClass().getName(), "editKindOfDay() started.");
 
         //Toast.makeText(MainActivity.this, "LongClick Yay!!", Toast.LENGTH_LONG).show();
 
@@ -414,10 +416,10 @@ public class MainActivity extends AppCompatActivity {
                     kindOfDayEdited = kindOfDayEdited.trim();
                 }
                 if (!kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
-                    Toast.makeText(MainActivity.this, "Save Yay!!", Toast.LENGTH_LONG).show();
                     // TODO save task to config file instead of just adding the task:
                     // TODO extend dialog to choose color and beginEndType
-                    KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, 8 * 60, true));
+                    KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, true));
+                    activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
                 }
             }
         });
@@ -429,8 +431,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         builder.show();
-
-        Log.i(getClass().getName(), "editKindOfDay() finished.");
     }
 
     private void aktualisiereKindOfDay(int color) {

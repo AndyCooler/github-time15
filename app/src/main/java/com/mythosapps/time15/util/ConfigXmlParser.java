@@ -32,13 +32,11 @@ public class ConfigXmlParser {
     //   <task>
     //     <displayString>
     //     <color>
-    //     <dueMinutes>
     //     <beginEndType>
 
     private static final String XML_TASK = "task";
     private static final String XML_NAME = "displayString";
     private static final String XML_COLOR = "color";
-    private static final String XML_DUE = "dueMinutes";
     private static final String XML_BEGIN_END = "beginEndType";
 
     public List<KindOfDay> parse(InputStream fis) {
@@ -51,10 +49,9 @@ public class ConfigXmlParser {
             Element e = (Element) nodeList.item(i);
             String displayString = getValue(e, XML_NAME);
             int color = Integer.valueOf(getValue(e, XML_COLOR));
-            int dueMinutes = Integer.valueOf(getValue(e, XML_DUE));
             boolean beginEndType = Boolean.valueOf(getValue(e, XML_BEGIN_END));
 
-            KindOfDay task = new KindOfDay(displayString, color, dueMinutes, beginEndType);
+            KindOfDay task = new KindOfDay(displayString, color, beginEndType);
             result.add(task);
         }
 
