@@ -194,14 +194,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_about) {
-            Toast.makeText(MainActivity.this, "Time15 von Andreas, \nVersion: " + AppVersion.getVersionName(this) + "\nBuild-ID:" + AppVersion.getVersionCode(this), Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        if (id == R.id.action_year) {
-            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
-                save(false);
-            }
-            startYearOverviewActivity();
+            String about = "Time15 von Andreas, \n";
+            about += "Version: " + AppVersion.getVersionName(this) + "\n";
+            about += "Build-ID:" + AppVersion.getVersionCode(this) + "\n";
+            about += "Code: Andreas. Viele viele Tests: Julian";
+            Toast.makeText(MainActivity.this, about, Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_delete) {
@@ -230,12 +227,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, id);
-        startActivity(intent);
-    }
-
-    public void startYearOverviewActivity() {
-        Intent intent = new Intent(this, YearOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
         startActivity(intent);
     }

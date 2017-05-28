@@ -233,16 +233,16 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id == R.id.action_day) {
-            startMainActivity(this.id);
+        if (id == R.id.action_month) {
+            startMonthOverviewActivity();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void startMainActivity(String withId) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, withId);
+    public void startMonthOverviewActivity() {
+        Intent intent = new Intent(this, MonthOverviewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, id);
         startActivity(intent);
     }
 

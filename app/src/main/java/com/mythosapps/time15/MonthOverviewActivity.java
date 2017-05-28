@@ -348,6 +348,11 @@ public class MonthOverviewActivity extends ActionBarActivity {
             EmailUtils.sendEmail(this, ExternalCsvFileStorage.getFilename(this.id), storageDir, subject);
             return true;
         }
+        if (id == R.id.action_year) {
+            startYearOverviewActivity();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -355,6 +360,12 @@ public class MonthOverviewActivity extends ActionBarActivity {
     public void startMainActivity(String withId) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, withId);
+        startActivity(intent);
+    }
+
+    public void startYearOverviewActivity() {
+        Intent intent = new Intent(this, YearOverviewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, id);
         startActivity(intent);
     }
 

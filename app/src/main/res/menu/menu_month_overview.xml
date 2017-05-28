@@ -5,11 +5,11 @@
     <item
         android:id="@+id/action_migrate"
         android:title="@string/action_migrate"
-        android:orderInCategory="100"
+        android:orderInCategory="900"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_month_backwards"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="Zurück"
         android:icon="@android:drawable/ic_media_rew"
         app:showAsAction="always"></item>
@@ -21,14 +21,20 @@
         android:icon="@android:drawable/ic_media_ff"></item>
     <item
         android:id="@+id/action_day"
-        android:orderInCategory="200"
+        android:orderInCategory="300"
         android:title="Day"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_day"></item>
     <item
-        android:id="@+id/action_send"
-        android:orderInCategory="200"
-        android:title="Send"
+        android:id="@+id/action_year"
+        android:orderInCategory="400"
+        android:title="Jahr"
         app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_agenda"></item>
+    <item
+        android:id="@+id/action_send"
+        android:orderInCategory="500"
+        android:title="Send"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_dialog_email"></item>
 </menu>

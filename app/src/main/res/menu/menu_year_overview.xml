@@ -4,10 +4,10 @@
     tools:context="com.mythosapps.time15.YearOverviewActivity">
 
     <item
-        android:id="@+id/action_day"
+        android:id="@+id/action_month"
         android:orderInCategory="200"
-        android:title="Day"
+        android:title="Monat"
         app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_day"></item>
+        android:icon="@android:drawable/ic_menu_month"></item>
 
 </menu>
