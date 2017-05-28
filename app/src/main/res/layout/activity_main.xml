@@ -364,6 +364,31 @@
 
             <LinearLayout
                 android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom">
+
+                <Space
+                    android:id="@+id/spacer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="10dp"
+                    android:visibility="visible"
+                    android:gravity="fill_vertical" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="fill_vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -472,29 +497,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Time15 // Code: Andreas. Viele viele Tests: Julian"
-                    android:id="@+id/autor"
-                    android:gravity="bottom" />
-            </LinearLayout>
-
-        </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>
