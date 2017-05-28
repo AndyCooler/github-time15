@@ -138,15 +138,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getIntentsId() {
-        String result = TimeUtils.createID();
         Intent intent = getIntent();
         if (intent != null) {
             String withId = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
             if (withId != null) {
-                result = withId;
+                return withId;
             }
         }
-        return result;
+        return TimeUtils.createID(); // today's id
     }
 
     @Override
