@@ -2,13 +2,16 @@ package com.mythosapps.time15.storage;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.util.ConfigXmlParser;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
     private ConfigXmlParser parser = new ConfigXmlParser();
 
     private ConfigAssetStorage assetStorage;
+    private Activity activity;
 
     //TODO maybe default to xml from app, load from external if present, then merge with all existing kindOfDays
 
@@ -31,6 +35,8 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
     }
 
     public List<KindOfDay> loadConfigXml(Activity activity) {
+
+        this.activity = activity;
 
         List<KindOfDay> result = new ArrayList<>();
 
@@ -75,5 +81,46 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
         return result;
     }
 
+    @Override
+    public boolean saveExternalConfigXml(Activity activity, List<KindOfDay> tasks) {
+        String filename = DEFAULT_CONFIG_FILE;
 
+        this.activity = activity;
+
+        if (!initialized && !init()) {
+            return false;
+        }
+
+        File file = new File(storageDir, filename);
+        boolean result = false;
+        try {
+            FileOutputStream fos = new FileOutputStream(file, false);
+
+            PrintWriter pw = new PrintWriter(fos);
+            pw.println(XML_PROLOG);
+            for (KindOfDay task : tasks) {
+                pw.println(task.toXmlConfig());
+            }
+            pw.println(XML_END);
+            pw.flush();
+            pw.close();
+            fos.close();
+
+            Log.i(getClass().getName(), "Saved file " + filename);
+            result = true;
+        } catch (IOException e) {
+            fatal("saveExternalConfigXml", "Error saving file " + filename);
+            Log.e(getClass().getName(), "Error saving file " + filename + " as " + file.getAbsolutePath(), e);
+        }
+        return result;
+    }
+
+
+    private void fatal(String method, String msg) {
+        Log.e(getClass().getName(), method + " : " + msg);
+
+        if (activity != null) {
+            Toast.makeText(activity, method + " : " + msg, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
