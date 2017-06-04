@@ -44,4 +44,24 @@ public class ConfigAssetStorage implements ConfigStorageFacade {
         Log.i(getClass().getName(), "Loaded " + result.size() + " entries from AssetStorage.");
         return result;
     }
+
+    @Override
+    public boolean saveExternalConfigXml(Activity activity, List<KindOfDay> tasks) {
+
+        boolean result = false;
+        try {
+            String xml = XML_PROLOG;
+
+            for (KindOfDay task : tasks) {
+                xml += task.toXmlConfig();
+            }
+            xml += XML_END;
+
+            Log.i(getClass().getName(), "Saved XML : \n" + xml);
+            result = true;
+        } catch (Throwable e) {
+            Log.e(getClass().getName(), "Error saving XML ", e);
+        }
+        return result;
+    }
 }

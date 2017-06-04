@@ -57,6 +57,10 @@ public class KindOfDay {
         addTaskTypes(configStorage.loadConfigXml(activity));
     }
 
+    public static boolean saveToExternalConfig(ConfigStorageFacade configStorage, Activity activity) {
+        return configStorage.saveExternalConfigXml(activity, list);
+    }
+
     public static void initializeForTests() {
         list.clear();
         listNames.clear();
@@ -170,5 +174,21 @@ public class KindOfDay {
         KindOfDay newType = new KindOfDay(displayString, -14774017, begin != null && end != null);
         addTaskType(newType);
         return newType;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public void setBeginEndType(boolean beginEndType) {
+        this.beginEndType = beginEndType;
+    }
+
+    public String toXmlConfig() {
+        return "    <task>\n" +
+                "        <displayString>" + getDisplayString() + "</displayString>\n" +
+                "        <color>" + getColor() + "</color>\n" +
+                "        <beginEndType>" + isBeginEndType() + "</beginEndType>\n" +
+                "    </task>\n";
     }
 }

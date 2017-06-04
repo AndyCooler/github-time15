@@ -12,7 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -424,37 +428,116 @@ public class MainActivity extends AppCompatActivity {
     public void editKindOfDay(View v) {
         Log.i(getClass().getName(), "editKindOfDay() started.");
 
-        //Toast.makeText(MainActivity.this, "LongClick Yay!!", Toast.LENGTH_LONG).show();
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Aufgabe anpassen");
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Neue Aufgabe");
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(input);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        input.setText(kindOfDay);
+        input.setSelection(0, kindOfDay.length());
+
+        CheckBox checkBox = new CheckBox(this);
+        checkBox.setText("Mit Von-Bis Uhrzeit");
+        checkBox.setChecked(KindOfDay.fromString(kindOfDay).isBeginEndType());
+
+        LinearLayout radioLayout = new LinearLayout(this);
+        radioLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
+        radioLayout.setOrientation(LinearLayout.HORIZONTAL);
+        final RadioGroup rg = new RadioGroup(this);
+        rg.setOrientation(LinearLayout.HORIZONTAL);
+        RadioButton rb1 = new RadioButton(this);
+        rb1.setText("Blau");
+        rg.addView(rb1, 0);
+        RadioButton rb2 = new RadioButton(this);
+        rb2.setText("Grün");
+        rg.addView(rb2, 1);
+        RadioButton rb3 = new RadioButton(this);
+        rb3.setText("Grau");
+        rg.addView(rb3, 2);
+        radioLayout.addView(rg);
+
+        TextView label = new TextView(this);
+        label.setText("Farbe in Monatsansicht:");
+
+        linearLayout.addView(input);
+        linearLayout.addView(checkBox);
+        linearLayout.addView(label);
+        linearLayout.addView(radioLayout);
+
+        builder.setView(linearLayout);
+        builder.setPositiveButton("Neu", new DialogInterface.OnClickListener() {
+            private String getTaskName() {
+                String taskName = input.getText().toString();
+                if (taskName != null) {
+                    taskName = taskName.trim();
+                }
+                return taskName;
+            }
+
+            private void updateTask() {
+                // save task to config file instead of just adding the task is not necessary:
+                // user can go to month that has the task, and its loaded: they can use it in another month
+                int colorChosen = rg.getCheckedRadioButtonId();
+                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
+
+                KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, taskColor, checkBox.isChecked()));
+                KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
+
+                activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
+            }
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                kindOfDayEdited = input.getText().toString();
-                if (kindOfDayEdited != null) {
-                    kindOfDayEdited = kindOfDayEdited.trim();
+                kindOfDayEdited = getTaskName();
+                if (KindOfDay.fromString(kindOfDayEdited) != null || kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
+                    Toast.makeText(MainActivity.this, "Aufgabe existiert bereits!", Toast.LENGTH_SHORT).show();
+                    // Snackbar hatte nicht geklappt...
+                    return;
                 }
-                if (!kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
-                    // TODO save task to config file instead of just adding the task:
-                    // TODO extend dialog to choose color and beginEndType
-                    KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, ColorsUI.DARK_BLUE_DEFAULT, true));
-                    activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
-                }
+                updateTask();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Ändern", new DialogInterface.OnClickListener() {
+            private String getTaskName() {
+                String taskName = input.getText().toString();
+                if (taskName != null) {
+                    taskName = taskName.trim();
+                }
+                return taskName;
+            }
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                kindOfDayEdited = getTaskName();
+                if (KindOfDay.fromString(kindOfDayEdited) == null) {
+                    Toast.makeText(MainActivity.this, "Aufgabe existiert nicht!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                KindOfDay taskToModify = KindOfDay.fromString(kindOfDayEdited);
+                int colorChosen = rg.getCheckedRadioButtonId();
+                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
+
+                taskToModify.setColor(taskColor);
+                taskToModify.setBeginEndType(checkBox.isChecked());
+                KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
+
+                activateKindOfDay(taskToModify);
+            }
+        });
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        builder.show();
+        final AlertDialog dialog = builder.show();
 
         Log.i(getClass().getName(), "editKindOfDay() finished.");
     }
