@@ -72,11 +72,6 @@ public class KindOfDay {
         list.add(PARENTAL_LEAVE);
     }
 
-    //TODO wird nicht mehr gebraucht weil direkt bei loadDaysDataNew neue Type of Tasks zur list geadded werden!
-    //  public static void addTaskTypesForMonth(StorageFacade storage, Activity activity, String id) {
-    //      addTaskTypes(storage.loadTaskNames(activity, id));
-    //}
-
     public static void addTaskTypes(List<KindOfDay> types) {
         for (KindOfDay task : types) {
             addTaskType(task);
