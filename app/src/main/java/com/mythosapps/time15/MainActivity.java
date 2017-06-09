@@ -481,8 +481,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private void updateTask() {
-                // save task to config file instead of just adding the task is not necessary:
-                // user can go to month that has the task, and its loaded: they can use it in another month
                 int colorChosen = rg.getCheckedRadioButtonId();
                 int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
 

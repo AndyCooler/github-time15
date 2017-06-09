@@ -38,8 +38,6 @@ public class ConfigAssetStorage implements ConfigStorageFacade {
             result = parser.parse(stream);
         } catch (IOException e) {
             Log.e("Error: ", e.getMessage());
-        } finally {
-            //TODO ? manager.close();
         }
         Log.i(getClass().getName(), "Loaded " + result.size() + " entries from AssetStorage.");
         return result;
