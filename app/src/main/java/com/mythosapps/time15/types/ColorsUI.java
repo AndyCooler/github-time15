@@ -2,6 +2,9 @@ package com.mythosapps.time15.types;
 
 import android.graphics.Color;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by andreas on 11.02.16.
  */
@@ -17,4 +20,15 @@ public class ColorsUI {
     public static final int RED_FLAGGED = Color.RED;
     public static final int ACTIVATED = Color.BLACK;
 
+    public static final Map<Integer, Integer> choiceToColor = new HashMap<>();
+    public static final Map<Integer, Integer> colorToChoice = new HashMap<>();
+
+    static {
+        choiceToColor.put(0, ColorsUI.DARK_BLUE_DEFAULT);
+        choiceToColor.put(1, ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        choiceToColor.put(2, ColorsUI.DARK_GREY_SAVE_ERROR);
+        colorToChoice.put(ColorsUI.DARK_BLUE_DEFAULT, 0);
+        colorToChoice.put(ColorsUI.DARK_GREEN_SAVE_SUCCESS, 1);
+        colorToChoice.put(ColorsUI.DARK_GREY_SAVE_ERROR, 2);
+    }
 }

@@ -15,6 +15,9 @@ import java.util.Set;
  */
 public class KindOfDay {
 
+    // TODO static method to return "initial" task used in modelToView initially
+    // --> This way, a check for initial state of UI is easy
+
     // Idea is: Due hours per day is one central value (in future configurable) for all tasks.
     public static final int DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES = 8 * 60;
 
@@ -64,6 +67,7 @@ public class KindOfDay {
     public static void initializeForTests() {
         list.clear();
         listNames.clear();
+        // TODO initialize from asset and assign CONSTANTS WORKDAY = assets(1), VACATION = assets(2) ..
         list.add(WORKDAY);
         list.add(VACATION);
         list.add(HOLIDAY);
@@ -85,6 +89,19 @@ public class KindOfDay {
             Log.i(KindOfDay.class.getName(), "Added task " + task.getDisplayString() + ".");
         } else {
             Log.i(KindOfDay.class.getName(), "Skipped task " + task.getDisplayString() + ".");
+        }
+    }
+
+    public static void replaceTaskType(KindOfDay task) {
+        if (listNames.contains(task.getDisplayString())) {
+            boolean result = list.remove(task);
+            result &= listNames.remove(task.getDisplayString());
+            Log.i(KindOfDay.class.getName(), "Replacing task " + task.getDisplayString() + ": " + result);
+            if (result) {
+                addTaskType(task);
+            }
+        } else {
+            Log.i(KindOfDay.class.getName(), "Replace task " + task.getDisplayString() + ": task not found.");
         }
     }
 
@@ -166,7 +183,8 @@ public class KindOfDay {
     }
 
     public static KindOfDay convert(String displayString, Integer begin, Integer end) {
-        KindOfDay newType = new KindOfDay(displayString, -14774017, begin != null && end != null);
+        Log.i(KindOfDay.class.getName(), "Converting task " + displayString + ".");
+        KindOfDay newType = new KindOfDay(displayString, ColorsUI.DARK_BLUE_DEFAULT, begin != null && end != null);
         addTaskType(newType);
         return newType;
     }

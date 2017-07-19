@@ -56,6 +56,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
         String filename = DEFAULT_CONFIG_FILE;
 
         if (!initialized && !init()) {
+            // TODO show error popup when init failed or config file not readable
             return defaultAssetConfig;
         }
 
@@ -71,6 +72,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
 
             loadedConfig = parser.parse(fis);
             if (loadedConfig != null) {
+                // loaded config is first, thus overrides asset
                 KindOfDay.addTaskTypes(loadedConfig);
             }
 

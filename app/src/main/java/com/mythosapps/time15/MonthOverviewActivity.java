@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,7 +48,7 @@ import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
  * This activity lets the user see on how many days they were working in a month, and what kind of
  * day each day was.
  */
-public class MonthOverviewActivity extends ActionBarActivity {
+public class MonthOverviewActivity extends AppCompatActivity {
 
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mythosapps.time15.MESSAGE";

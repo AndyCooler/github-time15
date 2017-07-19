@@ -216,6 +216,12 @@ public class MainActivity extends AppCompatActivity {
             deleteTask();
             return true;
         }
+        if (id == R.id.action_tasks) {
+            Intent intent = new Intent(this, TaskEditorActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, id);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
