@@ -94,15 +94,30 @@ public class KindOfDay {
 
     public static void replaceTaskType(KindOfDay task) {
         if (listNames.contains(task.getDisplayString())) {
-            boolean result = list.remove(task);
-            result &= listNames.remove(task.getDisplayString());
-            Log.i(KindOfDay.class.getName(), "Replacing task " + task.getDisplayString() + ": " + result);
-            if (result) {
+            // cant use #remove cause remove uses equals which respects the color of the task
+            boolean result0 = removeByName(task.getDisplayString());
+            boolean result1 = listNames.remove(task.getDisplayString());
+            Log.i(KindOfDay.class.getName(), "Replacing task " + task.getDisplayString() + ": " + result0 + "," + result1);
+            if (result0 && result1) {
                 addTaskType(task);
             }
         } else {
             Log.i(KindOfDay.class.getName(), "Replace task " + task.getDisplayString() + ": task not found.");
         }
+    }
+
+    private static boolean removeByName(String displayString) {
+        int index = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getDisplayString().equals(displayString)) {
+                index = i;
+            }
+        }
+        if (index >= 0) {
+            list.remove(index);
+            return true;
+        }
+        return false;
     }
 
     private String displayString;

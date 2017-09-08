@@ -11,12 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.mythosapps.time15.storage.ConfigStorageFacade;
@@ -26,6 +22,7 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -44,6 +41,7 @@ public class TaskEditorActivity extends AppCompatActivity implements AdapterView
     // View state and view state management
     private ListView listView;
     private String[] listItems;
+    private ListArrayAdapter<KindOfDay> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +83,16 @@ public class TaskEditorActivity extends AppCompatActivity implements AdapterView
 
         List<KindOfDay> list = configStorage.loadConfigXml(this);
 
-        listItems = new String[list.size()];
-
-        for (int i = 0; i < list.size(); i++) {
-            listItems[i] = list.get(i).getDisplayString();
-        }
         //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.list_item, R.id.task_name, listItems);
+
+        Comparator<KindOfDay> comparator = new Comparator<KindOfDay>() {
+            @Override
+            public int compare(KindOfDay lhs, KindOfDay rhs) {
+                return lhs.getDisplayString().compareTo(rhs.getDisplayString());
+            }
+        };
+
+        adapter = new ListArrayAdapter(this, R.layout.list_item, R.id.task_name, list, comparator);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
 
@@ -137,8 +138,8 @@ public class TaskEditorActivity extends AppCompatActivity implements AdapterView
         // TODO delete task
 
         // Modify existing task
-        final String taskName = listItems[position];
-        KindOfDay task = KindOfDay.fromString(taskName);
+        KindOfDay task = (KindOfDay) adapter.getItem(position);
+        final String taskName = task.getDisplayString();
         Log.i(getClass().getName(), taskName + " : " + task.getDisplayString());
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -151,43 +152,31 @@ public class TaskEditorActivity extends AppCompatActivity implements AdapterView
 
         final TextView taskNameView = new TextView(this);
         taskNameView.setText(taskName);
-        //taskNameView.setTextColor(task.getColor());
-        // TODO taskName editable?
-        // TODO Reichweite of the modification? Same month? Same Year?
 
-        // TODO soll isBeginEndType tatsächlich editierbar sein?
-        CheckBox beginEndCheckbox = new CheckBox(this);
-        beginEndCheckbox.setText("Mit Von-Bis Uhrzeit");
-        beginEndCheckbox.setChecked(task.isBeginEndType());
+        // TODO Reichweite auswählbar: x Same month? x Same Year?
+        // TODO Anzeige der Tasks immer nur für aktuellen Monat, blätterbar, aber:
+        // TODO Idee: Popup "bestehende Einträge anpassen" mit Liste der Monate, in denen der alte Eintrag auch vorkommt anhakbar
+        // TODO --> wird ein Monat nicht angehakt, gibt es weiterhin beide Tasks!
+        // TODO Idee: Aktionen umbenennen soll undoable sein
 
-        LinearLayout radioLayout = new LinearLayout(this);
-        radioLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        radioLayout.setOrientation(LinearLayout.HORIZONTAL);
+        // TODO Idee: soll isBeginEndType tatsächlich editierbar sein? Konsequenz: von-bis Uhrzeiten entfallen! Popup-Warnung!
+//        CheckBox beginEndCheckbox = new CheckBox(this);
+//        beginEndCheckbox.setText("Mit Von-Bis Uhrzeit");
+//        beginEndCheckbox.setChecked(task.isBeginEndType());
 
-        final RadioGroup rg = new RadioGroup(this);
-        rg.setOrientation(LinearLayout.HORIZONTAL);
-        RadioButton rb1 = new RadioButton(this);
-        rb1.setText("Blau");
-        rg.addView(rb1, 0);
-        RadioButton rb2 = new RadioButton(this);
-        rb2.setText("Grün");
-        rg.addView(rb2, 1);
-        RadioButton rb3 = new RadioButton(this);
-        rb3.setText("Grau");
-        rg.addView(rb3, 2);
-        Integer[] radioIds = new Integer[]{rb1.getId(), rb2.getId(), rb3.getId()};
-        List<Integer> radioIdsList = Arrays.asList(radioIds);
-        rg.check(radioIds[ColorsUI.colorToChoice.get(task.getColor())]);
-        radioLayout.addView(rg);
+        RadioButtonItem blue = new RadioButtonItem("Blau", ColorsUI.DARK_BLUE_DEFAULT);
+        RadioButtonItem green = new RadioButtonItem("Grün", ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        RadioButtonItem gray = new RadioButtonItem("Grau", ColorsUI.DARK_GREY_SAVE_ERROR);
+        RadioButtonUI colorChoiceUI = new RadioButtonUI(this, Arrays.asList(new RadioButtonItem[]{blue, green, gray}), task.getColor());
+
 
         TextView colorLabel = new TextView(this);
         colorLabel.setText("Farbe in Monatsansicht:");
 
         linearLayout.addView(taskNameView);
-        linearLayout.addView(beginEndCheckbox);
+        //linearLayout.addView(beginEndCheckbox);
         linearLayout.addView(colorLabel);
-        linearLayout.addView(radioLayout);
+        linearLayout.addView(colorChoiceUI.getRadioLayout());
 
         builder.setView(linearLayout);
         builder.setPositiveButton("Anpassen", new DialogInterface.OnClickListener() {
@@ -195,15 +184,17 @@ public class TaskEditorActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // update task
-                int chosenButtonId = rg.getCheckedRadioButtonId();
-                task.setBeginEndType(beginEndCheckbox.isChecked());
-                task.setColor(ColorsUI.choiceToColor.get(radioIdsList.indexOf(chosenButtonId)));
+                //task.setBeginEndType(beginEndCheckbox.isChecked());
+                task.setColor((int) colorChoiceUI.getSelectedValue());
                 KindOfDay.replaceTaskType(task);
                 KindOfDay.saveToExternalConfig(configStorage, TaskEditorActivity.this);
-                initialize();
+                adapter.clear();
+                adapter.addAllListItems(configStorage.loadConfigXml(TaskEditorActivity.this));
+                //adapter.notifyDataSetChanged();
+                // if update dont work, check where your data comes from!!
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -214,4 +205,5 @@ public class TaskEditorActivity extends AppCompatActivity implements AdapterView
 
         Log.i(getClass().getName(), "editKindOfDay() finished.");
     }
+
 }
