@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView total;
     private TextView totalSemi;
     private TextView total15;
+    private boolean appIsPaused = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,12 +164,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String intentsId = getIntentsId();
-        Log.i(getClass().getName(), "onResume() started with id " + intentsId);
+        Log.i(getClass().getName(), "onResume() started with id " + intentsId + ". appIsPaused="+appIsPaused);
 
-
-        switchToID(null, intentsId);
+        if (appIsPaused) {
+            appIsPaused = false;
+            switchToID(null, TimeUtils.createID());
+        } else {
+            switchToID(null, intentsId);
+        }
         updateBalance();
         Log.i(getClass().getName(), "onResume() finished.");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        appIsPaused = true;
+        Log.i(getClass().getName(), "onPause() finished.");
     }
 
     @Override
@@ -214,12 +227,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.action_delete) {
             deleteTask();
-            return true;
-        }
-        if (id == R.id.action_tasks) {
-            Intent intent = new Intent(this, TaskEditorActivity.class);
-            intent.putExtra(EXTRA_MESSAGE, id);
-            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -560,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             taskNo = 1;
             BeginEndTask task1 = new BeginEndTask();
-            task1.setKindOfDay(KindOfDay.VACATION);
+            task1.setKindOfDay(KindOfDay.VACATION); // TODO Default Task
             task1.setTotal(Time15.fromMinutes(0));
             modifiableData.addTask(task1);
             resetView();

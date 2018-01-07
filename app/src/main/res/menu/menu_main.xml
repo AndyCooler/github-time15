@@ -42,10 +42,4 @@
         android:title="Löschen"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_delete"></item>
-    <item
-        android:id="@+id/action_tasks"
-        android:orderInCategory="500"
-        android:title="Tasks"
-        app:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_compass"></item>
 </menu>

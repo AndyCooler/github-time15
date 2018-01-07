@@ -55,15 +55,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mythosapps.time15.MainActivity" />
         </activity>
-        <activity
-            android:name=".TaskEditorActivity"
-            android:label="@string/title_activity_task_editor"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mythosapps.time15.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
