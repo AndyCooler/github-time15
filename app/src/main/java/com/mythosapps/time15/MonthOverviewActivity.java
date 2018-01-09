@@ -107,7 +107,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     return;
                 }
 
-                // TODO statt FOlgendem besser ExternalCsvStorage.loadWholeMonth rufen und
+                // can: statt FOlgendem besser ExternalCsvStorage.loadWholeMonth rufen und
                 // parametrisieren mit dem Reader!
                 StringBuffer buf = new StringBuffer();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));

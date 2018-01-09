@@ -56,7 +56,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
         String filename = DEFAULT_CONFIG_FILE;
 
         if (!initialized && !init()) {
-            // TODO show error popup when init failed or config file not readable
+            fatal("loadConfigXml", "Error loading file " + filename);
             return defaultAssetConfig;
         }
 

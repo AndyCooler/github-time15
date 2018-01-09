@@ -42,7 +42,7 @@ public class ListArrayAdapter<T> extends ArrayAdapter {
             textView = (TextView) view;
         }
 
-        int textColor = ((KindOfDay) getItem(position)).getColor(); // TODO no casting here
+        int textColor = ((KindOfDay) getItem(position)).getColor();
         textView.setTextColor(textColor);
 
         return textView;

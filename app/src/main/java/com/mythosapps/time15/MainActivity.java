@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         KindOfDay.initializeFromConfig(configStorage, this);
 
-        balanceValue = storage.loadBalance(this, intentsId); // TODO should move to onResume() now that it's no more expensive
+        balanceValue = storage.loadBalance(this, intentsId); // can move to onResume() now that it's no more expensive
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
@@ -192,12 +192,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            //intent.putExtra(EXTRA_MESSAGE, id);
-            startActivity(intent);
-            return true;
-        }
         if (id == R.id.action_backwards) {
             dateBackwards();
             return true;
@@ -753,7 +747,7 @@ public class MainActivity extends AppCompatActivity {
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifiableData;
         modifiableData = DaysDataNew.copy(originalData);
-        modelToView(); // TODO shouldn't be necessary
+        modelToView(); // can: shouldn't be necessary
         updateBalance();
         Log.i(getClass().getName(), "saving...done.");
     }

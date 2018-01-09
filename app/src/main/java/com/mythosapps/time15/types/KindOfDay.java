@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class KindOfDay {
 
-    // TODO static method to return "initial" task used in modelToView initially
+    // TODO static method to return "initial"/default task used in modelToView initially
     // --> This way, a check for initial state of UI is easy
 
     // Idea is: Due hours per day is one central value (in future configurable) for all tasks.

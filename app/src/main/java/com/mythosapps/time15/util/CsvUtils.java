@@ -95,7 +95,7 @@ public final class CsvUtils {
 
         BeginEndTask task = new BeginEndTask();
         try {
-            // TODO simplify
+            // can:  simplify
             String displayString = safeGetNextToken(kindOfTask, id, "Task");
             task.setKindOfDay(KindOfDay.fromString(displayString));
 
