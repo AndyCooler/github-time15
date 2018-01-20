@@ -38,9 +38,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
 
@@ -181,10 +183,11 @@ public class MonthOverviewActivity extends AppCompatActivity {
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
         int previousWeekOfYear = -1;
 
+        Set<KindOfDay> tasksThisMonth = new HashSet<>();
+
         Map<Integer, Integer> weeksBalanceMap = new HashMap<Integer, Integer>();
         for (final String dayId : listOfIds) {
             DaysDataNew data = storage.loadDaysDataNew(this, dayId);
-
 
             if (data == null) {
                 if (!TimeUtils.isWeekend(dayId)) {
@@ -202,6 +205,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     table.addView(row);
                 }
             } else {
+                data.collectTaskNames(tasksThisMonth);
+
                 previousRow = row;
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
@@ -236,8 +241,35 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, row, previousRow);
                 table.addView(row);
             }
-
         }
+
+        View line = new View(this);
+        line.setBackgroundColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+        line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 4));
+        table.addView(line);
+
+        // Sum for this month's tasks
+        for (KindOfDay task : KindOfDay.list) {
+            // row
+            if (tasksThisMonth.contains(task)) {
+                task.getDisplayString();
+                int sumInMinutes = storage.loadTaskSum(this, id, task);
+                Time15 time15 = Time15.fromMinutes(sumInMinutes);
+
+                int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
+                previousRow = row;
+                row = new TableRow(this);
+                row.setLayoutParams(lp);
+                row.addView(createTextView("", rowColor));
+                row.addView(createTextView("", rowColor));
+                row.addView(createTextView(task.getDisplayString(), rowColor));
+                row.addView(createTextView(time15.toDisplayString(), rowColor));
+                row.addView(createTextView("(sum)", rowColor));
+                row.addView(createTextView("", rowColor));
+                table.addView(row);
+            }
+        }
+
         Log.i(getClass().getName(), "initialize() finished.");
     }
 

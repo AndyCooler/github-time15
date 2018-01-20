@@ -880,7 +880,7 @@ public class MainActivity extends AppCompatActivity {
         endeTime = null;
         ende15 = null;
         pauseTime = null;
-        kindOfDay = KindOfDay.WORKDAY.toString();
+        kindOfDay = KindOfDay.WORKDAY.toString(); // TODO Default kind of day
         aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
         aktualisiereTotal(ColorsUI.DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;
