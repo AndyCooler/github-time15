@@ -1,6 +1,7 @@
 package com.mythosapps.time15.types;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -177,6 +178,7 @@ public class DaysDataNew {
     }
 
     private boolean isInInitialState(BeginEndTask task) {
+        // TODO Default kind of day!
         boolean initial = KindOfDay.WORKDAY.getDisplayString().equals(task.getKindOfDay().getDisplayString()) && task.isOnlyTotalComplete();
         return initial;
     }
@@ -197,6 +199,13 @@ public class DaysDataNew {
             }
         } else {
             return false;
+        }
+    }
+
+    public void collectTaskNames(Set<KindOfDay> setOfTaskNames) {
+
+        for (BeginEndTask task : tasks) {
+            setOfTaskNames.add(task.getKindOfDay());
         }
     }
 }

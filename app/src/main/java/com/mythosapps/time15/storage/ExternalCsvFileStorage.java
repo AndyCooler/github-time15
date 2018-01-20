@@ -170,8 +170,8 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         ArrayList<String> warnings = new ArrayList<String>();
         try {
             // load from CSV
-            // TODO 1. refactor move code block to CsvUtils with InputStream parameter
-            // TODO 2. rework user notification scheme when problems occur
+            // can: 1. refactor move code block to CsvUtils with InputStream parameter
+            // can:  2. rework user notification scheme when problems occur
             Map<String, Integer> csvMonth = loadWholeMonth(id, getFilename(id));
             for (String csvCurrent : csvMonth.keySet()) {
                 DaysDataNew data = null;

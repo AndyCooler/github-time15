@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView total;
     private TextView totalSemi;
     private TextView total15;
+    private boolean appIsPaused = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         KindOfDay.initializeFromConfig(configStorage, this);
 
-        balanceValue = storage.loadBalance(this, intentsId); // TODO should move to onResume() now that it's no more expensive
+        balanceValue = storage.loadBalance(this, intentsId); // can move to onResume() now that it's no more expensive
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
@@ -160,8 +161,20 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         String intentsId = getIntentsId();
 
-        switchToID(null, intentsId);
+        if (appIsPaused) {
+            appIsPaused = false;
+            switchToID(null, TimeUtils.createID());
+        } else {
+            switchToID(null, intentsId);
+        }
         updateBalance();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        appIsPaused = true;
     }
 
     @Override
@@ -172,12 +185,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            //intent.putExtra(EXTRA_MESSAGE, id);
-            startActivity(intent);
-            return true;
-        }
         if (id == R.id.action_backwards) {
             dateBackwards();
             return true;
@@ -446,8 +453,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private void updateTask() {
-                // save task to config file instead of just adding the task is not necessary:
-                // user can go to month that has the task, and its loaded: they can use it in another month
                 int colorChosen = rg.getCheckedRadioButtonId();
                 int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
 
@@ -518,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             taskNo = 1;
             BeginEndTask task1 = new BeginEndTask();
-            task1.setKindOfDay(KindOfDay.VACATION);
+            task1.setKindOfDay(KindOfDay.VACATION); // TODO Default Task
             task1.setTotal(Time15.fromMinutes(0));
             modifiableData.addTask(task1);
             resetView();
@@ -696,7 +701,7 @@ public class MainActivity extends AppCompatActivity {
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifiableData;
         modifiableData = DaysDataNew.copy(originalData);
-        modelToView(); // TODO shouldn't be necessary
+        modelToView(); // can: shouldn't be necessary
         updateBalance();
     }
 
@@ -822,7 +827,7 @@ public class MainActivity extends AppCompatActivity {
         endeTime = null;
         ende15 = null;
         pauseTime = null;
-        kindOfDay = KindOfDay.WORKDAY.toString();
+        kindOfDay = KindOfDay.WORKDAY.toString(); // TODO Default kind of day
         aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
         aktualisiereTotal(ColorsUI.DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;

@@ -38,7 +38,7 @@ public interface StorageFacade {
     int loadBalance(Activity activity, String id);
 
     /**
-     * Load the name of all tasks of a month identified by id.
+     * Load the sum for a task for over the month identified by id.
      */
     int loadTaskSum(Activity activity, String id, KindOfDay task);
 }

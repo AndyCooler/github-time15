@@ -24,7 +24,7 @@ public final class TimeUtils {
     public static String createID(GregorianCalendar cal) {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String id = df.format(cal.getTime());
-        cache.put(id, cal); // TODO evtl ist es cleverer hier einmal cal.clone() abzulegen, statt in anderen Methoden zu clonen
+        cache.put(id, cal);
         return id;
     }
 
@@ -76,26 +76,14 @@ public final class TimeUtils {
     }
 
     private static GregorianCalendar toCalendar(String id) {
-        GregorianCalendar cal = null;
-        if (cache.get(id) != null) {
-            cal = cache.get(id);
+        GregorianCalendar cal = cache.get(id);
+        if (cache.get(id) == null) { // cache miss
+            int year = Integer.valueOf(id.substring(6));
+            int month = Integer.valueOf(id.substring(3, 5)) - 1;
+            int day = Integer.valueOf(id.substring(0, 2));
+            cal = new GregorianCalendar(year, month, day);
         }
-
-        //else {
-        int year = Integer.valueOf(id.substring(6));
-        int month = Integer.valueOf(id.substring(3, 5)) - 1;
-        int day = Integer.valueOf(id.substring(0, 2));
-        //cal = new GregorianCalendar(year, month, day);
-        GregorianCalendar cal2 = new GregorianCalendar(year, month, day);
-        if (cal != null && !createID(cal).equals(createID(cal2))) {
-            // TODO TimeUtils Cache: wenn keine solche Exception auftritt, kann ich mich auf den cache verlassen
-            String a = cal.get(Calendar.DAY_OF_MONTH) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.YEAR);
-            String b = cal2.get(Calendar.DAY_OF_MONTH) + "-" + cal2.get(Calendar.MONTH) + "-" + cal2.get(Calendar.YEAR);
-
-            throw new IllegalStateException("!!! TimeUtils.cache error getting " + id + ":\ncal :" + a + "\ncal2:" + b);
-        }
-        //}
-        return cal2;
+        return cal;
     }
 
     public static List<String> getListOfIdsOfMonth(String id) {

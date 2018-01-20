@@ -17,6 +17,10 @@ import java.util.List;
 
 /**
  * Created by andreas on 09.02.17.
+ *
+ * Default to xml asset config from app. Try and load from external xml config file,
+ * then merge with asset config from app by first adding tasks from external config file, second
+ * adding tasks from asset config.
  */
 
 public class ConfigFileStorage extends FileStorage implements ConfigStorageFacade {
@@ -28,38 +32,52 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
     private ConfigAssetStorage assetStorage;
     private Activity activity;
 
-    //TODO maybe default to xml from app, load from external if present, then merge with all existing kindOfDays
-
     public ConfigFileStorage() {
         assetStorage = new ConfigAssetStorage(parser);
     }
 
+    /**
+     * Load config from external XML file {@link #DEFAULT_CONFIG_FILE} if present. Loaded
+     * tasks are activated as a side effect. In addition, returns a list of tasks from app storage
+     * (asset storage) that can be activated by the caller. This way, the loaded tasks are always
+     * first and override tasks from asset storage.
+     *
+     * @param activity
+     * @return config loaded from external XML blended with asset config, or in
+     * case of error, only asset config
+     */
     public List<KindOfDay> loadConfigXml(Activity activity) {
 
         this.activity = activity;
 
-        List<KindOfDay> result = new ArrayList<>();
-
-        KindOfDay.addTaskTypes(assetStorage.loadConfigXml(activity));
+        List<KindOfDay> defaultAssetConfig = assetStorage.loadConfigXml(activity);
+        List<KindOfDay> loadedConfig = new ArrayList<KindOfDay>();
 
         String filename = DEFAULT_CONFIG_FILE;
 
         if (!initialized && !init()) {
-            return result;
+            fatal("loadConfigXml", "Error loading file " + filename);
+            return defaultAssetConfig;
         }
 
         File file = new File(storageDir, filename);
         if (!file.exists()) {
             Log.w(getClass().getName(), "loadConfigXml : file not found " + filename);
-            return result;
+            return defaultAssetConfig;
         }
 
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(file);
 
-            result = parser.parse(fis);
-        } catch (IOException e) {
+            loadedConfig = parser.parse(fis);
+            if (loadedConfig != null) {
+                // loaded config is first, thus overrides asset
+                KindOfDay.addTaskTypes(loadedConfig);
+            }
+
+        } catch (Throwable e) {
+            fatal("loadConfigXml", "Error loading config from file " + filename + " " + e.getMessage());
             Log.e(getClass().getName(), "Error loading config from file " + filename, e);
         } finally {
             if (fis != null) {
@@ -70,15 +88,9 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
                 }
             }
         }
-        Log.i(getClass().getName(), "Loaded " + result.size() + " entries from ConfigFileStorage.");
+        Log.i(getClass().getName(), "Loaded " + loadedConfig.size() + " entries from ConfigFileStorage.");
 
-        // TODO add all tasks found in data storage to KindOfDay.list
-        // TODO when we add a new task from data store, default due minutes per task cannot be determined
-        // TODO => better to not store default due minutes per task in KindOfDay (better make configurable once for all tasks)
-        // TODO this way, read only name and determine isBeginEndType from begin/end values
-        // TODO and let user define a color in their config file or (later) in a separate GUI
-
-        return result;
+        return defaultAssetConfig;
     }
 
     @Override

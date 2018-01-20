@@ -15,6 +15,9 @@ import java.util.Set;
  */
 public class KindOfDay {
 
+    // TODO static method to return "initial"/default task used in modelToView initially
+    // --> This way, a check for initial state of UI is easy
+
     // Idea is: Due hours per day is one central value (in future configurable) for all tasks.
     public static final int DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES = 8 * 60;
 
@@ -64,6 +67,7 @@ public class KindOfDay {
     public static void initializeForTests() {
         list.clear();
         listNames.clear();
+        // TODO initialize from asset and assign CONSTANTS WORKDAY = assets(1), VACATION = assets(2) ..
         list.add(WORKDAY);
         list.add(VACATION);
         list.add(HOLIDAY);
@@ -71,11 +75,6 @@ public class KindOfDay {
         list.add(SICKDAY);
         list.add(PARENTAL_LEAVE);
     }
-
-    //TODO wird nicht mehr gebraucht weil direkt bei loadDaysDataNew neue Type of Tasks zur list geadded werden!
-    //  public static void addTaskTypesForMonth(StorageFacade storage, Activity activity, String id) {
-    //      addTaskTypes(storage.loadTaskNames(activity, id));
-    //}
 
     public static void addTaskTypes(List<KindOfDay> types) {
         for (KindOfDay task : types) {
@@ -91,6 +90,34 @@ public class KindOfDay {
         } else {
             Log.i(KindOfDay.class.getName(), "Skipped task " + task.getDisplayString() + ".");
         }
+    }
+
+    public static void replaceTaskType(KindOfDay task) {
+        if (listNames.contains(task.getDisplayString())) {
+            // cant use #remove cause remove uses equals which respects the color of the task
+            boolean result0 = removeByName(task.getDisplayString());
+            boolean result1 = listNames.remove(task.getDisplayString());
+            Log.i(KindOfDay.class.getName(), "Replacing task " + task.getDisplayString() + ": " + result0 + "," + result1);
+            if (result0 && result1) {
+                addTaskType(task);
+            }
+        } else {
+            Log.i(KindOfDay.class.getName(), "Replace task " + task.getDisplayString() + ": task not found.");
+        }
+    }
+
+    private static boolean removeByName(String displayString) {
+        int index = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getDisplayString().equals(displayString)) {
+                index = i;
+            }
+        }
+        if (index >= 0) {
+            list.remove(index);
+            return true;
+        }
+        return false;
     }
 
     private String displayString;
@@ -171,7 +198,8 @@ public class KindOfDay {
     }
 
     public static KindOfDay convert(String displayString, Integer begin, Integer end) {
-        KindOfDay newType = new KindOfDay(displayString, -14774017, begin != null && end != null);
+        Log.i(KindOfDay.class.getName(), "Converting task " + displayString + ".");
+        KindOfDay newType = new KindOfDay(displayString, ColorsUI.DARK_BLUE_DEFAULT, begin != null && end != null);
         addTaskType(newType);
         return newType;
     }
