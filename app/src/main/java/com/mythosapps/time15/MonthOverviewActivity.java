@@ -35,7 +35,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -410,6 +409,9 @@ public class MonthOverviewActivity extends AppCompatActivity {
      */
     private void migrateDataForMonth() {
 
+        // TODO remove: test drive crash reporting feature
+        throw new IllegalStateException("Test drive Crashalytics Time15");
+/*
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
 
         String success = "Success! ";
@@ -430,6 +432,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         String goodBad = "\n\nMonth: " + TimeUtils.getMonthYearDisplayString(id)
                 + "\n\nGood: " + TextUtils.join(",", good) + "\nBad: " + TextUtils.join(",", bad);
         Toast.makeText(MonthOverviewActivity.this, success + goodBad, Toast.LENGTH_LONG).show();
+*/
     }
 
 }
