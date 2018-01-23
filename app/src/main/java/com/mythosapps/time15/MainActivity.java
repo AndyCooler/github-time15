@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // TODO install default exception handler to report crashes to me
         // TODO use ProGuard to obfuscate the code
 
         Log.i(getClass().getName(), "onCreate() finished.");
