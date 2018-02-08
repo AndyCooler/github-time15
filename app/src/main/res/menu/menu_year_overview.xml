@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_month"
         android:orderInCategory="200"
-        android:title="Monat"
+        android:title="@string/menu_month"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_month"></item>
 

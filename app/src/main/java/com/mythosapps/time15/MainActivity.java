@@ -103,22 +103,14 @@ public class MainActivity extends AppCompatActivity {
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
-        kindOfDayView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleKindOfDay(v);
-            }
+        kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
+
+        kindOfDayView.setOnLongClickListener(v -> {
+            editKindOfDay(v);
+            return true;
         });
 
-        kindOfDayView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                editKindOfDay(v);
-                return true;
-            }
-        });
-
-        // TODO use ProGuard to obfuscate the code
+        // can: use ProGuard to obfuscate the code
 
         Log.i(getClass().getName(), "onCreate() finished.");
     }
@@ -448,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
         input.setSelection(0, kindOfDay.length());
 
         CheckBox checkBox = new CheckBox(this);
-        checkBox.setText("Mit Von-Bis Uhrzeit");
+        checkBox.setText(R.string.edit_task_with_begin_end);
         checkBox.setChecked(KindOfDay.fromString(kindOfDay).isBeginEndType());
 
         LinearLayout radioLayout = new LinearLayout(this);
@@ -458,18 +450,18 @@ public class MainActivity extends AppCompatActivity {
         final RadioGroup rg = new RadioGroup(this);
         rg.setOrientation(LinearLayout.HORIZONTAL);
         RadioButton rb1 = new RadioButton(this);
-        rb1.setText("Blau");
+        rb1.setText(R.string.edit_task_color_blue);
         rg.addView(rb1, 0);
         RadioButton rb2 = new RadioButton(this);
-        rb2.setText("Grün");
+        rb2.setText(R.string.edit_task_color_green);
         rg.addView(rb2, 1);
         RadioButton rb3 = new RadioButton(this);
-        rb3.setText("Grau");
+        rb3.setText(R.string.edit_task_color_gray);
         rg.addView(rb3, 2);
         radioLayout.addView(rg);
 
         TextView label = new TextView(this);
-        label.setText("Farbe in Monatsansicht:");
+        label.setText(R.string.edit_task_color_in_month_overview);
 
         linearLayout.addView(input);
         linearLayout.addView(checkBox);
@@ -477,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayout.addView(radioLayout);
 
         builder.setView(linearLayout);
-        builder.setPositiveButton("Neu", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.edit_task_new), new DialogInterface.OnClickListener() {
             private String getTaskName() {
                 String taskName = input.getText().toString();
                 if (taskName != null) {
@@ -499,14 +491,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 kindOfDayEdited = getTaskName();
                 if (KindOfDay.fromString(kindOfDayEdited) != null || kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
-                    Toast.makeText(MainActivity.this, "Aufgabe existiert bereits!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.edit_task_error_task_exists, Toast.LENGTH_SHORT).show();
                     // Snackbar hatte nicht geklappt...
                     return;
                 }
                 updateTask();
             }
         });
-        builder.setNegativeButton("Ändern", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.edit_task_edit), new DialogInterface.OnClickListener() {
             private String getTaskName() {
                 String taskName = input.getText().toString();
                 if (taskName != null) {
@@ -520,7 +512,7 @@ public class MainActivity extends AppCompatActivity {
 
                 kindOfDayEdited = getTaskName();
                 if (KindOfDay.fromString(kindOfDayEdited) == null) {
-                    Toast.makeText(MainActivity.this, "Aufgabe existiert nicht!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.edit_task_error_task_not_found, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 KindOfDay taskToModify = KindOfDay.fromString(kindOfDayEdited);
@@ -534,12 +526,7 @@ public class MainActivity extends AppCompatActivity {
                 activateKindOfDay(taskToModify);
             }
         });
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNeutralButton(getString(R.string.edit_task_cancel), (dialog, which) -> dialog.cancel());
 
         final AlertDialog dialog = builder.show();
 
@@ -556,7 +543,7 @@ public class MainActivity extends AppCompatActivity {
     public void addTask(View v) {
         Log.i(getClass().getName(), "addTask() started at task #" + taskNo);
         if (modifiableData.getNumberOfTasks() > 1) {
-            Toast.makeText(MainActivity.this, "Nur 2 Aufgaben pro Tag!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.tasks_per_day_limit, Toast.LENGTH_SHORT).show();
         } else {
             taskNo = 1;
             BeginEndTask task1 = new BeginEndTask();
@@ -576,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
             taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
             modelToView();
         } else {
-            Toast.makeText(MainActivity.this, "Erst mit + eine Aufgabe hinzufügen!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.task_add_by_pressing_plus, Toast.LENGTH_SHORT).show();
         }
         Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
     }
@@ -782,7 +769,7 @@ public class MainActivity extends AppCompatActivity {
     private void viewToModel() {
         Log.i(getClass().getName(), "viewToModel() started.");
 
-        BeginEndTask task0 = (BeginEndTask) modifiableData.getTask(taskNo);
+        BeginEndTask task0 = modifiableData.getTask(taskNo);
         if (task0 == null) {
             task0 = new BeginEndTask();
             modifiableData.addTask(task0);
@@ -820,7 +807,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (task.getKindOfDay().isBeginEndType()) {
             setBeginEndSelectionActivated(true);
-            BeginEndTask task0 = (BeginEndTask) task;
+            BeginEndTask task0 = task;
             beginnTime = task0.getBegin();
             beginn15 = task0.getBegin15();
             endeTime = task0.getEnd();

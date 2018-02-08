@@ -2,39 +2,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mythosapps.time15.MonthOverviewActivity">
-    <item
-        android:id="@+id/action_migrate"
-        android:title="@string/action_migrate"
-        android:orderInCategory="900"
-        app:showAsAction="never" />
+    <!--    <item
+            android:id="@+id/action_migrate"
+            android:title="@string/action_migrate"
+            android:orderInCategory="900"
+            app:showAsAction="never" />
+            -->
     <item
         android:id="@+id/action_month_backwards"
         android:orderInCategory="100"
-        android:title="Zurück"
+        android:title="@string/menu_back"
         android:icon="@android:drawable/ic_media_rew"
         app:showAsAction="always"></item>
     <item
         android:id="@+id/action_month_forwards"
         android:orderInCategory="200"
-        android:title="Vorwärts"
+        android:title="@string/menu_forward"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_media_ff"></item>
     <item
         android:id="@+id/action_day"
         android:orderInCategory="300"
-        android:title="Day"
+        android:title="@string/menu_day"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_day"></item>
     <item
         android:id="@+id/action_year"
         android:orderInCategory="400"
-        android:title="Jahr"
+        android:title="@string/menu_year"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_agenda"></item>
-    <item
-        android:id="@+id/action_send"
-        android:orderInCategory="500"
-        android:title="Send"
-        app:showAsAction="never"
-        android:icon="@android:drawable/ic_dialog_email"></item>
+    <!--    <item
+            android:id="@+id/action_send"
+            android:orderInCategory="500"
+            android:title="Send"
+            app:showAsAction="never"
+            android:icon="@android:drawable/ic_dialog_email"></item>
+            -->
 </menu>

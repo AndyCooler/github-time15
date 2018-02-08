@@ -66,14 +66,14 @@ public class ConfigAssetStorage implements ConfigStorageFacade {
 
         boolean result = false;
         try {
-            String xml = XML_PROLOG;
+            StringBuilder xml = new StringBuilder(XML_PROLOG);
 
             for (KindOfDay task : tasks) {
-                xml += task.toXmlConfig();
+                xml.append(task.toXmlConfig());
             }
-            xml += XML_END;
+            xml.append(XML_END);
 
-            saveActionXml = xml;
+            saveActionXml = xml.toString();
             Log.i(getClass().getName(), "Saved XML : \n" + xml);
             result = true;
         } catch (Throwable e) {

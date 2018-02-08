@@ -93,11 +93,11 @@ public class DaysDataNew {
 
     @Override
     public String toString() {
-        String s = id;
+        StringBuilder s = new StringBuilder(id);
         for (BeginEndTask task : tasks) {
-            s += task.toString();
+            s.append(task.toString());
         }
-        return s;
+        return s.toString();
     }
 
     public static DaysDataNew fromString(String s) {

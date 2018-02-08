@@ -194,7 +194,7 @@ public class KindOfDay {
 
     public static boolean isBeginEndType(String kindOfDay) {
         KindOfDay day = fromString(kindOfDay);
-        return day.isBeginEndType();
+        return day == null ? true : day.isBeginEndType();
     }
 
     public static KindOfDay convert(String displayString, Integer begin, Integer end) {

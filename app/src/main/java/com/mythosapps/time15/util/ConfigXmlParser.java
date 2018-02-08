@@ -100,7 +100,7 @@ public class ConfigXmlParser {
         return this.getTextNodeValue(nodes.item(0));
     }
 
-    private final String getTextNodeValue(Node node) {
+    private String getTextNodeValue(Node node) {
         Node child;
         if (node != null) {
             if (node.hasChildNodes()) {

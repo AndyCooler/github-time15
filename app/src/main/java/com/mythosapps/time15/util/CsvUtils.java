@@ -31,29 +31,29 @@ public final class CsvUtils {
         if (data.getNumberOfTasks() == 0) {
             return null;
         }
-        String s = data.getId() + ",";
+        StringBuilder s = new StringBuilder(data.getId() + ",");
         for (int i = 0; i < data.getNumberOfTasks(); i++) {
             BeginEndTask taskB = data.getTask(i);
-            s += taskB.getKindOfDay() + ",";
+            s.append(taskB.getKindOfDay()).append(",");
                 if (taskB.getBegin() == null || taskB.getBegin15() == null) {
-                    s += ",";
+                    s.append(",");
                 } else {
-                    s += new Time15(taskB.getBegin(), taskB.getBegin15()).toDisplayString() + ",";
+                    s.append(new Time15(taskB.getBegin(), taskB.getBegin15()).toDisplayString()).append(",");
                 }
                 if (taskB.getEnd() == null || taskB.getEnd15() == null) {
-                    s += ",";
+                    s.append(",");
                 } else {
-                    s += new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString() + ",";
+                    s.append(new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString()).append(",");
                 }
                 if (taskB.getPause() == null) {
-                    s += ",";
+                    s.append(",");
                 } else {
-                    s += Time15.fromMinutes(taskB.getPause()).toDisplayString() + ",";
+                    s.append(Time15.fromMinutes(taskB.getPause()).toDisplayString()).append(",");
                 }
-            s += taskB.getTotal().toDecimalFormat() + ",";
-            s += ","; // reserved for future note
+            s.append(taskB.getTotal().toDecimalFormat()).append(",");
+            s.append(","); // reserved for future note
         }
-        return s;
+        return s.toString();
     }
 
 

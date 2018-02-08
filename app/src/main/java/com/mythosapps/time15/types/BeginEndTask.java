@@ -227,6 +227,6 @@ public class BeginEndTask {
     }
 
     private boolean safeEquals(Object a, Object b) {
-        return a == null ? b == null : b == null ? a == null : a.equals(b);
+        return (a == null) ? (b == null) : ((b != null) && a.equals(b));
     }
 }

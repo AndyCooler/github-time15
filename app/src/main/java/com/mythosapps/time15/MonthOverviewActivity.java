@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +19,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mythosapps.time15.storage.ExternalCsvFileStorage;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.types.BeginEndTask;
@@ -28,11 +26,9 @@ import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
-import com.mythosapps.time15.util.EmailUtils;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -41,8 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
-import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
 
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
@@ -212,8 +206,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
                 String hours = "";
                 String extraVacationHours = "";
-                BeginEndTask task0 = (BeginEndTask) data.getTask(0);
-                BeginEndTask task1 = (BeginEndTask) data.getTask(1);
+                BeginEndTask task0 = data.getTask(0);
+                BeginEndTask task1 = data.getTask(1);
                 //if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
                 hours += task0.getTotal().toDisplayString() + " h";
 
@@ -262,7 +256,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextView("", rowColor));
                 row.addView(createTextView(task.getDisplayString(), rowColor));
                 row.addView(createTextView(time15.toDisplayString(), rowColor));
-                row.addView(createTextView("(sum)", rowColor));
+                row.addView(createTextView(getString(R.string.month_sum), rowColor));
                 row.addView(createTextView("", rowColor));
                 table.addView(row);
             }
@@ -293,9 +287,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
             // add text view with balance to current row
             TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, true);
             row.addView(balanceView);
-        } else {
-            //TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, false);
-            //previousRow.addView(balanceView);
         }
         return newPreviousWeekOfYear;
     }
@@ -360,9 +351,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_day) {
             startMainActivity(this.id);
             return true;
@@ -377,7 +365,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
             initialize();
             return true;
         }
-        if (id == R.id.action_migrate) {
+/*        if (id == R.id.action_migrate) {
             migrateDataForMonth();
             return true;
         }
@@ -387,7 +375,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
             String subject = TimeUtils.getMonthYearDisplayString(this.id);
             EmailUtils.sendEmail(this, ExternalCsvFileStorage.getFilename(this.id), storageDir, subject);
             return true;
-        }
+        }*/
         if (id == R.id.action_year) {
             startYearOverviewActivity();
             return true;
