@@ -22,7 +22,7 @@ public final class TimeUtils {
     }
 
     public static String createID(GregorianCalendar cal) {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy", java.util.Locale.getDefault());
         String id = df.format(cal.getTime());
         cache.put(id, cal);
         return id;

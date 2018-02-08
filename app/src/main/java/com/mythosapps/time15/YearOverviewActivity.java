@@ -75,7 +75,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     }
 
     private void initialize() {
-        setTitle("Übersicht " + TimeUtils.getYearDisplayString(id));
+        setTitle(getString(R.string.year_overview_title) + TimeUtils.getYearDisplayString(id));
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
         List<CharSequence> taskNames = new ArrayList<>();
@@ -99,7 +99,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         TableRow row = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
-        List<String> listOfIds = Arrays.asList(new String[]{"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"});
+        List<String> listOfIds = Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
         String idFirstJan = "01.01." + TimeUtils.getYearDisplayString(id);
         String idFirstOfMonth = idFirstJan;
 
@@ -114,7 +114,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
                 time15.minus(DaysDataNew.DUE_TOTAL_MINUTES);
             }
 
-            String display = " : " + numDays + " days, " + time15.toDecimalFormat() + " hours";
+            String display = " : " + numDays + " " + getString(R.string.year_days) + ", " + time15.toDecimalFormat() + " " + getString(R.string.year_hours);
 
             row = new TableRow(this);
             row.setLayoutParams(lp);
@@ -142,12 +142,12 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             totalYear.minus(DaysDataNew.DUE_TOTAL_MINUTES);
         }
 
-        String display = " : " + numDays + " days, " + totalYear.toDecimalFormat() + " hours";
+        String display = " : " + numDays + " " + getString(R.string.year_days) + ", " + totalYear.toDecimalFormat() + " " + getString(R.string.year_hours);
 
         row = new TableRow(this);
         row.setLayoutParams(lp);
 
-        row.addView(createTextView("Total:"));
+        row.addView(createTextView(getString(R.string.year_total)));
         row.addView(createTextView(display));
         row.addView(createTextView(""));
         row.addView(createTextView(""));
@@ -174,9 +174,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             // add text view with balance to current row
             TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, true);
             row.addView(balanceView);
-        } else {
-            //TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, false);
-            //previousRow.addView(balanceView);
         }
         return newPreviousWeekOfYear;
     }
@@ -230,9 +227,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_month) {
             startMonthOverviewActivity();
             return true;

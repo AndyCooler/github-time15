@@ -13,4 +13,33 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_task_editor">TaskEditorActivity</string>
 
+    <string name="main_begin">Beginn</string>
+    <string name="main_end">Ende</string>
+    <string name="main_pause">Pause</string>
+    <string name="main_default_task">Arbeit</string>
+    <string name="menu_back">Zurück</string>
+    <string name="menu_forward">Vorwärts</string>
+    <string name="menu_day">Day</string>
+    <string name="menu_year">Jahr</string>
+    <string name="menu_today">Heute</string>
+    <string name="menu_month">Monat</string>
+    <string name="menu_about">Info</string>
+    <string name="menu_delete">Löschen</string>
+    <string name="edit_task_with_begin_end">Mit Von-Bis Uhrzeit</string>
+    <string name="edit_task_color_blue">Blau</string>
+    <string name="edit_task_color_green">Grün</string>
+    <string name="edit_task_color_gray">Grau</string>
+    <string name="edit_task_color_in_month_overview">Farbe in Monatsansicht:</string>
+    <string name="edit_task_new">Neu</string>
+    <string name="edit_task_error_task_exists">Aufgabe existiert bereits!</string>
+    <string name="edit_task_edit">Ändern</string>
+    <string name="edit_task_error_task_not_found">Aufgabe existiert nicht!</string>
+    <string name="edit_task_cancel">Cancel</string>
+    <string name="tasks_per_day_limit">Nur 2 Aufgaben pro Tag!</string>
+    <string name="task_add_by_pressing_plus">Erst mit + eine Aufgabe hinzufügen!</string>
+    <string name="year_overview_title">Übersicht</string>
+    <string name="year_days">days</string>
+    <string name="year_hours">hours</string>
+    <string name="year_total">Total:</string>
+    <string name="month_sum">(sum)</string>
 </resources>
