@@ -108,13 +108,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-<<<<<<< HEAD
-        // TODO use ProGuard to obfuscate the code
-=======
         // can: use ProGuard to obfuscate the code
-
-        Log.i(getClass().getName(), "onCreate() finished.");
->>>>>>> origin/master
     }
 
     private void setBeginEndSelectionActivated(boolean activated) {
