@@ -80,7 +80,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 Uri uri = intent.getData();
                 importData(uri);
             } else {
-                Toast.makeText(MonthOverviewActivity.this, "intent type is null!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), "intent type is null!", Toast.LENGTH_LONG).show();
             }
         } else {
             id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
@@ -97,7 +97,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 ContentResolver cr = MonthOverviewActivity.this.getContentResolver();
                 InputStream is = cr.openInputStream(data);
                 if (is == null) {
-                    Toast.makeText(MonthOverviewActivity.this, "inputStream is null!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), "inputStream is null!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -126,13 +126,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
-                        Toast.makeText(MonthOverviewActivity.this, "yay! " + s, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), "yay! " + s, Toast.LENGTH_LONG).show();
                     }
                 });
                 builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
-                        Toast.makeText(MonthOverviewActivity.this, "nay-nay! " + s, Toast.LENGTH_LONG).show();
+                        Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), "nay-nay! " + s, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -142,10 +142,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 dialog.show();
 
             } catch (Exception e) {
-                Toast.makeText(MonthOverviewActivity.this, "ex: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), "ex: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(MonthOverviewActivity.this, "scheme: " + scheme, Toast.LENGTH_LONG).show();
+            Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), "scheme: " + scheme, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -218,10 +218,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
                 row.addView(createTextView(dayId.substring(0, 2)));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
-                row.addView(createTextView(task0.getKindOfDay().getDisplayString(), itemColor));
+                row.addView(createTextView(trimmed(task0.getKindOfDay().getDisplayString()), itemColor));
                 row.addView(createTextView(hours, itemColor));
                 itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
-                row.addView(createTextView(task1 == null ? "" : task1.getKindOfDay().getDisplayString(), itemColor));
+                row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
                 row.addView(createTextView(extraVacationHours, itemColor));
 
                 row.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +244,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
         for (KindOfDay task : KindOfDay.list) {
             // row
             if (tasksThisMonth.contains(task)) {
-                task.getDisplayString();
                 int sumInMinutes = storage.loadTaskSum(this, id, task);
                 Time15 time15 = Time15.fromMinutes(sumInMinutes);
 
@@ -254,7 +253,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.setLayoutParams(lp);
                 row.addView(createTextView("", rowColor));
                 row.addView(createTextView("", rowColor));
-                row.addView(createTextView(task.getDisplayString(), rowColor));
+                row.addView(createTextView(trimmed(task.getDisplayString()), rowColor));
                 row.addView(createTextView(time15.toDisplayString(), rowColor));
                 row.addView(createTextView(getString(R.string.month_sum), rowColor));
                 row.addView(createTextView("", rowColor));
@@ -263,6 +262,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
         }
 
         Log.i(getClass().getName(), "initialize() finished.");
+    }
+
+    private String trimmed(String displayString) {
+        return displayString.length() > 10 ? displayString.substring(0, 10) : displayString;
     }
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {

@@ -371,11 +371,25 @@
                 <Space
                     android:id="@+id/spacer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:minHeight="10dp"
                     android:visibility="visible"
                     android:gravity="fill_vertical" />
 
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/main_default_task"
+                    android:id="@+id/kindOfDay"
+                    android:layout_weight="4"
+                    android:textColor="#1E90FF"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:clickable="true"
+                    android:longClickable="true"
+                    android:maxLength="22"
+                    android:singleLine="true"
+                    android:paddingBottom="2dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -409,21 +423,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/main_default_task"
-                    android:id="@+id/kindOfDay"
-                    android:layout_weight="4"
-                    android:textColor="#1E90FF"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:clickable="true"
-                    android:longClickable="true"
-                    android:maxLength="12"
-                    android:singleLine="true"
-                    android:paddingBottom="2dp" />
 
                 <LinearLayout
                     android:orientation="horizontal"

@@ -132,7 +132,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
         Log.e(getClass().getName(), method + " : " + msg);
 
         if (activity != null) {
-            Toast.makeText(activity, method + " : " + msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity.getApplicationContext(), method + " : " + msg, Toast.LENGTH_SHORT).show();
         }
     }
 }

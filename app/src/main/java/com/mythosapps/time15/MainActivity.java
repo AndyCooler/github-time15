@@ -207,7 +207,8 @@ public class MainActivity extends AppCompatActivity {
             about += "Version: " + AppVersion.getVersionName(this) + "\n";
             about += "Build-ID:" + AppVersion.getVersionCode(this) + "\n";
             about += "Code: Andreas. Viele viele Tests: Julian";
-            Toast.makeText(MainActivity.this, about, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getApplicationContext(), about, Toast.LENGTH_SHORT).show();
             return true;
         }
         if (id == R.id.action_delete) {
@@ -220,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
     private void deleteTask() {
         Log.i(getClass().getName(), "deleteTask() started at task #" + taskNo);
         if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
-            Toast.makeText(MainActivity.this, "Nichts zu löschen!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this.getApplicationContext(), R.string.main_delete_error, Toast.LENGTH_SHORT).show();
         } else {
             originalData = null;
             modifiableData.deleteTask(modifiableData.getTask(taskNo));
@@ -427,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "editKindOfDay() started.");
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Aufgabe anpassen");
+        builder.setTitle(getString(R.string.edit_task_title));
 
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -491,8 +492,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 kindOfDayEdited = getTaskName();
                 if (KindOfDay.fromString(kindOfDayEdited) != null || kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
-                    Toast.makeText(MainActivity.this, R.string.edit_task_error_task_exists, Toast.LENGTH_SHORT).show();
-                    // Snackbar hatte nicht geklappt...
+                    Toast.makeText(MainActivity.this.getApplicationContext(), R.string.edit_task_error_task_exists, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 updateTask();
@@ -512,7 +512,7 @@ public class MainActivity extends AppCompatActivity {
 
                 kindOfDayEdited = getTaskName();
                 if (KindOfDay.fromString(kindOfDayEdited) == null) {
-                    Toast.makeText(MainActivity.this, R.string.edit_task_error_task_not_found, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this.getApplicationContext(), R.string.edit_task_error_task_not_found, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 KindOfDay taskToModify = KindOfDay.fromString(kindOfDayEdited);
@@ -535,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void aktualisiereKindOfDay(int color) {
         TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText(KindOfDay.fromString(kindOfDay).getDisplayString() + ">>");
+        day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
         day.setTextColor(color);
         setSelected(R.id.kindOfDay);
     }
@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
             taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
             modelToView();
         } else {
-            Toast.makeText(MainActivity.this, R.string.task_add_by_pressing_plus, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this.getApplicationContext(), R.string.task_add_by_pressing_plus, Toast.LENGTH_SHORT).show();
         }
         Log.i(getClass().getName(), "switchTasks() finished at task #" + taskNo);
     }

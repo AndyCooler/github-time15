@@ -162,7 +162,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         Log.e(getClass().getName(), method + " : " + msg);
 
         if (activity != null) {
-            Toast.makeText(activity, method + " : " + msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity.getApplicationContext(), method + " : " + msg, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -202,7 +202,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
                 for (String msg : warnings) {
                     warningsMsg.append(msg).append("\n");
                 }
-                Toast.makeText(activity, warningsMsg.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(activity.getApplicationContext(), warningsMsg.toString(), Toast.LENGTH_LONG).show();
             }
             success = true;
         } finally {
