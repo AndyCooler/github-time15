@@ -211,6 +211,10 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), about, Toast.LENGTH_SHORT).show();
             return true;
         }
+        if (id == R.id.action_new) {
+            menuNewTask();
+            return true;
+        }
         if (id == R.id.action_delete) {
             deleteTask();
             return true;
@@ -422,6 +426,42 @@ public class MainActivity extends AppCompatActivity {
         resetView();
         modelToView();
         Log.i(getClass().getName(), "activateKindOfDay() finished. Now active: " + kindOfDay);
+    }
+
+    public void menuNewTask() {
+        final TaskPopupUI taskUI = new TaskPopupUI(this, getString(R.string.new_task_title), kindOfDay);
+
+        taskUI.setOkButton(getString(R.string.edit_task_new), new DialogInterface.OnClickListener() {
+            private String getTaskName() {
+                String taskName = taskUI.getInputTextField().getText().toString();
+                if (taskName != null) {
+                    taskName = taskName.trim();
+                }
+                return taskName;
+            }
+
+            private void updateTask() {
+                int colorChosen = taskUI.getInputRadioButtonGroup().getCheckedRadioButtonId();
+                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
+
+                KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, taskColor, taskUI.getCheckBox().isChecked()));
+                KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
+
+                activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
+            }
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                kindOfDayEdited = getTaskName();
+                if (KindOfDay.fromString(kindOfDayEdited) != null || kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
+                    Toast.makeText(MainActivity.this.getApplicationContext(), R.string.edit_task_error_task_exists, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                updateTask();
+            }
+        });
+        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
+        taskUI.show();
     }
 
     public void editKindOfDay(View v) {

@@ -24,7 +24,9 @@
     <string name="menu_today">Heute</string>
     <string name="menu_month">Monat</string>
     <string name="menu_about">Info</string>
+    <string name="menu_new">Neue Aufgabe</string>
     <string name="menu_delete">Löschen</string>
+    <string name="new_task_title">Neue Aufgabe</string>
     <string name="edit_task_title">Aufgabe anpassen</string>
     <string name="edit_task_with_begin_end">Mit Von-Bis Uhrzeit</string>
     <string name="edit_task_color_blue">Blau</string>
