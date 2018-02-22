@@ -366,7 +366,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom">
+                android:gravity="bottom|center_horizontal">
 
                 <Space
                     android:id="@+id/spacer"
@@ -377,7 +377,7 @@
                     android:gravity="fill_vertical" />
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/main_default_task"
@@ -388,8 +388,15 @@
                     android:clickable="true"
                     android:longClickable="true"
                     android:maxLength="22"
-                    android:singleLine="true"
-                    android:paddingBottom="2dp" />
+                    android:singleLine="true" />
+
+                <Space
+                    android:id="@+id/spacer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="2dp"
+                    android:visibility="visible"
+                    android:gravity="fill_vertical" />
             </LinearLayout>
 
         </LinearLayout>
@@ -467,15 +474,6 @@
                         android:clickable="true" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="(0)"
-                    android:id="@+id/balance"
-                    android:layout_weight="4"
-                    android:gravity="top|center_horizontal" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -495,6 +493,22 @@
                     android:clickable="true" />
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="(0)"
+                android:id="@+id/balance"
+                android:layout_weight="4"
+                android:gravity="top|center_horizontal" />
         </LinearLayout>
     </LinearLayout>
 
