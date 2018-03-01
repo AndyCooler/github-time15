@@ -30,11 +30,13 @@ public class TaskPopupUI {
     private EditText inputTextField;
     private RadioGroup radioGroup;
     private CheckBox checkBox;
+    private boolean taskNameEditable;
 
-    public TaskPopupUI(Activity parent, String title, String kindOfDay) {
+    public TaskPopupUI(Activity parent, String title, String kindOfDay, boolean taskNameEditable) {
         this.parent = parent;
         this.title = title;
         this.kindOfDay = kindOfDay;
+        this.taskNameEditable = taskNameEditable;
     }
 
     public void setOkButton(String okButtonText, DialogInterface.OnClickListener okButtonListener) {
@@ -52,7 +54,7 @@ public class TaskPopupUI {
 
     private void initializeUI() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-        builder.setTitle(parent.getString(R.string.edit_task_title));
+        builder.setTitle(title);
 
         LinearLayout linearLayout = new LinearLayout(parent);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -62,7 +64,11 @@ public class TaskPopupUI {
         inputTextField = new EditText(parent);
         inputTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
         inputTextField.setText(kindOfDay);
-        inputTextField.setSelection(0, kindOfDay.length());
+        if (taskNameEditable) {
+            inputTextField.setSelection(0, kindOfDay.length());
+        }
+        inputTextField.setEnabled(taskNameEditable);
+
 
         checkBox = new CheckBox(parent);
         checkBox.setText(R.string.edit_task_with_begin_end);

@@ -386,7 +386,6 @@
                     android:textColor="#1E90FF"
                     android:gravity="center_vertical|center_horizontal"
                     android:clickable="true"
-                    android:longClickable="true"
                     android:maxLength="22"
                     android:singleLine="true" />
 
