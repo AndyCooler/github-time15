@@ -3,7 +3,6 @@ package com.mythosapps.time15;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -11,11 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,11 +96,6 @@ public class MainActivity extends AppCompatActivity {
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
-
-        kindOfDayView.setOnLongClickListener(v -> {
-            editKindOfDay(v);
-            return true;
-        });
 
         // can: use ProGuard to obfuscate the code
     }
@@ -200,7 +189,16 @@ public class MainActivity extends AppCompatActivity {
             about += "Version: " + AppVersion.getVersionName(this) + "\n";
             about += "Build-ID:" + AppVersion.getVersionCode(this) + "\n";
             about += "Code: Andreas. Viele viele Tests: Julian";
-            Toast.makeText(MainActivity.this, about, Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getApplicationContext(), about, Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_new) {
+            menuNewTask();
+            return true;
+        }
+        if (id == R.id.action_edit) {
+            menuEditTask();
             return true;
         }
         if (id == R.id.action_delete) {
@@ -212,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void deleteTask() {
         if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
-            Toast.makeText(MainActivity.this, "Nichts zu löschen!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this.getApplicationContext(), R.string.main_delete_error, Toast.LENGTH_SHORT).show();
         } else {
             originalData = null;
             modifiableData.deleteTask(modifiableData.getTask(taskNo));
@@ -389,54 +387,12 @@ public class MainActivity extends AppCompatActivity {
         modelToView();
     }
 
-    public void editKindOfDay(View v) {
+    public void menuNewTask() {
+        final TaskPopupUI taskUI = new TaskPopupUI(this, getString(R.string.new_task_title), kindOfDay, true);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Aufgabe anpassen");
-
-        LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT));
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        input.setText(kindOfDay);
-        input.setSelection(0, kindOfDay.length());
-
-        CheckBox checkBox = new CheckBox(this);
-        checkBox.setText(R.string.edit_task_with_begin_end);
-        checkBox.setChecked(KindOfDay.fromString(kindOfDay).isBeginEndType());
-
-        LinearLayout radioLayout = new LinearLayout(this);
-        radioLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        radioLayout.setOrientation(LinearLayout.HORIZONTAL);
-        final RadioGroup rg = new RadioGroup(this);
-        rg.setOrientation(LinearLayout.HORIZONTAL);
-        RadioButton rb1 = new RadioButton(this);
-        rb1.setText(R.string.edit_task_color_blue);
-        rg.addView(rb1, 0);
-        RadioButton rb2 = new RadioButton(this);
-        rb2.setText(R.string.edit_task_color_green);
-        rg.addView(rb2, 1);
-        RadioButton rb3 = new RadioButton(this);
-        rb3.setText(R.string.edit_task_color_gray);
-        rg.addView(rb3, 2);
-        radioLayout.addView(rg);
-
-        TextView label = new TextView(this);
-        label.setText(R.string.edit_task_color_in_month_overview);
-
-        linearLayout.addView(input);
-        linearLayout.addView(checkBox);
-        linearLayout.addView(label);
-        linearLayout.addView(radioLayout);
-
-        builder.setView(linearLayout);
-        builder.setPositiveButton(getString(R.string.edit_task_new), new DialogInterface.OnClickListener() {
+        taskUI.setOkButton(getString(R.string.edit_task_new), new DialogInterface.OnClickListener() {
             private String getTaskName() {
-                String taskName = input.getText().toString();
+                String taskName = taskUI.getInputTextField().getText().toString();
                 if (taskName != null) {
                     taskName = taskName.trim();
                 }
@@ -444,61 +400,64 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private void updateTask() {
-                int colorChosen = rg.getCheckedRadioButtonId();
+                int colorChosen = taskUI.getInputRadioButtonGroup().getCheckedRadioButtonId();
                 int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
 
-                KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, taskColor, checkBox.isChecked()));
+                KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, taskColor, taskUI.getCheckBox().isChecked()));
                 KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
 
                 activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
             }
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 kindOfDayEdited = getTaskName();
                 if (KindOfDay.fromString(kindOfDayEdited) != null || kindOfDay.equalsIgnoreCase(kindOfDayEdited)) {
-                    Toast.makeText(MainActivity.this, R.string.edit_task_error_task_exists, Toast.LENGTH_SHORT).show();
-                    // Snackbar hatte nicht geklappt...
+                    Toast.makeText(MainActivity.this.getApplicationContext(), R.string.edit_task_error_task_exists, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 updateTask();
             }
         });
-        builder.setNegativeButton(getString(R.string.edit_task_edit), new DialogInterface.OnClickListener() {
+        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
+        taskUI.show();
+    }
+
+    public void menuEditTask() {
+        final TaskPopupUI taskUI = new TaskPopupUI(this, getString(R.string.edit_task_title), kindOfDay, false);
+
+        taskUI.setOkButton(getString(R.string.edit_task_edit), new DialogInterface.OnClickListener() {
             private String getTaskName() {
-                String taskName = input.getText().toString();
+                String taskName = taskUI.getInputTextField().getText().toString();
                 if (taskName != null) {
                     taskName = taskName.trim();
                 }
                 return taskName;
             }
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                kindOfDayEdited = getTaskName();
-                if (KindOfDay.fromString(kindOfDayEdited) == null) {
-                    Toast.makeText(MainActivity.this, R.string.edit_task_error_task_not_found, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                KindOfDay taskToModify = KindOfDay.fromString(kindOfDayEdited);
-                int colorChosen = rg.getCheckedRadioButtonId();
+            private void updateTask() {
+                int colorChosen = taskUI.getInputRadioButtonGroup().getCheckedRadioButtonId();
                 int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
 
-                taskToModify.setColor(taskColor);
-                taskToModify.setBeginEndType(checkBox.isChecked());
+                KindOfDay.replaceTaskType(new KindOfDay(kindOfDayEdited, taskColor, taskUI.getCheckBox().isChecked()));
                 KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
 
-                activateKindOfDay(taskToModify);
+                activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
+            }
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                kindOfDayEdited = getTaskName();
+                updateTask();
             }
         });
-        builder.setNeutralButton(getString(R.string.edit_task_cancel), (dialog, which) -> dialog.cancel());
-
-        final AlertDialog dialog = builder.show();
+        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
+        taskUI.show();
     }
 
     private void aktualisiereKindOfDay(int color) {
         TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText(KindOfDay.fromString(kindOfDay).getDisplayString() + ">>");
+        day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
         day.setTextColor(color);
         setSelected(R.id.kindOfDay);
     }
@@ -523,7 +482,7 @@ public class MainActivity extends AppCompatActivity {
             taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
             modelToView();
         } else {
-            Toast.makeText(MainActivity.this, R.string.task_add_by_pressing_plus, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this.getApplicationContext(), R.string.task_add_by_pressing_plus, Toast.LENGTH_SHORT).show();
         }
     }
 

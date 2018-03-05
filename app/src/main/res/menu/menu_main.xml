@@ -37,4 +37,16 @@
         android:title="@string/menu_delete"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_delete"></item>
+    <item
+        android:id="@+id/action_new"
+        android:orderInCategory="510"
+        android:title="@string/menu_new"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_month"></item>
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="520"
+        android:title="@string/menu_edit"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_month"></item>
 </menu>
