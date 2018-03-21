@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,7 @@ import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.AppVersion;
+import com.mythosapps.time15.util.SwipeDetector;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
@@ -45,20 +51,27 @@ public class MainActivity extends AppCompatActivity {
     // View state and view state management
     private String id = null;
     private int taskNo = 0;
-    private Integer beginnTime = null;
-    private Integer endeTime = null;
-    private Integer pauseTime = null;
-    private Integer beginn15 = null;
-    private Integer ende15 = null;
+    private Integer beginnTime = null; //value
+    private Integer endeTime = null; //value
+    private Integer pauseTime = null; //value
+    private Integer beginn15 = null; //value
+    private Integer ende15 = null; //value
     private String kindOfDay = KindOfDay.WORKDAY.toString();
     private String kindOfDayEdited = null;
-    private Integer previousSelectionBeginnTime = null;
-    private Integer previousSelectionEndeTime = null;
-    private Integer previousSelectionPauseTime = null;
-    private Integer previousSelectionBeginn15 = null;
-    private Integer previousSelectionEnde15 = null;
+    private Integer previousSelectionBeginnTime = null; //viewId
+    private Integer previousSelectionEndeTime = null; //viewId
+    private Integer previousSelectionPauseTime = null; //viewId
+    private Integer previousSelectionBeginn15 = null; //viewId
+    private Integer previousSelectionEnde15 = null; //viewId
     private String previousSelectionKindOfDays = null;
-    private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<>();
+    // here are the maps from value to viewId that enable re-use of 4 TextViews for full range 0-24
+    // TODO for ScrollView, just extend initialization to full range of values
+    // TODO later: maps can be avoided by makeing better use of TextView (has ID, has value, so
+    // no need for mappings as we now use the full range)
+
+    // TODO ScrollView#requestChildFocus(View) scroll bis ein child View sichtbar wird,
+    // TODO oder #scrollTo #smoothScrollTo mit int Y. Param Y fuer scrollTO ist getTop() oder getBottom() von TextView
+    private HashMap<Integer, TextView> mapBeginValueToView = new HashMap<>();
     private HashMap<Integer, Integer> mapBeginn15ValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
@@ -72,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView totalSemi;
     private TextView total15;
     private boolean appIsPaused = false;
+    private ScrollView scrollViewBegin;
+    private LinearLayout scrollViewBeginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initMapWithIds(mapBeginnValueToViewId, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
         initMapWithIds(mapEndeValueToViewId, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
         initMapWithIds(mapBeginn15ValueToViewId, R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
         initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
@@ -96,16 +110,45 @@ public class MainActivity extends AppCompatActivity {
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
+        scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
+        scrollViewBegin.setOnTouchListener(new SwipeDetector(scrollViewBegin));
+
+        scrollViewBeginLayout = (LinearLayout) findViewById(R.id.scrollBeginLayout);
+        for (int i = 0; i < 24; i++) {
+            TextView view = new TextView(this);
+            // works already! maybe set width to match_parent
+            view.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT, 1f));
+            view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 48f);
+            view.setId(1000 + i);
+            view.setText(i < 10 ? "0" + i : "" + i);
+            //view.setTextAppearance(this, android.R.style.TextAppearance_Large);
+            view.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    verarbeiteKlick(v);
+                }
+            });
+            view.setClickable(true);
+            view.setGravity(Gravity.CENTER);
+            scrollViewBeginLayout.addView(view, i);
+            mapBeginValueToView.put(i, view);
+        }
+
+
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
-        
+
         // can: use ProGuard to obfuscate the code
 
         Log.i(getClass().getName(), "onCreate() finished.");
     }
 
+    // only for UI: sets view's text color to black when active, gray when inactive
     private void setBeginEndSelectionActivated(boolean activated) {
-        for (Integer viewId : mapBeginnValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapBeginValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
         for (Integer viewId : mapEndeValueToViewId.values()) {
             setActivation(viewId, activated);
@@ -307,20 +350,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void beginEarlier(View view) {
         Log.i(getClass().getName(), "beginEarlier() started.");
-        TextView textView = (TextView) findViewById(R.id.beginnA);
-        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
-        updateMapToBeginAt(intoRange(hour));
+//        TextView textView = (TextView) findViewById(R.id.beginnA);
+//        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
+//        updateMapToBeginAt(intoRange(hour));
         Log.i(getClass().getName(), "beginEarlier() finished.");
     }
 
     public void beginLater(View view) {
         Log.i(getClass().getName(), "beginLater() started.");
-        TextView textView = (TextView) findViewById(R.id.beginnA);
-        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
-        updateMapToBeginAt(intoRange(hour));
+//        TextView textView = (TextView) findViewById(R.id.beginnA);
+//        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
+//        updateMapToBeginAt(intoRange(hour));
         Log.i(getClass().getName(), "beginLater() finished.");
     }
 
+    // ensures that begin hour is visible
     public void beginAt(Integer hour) {
         Log.i(getClass().getName(), "beginAt() started." + hour);
         if (hour == null || isBeginHourVisible(hour)) {
@@ -330,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(getClass().getName(), "beginAt() finished.");
     }
 
+    // ensures that end hour is visible
     public void endAt(Integer hour) {
         Log.i(getClass().getName(), "endAt() started." + hour);
         if (hour == null || isEndHourVisible(hour)) {
@@ -346,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isBeginHourVisible(int hour) {
-        return mapBeginnValueToViewId.get(hour) != null;
+        return mapBeginValueToView.get(hour).isShown(); // TODO is visible?
     }
 
     private boolean isEndHourVisible(int hour) {
@@ -354,9 +399,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMapToBeginAt(Integer newValue) {
-        resetView();
-        updateMapWithIds(mapBeginnValueToViewId, newValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-        modelToView();
+        TextView textView = mapBeginValueToView.get(newValue);
+        textView.requestFocus(); // TODO requestFocus hier?
     }
 
     private Integer intoRange(int hour) {
@@ -539,7 +583,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView view = (TextView) v;
         int viewId = view.getId();
-        boolean isBeginnTime = viewId == R.id.beginnA || viewId == R.id.beginnB || viewId == R.id.beginnC || viewId == R.id.beginnD;
+            boolean isBeginnTime = mapBeginValueToView.containsValue(view);
         boolean isEndeTime = viewId == R.id.endeA || viewId == R.id.endeB || viewId == R.id.endeC || viewId == R.id.endeD;
         boolean isBeginn15 = viewId == R.id.beginn00 || viewId == R.id.beginn15 || viewId == R.id.beginn30 || viewId == R.id.beginn45;
         boolean isEnde15 = viewId == R.id.ende00 || viewId == R.id.ende15 || viewId == R.id.ende30 || viewId == R.id.ende45;
@@ -775,7 +819,7 @@ public class MainActivity extends AppCompatActivity {
             previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
             previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
             previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
-            previousSelectionBeginnTime = mapBeginnValueToViewId.get(beginnTime);
+            previousSelectionBeginnTime = mapBeginValueToView.get(beginnTime) == null ? null : mapBeginValueToView.get(beginnTime).getId();
             previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
 
             setSelected(previousSelectionPauseTime);
@@ -809,6 +853,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetView() {
+        Log.i(getClass().getName(), "resetView() started.");
 
         setTransparent(previousSelectionPauseTime);
         setTransparent(previousSelectionEnde15);
@@ -835,6 +880,7 @@ public class MainActivity extends AppCompatActivity {
         setTransparent(R.id.total);
         setTransparent(R.id.totalSemi);
         setTransparent(R.id.total15);
+        Log.i(getClass().getName(), "resetView() finished.");
     }
 
     private void setTransparent(Integer viewId) {

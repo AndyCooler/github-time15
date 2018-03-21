@@ -72,20 +72,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="08"
-                android:id="@+id/beginnA"
+                android:layout_height="200dp"
+                android:fillViewport="true"
+                android:scrollbars="none"
                 android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
+                android:id="@+id/scrollBegin">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scrollBeginLayout"
+                    android:gravity="center">
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="00"
@@ -97,49 +116,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="16"
-                android:id="@+id/endeA"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="00"
-                android:id="@+id/ende00"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="09"
-                android:id="@+id/beginnB"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="15"
@@ -154,42 +131,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="17"
-                android:id="@+id/endeB"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="15"
-                android:id="@+id/ende15"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="10"
-                android:id="@+id/beginnC"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="30"
                 android:id="@+id/beginn30"
                 android:layout_weight="1"
@@ -199,44 +140,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="18"
-                android:id="@+id/endeC"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="30"
-                android:id="@+id/ende30"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="11"
-                android:id="@+id/beginnD"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="45"
@@ -246,27 +150,129 @@
                 android:onClick="verarbeiteKlick"
                 android:clickable="true"
                 android:gravity="center" />
+                </LinearLayout>
+            </ScrollView>
 
-            <TextView
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="19"
-                android:id="@+id/endeD"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
+                android:layout_height="200dp"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:layout_weight="1">
 
-            <TextView
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="16"
+                        android:id="@+id/endeA"
+                        android:layout_weight="1"
+                        android:textSize="48sp"
+                        android:onClick="verarbeiteKlick"
+                        android:clickable="true"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="17"
+                        android:id="@+id/endeB"
+                        android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="18"
+                        android:id="@+id/endeC"
+                        android:textSize="48sp"
+                        android:onClick="verarbeiteKlick"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="19"
+                        android:id="@+id/endeD"
+                        android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="45"
-                android:id="@+id/ende45"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
+                android:layout_height="200dp"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="00"
+                        android:id="@+id/ende00"
+                        android:layout_weight="1"
+                        android:textSize="48sp"
+                        android:onClick="verarbeiteKlick"
+                        android:clickable="true"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="15"
+                        android:id="@+id/ende15"
+                        android:layout_weight="1"
+                        android:textSize="48sp"
+                        android:onClick="verarbeiteKlick"
+                        android:clickable="true"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="30"
+                        android:id="@+id/ende30"
+                        android:layout_weight="1"
+                        android:textSize="48sp"
+                        android:onClick="verarbeiteKlick"
+                        android:clickable="true"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="45"
+                        android:id="@+id/ende45"
+                        android:layout_weight="1"
+                        android:textSize="48sp"
+                        android:onClick="verarbeiteKlick"
+                        android:clickable="true"
+                        android:gravity="center" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
 
         <LinearLayout
