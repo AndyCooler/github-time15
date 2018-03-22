@@ -6,15 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +23,6 @@ import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.AppVersion;
-import com.mythosapps.time15.util.SwipeDetector;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
@@ -72,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
     // TODO ScrollView#requestChildFocus(View) scroll bis ein child View sichtbar wird,
     // TODO oder #scrollTo #smoothScrollTo mit int Y. Param Y fuer scrollTO ist getTop() oder getBottom() von TextView
     private HashMap<Integer, TextView> mapBeginValueToView = new HashMap<>();
-    private HashMap<Integer, Integer> mapBeginn15ValueToViewId = new HashMap<Integer, Integer>();
-    private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
-    private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
+    private HashMap<Integer, TextView> mapBegin15ValueToView = new HashMap<>();
+    private HashMap<Integer, TextView> mapEndValueToView = new HashMap<>();
+    private HashMap<Integer, TextView> mapEnd15ValueToView = new HashMap<>();
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
     private DaysDataNew originalData;
@@ -86,7 +81,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView total15;
     private boolean appIsPaused = false;
     private ScrollView scrollViewBegin;
-    private LinearLayout scrollViewBeginLayout;
+    private ScrollView scrollViewBegin15;
+    private ScrollView scrollViewEnd;
+    private ScrollView scrollViewEnd15;
+
+    private View.OnClickListener scrollUIListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            verarbeiteKlick(v);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +104,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initMapWithIds(mapEndeValueToViewId, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
-        initMapWithIds(mapBeginn15ValueToViewId, R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
-        initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
         KindOfDay.initializeFromConfig(configStorage, this);
@@ -110,6 +112,20 @@ public class MainActivity extends AppCompatActivity {
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
+        scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000);
+
+        scrollViewBegin15 = (ScrollView) findViewById(R.id.scrollBegin15);
+        ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewBegin15, mapBegin15ValueToView, 2000);
+
+        scrollViewEnd = (ScrollView) findViewById(R.id.scrollEnd);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000);
+
+        scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
+        ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
+
+
+/*
         scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
         scrollViewBegin.setOnTouchListener(new SwipeDetector(scrollViewBegin));
 
@@ -124,18 +140,14 @@ public class MainActivity extends AppCompatActivity {
             view.setId(1000 + i);
             view.setText(i < 10 ? "0" + i : "" + i);
             //view.setTextAppearance(this, android.R.style.TextAppearance_Large);
-            view.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    verarbeiteKlick(v);
-                }
-            });
+            view.setOnClickListener(scrollUIListener);
             view.setClickable(true);
             view.setGravity(Gravity.CENTER);
             scrollViewBeginLayout.addView(view, i);
             mapBeginValueToView.put(i, view);
         }
+*/
+        //mapBegin15ValueToView
 
 
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
@@ -150,14 +162,14 @@ public class MainActivity extends AppCompatActivity {
         for (TextView view : mapBeginValueToView.values()) {
             setActivation(view.getId(), activated);
         }
-        for (Integer viewId : mapEndeValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapEndValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
-        for (Integer viewId : mapBeginn15ValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapBegin15ValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
-        for (Integer viewId : mapEnde15ValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapEnd15ValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
         for (Integer viewId : mapPauseValueToViewId.values()) {
             setActivation(viewId, activated);
@@ -348,22 +360,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void beginEarlier(View view) {
-        Log.i(getClass().getName(), "beginEarlier() started.");
-//        TextView textView = (TextView) findViewById(R.id.beginnA);
-//        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
-//        updateMapToBeginAt(intoRange(hour));
-        Log.i(getClass().getName(), "beginEarlier() finished.");
-    }
-
-    public void beginLater(View view) {
-        Log.i(getClass().getName(), "beginLater() started.");
-//        TextView textView = (TextView) findViewById(R.id.beginnA);
-//        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
-//        updateMapToBeginAt(intoRange(hour));
-        Log.i(getClass().getName(), "beginLater() finished.");
-    }
-
     // ensures that begin hour is visible
     public void beginAt(Integer hour) {
         Log.i(getClass().getName(), "beginAt() started." + hour);
@@ -385,9 +381,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMapToEndAt(Integer newValue) {
-        resetView();
-        updateMapWithIds(mapEndeValueToViewId, newValue, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
-        modelToView();
+        TextView textView = mapEndValueToView.get(newValue);
+        textView.requestFocus(); // TODO requestFocus hier?
     }
 
     private boolean isBeginHourVisible(int hour) {
@@ -395,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isEndHourVisible(int hour) {
-        return mapEndeValueToViewId.get(hour) != null;
+        return mapEndValueToView.get(hour).isShown();
     }
 
     private void updateMapToBeginAt(Integer newValue) {
@@ -412,22 +407,6 @@ public class MainActivity extends AppCompatActivity {
             newValue = 20;
         }
         return newValue;
-    }
-
-    public void endEarlier(View view) {
-        Log.i(getClass().getName(), "endEarlier() started.");
-        TextView textView = (TextView) findViewById(R.id.endeA);
-        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
-        updateMapToEndAt(intoRange(hour));
-        Log.i(getClass().getName(), "endEarlier() finished.");
-    }
-
-    public void endLater(View view) {
-        Log.i(getClass().getName(), "endLater() started.");
-        TextView textView = (TextView) findViewById(R.id.endeA);
-        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
-        updateMapToEndAt(intoRange(hour));
-        Log.i(getClass().getName(), "endLater() finished.");
     }
 
     private void saveKindOfDay() {
@@ -584,9 +563,9 @@ public class MainActivity extends AppCompatActivity {
         TextView view = (TextView) v;
         int viewId = view.getId();
             boolean isBeginnTime = mapBeginValueToView.containsValue(view);
-        boolean isEndeTime = viewId == R.id.endeA || viewId == R.id.endeB || viewId == R.id.endeC || viewId == R.id.endeD;
-        boolean isBeginn15 = viewId == R.id.beginn00 || viewId == R.id.beginn15 || viewId == R.id.beginn30 || viewId == R.id.beginn45;
-        boolean isEnde15 = viewId == R.id.ende00 || viewId == R.id.ende15 || viewId == R.id.ende30 || viewId == R.id.ende45;
+            boolean isEndeTime = mapEndValueToView.containsValue(view);
+            boolean isBeginn15 = mapBegin15ValueToView.containsValue(view);
+            boolean isEnde15 = mapEnd15ValueToView.containsValue(view);
         boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
         boolean isSelected = false;
         boolean isDeselected = false;
@@ -817,10 +796,10 @@ public class MainActivity extends AppCompatActivity {
             endAt(endeTime);
 
             previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
-            previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
-            previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
+            previousSelectionEnde15 = mapEnd15ValueToView.get(ende15) == null ? null : mapEnd15ValueToView.get(ende15).getId();
+            previousSelectionEndeTime = mapEndValueToView.get(endeTime) == null ? null : mapEndValueToView.get(endeTime).getId();
             previousSelectionBeginnTime = mapBeginValueToView.get(beginnTime) == null ? null : mapBeginValueToView.get(beginnTime).getId();
-            previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
+            previousSelectionBeginn15 = mapBegin15ValueToView.get(beginn15) == null ? null : mapBegin15ValueToView.get(beginn15).getId();
 
             setSelected(previousSelectionPauseTime);
             setSelected(previousSelectionEnde15);

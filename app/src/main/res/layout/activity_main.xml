@@ -32,9 +32,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/beginEarlierButton"
                 android:src="@android:drawable/arrow_up_float"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:onClick="beginEarlier" />
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="0dp"
@@ -51,9 +49,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/endEarlierButton"
                 android:src="@android:drawable/arrow_up_float"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:onClick="endEarlier" />
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="0dp"
@@ -84,7 +80,6 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/scrollBeginLayout"
                     android:gravity="center">
 
                 </LinearLayout>
@@ -95,118 +90,14 @@
                 android:layout_height="200dp"
                 android:fillViewport="true"
                 android:scrollbars="none"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:id="@+id/scrollBegin15">
 
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="00"
-                android:id="@+id/beginn00"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="15"
-                android:id="@+id/beginn15"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="30"
-                android:id="@+id/beginn30"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="45"
-                android:id="@+id/beginn45"
-                android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
-                android:clickable="true"
-                android:gravity="center" />
-                </LinearLayout>
-            </ScrollView>
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="16"
-                        android:id="@+id/endeA"
-                        android:layout_weight="1"
-                        android:textSize="48sp"
-                        android:onClick="verarbeiteKlick"
-                        android:clickable="true"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="17"
-                        android:id="@+id/endeB"
-                        android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="18"
-                        android:id="@+id/endeC"
-                        android:textSize="48sp"
-                        android:onClick="verarbeiteKlick"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="19"
-                        android:id="@+id/endeD"
-                        android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                        android:layout_weight="1" />
 
                 </LinearLayout>
             </ScrollView>
@@ -216,7 +107,8 @@
                 android:layout_height="200dp"
                 android:fillViewport="true"
                 android:scrollbars="none"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:id="@+id/scrollEnd">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -224,53 +116,23 @@
                     android:layout_height="wrap_content"
                     android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="00"
-                        android:id="@+id/ende00"
-                        android:layout_weight="1"
-                        android:textSize="48sp"
-                        android:onClick="verarbeiteKlick"
-                        android:clickable="true"
-                        android:gravity="center" />
+                </LinearLayout>
+            </ScrollView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="15"
-                        android:id="@+id/ende15"
-                        android:layout_weight="1"
-                        android:textSize="48sp"
-                        android:onClick="verarbeiteKlick"
-                        android:clickable="true"
-                        android:gravity="center" />
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:fillViewport="true"
+                android:scrollbars="none"
+                android:layout_weight="1"
+                android:id="@+id/scrollEnd15">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="30"
-                        android:id="@+id/ende30"
-                        android:layout_weight="1"
-                        android:textSize="48sp"
-                        android:onClick="verarbeiteKlick"
-                        android:clickable="true"
-                        android:gravity="center" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="45"
-                        android:id="@+id/ende45"
-                        android:layout_weight="1"
-                        android:textSize="48sp"
-                        android:onClick="verarbeiteKlick"
-                        android:clickable="true"
-                        android:gravity="center" />
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
@@ -285,9 +147,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/beginLaterButton"
                 android:src="@android:drawable/arrow_down_float"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:onClick="beginLater" />
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="0dp"
@@ -304,9 +164,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/endLaterButton"
                 android:src="@android:drawable/arrow_down_float"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:onClick="endLater" />
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="0dp"
