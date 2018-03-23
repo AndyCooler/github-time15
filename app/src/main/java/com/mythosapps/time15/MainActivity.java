@@ -124,36 +124,11 @@ public class MainActivity extends AppCompatActivity {
         scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
 
-
-/*
-        scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
-        scrollViewBegin.setOnTouchListener(new SwipeDetector(scrollViewBegin));
-
-        scrollViewBeginLayout = (LinearLayout) findViewById(R.id.scrollBeginLayout);
-        for (int i = 0; i < 24; i++) {
-            TextView view = new TextView(this);
-            // works already! maybe set width to match_parent
-            view.setLayoutParams(new TableLayout.LayoutParams(
-                    TableLayout.LayoutParams.WRAP_CONTENT,
-                    TableLayout.LayoutParams.WRAP_CONTENT, 1f));
-            view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 48f);
-            view.setId(1000 + i);
-            view.setText(i < 10 ? "0" + i : "" + i);
-            //view.setTextAppearance(this, android.R.style.TextAppearance_Large);
-            view.setOnClickListener(scrollUIListener);
-            view.setClickable(true);
-            view.setGravity(Gravity.CENTER);
-            scrollViewBeginLayout.addView(view, i);
-            mapBeginValueToView.put(i, view);
-        }
-*/
-        //mapBegin15ValueToView
-
-
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         // can: use ProGuard to obfuscate the code
 
+        //setContentView(R.layout.activity_main); // do it again to init scrollViews
         Log.i(getClass().getName(), "onCreate() finished.");
     }
 
@@ -363,39 +338,15 @@ public class MainActivity extends AppCompatActivity {
     // ensures that begin hour is visible
     public void beginAt(Integer hour) {
         Log.i(getClass().getName(), "beginAt() started." + hour);
-        if (hour == null || isBeginHourVisible(hour)) {
-            return;
-        }
-        updateMapToBeginAt(intoRange(hour));
+        ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour));
         Log.i(getClass().getName(), "beginAt() finished.");
     }
 
     // ensures that end hour is visible
     public void endAt(Integer hour) {
         Log.i(getClass().getName(), "endAt() started." + hour);
-        if (hour == null || isEndHourVisible(hour)) {
-            return;
-        }
-        updateMapToEndAt(intoRange(hour));
+        ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour));
         Log.i(getClass().getName(), "endAt() finished.");
-    }
-
-    private void updateMapToEndAt(Integer newValue) {
-        TextView textView = mapEndValueToView.get(newValue);
-        textView.requestFocus(); // TODO requestFocus hier?
-    }
-
-    private boolean isBeginHourVisible(int hour) {
-        return mapBeginValueToView.get(hour).isShown(); // TODO is visible?
-    }
-
-    private boolean isEndHourVisible(int hour) {
-        return mapEndValueToView.get(hour).isShown();
-    }
-
-    private void updateMapToBeginAt(Integer newValue) {
-        TextView textView = mapBeginValueToView.get(newValue);
-        textView.requestFocus(); // TODO requestFocus hier?
     }
 
     private Integer intoRange(int hour) {

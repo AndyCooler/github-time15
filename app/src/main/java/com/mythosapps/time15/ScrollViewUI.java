@@ -20,13 +20,22 @@ import java.util.Map;
 
 public final class ScrollViewUI {
 
+    public static Integer childViewHeight;
+
+    public static void scrollToChild(ScrollView scrollView, int childNumber) {
+
+        Log.i("ScrollViewUI", "scrollToChild: " + childNumber + ", height: " + childViewHeight);
+        if (childViewHeight != null) {
+            scrollView.smoothScrollTo(0, childViewHeight * childNumber);
+        }
+    }
+
     public static void populateHoursUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId) {
 
         scrollView.setOnTouchListener(new SwipeDetector(scrollView));
 
         LinearLayout layoutView = (LinearLayout) scrollView.getChildAt(0);
 
-        int height = 0;
         TextView view = null;
         for (int i = 0; i < 24; i++) {
             view = new TextView(context);
@@ -52,6 +61,7 @@ public final class ScrollViewUI {
                 scrollView.getLayoutParams().height = 4 * height;
                 scrollView.invalidate();
                 v.removeOnLayoutChangeListener(this);
+                childViewHeight = height;
             }
         });
     }

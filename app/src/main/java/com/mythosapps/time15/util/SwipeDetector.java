@@ -21,17 +21,11 @@ public class SwipeDetector implements View.OnTouchListener {
         this.scrollView = scrollView;
     }
 
-
     public void onTopToBottomSwipe(int scrollTo) {
-
-        //scrollView.arrowScroll(View.FOCUS_UP);
         scrollView.smoothScrollTo(0, scrollTo);
-
     }
 
     public void onBottomToTopSwipe(int scrollTo) {
-        Log.i("Swipe:", "onBottomToTopSwipe!");
-        //scrollView.arrowScroll(View.FOCUS_DOWN);
         scrollView.smoothScrollTo(0, scrollTo);
     }
 
