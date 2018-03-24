@@ -113,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
         scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
-        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000, 8);
 
         scrollViewBegin15 = (ScrollView) findViewById(R.id.scrollBegin15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewBegin15, mapBegin15ValueToView, 2000);
 
         scrollViewEnd = (ScrollView) findViewById(R.id.scrollEnd);
-        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000, 16);
 
         scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
@@ -303,6 +303,9 @@ public class MainActivity extends AppCompatActivity {
         modifiableData = DaysDataNew.copy(originalData);
         if (modifiableData == null) {
             modifiableData = new DaysDataNew(id);
+            BeginEndTask task0 = new BeginEndTask();
+            task0.setKindOfDay(KindOfDay.WORKDAY);
+            modifiableData.addTask(task0);
         }
         taskNo = 0;
         resetView();
@@ -338,14 +341,18 @@ public class MainActivity extends AppCompatActivity {
     // ensures that begin hour is visible
     public void beginAt(Integer hour) {
         Log.i(getClass().getName(), "beginAt() started." + hour);
-        ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour));
+        if (hour != null) {
+            ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour));
+        }
         Log.i(getClass().getName(), "beginAt() finished.");
     }
 
     // ensures that end hour is visible
     public void endAt(Integer hour) {
         Log.i(getClass().getName(), "endAt() started." + hour);
-        ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour));
+        if (hour != null) {
+            ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour));
+        }
         Log.i(getClass().getName(), "endAt() finished.");
     }
 

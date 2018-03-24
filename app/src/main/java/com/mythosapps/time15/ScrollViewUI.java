@@ -30,7 +30,7 @@ public final class ScrollViewUI {
         }
     }
 
-    public static void populateHoursUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId) {
+    public static void populateHoursUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId, int defaultValue) {
 
         scrollView.setOnTouchListener(new SwipeDetector(scrollView));
 
@@ -62,8 +62,10 @@ public final class ScrollViewUI {
                 scrollView.invalidate();
                 v.removeOnLayoutChangeListener(this);
                 childViewHeight = height;
+                scrollToChild(scrollView, defaultValue);
             }
         });
+        view.forceLayout();
     }
 
     public static void populateFifteensUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId) {
