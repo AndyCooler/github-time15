@@ -58,15 +58,21 @@ public final class ScrollViewUI {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 int height = bottom - top;
-                Log.i(ScrollViewUI.class.getName(), ".hf.-> height: " + height + ", 4*height: " + 4 * height);
+                Log.i(ScrollViewUI.class.getName(), ".......view.-> height: " + height + ", 4*height: " + 4 * height);
 
                 v.removeOnLayoutChangeListener(this);
 
                 childViewHeight = height;
                 scrollToChild(scrollView, defaultValue);
-
+            }
+        });
+        scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.i(ScrollViewUI.class.getName(), ".........scrollView.-> height: " + childViewHeight + ", 4*height: " + 4 * childViewHeight);
+                scrollView.removeOnLayoutChangeListener(this);
                 ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                params.height = 4 * height;
+                params.height = 4 * childViewHeight;
                 scrollView.setLayoutParams(params);
             }
         });
@@ -101,9 +107,15 @@ public final class ScrollViewUI {
                 int height = bottom - top;
                 Log.i(ScrollViewUI.class.getName(), ".-> height: " + height + ", 4*height: " + 4 * height);
                 v.removeOnLayoutChangeListener(this);
-
+            }
+        });
+        scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.i(ScrollViewUI.class.getName(), ".........scrollView.-> height: " + childViewHeight + ", 4*height: " + 4 * childViewHeight);
+                scrollView.removeOnLayoutChangeListener(this);
                 ViewGroup.LayoutParams params = scrollView.getLayoutParams();
-                params.height = 4 * height;
+                params.height = 4 * childViewHeight;
                 scrollView.setLayoutParams(params);
             }
         });
