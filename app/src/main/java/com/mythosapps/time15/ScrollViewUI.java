@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -57,15 +58,18 @@ public final class ScrollViewUI {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 int height = bottom - top;
-                Log.i(ScrollViewUI.class.getName(), "-> height: " + height + ", 4*height: " + 4 * height);
-                scrollView.getLayoutParams().height = 4 * height;
-                scrollView.invalidate();
+                Log.i(ScrollViewUI.class.getName(), ".hf.-> height: " + height + ", 4*height: " + 4 * height);
+
                 v.removeOnLayoutChangeListener(this);
+
                 childViewHeight = height;
                 scrollToChild(scrollView, defaultValue);
+
+                ViewGroup.LayoutParams params = scrollView.getLayoutParams();
+                params.height = 4 * height;
+                scrollView.setLayoutParams(params);
             }
         });
-        view.forceLayout();
     }
 
     public static void populateFifteensUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId) {
@@ -95,10 +99,12 @@ public final class ScrollViewUI {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 int height = bottom - top;
-                Log.i(ScrollViewUI.class.getName(), "-> height: " + height + ", 4*height: " + 4 * height);
-                scrollView.getLayoutParams().height = 4 * height;
-                scrollView.invalidate();
+                Log.i(ScrollViewUI.class.getName(), ".-> height: " + height + ", 4*height: " + 4 * height);
                 v.removeOnLayoutChangeListener(this);
+
+                ViewGroup.LayoutParams params = scrollView.getLayoutParams();
+                params.height = 4 * height;
+                scrollView.setLayoutParams(params);
             }
         });
     }
