@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,23 +45,30 @@ public class MainActivity extends AppCompatActivity {
     // View state and view state management
     private String id = null;
     private int taskNo = 0;
-    private Integer beginnTime = null;
-    private Integer endeTime = null;
-    private Integer pauseTime = null;
-    private Integer beginn15 = null;
-    private Integer ende15 = null;
+    private Integer beginnTime = null; //value
+    private Integer endeTime = null; //value
+    private Integer pauseTime = null; //value
+    private Integer beginn15 = null; //value
+    private Integer ende15 = null; //value
     private String kindOfDay = KindOfDay.WORKDAY.toString();
     private String kindOfDayEdited = null;
-    private Integer previousSelectionBeginnTime = null;
-    private Integer previousSelectionEndeTime = null;
-    private Integer previousSelectionPauseTime = null;
-    private Integer previousSelectionBeginn15 = null;
-    private Integer previousSelectionEnde15 = null;
+    private Integer previousSelectionBeginnTime = null; //viewId
+    private Integer previousSelectionEndeTime = null; //viewId
+    private Integer previousSelectionPauseTime = null; //viewId
+    private Integer previousSelectionBeginn15 = null; //viewId
+    private Integer previousSelectionEnde15 = null; //viewId
     private String previousSelectionKindOfDays = null;
-    private HashMap<Integer, Integer> mapBeginnValueToViewId = new HashMap<>();
-    private HashMap<Integer, Integer> mapBeginn15ValueToViewId = new HashMap<Integer, Integer>();
-    private HashMap<Integer, Integer> mapEndeValueToViewId = new HashMap<Integer, Integer>();
-    private HashMap<Integer, Integer> mapEnde15ValueToViewId = new HashMap<Integer, Integer>();
+    // here are the maps from value to viewId that enable re-use of 4 TextViews for full range 0-24
+    // TODO for ScrollView, just extend initialization to full range of values
+    // TODO later: maps can be avoided by makeing better use of TextView (has ID, has value, so
+    // no need for mappings as we now use the full range)
+
+    // TODO ScrollView#requestChildFocus(View) scroll bis ein child View sichtbar wird,
+    // TODO oder #scrollTo #smoothScrollTo mit int Y. Param Y fuer scrollTO ist getTop() oder getBottom() von TextView
+    private HashMap<Integer, TextView> mapBeginValueToView = new HashMap<>();
+    private HashMap<Integer, TextView> mapBegin15ValueToView = new HashMap<>();
+    private HashMap<Integer, TextView> mapEndValueToView = new HashMap<>();
+    private HashMap<Integer, TextView> mapEnd15ValueToView = new HashMap<>();
     private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
     private DaysDataNew originalData;
@@ -71,6 +79,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView totalSemi;
     private TextView total15;
     private boolean appIsPaused = false;
+    private ScrollView scrollViewBegin;
+    private ScrollView scrollViewBegin15;
+    private ScrollView scrollViewEnd;
+    private ScrollView scrollViewEnd15;
+
+    private View.OnClickListener scrollUIListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            verarbeiteKlick(v);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +102,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initMapWithIds(mapBeginnValueToViewId, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-        initMapWithIds(mapEndeValueToViewId, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
-        initMapWithIds(mapBeginn15ValueToViewId, R.id.beginn00, R.id.beginn15, R.id.beginn30, R.id.beginn45);
-        initMapWithIds(mapEnde15ValueToViewId, R.id.ende00, R.id.ende15, R.id.ende30, R.id.ende45);
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
         KindOfDay.initializeFromConfig(configStorage, this);
@@ -94,23 +110,38 @@ public class MainActivity extends AppCompatActivity {
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
+        scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000, 8);
+
+        scrollViewBegin15 = (ScrollView) findViewById(R.id.scrollBegin15);
+        ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewBegin15, mapBegin15ValueToView, 2000);
+
+        scrollViewEnd = (ScrollView) findViewById(R.id.scrollEnd);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000, 16);
+
+        scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
+        ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
+
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         // can: use ProGuard to obfuscate the code
+
+        //setContentView(R.layout.activity_main); // do it again to init scrollViews
     }
 
+    // only for UI: sets view's text color to black when active, gray when inactive
     private void setBeginEndSelectionActivated(boolean activated) {
-        for (Integer viewId : mapBeginnValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapBeginValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
-        for (Integer viewId : mapEndeValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapEndValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
-        for (Integer viewId : mapBeginn15ValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapBegin15ValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
-        for (Integer viewId : mapEnde15ValueToViewId.values()) {
-            setActivation(viewId, activated);
+        for (TextView view : mapEnd15ValueToView.values()) {
+            setActivation(view.getId(), activated);
         }
         for (Integer viewId : mapPauseValueToViewId.values()) {
             setActivation(viewId, activated);
@@ -262,6 +293,9 @@ public class MainActivity extends AppCompatActivity {
         modifiableData = DaysDataNew.copy(originalData);
         if (modifiableData == null) {
             modifiableData = new DaysDataNew(id);
+            BeginEndTask task0 = new BeginEndTask();
+            task0.setKindOfDay(KindOfDay.WORKDAY);
+            modifiableData.addTask(task0);
         }
         taskNo = 0;
         resetView();
@@ -287,50 +321,18 @@ public class MainActivity extends AppCompatActivity {
         switchToID(id, TimeUtils.createID());
     }
 
-    public void beginEarlier(View view) {
-        TextView textView = (TextView) findViewById(R.id.beginnA);
-        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
-        updateMapToBeginAt(intoRange(hour));
-    }
-
-    public void beginLater(View view) {
-        TextView textView = (TextView) findViewById(R.id.beginnA);
-        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
-        updateMapToBeginAt(intoRange(hour));
-    }
-
+    // ensures that begin hour is visible
     public void beginAt(Integer hour) {
-        if (hour == null || isBeginHourVisible(hour)) {
-            return;
+        if (hour != null) {
+            ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour));
         }
-        updateMapToBeginAt(intoRange(hour));
     }
 
+    // ensures that end hour is visible
     public void endAt(Integer hour) {
-        if (hour == null || isEndHourVisible(hour)) {
-            return;
+        if (hour != null) {
+            ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour));
         }
-        updateMapToEndAt(intoRange(hour));
-    }
-
-    private void updateMapToEndAt(Integer newValue) {
-        resetView();
-        updateMapWithIds(mapEndeValueToViewId, newValue, R.id.endeA, R.id.endeB, R.id.endeC, R.id.endeD);
-        modelToView();
-    }
-
-    private boolean isBeginHourVisible(int hour) {
-        return mapBeginnValueToViewId.get(hour) != null;
-    }
-
-    private boolean isEndHourVisible(int hour) {
-        return mapEndeValueToViewId.get(hour) != null;
-    }
-
-    private void updateMapToBeginAt(Integer newValue) {
-        resetView();
-        updateMapWithIds(mapBeginnValueToViewId, newValue, R.id.beginnA, R.id.beginnB, R.id.beginnC, R.id.beginnD);
-        modelToView();
     }
 
     private Integer intoRange(int hour) {
@@ -342,18 +344,6 @@ public class MainActivity extends AppCompatActivity {
             newValue = 20;
         }
         return newValue;
-    }
-
-    public void endEarlier(View view) {
-        TextView textView = (TextView) findViewById(R.id.endeA);
-        Integer hour = Integer.valueOf((String) textView.getText()) - 1;
-        updateMapToEndAt(intoRange(hour));
-    }
-
-    public void endLater(View view) {
-        TextView textView = (TextView) findViewById(R.id.endeA);
-        Integer hour = Integer.valueOf((String) textView.getText()) + 1;
-        updateMapToEndAt(intoRange(hour));
     }
 
     private void saveKindOfDay() {
@@ -501,10 +491,10 @@ public class MainActivity extends AppCompatActivity {
 
         TextView view = (TextView) v;
         int viewId = view.getId();
-        boolean isBeginnTime = viewId == R.id.beginnA || viewId == R.id.beginnB || viewId == R.id.beginnC || viewId == R.id.beginnD;
-        boolean isEndeTime = viewId == R.id.endeA || viewId == R.id.endeB || viewId == R.id.endeC || viewId == R.id.endeD;
-        boolean isBeginn15 = viewId == R.id.beginn00 || viewId == R.id.beginn15 || viewId == R.id.beginn30 || viewId == R.id.beginn45;
-        boolean isEnde15 = viewId == R.id.ende00 || viewId == R.id.ende15 || viewId == R.id.ende30 || viewId == R.id.ende45;
+            boolean isBeginnTime = mapBeginValueToView.containsValue(view);
+            boolean isEndeTime = mapEndValueToView.containsValue(view);
+            boolean isBeginn15 = mapBegin15ValueToView.containsValue(view);
+            boolean isEnde15 = mapEnd15ValueToView.containsValue(view);
         boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
         boolean isSelected = false;
         boolean isDeselected = false;
@@ -725,10 +715,10 @@ public class MainActivity extends AppCompatActivity {
             endAt(endeTime);
 
             previousSelectionPauseTime = mapPauseValueToViewId.get(pauseTime);
-            previousSelectionEnde15 = mapEnde15ValueToViewId.get(ende15);
-            previousSelectionEndeTime = mapEndeValueToViewId.get(endeTime);
-            previousSelectionBeginnTime = mapBeginnValueToViewId.get(beginnTime);
-            previousSelectionBeginn15 = mapBeginn15ValueToViewId.get(beginn15);
+            previousSelectionEnde15 = mapEnd15ValueToView.get(ende15) == null ? null : mapEnd15ValueToView.get(ende15).getId();
+            previousSelectionEndeTime = mapEndValueToView.get(endeTime) == null ? null : mapEndValueToView.get(endeTime).getId();
+            previousSelectionBeginnTime = mapBeginValueToView.get(beginnTime) == null ? null : mapBeginValueToView.get(beginnTime).getId();
+            previousSelectionBeginn15 = mapBegin15ValueToView.get(beginn15) == null ? null : mapBegin15ValueToView.get(beginn15).getId();
 
             setSelected(previousSelectionPauseTime);
             setSelected(previousSelectionEnde15);

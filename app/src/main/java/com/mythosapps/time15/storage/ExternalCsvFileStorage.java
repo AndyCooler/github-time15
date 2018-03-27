@@ -212,7 +212,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         if (monthYear.equals(currentMonthYear)) {
             int balance = 0;
             for (DaysDataNew data : currentMonthsData.values()) {
-                balance += data.getBalance();
+                if (data != null) {
+                    balance += data.getBalance();
+                }
             }
             return balance;
         }
