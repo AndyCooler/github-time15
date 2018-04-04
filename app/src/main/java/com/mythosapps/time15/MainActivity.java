@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewBegin15, mapBegin15ValueToView, 2000);
 
         scrollViewEnd = (ScrollView) findViewById(R.id.scrollEnd);
-        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000, 2);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000, 16);
 
         scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
