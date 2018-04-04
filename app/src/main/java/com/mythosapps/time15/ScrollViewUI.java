@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.mythosapps.time15.util.SwipeDetector;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,9 +24,12 @@ public final class ScrollViewUI {
 
     public static Integer childViewHeight;
 
+    public static Map<ScrollView, Integer> requestedValues = new HashMap<>();
+
     public static void scrollToChild(ScrollView scrollView, int childNumber) {
 
         Log.i("ScrollViewUI", "scrollToChild: " + childNumber + ", height: " + childViewHeight);
+        requestedValues.put(scrollView, childNumber);
         if (childViewHeight != null) {
             scrollView.smoothScrollTo(0, childViewHeight * childNumber);
         }
@@ -33,6 +37,8 @@ public final class ScrollViewUI {
 
     public static void populateHoursUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId, int defaultValue) {
 
+        requestedValues.clear();
+        requestedValues.put(scrollView, defaultValue);
         scrollView.setOnTouchListener(new SwipeDetector(scrollView));
 
         LinearLayout layoutView = (LinearLayout) scrollView.getChildAt(0);
@@ -63,7 +69,8 @@ public final class ScrollViewUI {
                 //v.removeOnLayoutChangeListener(this);
 
                 childViewHeight = height;
-                scrollToChild(scrollView, defaultValue);
+                Log.i(ScrollViewUI.class.getName(), "........viewHours. requestedValue=" + requestedValues.get(scrollView));
+                scrollToChild(scrollView, requestedValues.get(scrollView));
             }
         });
         scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
