@@ -66,7 +66,6 @@ public final class ScrollViewUI {
                 //v.removeOnLayoutChangeListener(this);
 
                 childViewHeight = height;
-                Log.i(ScrollViewUI.class.getName(), "........viewHours. requestedValue=" + requestedValues.get(scrollView));
                 scrollToChild(scrollView, requestedValues.get(scrollView));
             }
         });
