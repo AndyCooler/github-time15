@@ -11,9 +11,9 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.mythosapps.time15.types.ScrollViewType;
 import com.mythosapps.time15.util.SwipeDetector;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,21 +24,29 @@ public final class ScrollViewUI {
 
     public static Integer childViewHeight;
 
-    public static Map<ScrollView, Integer> requestedValues = new HashMap<>();
+    public static Integer requestedBegin = 8;
+    public static Integer requestedEnd = 16;
 
-    public static void scrollToChild(ScrollView scrollView, int childNumber) {
+    public static void scrollToChild(ScrollView scrollView, int childNumber, ScrollViewType type) {
 
-        Log.i("ScrollViewUI", "scrollToChild: " + childNumber + ", height: " + childViewHeight);
-        requestedValues.put(scrollView, childNumber);
+        if (type == ScrollViewType.BEGIN) {
+            requestedBegin = childNumber;
+        } else {
+            requestedEnd = childNumber;
+        }
         if (childViewHeight != null) {
             scrollView.smoothScrollTo(0, childViewHeight * childNumber);
         }
     }
 
-    public static void populateHoursUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId, int defaultValue) {
+    public static void populateHoursUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId, int defaultValue, ScrollViewType type) {
 
-        requestedValues.clear();
-        requestedValues.put(scrollView, defaultValue);
+        if (type == ScrollViewType.BEGIN) {
+            requestedBegin = 8;
+        } else {
+            requestedEnd = 16;
+        }
+
         scrollView.setOnTouchListener(new SwipeDetector(scrollView));
 
         LinearLayout layoutView = (LinearLayout) scrollView.getChildAt(0);
@@ -66,11 +74,12 @@ public final class ScrollViewUI {
                 int height = bottom - top;
                 Log.i(ScrollViewUI.class.getName(), ".......viewHours.-> height: " + height + ", 4*height: " + 4 * height);
 
-                //v.removeOnLayoutChangeListener(this);
-
                 childViewHeight = height;
-                Log.i(ScrollViewUI.class.getName(), "........viewHours. requestedValue=" + requestedValues.get(scrollView));
-                scrollToChild(scrollView, requestedValues.get(scrollView));
+                if (type == ScrollViewType.BEGIN) {
+                    scrollToChild(scrollView, requestedBegin, type);
+                } else {
+                    scrollToChild(scrollView, requestedEnd, type);
+                }
             }
         });
         scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -81,11 +90,6 @@ public final class ScrollViewUI {
                 ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                 params.height = 4 * childViewHeight;
                 scrollView.setLayoutParams(params);
-                //((LinearLayout)scrollView.getParent()).invalidate();
-                //((LinearLayout)scrollView.getParent()).requestLayout();
-                //scrollView.forceLayout();
-                //scrollView.requestLayout();
-                //layoutView.forceLayout();
                 layoutView.requestLayout();
             }
         });
@@ -131,12 +135,6 @@ public final class ScrollViewUI {
                 ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                 params.height = 4 * childViewHeight;
                 scrollView.setLayoutParams(params);
-                //((LinearLayout)scrollView.getParent()).invalidate();
-                //((LinearLayout)scrollView.getParent()).requestLayout();
-                //scrollView.invalidate();
-                //scrollView.forceLayout();
-                //scrollView.requestLayout();
-                //layoutView.forceLayout();
                 layoutView.requestLayout();
             }
         });
