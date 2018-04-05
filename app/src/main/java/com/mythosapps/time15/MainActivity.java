@@ -20,6 +20,7 @@ import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
+import com.mythosapps.time15.types.ScrollViewType;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.AppVersion;
 import com.mythosapps.time15.util.TimeUtils;
@@ -111,13 +112,13 @@ public class MainActivity extends AppCompatActivity {
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
         scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
-        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000, 8);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000, 8, ScrollViewType.BEGIN);
 
         scrollViewBegin15 = (ScrollView) findViewById(R.id.scrollBegin15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewBegin15, mapBegin15ValueToView, 2000);
 
         scrollViewEnd = (ScrollView) findViewById(R.id.scrollEnd);
-        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000, 16);
+        ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewEnd, mapEndValueToView, 3000, 16, ScrollViewType.END);
 
         scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
@@ -324,14 +325,14 @@ public class MainActivity extends AppCompatActivity {
     // ensures that begin hour is visible
     public void beginAt(Integer hour) {
         if (hour != null) {
-            ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour));
+            ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour), ScrollViewType.BEGIN);
         }
     }
 
     // ensures that end hour is visible
     public void endAt(Integer hour) {
         if (hour != null) {
-            ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour));
+            ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour), ScrollViewType.END);
         }
     }
 
