@@ -78,6 +78,7 @@ public final class ScrollViewUI {
                 } else {
                     scrollToChild(scrollView, requestedEnd, type);
                 }
+            }
         });
         scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
