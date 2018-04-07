@@ -26,6 +26,16 @@ public final class ScrollViewUI {
     public static Integer requestedBegin = 8;
     public static Integer requestedEnd = 16;
 
+    public static boolean isBeginHourVisible(int childNumber) {
+        boolean visible = (childNumber >= requestedBegin && childNumber < requestedBegin + 4);
+        return visible;
+    }
+
+    public static boolean isEndHourVisible(int childNumber) {
+        boolean visible = (childNumber >= requestedEnd && childNumber < requestedEnd + 4);
+        return visible;
+    }
+
     public static void scrollToChild(ScrollView scrollView, int childNumber, ScrollViewType type) {
 
         if (type == ScrollViewType.BEGIN) {
@@ -46,7 +56,7 @@ public final class ScrollViewUI {
             requestedEnd = 16;
         }
 
-        scrollView.setOnTouchListener(new SwipeDetector(scrollView));
+        scrollView.setOnTouchListener(new SwipeDetector(scrollView, type));
 
         LinearLayout layoutView = (LinearLayout) scrollView.getChildAt(0);
 
@@ -94,7 +104,7 @@ public final class ScrollViewUI {
 
     public static void populateFifteensUI(View.OnClickListener listener, Context context, ScrollView scrollView, Map mapValueToView, int rootId) {
 
-        scrollView.setOnTouchListener(new SwipeDetector(scrollView));
+        scrollView.setOnTouchListener(new SwipeDetector(scrollView, null));
 
         LinearLayout layoutView = (LinearLayout) scrollView.getChildAt(0);
         //layoutView.removeAllViews();

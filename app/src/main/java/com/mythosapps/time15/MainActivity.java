@@ -324,14 +324,14 @@ public class MainActivity extends AppCompatActivity {
 
     // ensures that begin hour is visible
     public void beginAt(Integer hour) {
-        if (hour != null) {
+        if (hour != null && !ScrollViewUI.isBeginHourVisible(hour)) {
             ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour), ScrollViewType.BEGIN);
         }
     }
 
     // ensures that end hour is visible
     public void endAt(Integer hour) {
-        if (hour != null) {
+        if (hour != null && !ScrollViewUI.isEndHourVisible(hour)) {
             ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour), ScrollViewType.END);
         }
     }

@@ -5,19 +5,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
+import com.mythosapps.time15.ScrollViewUI;
+import com.mythosapps.time15.types.ScrollViewType;
+
 /**
  * Created by andreas on 15.03.18.
  */
 
 public class SwipeDetector implements View.OnTouchListener {
 
+    private final ScrollViewType type;
     private ScrollView scrollView;
     static final int MIN_DISTANCE = 20;
     private float downX, downY, upX, upY;
     private int mActiveView;
 
-    public SwipeDetector(final ScrollView scrollView) {
+    public SwipeDetector(final ScrollView scrollView, ScrollViewType type) {
         this.scrollView = scrollView;
+        this.type = type;
     }
 
     public void onTopToBottomSwipe(int scrollTo) {
@@ -52,6 +57,13 @@ public class SwipeDetector implements View.OnTouchListener {
                 if (Math.abs(deltaY) > MIN_DISTANCE) {
                     mActiveView = ((scrollY + (childViewHeight / 2)) / childViewHeight);
                     int scrollTo = mActiveView * childViewHeight;
+                    if (type != null) {
+                        if (ScrollViewType.BEGIN == type) {
+                            ScrollViewUI.requestedBegin = mActiveView;
+                        } else {
+                            ScrollViewUI.requestedEnd = mActiveView;
+                        }
+                    }
                     if (deltaY < 0) {
                         this.onTopToBottomSwipe(scrollTo);
                         return true;
