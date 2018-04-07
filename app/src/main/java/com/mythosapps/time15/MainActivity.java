@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
     // ensures that begin hour is visible
     public void beginAt(Integer hour) {
         Log.i(getClass().getName(), "beginAt() started." + hour);
-        if (hour != null) {
+        if (hour != null && !ScrollViewUI.isBeginHourVisible(hour)) {
             ScrollViewUI.scrollToChild(scrollViewBegin, intoRange(hour), ScrollViewType.BEGIN);
         }
         Log.i(getClass().getName(), "beginAt() finished.");
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
     // ensures that end hour is visible
     public void endAt(Integer hour) {
         Log.i(getClass().getName(), "endAt() started." + hour);
-        if (hour != null) {
+        if (hour != null && !ScrollViewUI.isEndHourVisible(hour)) {
             ScrollViewUI.scrollToChild(scrollViewEnd, intoRange(hour), ScrollViewType.END);
         }
         Log.i(getClass().getName(), "endAt() finished.");
