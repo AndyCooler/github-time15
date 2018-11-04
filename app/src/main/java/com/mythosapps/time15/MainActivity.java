@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Integer pauseTime = null; //value
     private Integer beginn15 = null; //value
     private Integer ende15 = null; //value
+    private String note = null; // value
     private String kindOfDay = KindOfDay.WORKDAY.toString();
     private String kindOfDayEdited = null;
     private Integer previousSelectionBeginnTime = null; //viewId
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView scrollViewBegin15;
     private ScrollView scrollViewEnd;
     private ScrollView scrollViewEnd15;
+    private EditText noteEditView;
 
     private View.OnClickListener scrollUIListener = new View.OnClickListener() {
 
@@ -124,6 +129,22 @@ public class MainActivity extends AppCompatActivity {
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
 
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
+
+        noteEditView = (EditText) findViewById(R.id.note);
+        noteEditView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                System.out.println("------------> TExt: " + s.toString());
+                note = s == null || "Note".equals(s.toString()) ? null : s.toString();
+            }
+        });
 
         // can: use ProGuard to obfuscate the code
 
@@ -677,6 +698,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
+        System.out.println("viewToModel.note="+note);
+        task0.setNote(note == null || "Note".equals(note) ? null : note);
         if (task0.getKindOfDay().isBeginEndType()) {
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
@@ -742,6 +765,8 @@ public class MainActivity extends AppCompatActivity {
         }
         previousSelectionKindOfDays = kindOfDay;
         kindOfDay = task.getKindOfDay().toString();
+        note = task.getNote();
+        noteEditView.setText(note == null ? "Note" : note);
         if (previousSelectionKindOfDays == null) {
             previousSelectionKindOfDays = kindOfDay;
         }
@@ -764,6 +789,7 @@ public class MainActivity extends AppCompatActivity {
         ende15 = null;
         pauseTime = null;
         kindOfDay = KindOfDay.WORKDAY.toString(); // TODO Default kind of day
+        note = null;
         aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
         aktualisiereTotal(ColorsUI.DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;
@@ -777,6 +803,7 @@ public class MainActivity extends AppCompatActivity {
         setTransparent(R.id.total);
         setTransparent(R.id.totalSemi);
         setTransparent(R.id.total15);
+        noteEditView.setText("Note");
     }
 
     private void setTransparent(Integer viewId) {

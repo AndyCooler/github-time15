@@ -26,6 +26,8 @@ public class BeginEndTask {
 
     private Time15 total;
 
+    private String note;
+
     public Integer getBegin() {
         return begin;
     }
@@ -99,11 +101,19 @@ public class BeginEndTask {
         this.total = total;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     @Override
     public String toString() {
         return SEP + day.toString() + SEP + valueOf(begin) + SEP + valueOf(begin15) + SEP +
                 valueOf(end) + SEP + valueOf(end15) + SEP +
-                valueOf(pause) + SEP + (total == null ? "-" : total.toDecimalFormat());
+                valueOf(pause) + SEP + (total == null ? "-" : total.toDecimalFormat() + SEP + note);
     }
 
     public BeginEndTask copy() {
@@ -115,61 +125,12 @@ public class BeginEndTask {
         copy.setEnd15(end15);
         copy.setPause(pause);
         copy.setTotal(total == null ? null : Time15.fromMinutes(total.toMinutes()));
+        copy.setNote(note);
         return copy;
     }
 
     private String valueOf(Integer value) {
         return (value == null) ? "-" : String.valueOf(value);
-    }
-
-    public static BeginEndTask fromString(String s) {
-
-        BeginEndTask beginEndTask = new BeginEndTask();
-
-        try {
-            StringTokenizer tokenizer = new StringTokenizer(s, SEP);
-
-            String displayString = tokenizer.nextToken();
-            beginEndTask.setKindOfDay(KindOfDay.fromString(displayString));
-            Integer begin = nextIntToken(tokenizer);
-            beginEndTask.setBegin(begin);
-            beginEndTask.setBegin15(nextIntToken(tokenizer));
-            Integer end = nextIntToken(tokenizer);
-            beginEndTask.setEnd(end);
-            beginEndTask.setEnd15(nextIntToken(tokenizer));
-            beginEndTask.setPause(nextIntToken(tokenizer));
-            String totalString = tokenizer.hasMoreElements() ? tokenizer.nextToken() : null;
-            if (totalString == null) {
-                beginEndTask.setTotal(null);
-            } else {
-                if (totalString.indexOf(".") > 0) {
-                    beginEndTask.setTotal(Time15.fromDecimalFormat(totalString));
-                } else {
-                    // legacy format
-                    beginEndTask.setTotal(Time15.fromMinutes(60 * Integer.valueOf(totalString)));
-                }
-            }
-            if (beginEndTask.getKindOfDay() == null) {
-                beginEndTask.setKindOfDay(KindOfDay.convert(displayString, begin, end));
-            }
-        } catch (Throwable t) {
-            // error while reading task from String, might result in Task.isComplete == false
-            Log.e(BeginEndTask.class.getName(), "Error: ", t);
-        }
-        return beginEndTask;
-    }
-
-    private static Integer nextIntToken(StringTokenizer tokenizer) {
-        String token = null;
-        try {
-            token = tokenizer.nextToken();
-        } catch (NoSuchElementException e) {
-            return null; // noop migration: allow self-repair of data next time it's saved
-        }
-        if (token == null || "null".equals(token) || "-".equals(token)) {
-            return null;
-        }
-        return Integer.valueOf(token);
     }
 
     public void calcTotal() {
@@ -221,7 +182,8 @@ public class BeginEndTask {
                     safeEquals(begin15, b.begin15) &&
                     safeEquals(end15, b.end15) &&
                     safeEquals(pause, b.pause) &&
-                    safeEquals(total, b.total);
+                    safeEquals(total, b.total) &&
+                    safeEquals(note, b.note);
         }
         return equal;
     }

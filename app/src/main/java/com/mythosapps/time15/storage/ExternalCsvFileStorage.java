@@ -41,7 +41,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
 
-        if (!initialized && !init()) {
+        if (!initialized && !init(activity)) {
             return false;
         }
         this.activity = activity;
@@ -75,7 +75,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     private boolean saveWholeMonth(String filename, List<String> csvMonth) {
 
-        if (!initialized && !init()) {
+        if (!initialized && !init(activity)) {
             return false;
         }
 
@@ -103,7 +103,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     public Map<String, Integer> loadWholeMonth(String id, String filename) {
 
-        if (!initialized && !init()) {
+        if (!initialized && !init(activity)) {
             return null;
         }
 

@@ -49,7 +49,7 @@ public final class CsvUtils {
                     s.append(Time15.fromMinutes(taskB.getPause()).toDisplayString()).append(",");
                 }
             s.append(taskB.getTotal().toDecimalFormat()).append(",");
-            s.append(","); // reserved for future note
+            s.append(taskB.getNote() == null ? "" : taskB.getNote()).append(",");
         }
         return s.toString();
     }
@@ -121,6 +121,10 @@ public final class CsvUtils {
             if (totalTime != null) {
                 task.setTotal(totalTime);
             }
+
+            s = safeGetNextTokenOptional(note, id, "Note");
+            task.setNote(s);
+
             if (task.getKindOfDay() == null) {
                 task.setKindOfDay(KindOfDay.convert(displayString, task.getBegin(), task.getEnd()));
             }

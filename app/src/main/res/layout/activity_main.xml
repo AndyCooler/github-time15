@@ -14,18 +14,37 @@
         app:contentInsetStart="0dp"></android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/toolbar"
-        android:id="@+id/linearLayout">
-
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical">
+<!--
         <LinearLayout
-            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="left"
+                android:text="Note"
+
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </LinearLayout>
+-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/beginnView"
@@ -39,108 +58,108 @@
                 android:textColor="#1E90FF" />
 
             <TextView
+                android:id="@+id/endeView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:background="@drawable/title"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/main_end"
-                android:id="@+id/endeView"
-                android:textColor="#1E90FF"
                 android:gravity="center_horizontal"
-                android:layout_weight="2" />
+                android:text="@string/main_end"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#1E90FF" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:layout_weight="1"
-                android:id="@+id/scrollBegin">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                </LinearLayout>
-            </ScrollView>
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:layout_weight="1"
-                android:id="@+id/scrollBegin15">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                </LinearLayout>
-            </ScrollView>
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:layout_weight="1"
-                android:id="@+id/scrollEnd">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                </LinearLayout>
-            </ScrollView>
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:scrollbars="none"
-                android:layout_weight="1"
-                android:id="@+id/scrollEnd15">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/pauseLayout">
+            android:orientation="horizontal">
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scrollBegin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scrollBegin15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scrollEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scrollEnd15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pauseLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/pauseView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/main_pause"
-                android:background="@drawable/title"
-                android:id="@+id/pauseView"
                 android:layout_weight="4"
-                android:textColor="#1E90FF"
-                android:gravity="center_horizontal" />
+                android:background="@drawable/title"
+                android:gravity="center_horizontal"
+                android:text="@string/main_pause"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#1E90FF" />
             <!--
                         <TextView
                             android:layout_width="0dp"
@@ -153,202 +172,223 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="30"
                 android:id="@+id/pauseA"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="45"
-                android:id="@+id/pauseB"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="60"
-                android:id="@+id/pauseC"
-                android:textSize="48sp"                 android:onClick="verarbeiteKlick"                 android:clickable="true"                 android:gravity="center"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="75"
-                android:id="@+id/pauseD"
                 android:layout_weight="1"
-                android:textSize="48sp"
-                android:onClick="verarbeiteKlick"
                 android:clickable="true"
-                android:gravity="center" />
+                android:gravity="center"
+                android:onClick="verarbeiteKlick"
+                android:text="30"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="48sp" />
+
+            <TextView
+                android:id="@+id/pauseB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="verarbeiteKlick"
+                android:text="45"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="48sp" />
+
+            <TextView
+                android:id="@+id/pauseC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="verarbeiteKlick"
+                android:text="60"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="48sp" />
+
+            <TextView
+                android:id="@+id/pauseD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="verarbeiteKlick"
+                android:text="75"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="48sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="fill_vertical">
+            android:gravity="fill_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal">
-
+                android:gravity="bottom|center_horizontal"
+                android:orientation="horizontal">
+<!--
                 <Space
                     android:id="@+id/spacer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="fill_vertical"
                     android:minHeight="10dp"
-                    android:visibility="visible"
-                    android:gravity="fill_vertical" />
-
+                    android:visibility="visible" />
+-->
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/main_default_task"
                     android:id="@+id/kindOfDay"
-                    android:layout_weight="4"
-                    android:textColor="#1E90FF"
-                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:clickable="true"
+                    android:gravity="center_vertical"
                     android:maxLength="22"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@string/main_default_task"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#1E90FF" />
 
+                <EditText
+                    android:id="@+id/note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="Note"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<!--
                 <Space
                     android:id="@+id/spacer2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="2dp"
-                    android:visibility="visible"
-                    android:gravity="fill_vertical" />
+                    android:gravity="fill_vertical"
+                    android:minHeight="10dp"
+                    android:visibility="visible" />
+                    -->
             </LinearLayout>
 
         </LinearLayout>
 
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="fill_vertical">
+            android:gravity="fill_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/switchTasksButton"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:id="@+id/switchTasksButton"
+                    android:clickable="true"
                     android:onClick="switchTasks"
-                    android:clickable="true" />
+                    android:text="1" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="00"
                         android:id="@+id/total"
-                        android:textSize="48sp"
-                        android:gravity="left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="#1E90FF"
+                        android:clickable="true"
+                        android:gravity="left"
                         android:onClick="toggleTotal"
-                        android:clickable="true" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text=":"
-                    android:id="@+id/totalSemi"
-                    android:textSize="48sp"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:textColor="#1E90FF" />
+                        android:text="00"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#1E90FF"
+                        android:textSize="48sp" />
 
                     <TextView
+                        android:id="@+id/totalSemi"
                         android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="00"
-                        android:id="@+id/total15"
-                        android:textSize="48sp"
-                        android:gravity=""
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:gravity="center"
+                        android:text=":"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#1E90FF"
+                        android:textSize="48sp" />
+
+                    <TextView
+                        android:id="@+id/total15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:gravity=""
                         android:onClick="toggleTotal15"
-                        android:clickable="true" />
+                        android:text="00"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="#1E90FF"
+                        android:textSize="48sp" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/addTaskButton"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+"
-                    android:id="@+id/addTaskButton"
+                    android:clickable="true"
                     android:onClick="addTask"
-                    android:clickable="true" />
+                    android:text="+" />
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/balance"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="(0)"
-                android:id="@+id/balance"
                 android:layout_weight="4"
-                android:gravity="top|center_horizontal" />
+                android:gravity="top|center_horizontal"
+                android:text="(0)"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
     </LinearLayout>
 
