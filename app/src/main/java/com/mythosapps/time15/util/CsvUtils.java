@@ -1,7 +1,5 @@
 package com.mythosapps.time15.util;
 
-import android.util.Log;
-
 import com.mythosapps.time15.storage.CsvFileLineWrongException;
 import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.DaysDataNew;
@@ -51,7 +49,7 @@ public final class CsvUtils {
                     s.append(Time15.fromMinutes(taskB.getPause()).toDisplayString()).append(",");
                 }
             s.append(taskB.getTotal().toDecimalFormat()).append(",");
-            s.append(","); // reserved for future note
+            s.append(taskB.getNote() == null ? "" : taskB.getNote()).append(",");
         }
         return s.toString();
     }
@@ -84,7 +82,6 @@ public final class CsvUtils {
             }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
-            Log.e(CsvUtils.class.getName(), errMsg, t);
         }
 
         // ignore rest of csvString
@@ -124,12 +121,15 @@ public final class CsvUtils {
             if (totalTime != null) {
                 task.setTotal(totalTime);
             }
+
+            s = safeGetNextTokenOptional(note, id, "Note");
+            task.setNote(s);
+
             if (task.getKindOfDay() == null) {
                 task.setKindOfDay(KindOfDay.convert(displayString, task.getBegin(), task.getEnd()));
             }
         } catch (Throwable t) {
             // error while reading task from String, might result in Task.isComplete == false
-            Log.e(CsvUtils.class.getName(), "Error: ", t);
         }
 
         return task;
@@ -165,7 +165,6 @@ public final class CsvUtils {
     private static String safeGetNextToken(String s, String id, String expected) throws CsvFileLineWrongException {
         if (s == null || s.isEmpty()) {
             String msg = "load csv " + id + " missing: " + expected;
-            Log.e(CsvUtils.class.getName(), msg);
             throw new CsvFileLineWrongException(id, msg);
         }
         return s.trim();

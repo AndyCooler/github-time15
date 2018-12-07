@@ -9,7 +9,7 @@ import com.mythosapps.time15.util.CsvUtils;
 
 import junit.framework.TestCase;
 
-import org.testng.annotations.BeforeClass;
+//import org.testng.annotations.BeforeClass;
 
 /**
  * Created by andreas on 12.10.16.
@@ -17,7 +17,7 @@ import org.testng.annotations.BeforeClass;
 
 public class CsvUtilsTest extends TestCase {
 
-    @BeforeClass
+    //@BeforeClass
     public void setUp() {
         KindOfDay.initializeForTests();
     }

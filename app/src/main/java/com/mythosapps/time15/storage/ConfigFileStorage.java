@@ -1,6 +1,9 @@
 package com.mythosapps.time15.storage;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,7 +58,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
 
         String filename = DEFAULT_CONFIG_FILE;
 
-        if (!initialized && !init()) {
+        if (!initialized && !init(activity)) {
             fatal("loadConfigXml", "Error loading file " + filename);
             return defaultAssetConfig;
         }
@@ -99,7 +102,7 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
 
         this.activity = activity;
 
-        if (!initialized && !init()) {
+        if (!initialized && !init(activity)) {
             return false;
         }
 
@@ -126,7 +129,6 @@ public class ConfigFileStorage extends FileStorage implements ConfigStorageFacad
         }
         return result;
     }
-
 
     private void fatal(String method, String msg) {
         Log.e(getClass().getName(), method + " : " + msg);

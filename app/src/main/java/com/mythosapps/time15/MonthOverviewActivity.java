@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,7 +56,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(getClass().getName(), "onCreate() started.");
         setContentView(R.layout.activity_month_overview);
 
         storage = StorageFactory.getDataStorage();
@@ -68,9 +66,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
-
-        Log.i(getClass().getName(), "intent action : " + action);
-        Log.i(getClass().getName(), "intent type   : " + type);
 
         // importData operation is deactivated in AndroidManifest.xml at the moment
         // by removed intent definitions
@@ -86,7 +81,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
             id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         }
 
-        Log.i(getClass().getName(), "onCreate() finished.");
     }
 
     private void importData(Uri data) {
@@ -152,15 +146,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(getClass().getName(), "onResume() started with id " + id);
 
         initialize();
 
-        Log.i(getClass().getName(), "onResume() finished.");
     }
 
     private void initialize() {
-        Log.i(getClass().getName(), "initialize() started with id " + id);
         setTitle(TimeUtils.getMonthYearDisplayStringShort(id));
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
@@ -261,7 +252,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
             }
         }
 
-        Log.i(getClass().getName(), "initialize() finished.");
     }
 
     private String trimmed(String displayString) {

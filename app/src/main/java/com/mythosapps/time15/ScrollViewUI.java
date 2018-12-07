@@ -1,7 +1,6 @@
 package com.mythosapps.time15;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -29,19 +28,16 @@ public final class ScrollViewUI {
 
     public static boolean isBeginHourVisible(int childNumber) {
         boolean visible = (childNumber >= requestedBegin && childNumber < requestedBegin + 4);
-        Log.i(ScrollViewUI.class.getName(), ".......VISIBLE BEGIN: " + childNumber + ":" + visible + "(" + requestedBegin + ")");
         return visible;
     }
 
     public static boolean isEndHourVisible(int childNumber) {
         boolean visible = (childNumber >= requestedEnd && childNumber < requestedEnd + 4);
-        Log.i(ScrollViewUI.class.getName(), ".......VISIBLE END: " + childNumber + ":" + visible + "(" + requestedEnd + ")");
         return visible;
     }
 
     public static void scrollToChild(ScrollView scrollView, int childNumber, ScrollViewType type) {
 
-        Log.i(ScrollViewUI.class.getName(), ".......scrollToChild: " + childNumber + ":" + type);
         if (type == ScrollViewType.BEGIN) {
             requestedBegin = childNumber;
         } else {
@@ -85,7 +81,6 @@ public final class ScrollViewUI {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 int height = bottom - top;
-                Log.i(ScrollViewUI.class.getName(), ".......viewHours.-> height: " + height + ", 4*height: " + 4 * height);
 
                 childViewHeight = height;
                 if (type == ScrollViewType.BEGIN) {
@@ -98,7 +93,6 @@ public final class ScrollViewUI {
         scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.i(ScrollViewUI.class.getName(), ".........scrollViewHours.-> height: " + childViewHeight + ", 4*height: " + 4 * childViewHeight);
                 scrollView.removeOnLayoutChangeListener(this);
                 ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                 params.height = 4 * childViewHeight;
@@ -136,14 +130,12 @@ public final class ScrollViewUI {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 int height = bottom - top;
-                Log.i(ScrollViewUI.class.getName(), ".......view15: " + height + ", 4*height: " + 4 * height);
                 //v.removeOnLayoutChangeListener(this);
             }
         });
         scrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.i(ScrollViewUI.class.getName(), ".........scrollView15.-> height: " + childViewHeight + ", 4*height: " + 4 * childViewHeight);
                 scrollView.removeOnLayoutChangeListener(this);
                 ViewGroup.LayoutParams params = scrollView.getLayoutParams();
                 params.height = 4 * childViewHeight;

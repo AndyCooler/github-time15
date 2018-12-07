@@ -1,6 +1,5 @@
 package com.mythosapps.time15.util;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +38,8 @@ public class SwipeDetector implements View.OnTouchListener {
 
         ViewGroup layoutView = (ViewGroup) scrollView.getChildAt(0);
         int childCount = layoutView.getChildCount();
-        Log.i("ScrollInfo:", "ScrollView.childCount: " + childCount);
 
         int childViewHeight = layoutView.getChildAt(0).getMeasuredHeight();
-        Log.i("ScrollInfo:", "ScrollView.childViewHeight: " + childViewHeight);
-        Log.i("ScrollInfo:", "ScrollView.scrollY: " + ((ScrollView) v).getScrollY());
 
         //mActiveView = Integer.valueOf(((ScrollView)v).getScrollY()); // ((scrollY + (viewHeight/2))/viewHeight);
 
@@ -60,9 +56,7 @@ public class SwipeDetector implements View.OnTouchListener {
                 // do swipe
                 if (Math.abs(deltaY) > MIN_DISTANCE) {
                     mActiveView = ((scrollY + (childViewHeight / 2)) / childViewHeight);
-                    Log.i("ScrollInfo:", "mActiveView: " + mActiveView);
                     int scrollTo = mActiveView * childViewHeight;
-                    Log.i("Swipe:", "to position " + mActiveView);
                     if (type != null) {
                         if (ScrollViewType.BEGIN == type) {
                             ScrollViewUI.requestedBegin = mActiveView;
@@ -78,8 +72,6 @@ public class SwipeDetector implements View.OnTouchListener {
                         this.onBottomToTopSwipe(scrollTo);
                         return true;
                     }
-                } else {
-                    Log.i("Swipe:", "Swipe was only  long, need at least " + MIN_DISTANCE);
                 }
 
                 //return true;

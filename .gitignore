@@ -10,7 +10,9 @@
 *.apk
 *.ap_
 
-# keystore
+# Files for the ART/Dalvik VM
+*.dex
+
+#keystore
 /keystore.properties
 /howto.txt
-
