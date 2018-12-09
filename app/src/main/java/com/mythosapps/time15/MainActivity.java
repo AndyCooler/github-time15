@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView scrollViewBegin15;
     private ScrollView scrollViewEnd;
     private ScrollView scrollViewEnd15;
-    private EditText noteEditView;
 
     private View.OnClickListener scrollUIListener = new View.OnClickListener() {
 
@@ -129,22 +128,6 @@ public class MainActivity extends AppCompatActivity {
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
 
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
-
-        noteEditView = (EditText) findViewById(R.id.note);
-        noteEditView.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println("------------> TExt: " + s.toString());
-                note = s == null || "Note".equals(s.toString()) ? null : s.toString();
-            }
-        });
 
         // can: use ProGuard to obfuscate the code
 
@@ -251,6 +234,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.action_edit) {
             menuEditTask();
+            return true;
+        }
+        if (id == R.id.action_note) {
+            menuEditNote();
             return true;
         }
         if (id == R.id.action_delete) {
@@ -396,6 +383,22 @@ public class MainActivity extends AppCompatActivity {
         viewToModel();
         resetView();
         modelToView();
+    }
+
+    public void menuEditNote() {
+        final EditNotePopupUI taskUI = new EditNotePopupUI(this, modifiableData.getTask(taskNo).getNote());
+
+        taskUI.setOkButton(getString(R.string.edit_task_new), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newNote = taskUI.getInputTextField().getText().toString();
+                //modifiableData.getTask(taskNo).setNote(newNote== null || newNote.isEmpty() ? null : newNote);
+                MainActivity.this.note = newNote== null || newNote.isEmpty() ? null : newNote;
+            }
+        });
+        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
+        taskUI.show();
     }
 
     public void menuNewTask() {
@@ -699,7 +702,7 @@ public class MainActivity extends AppCompatActivity {
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
         System.out.println("viewToModel.note="+note);
-        task0.setNote(note == null || "Note".equals(note) ? null : note);
+        task0.setNote(note);
         if (task0.getKindOfDay().isBeginEndType()) {
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
@@ -766,7 +769,6 @@ public class MainActivity extends AppCompatActivity {
         previousSelectionKindOfDays = kindOfDay;
         kindOfDay = task.getKindOfDay().toString();
         note = task.getNote();
-        noteEditView.setText(note == null ? "Note" : note);
         if (previousSelectionKindOfDays == null) {
             previousSelectionKindOfDays = kindOfDay;
         }
@@ -803,7 +805,6 @@ public class MainActivity extends AppCompatActivity {
         setTransparent(R.id.total);
         setTransparent(R.id.totalSemi);
         setTransparent(R.id.total15);
-        noteEditView.setText("Note");
     }
 
     private void setTransparent(Integer viewId) {

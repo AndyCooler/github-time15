@@ -209,7 +209,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
                 row.addView(createTextView(dayId.substring(0, 2)));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
-                row.addView(createTextView(trimmed(task0.getKindOfDay().getDisplayString()), itemColor));
+                String kindOf = task0.getKindOfDay().getDisplayString();
+                row.addView(createTextView(trimmed(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf), itemColor));
                 row.addView(createTextView(hours, itemColor));
                 itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
                 row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
