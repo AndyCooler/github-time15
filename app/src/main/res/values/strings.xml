@@ -27,6 +27,7 @@
     <string name="menu_new">Aufgabe hinzufügen</string>
     <string name="menu_edit">Aufgabe anpassen</string>
     <string name="menu_delete">Eintrag Löschen</string>
+    <string name="menu_note">Notiz erfassen</string>
     <string name="new_task_title">Aufgabe hinzufügen</string>
     <string name="edit_task_title">Aufgabe anpassen</string>
     <string name="edit_task_with_begin_end">Mit Von-Bis Uhrzeit</string>

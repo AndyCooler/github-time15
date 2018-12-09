@@ -20,3 +20,17 @@ allprojects {
         google()
     }
 }
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+//27.0.3  22.2.1
+subprojects {
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.android.support'
+                    && !details.requested.name.contains('multidex') ) {
+                details.useVersion "23.0.1"
+            }
+        }
+    }
+}

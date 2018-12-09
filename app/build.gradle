@@ -1,39 +1,21 @@
 apply plugin: 'com.android.application'
 
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-
-// Initialize a new Properties() object called keystoreProperties.
-def keystoreProperties = new Properties()
-
-// Load your keystore.properties file into the keystoreProperties object.
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
-
 android {
-    signingConfigs {
-        config {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
     compileSdkVersion 27
-    buildToolsVersion "28.0.3"
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.mythosapps.time15"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 7
-        versionName "1.1.5"
+        versionCode 6
+        versionName "1.1.5-snap"
 
 //        jackOptions {
 //            enabled true
-//       }
+//        }
     }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -44,24 +26,24 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
     // Set this dependency if you want to use Mockito
     //testCompile 'org.mockito:mockito-core:1.10.19'
     // Set this dependency if you want to use Hamcrest matching
     //testCompile 'org.hamcrest:hamcrest-library:1.1'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:+'
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.testng:testng:6.9.6'
-    androidTestImplementation 'org.testng:testng:6.9.6'
+
+    compile 'com.android.support:appcompat-v7:27.0.3'
+    compile 'com.android.support:support-v4:27.0.3'
+    compile 'com.android.support:design:27.0.3'
+    compile 'com.android.support.constraint:constraint-layout:+'
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'org.testng:testng:6.9.6'
 }
 
 apply plugin: 'com.google.gms.google-services'
