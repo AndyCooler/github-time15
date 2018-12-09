@@ -395,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
                 String newNote = taskUI.getInputTextField().getText().toString();
                 //modifiableData.getTask(taskNo).setNote(newNote== null || newNote.isEmpty() ? null : newNote);
                 MainActivity.this.note = newNote== null || newNote.isEmpty() ? null : newNote;
+                MainActivity.this.save(false);
             }
         });
         taskUI.setCancelButton(getString(R.string.edit_task_cancel));
