@@ -53,6 +53,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
     private String id;
     private Random random = new Random();
 
+    private boolean showSecondTask = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,7 +160,11 @@ public class MonthOverviewActivity extends AppCompatActivity {
         table.removeAllViews();
         //table.setColumnShrinkable(7, true);
         //table.setColumnStretchable(7, true);
-        table.setColumnStretchable(6, true);
+        if (showSecondTask) {
+            table.setColumnStretchable(6, true);
+        } else {
+            table.setColumnStretchable(4, true);
+        }
         TableRow row = null;
         TableRow previousRow = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
@@ -182,8 +188,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     row.addView(createTextView(dayId.substring(0, 2), rowColor));
                     row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
-                    row.addView(createTextView("", rowColor));
-                    row.addView(createTextView("", rowColor));
+                    if (showSecondTask) {
+                        row.addView(createTextView("", rowColor));
+                        row.addView(createTextView("", rowColor));
+                    }
                     previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, row, previousRow);
                     table.addView(row);
                 }
@@ -202,19 +210,21 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 //if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
                 hours += task0.getTotal().toDisplayString() + " h";
 
-                if (task1 != null) {
-                    extraVacationHours = task1.getTotal().toDisplayString() + " h";
-                }
-
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
                 row.addView(createTextView(dayId.substring(0, 2)));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 String kindOf = task0.getKindOfDay().getDisplayString();
                 row.addView(createTextView(trimmed(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf), itemColor));
                 row.addView(createTextView(hours, itemColor));
-                itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
-                row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
-                row.addView(createTextView(extraVacationHours, itemColor));
+
+                if (showSecondTask) {
+                    if (task1 != null) {
+                        extraVacationHours = task1.getTotal().toDisplayString() + " h";
+                    }
+                    itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
+                    row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
+                    row.addView(createTextView(extraVacationHours, itemColor));
+                }
 
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -247,8 +257,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextView("", rowColor));
                 row.addView(createTextView(trimmed(task.getDisplayString()), rowColor));
                 row.addView(createTextView(time15.toDisplayString(), rowColor));
-                row.addView(createTextView(getString(R.string.month_sum), rowColor));
-                row.addView(createTextView("", rowColor));
+                if (showSecondTask) {
+                    row.addView(createTextView(getString(R.string.month_sum), rowColor));
+                    row.addView(createTextView("", rowColor));
+                }
                 table.addView(row);
             }
         }
@@ -256,7 +268,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     private String trimmed(String displayString) {
-        return displayString.length() > 10 ? displayString.substring(0, 10) : displayString;
+        if (showSecondTask) {
+            return displayString.length() > 10 ? displayString.substring(0, 10) : displayString;
+        } else {
+            return displayString.length() > 60 ? displayString.substring(0, 60) : displayString;
+        }
+
     }
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {

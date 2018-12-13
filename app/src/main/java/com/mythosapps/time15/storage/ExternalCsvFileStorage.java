@@ -101,7 +101,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
     }
 
 
-    public Map<String, Integer> loadWholeMonth(String id, String filename) {
+    public Map<String, Integer> loadWholeMonth(Activity activity, String id, String filename) {
 
         if (!initialized && !init(activity)) {
             return null;
@@ -157,7 +157,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
 
     @Override
     public DaysDataNew loadDaysDataNew(Activity activity, String id) {
-
+        this.activity = activity;
         // get data for id from cache
         String newMonthYear = TimeUtils.getMonthYearOfID(id);
 
@@ -172,7 +172,7 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
             // load from CSV
             // can: 1. refactor move code block to CsvUtils with InputStream parameter
             // can:  2. rework user notification scheme when problems occur
-            Map<String, Integer> csvMonth = loadWholeMonth(id, getFilename(id));
+            Map<String, Integer> csvMonth = loadWholeMonth(activity, id, getFilename(id));
             for (String csvCurrent : csvMonth.keySet()) {
                 DaysDataNew data = null;
                 try {
