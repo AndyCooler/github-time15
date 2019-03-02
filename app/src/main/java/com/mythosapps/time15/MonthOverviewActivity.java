@@ -53,7 +53,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     private String id;
     private Random random = new Random();
 
-    private boolean showSecondTask = false;
+    private boolean showSecondTask = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

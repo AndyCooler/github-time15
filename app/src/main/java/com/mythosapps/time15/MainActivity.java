@@ -392,8 +392,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newNote = taskUI.getInputTextField().getText().toString();
-                //modifiableData.getTask(taskNo).setNote(newNote== null || newNote.isEmpty() ? null : newNote);
-                MainActivity.this.note = newNote== null || newNote.isEmpty() ? null : newNote;
+                if (newNote== null || newNote.isEmpty()) {
+                    MainActivity.this.note = null;
+                } else {
+                    MainActivity.this.note = newNote.replaceAll(",", ";");
+                }
+
                 MainActivity.this.save(false);
             }
         });
