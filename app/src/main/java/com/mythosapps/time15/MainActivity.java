@@ -111,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
         KindOfDay.initializeFromConfig(configStorage, this);
 
-        balanceValue = storage.loadBalance(this, intentsId); // can move to onResume() now that it's no more expensive
-
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
         scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
@@ -175,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String intentsId = getIntentsId();
+        balanceValue = storage.loadBalance(this, intentsId);
 
         if (appIsPaused) {
             appIsPaused = false;
@@ -393,8 +392,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newNote = taskUI.getInputTextField().getText().toString();
-                //modifiableData.getTask(taskNo).setNote(newNote== null || newNote.isEmpty() ? null : newNote);
-                MainActivity.this.note = newNote== null || newNote.isEmpty() ? null : newNote;
+                if (newNote== null || newNote.isEmpty()) {
+                    MainActivity.this.note = null;
+                } else {
+                    MainActivity.this.note = newNote.replaceAll(",", ";");
+                }
+
                 MainActivity.this.save(false);
             }
         });
