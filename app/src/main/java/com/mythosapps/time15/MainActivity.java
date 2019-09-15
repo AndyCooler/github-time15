@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private Integer previousSelectionBeginn15 = null; //viewId
     private Integer previousSelectionEnde15 = null; //viewId
     private String previousSelectionKindOfDays = null;
+    private boolean isPaused = false;
     // here are the maps from value to viewId that enable re-use of 4 TextViews for full range 0-24
     // TODO for ScrollView, just extend initialization to full range of values
     // TODO later: maps can be avoided by makeing better use of TextView (has ID, has value, so
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView total;
     private TextView totalSemi;
     private TextView total15;
-    private boolean appIsPaused = false;
     private ScrollView scrollViewBegin;
     private ScrollView scrollViewBegin15;
     private ScrollView scrollViewEnd;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         storage = StorageFactory.getDataStorage();
         configStorage = StorageFactory.getConfigStorage();
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -172,23 +174,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String intentsId = getIntentsId();
-        balanceValue = storage.loadBalance(this, intentsId);
-
-        if (appIsPaused) {
-            appIsPaused = false;
-            switchToID(null, TimeUtils.createID());
-        } else {
-            switchToID(null, intentsId);
+        String intentsId = isPaused ? id : getIntentsId();
+        isPaused = false;
+        if (intentsId == null) {
+            TimeUtils.createID(); // today's id
         }
+        balanceValue = storage.loadBalance(this, intentsId);
+        switchToID(null, intentsId);
         updateBalance();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        appIsPaused = true;
+        isPaused = true;
     }
 
     @Override
