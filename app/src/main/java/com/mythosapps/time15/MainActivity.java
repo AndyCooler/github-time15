@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD,R.id.pauseE,R.id.pauseF);
+        initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
         KindOfDay.initializeFromConfig(configStorage, this);
 
@@ -524,7 +524,7 @@ public class MainActivity extends AppCompatActivity {
             boolean isEndeTime = mapEndValueToView.containsValue(view);
             boolean isBeginn15 = mapBegin15ValueToView.containsValue(view);
             boolean isEnde15 = mapEnd15ValueToView.containsValue(view);
-        boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD || viewId == R.id.pauseE || viewId == R.id.pauseF;
+        boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
         boolean isSelected = false;
         boolean isDeselected = false;
         if (isBeginnTime) {

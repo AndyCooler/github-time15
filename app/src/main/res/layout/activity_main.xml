@@ -187,7 +187,7 @@
                 android:onClick="verarbeiteKlick"
                 android:text="30"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                android:textSize="48sp" />
 
             <TextView
                 android:id="@+id/pauseB"
@@ -197,9 +197,9 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="verarbeiteKlick"
-                android:text="40"
+                android:text="45"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                android:textSize="48sp" />
 
             <TextView
                 android:id="@+id/pauseC"
@@ -209,9 +209,9 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="verarbeiteKlick"
-                android:text="45"
+                android:text="60"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                android:textSize="48sp" />
 
             <TextView
                 android:id="@+id/pauseD"
@@ -221,10 +221,10 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="verarbeiteKlick"
-                android:text="50"
+                android:text="90"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
-
+                android:textSize="48sp" />
+<!--
             <TextView
                 android:id="@+id/pauseE"
                 android:layout_width="wrap_content"
@@ -248,7 +248,7 @@
                 android:text="75"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="30sp" />
-
+-->
         </LinearLayout>
 
         <LinearLayout
