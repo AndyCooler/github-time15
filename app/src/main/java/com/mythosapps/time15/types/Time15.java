@@ -100,6 +100,12 @@ public class Time15 {
         return String.format(Locale.US, "%.2f", d);
     }
 
+    public String toDecimalForDisplay() {
+        double d = (double) totalMinutes / (double) 60;
+        String display = String.format(Locale.US, "%.2f", d);
+        return display.endsWith("0") ? display.substring(0, display.length()-1) : display;
+    }
+
     public int toMinutes() {
         return totalMinutes;
     }

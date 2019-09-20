@@ -91,6 +91,16 @@ public class DaysDataNew {
         return total;
     }
 
+    public Time15 getTotalFor(KindOfDay day) {
+        Time15 total = Time15.fromMinutes(0);
+        for (BeginEndTask task : tasks) {
+            if (day.equals(task.getKindOfDay())) {
+                total.plus(task.getTotal());
+            }
+        }
+        return total;
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder(id);

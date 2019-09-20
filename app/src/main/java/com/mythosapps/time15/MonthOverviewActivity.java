@@ -210,7 +210,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 BeginEndTask task0 = data.getTask(0);
                 BeginEndTask task1 = data.getTask(1);
                 //if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
-                hours += task0.getTotal().toDisplayString() + " h";
+                hours += task0.getTotal().toDecimalForDisplay();// + " h";
 
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
                 row.addView(createTextView(dayId.substring(0, 2)));
@@ -221,7 +221,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
                 if (showSecondTask) {
                     if (task1 != null) {
-                        extraVacationHours = task1.getTotal().toDisplayString() + " h";
+                        extraVacationHours = task1.getTotal().toDecimalForDisplay();// + " h";
                     }
                     itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
                     row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
@@ -258,7 +258,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextView("", rowColor));
                 row.addView(createTextView("", rowColor));
                 row.addView(createTextView(trimmed(task.getDisplayString()), rowColor));
-                row.addView(createTextView(time15.toDisplayString(), rowColor));
+                row.addView(createTextView(time15.toDecimalForDisplay(), rowColor));
                 if (showSecondTask) {
                     row.addView(createTextView(getString(R.string.month_sum), rowColor));
                     row.addView(createTextView("", rowColor));
@@ -315,7 +315,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
         if (show) {
             int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
-            String balanceText = Time15.fromMinutes(weeksBalance).toDisplayStringWithSign();
+            String balanceText = Time15.fromMinutes(weeksBalance).toDecimalForDisplay();
             balanceView.setText(balanceText);
         } else {
             balanceView.setText("");
@@ -325,7 +325,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private void addToBalance(DaysDataNew data, Map<Integer, Integer> weeksBalanceMap) {
         int weekOfYear = TimeUtils.getWeekOfYear(data.getId());
-        int balanceInMinutes = data.getBalance();
+        int balanceInMinutes = data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
         Integer current = weeksBalanceMap.get(weekOfYear);
         if (current == null) {
             weeksBalanceMap.put(weekOfYear, balanceInMinutes);
