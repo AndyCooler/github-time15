@@ -1,7 +1,5 @@
 package com.mythosapps.time15;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import com.mythosapps.time15.types.Time15;
 
 import junit.framework.TestCase;
@@ -9,7 +7,6 @@ import junit.framework.TestCase;
 /**
  * Created by andreas on 14.03.16.
  */
-@SmallTest
 public class Time15Test extends TestCase {
 
     public void testToMinutes() {

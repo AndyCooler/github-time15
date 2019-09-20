@@ -9,8 +9,6 @@ import java.util.StringTokenizer;
  */
 public class Time15 {
 
-    private static final DecimalFormat FORMAT = new DecimalFormat("#,00");
-
     private int totalMinutes;
 
     public Time15(int hours, int minutes) {

@@ -1,41 +1,44 @@
 package com.mythosapps.time15;
 
-import android.test.suitebuilder.annotation.SmallTest;
-
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.util.TimeUtils;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.List;
 
 /**
  * Created by andreas on 05.01.16.
  */
-@SmallTest
-public class TimeUtilsTest extends TestCase {
+public class TimeUtilsTest {
 
+    @Test
     public void testCreateID() {
-        assertNotNull(TimeUtils.createID());
-        assertTrue(TimeUtils.createID().length() == 10);
+        Assert.assertNotNull(TimeUtils.createID());
+        Assert.assertTrue(TimeUtils.createID().length() == 10);
     }
 
+    @Test
     public void testGetMonthYearOfID() {
-        assertEquals("2016_01", TimeUtils.getMonthYearOfID("05.01.2016"));
+        Assert.assertEquals("2016_01", TimeUtils.getMonthYearOfID("05.01.2016"));
     }
 
+    @Test
     public void testDateBackwards() {
-        assertEquals("03.01.2016", TimeUtils.dateBackwards("04.01.2016"));
-        assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
-        assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
-        assertEquals("05.01.2016", TimeUtils.dateBackwards("06.01.2016"));
+        Assert.assertEquals("03.01.2016", TimeUtils.dateBackwards("04.01.2016"));
+        Assert.assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
+        Assert.assertEquals("04.01.2016", TimeUtils.dateBackwards("05.01.2016"));
+        Assert.assertEquals("05.01.2016", TimeUtils.dateBackwards("06.01.2016"));
     }
 
+    @Test
     public void testDateForwards() {
-        assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
-        assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
+        Assert.assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
+        Assert.assertEquals("01.02.2016", TimeUtils.dateForwards("31.01.2016"));
     }
 
+    @Test
     public void testListOfIdsOfMonth() {
 
         checkMonth("05.01.2016", 31);
@@ -52,6 +55,7 @@ public class TimeUtilsTest extends TestCase {
         checkMonth("05.12.2016", 31);
     }
 
+    @Test
     public void testCreateTestdata() {
         StorageFactory.getDataStorage();
     }
@@ -60,7 +64,7 @@ public class TimeUtilsTest extends TestCase {
         List<String> list = TimeUtils.getListOfIdsOfMonth(id);
         String firstId = list.get(0);
         String lastId = list.get(list.size() - 1);
-        assertEquals("01" + id.substring(2), firstId);
-        assertEquals(daysInMonth + id.substring(2), lastId);
+        Assert.assertEquals("01" + id.substring(2), firstId);
+        Assert.assertEquals(daysInMonth + id.substring(2), lastId);
     }
 }
