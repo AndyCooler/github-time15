@@ -28,7 +28,7 @@ public class Time15 {
     }
 
     public String getHoursDisplayString() {
-        return formatWithTwoDigits(getHours());
+        return String.valueOf(Math.abs(getHours()));
     }
 
     public int getMinutes() {
@@ -36,7 +36,10 @@ public class Time15 {
     }
 
     public String getMinutesDisplayString() {
-        return formatWithTwoDigits(getMinutes());
+        double d = (double) totalMinutes / (double) 60;
+        String display = String.format(Locale.US, "%.2f", d);
+        display = "."+ display.substring((display.indexOf(".")+1));
+        return display.endsWith("0") ? display.substring(0, display.length()-1) : display;
     }
 
     public String toDisplayString() {

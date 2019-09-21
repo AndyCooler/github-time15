@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     private Integer numberTaskHours = null;
     private Integer numberTaskMinutes = null;
     private TextView total;
-    private TextView totalSemi;
     private TextView total15;
     private ScrollView scrollViewBegin;
     private ScrollView scrollViewBegin15;
@@ -612,12 +611,10 @@ public class MainActivity extends AppCompatActivity {
             totalTime = modifiableData.getTask(taskNo).getTotal();
         }
         total = (TextView) findViewById(R.id.total);
-        totalSemi = (TextView) findViewById(R.id.totalSemi);
         total15 = (TextView) findViewById(R.id.total15);
 
         total.setText(totalTime.getHoursDisplayString());
         total.setTextColor(color);
-        totalSemi.setTextColor(color);
         total15.setText(totalTime.getMinutesDisplayString());
         total15.setTextColor(color);
     }
@@ -757,7 +754,6 @@ public class MainActivity extends AppCompatActivity {
             setSelected(previousSelectionBeginn15);
 
             setTransparent(R.id.total);
-            setTransparent(R.id.totalSemi);
             setTransparent(R.id.total15);
         } else {
 
@@ -766,7 +762,6 @@ public class MainActivity extends AppCompatActivity {
             numberTaskMinutes = task.getTotal().getMinutes();
 
             setSelected(R.id.total);
-            setSelected(R.id.totalSemi);
             setSelected(R.id.total15);
         }
         previousSelectionKindOfDays = kindOfDay;
@@ -806,7 +801,6 @@ public class MainActivity extends AppCompatActivity {
         numberTaskHours = null;
         numberTaskMinutes = null;
         setTransparent(R.id.total);
-        setTransparent(R.id.totalSemi);
         setTransparent(R.id.total15);
     }
 
