@@ -286,11 +286,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void updateBalance() {
+        /** ANzeige der balance deaktiviert in Layout, dann hier auch weg.
         TextView balance = (TextView) findViewById(R.id.balance);
         String balanceText = Time15.fromMinutes(balanceValue).toDisplayStringWithSign();
         balance.setText("(" + balanceText + ")");
+         */
     }
+
 
     private void switchToID(String fromId, String toId) {
         id = toId;
