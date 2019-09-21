@@ -1,8 +1,12 @@
 package com.mythosapps.time15;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -110,7 +114,10 @@ public class MainActivity extends AppCompatActivity {
 
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
-        KindOfDay.initializeFromConfig(configStorage, this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            KindOfDay.initializeFromConfig(configStorage, this);
+        }
 
         TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
 
@@ -170,17 +177,55 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String[] permissions,
+            int[] grantResults
+    ) {
+        if (requestCode == 123) {
+            // Request for camera permission.
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                KindOfDay.initializeFromConfig(configStorage, this);
+                onResume();
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         String intentsId = isPaused ? id : getIntentsId();
         isPaused = false;
         if (intentsId == null) {
-            TimeUtils.createID(); // today's id
+            intentsId = TimeUtils.createID(); // today's id
         }
-        balanceValue = storage.loadBalance(this, intentsId);
-        switchToID(null, intentsId);
-        updateBalance();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            balanceValue = storage.loadBalance(this, intentsId);
+            switchToID(null, intentsId);
+            updateBalance();
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Provide an additional rationale to the user if the permission was not granted
+                // and the user would benefit from additional context for the use of the permission.
+                // Display a SnackBar with cda button to request the missing permission.
+                Snackbar.make(findViewById(R.id.total), "App liest und schreibt .csv Dateien",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Request the permission
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                123);
+                    }
+                }).show();
+            } else {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        123);
+            }
+        }
     }
 
     @Override
