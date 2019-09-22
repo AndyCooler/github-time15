@@ -46,6 +46,6 @@
     <string name="year_days">days</string>
     <string name="year_hours">hours</string>
     <string name="year_total">Total:</string>
-    <string name="month_sum">hours</string>
+    <string name="display_sum">\u2211</string>
     <string name="main_delete_error">Nichts zu löschen!</string>
 </resources>

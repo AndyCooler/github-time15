@@ -256,11 +256,11 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
                 row.addView(createTextView("", rowColor));
-                row.addView(createTextView("", rowColor));
+                row.addView(createTextView(getString(R.string.display_sum), rowColor));
                 row.addView(createTextView(trimmed(task.getDisplayString()), rowColor));
-                row.addView(createTextView(time15.toDecimalForDisplay(), rowColor));
+                row.addView(createTextView(time15.toDecimalForDisplay() + " h", rowColor));
                 if (showSecondTask) {
-                    row.addView(createTextView(getString(R.string.month_sum), rowColor));
+                    row.addView(createTextView("", rowColor));
                     row.addView(createTextView("", rowColor));
                 }
                 table.addView(row);

@@ -522,7 +522,7 @@ public class MainActivity extends AppCompatActivity {
         TextView day = (TextView) findViewById(R.id.kindOfDay);
         day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
         day.setTextColor(color);
-        setSelected(R.id.kindOfDay);
+        //setSelected(R.id.kindOfDay);
     }
 
     public void addTask(View v) {
