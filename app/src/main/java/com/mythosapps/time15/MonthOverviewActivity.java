@@ -168,22 +168,25 @@ public class MonthOverviewActivity extends AppCompatActivity {
             table.setColumnStretchable(4, true);
         }
         TableRow row = null;
-        TableRow previousRow = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
-        int previousWeekOfYear = -1;
 
         Set<KindOfDay> tasksThisMonth = new HashSet<>();
+        TextView lastSumOfWeekView = null;
+        int sumUpToday = 0;
 
-        Map<Integer, Integer> weeksBalanceMap = new HashMap<Integer, Integer>();
         for (final String dayId : listOfIds) {
             DaysDataNew data = storage.loadDaysDataNew(this, dayId);
 
             if (data == null) {
                 if (!TimeUtils.isWeekend(dayId)) {
+                    if (TimeUtils.isMonday(dayId)) {
+                        colorize(lastSumOfWeekView);
+                        addWeekSeparatorLine(table);
+                    }
+
                     int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
-                    previousRow = row;
                     row = new TableRow(this);
                     row.setLayoutParams(lp);
                     row.addView(createTextView(TimeUtils.dayOfWeek(dayId), rowColor));
@@ -194,16 +197,22 @@ public class MonthOverviewActivity extends AppCompatActivity {
                         row.addView(createTextView("", rowColor));
                         row.addView(createTextView("", rowColor));
                     }
-                    previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, row, previousRow);
+                    lastSumOfWeekView = createBalanceView(sumUpToday, dayId);
+                    row.addView(lastSumOfWeekView);
+
                     table.addView(row);
                 }
             } else {
-                data.collectTaskNames(tasksThisMonth);
+                if (TimeUtils.isMonday(dayId)) {
+                    colorize(lastSumOfWeekView);
+                    addWeekSeparatorLine(table);
+                }
 
-                previousRow = row;
+                data.collectTaskNames(tasksThisMonth);
+                sumUpToday += data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
+
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
-                addToBalance(data, weeksBalanceMap);
 
                 String hours = "";
                 String extraVacationHours = "";
@@ -227,6 +236,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
                     row.addView(createTextView(extraVacationHours, itemColor));
                 }
+                lastSumOfWeekView = createBalanceView(sumUpToday, dayId);
+                row.addView(lastSumOfWeekView);
 
                 row.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -234,7 +245,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
                         startMainActivity(dayId);
                     }
                 });
-                previousWeekOfYear = addWeekSeparatorLine(dayId, weeksBalanceMap, table, previousWeekOfYear, row, previousRow);
                 table.addView(row);
             }
         }
@@ -252,7 +262,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 Time15 time15 = Time15.fromMinutes(sumInMinutes);
 
                 int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
-                previousRow = row;
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
                 row.addView(createTextView("", rowColor));
@@ -269,6 +278,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     }
 
+    private void colorize(TextView view) {
+        if (view != null) {
+            view.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+        }
+    }
+
     private String trimmed(String displayString) {
         if (showSecondTask) {
             return displayString.length() > 10 ? displayString.substring(0, 10) : displayString;
@@ -283,55 +298,30 @@ public class MonthOverviewActivity extends AppCompatActivity {
         return isComplete ? kindOfDay.getColor() : ColorsUI.RED_FLAGGED;
     }
 
-    private int addWeekSeparatorLine(String dayId, Map<Integer, Integer> weeksBalanceMap, TableLayout table, int previousWeekOfYear, ViewGroup row, ViewGroup previousRow) {
-        int weekOfYear = TimeUtils.getWeekOfYear(dayId);
-        int newPreviousWeekOfYear = previousWeekOfYear;
-        if (weekOfYear != previousWeekOfYear) {
-            if (previousWeekOfYear != -1) {
-                TextView balanceView = createBalanceView(weeksBalanceMap, previousWeekOfYear, true);
-                previousRow.addView(balanceView);
-                View line = new View(this);
-                line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
-                line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
-                table.addView(line);
-            }
-            newPreviousWeekOfYear = weekOfYear;
-        } else if (TimeUtils.isLastWorkDayOfMonth(dayId)) { // if id is last in month
-            // add text view with balance to current row
-            TextView balanceView = createBalanceView(weeksBalanceMap, weekOfYear, true);
-            row.addView(balanceView);
-        }
-        return newPreviousWeekOfYear;
+    private void addWeekSeparatorLine(TableLayout table) {
+        View line = new View(this);
+        line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
+        line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
+        table.addView(line);
     }
 
-    private TextView createBalanceView(Map<Integer, Integer> weeksBalanceMap, int weekOfYear, boolean show) {
+    private TextView createBalanceView(int sumUpToday, String dayId) {
         TextView balanceView = new TextView(this);
         //balanceView.setWidth(0);
         balanceView.setGravity(Gravity.RIGHT);
         //balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
         balanceView.setPadding(5, 5, 10, 5);
-        balanceView.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+
 
         //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
-        if (show) {
-            int weeksBalance = weeksBalanceMap.get(weekOfYear) == null ? 0 : weeksBalanceMap.get(weekOfYear);
-            String balanceText = Time15.fromMinutes(weeksBalance).toDecimalForDisplay();
-            balanceView.setText(balanceText);
+        String balanceText = Time15.fromMinutes(sumUpToday).toDecimalForDisplay();
+        balanceView.setText(balanceText);
+        if (TimeUtils.isLastWorkDayOfMonth(dayId)) {
+            colorize(balanceView);
         } else {
-            balanceView.setText("");
+            balanceView.setTextColor(ColorsUI.DEACTIVATED);
         }
         return balanceView;
-    }
-
-    private void addToBalance(DaysDataNew data, Map<Integer, Integer> weeksBalanceMap) {
-        int weekOfYear = TimeUtils.getWeekOfYear(data.getId());
-        int balanceInMinutes = data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
-        Integer current = weeksBalanceMap.get(weekOfYear);
-        if (current == null) {
-            weeksBalanceMap.put(weekOfYear, balanceInMinutes);
-        } else {
-            weeksBalanceMap.put(weekOfYear, current + balanceInMinutes);
-        }
     }
 
     private TextView createTextView(String text, int color) {

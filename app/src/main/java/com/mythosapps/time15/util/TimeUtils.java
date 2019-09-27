@@ -108,6 +108,14 @@ public final class TimeUtils {
         return calA.get(Calendar.MONTH) == calB.get(Calendar.MONTH) && calA.get(Calendar.YEAR) == calB.get(Calendar.YEAR);
     }
 
+    public static boolean isMonday(String id) {
+        if (id == null) {
+            return false;
+        }
+        GregorianCalendar cal = toCalendar(id);
+        return 2 == cal.get(Calendar.DAY_OF_WEEK);
+    }
+
     public static int getWeekOfYear(String id) {
         Calendar cal = toCalendar(id);
         return cal.get(Calendar.WEEK_OF_YEAR);

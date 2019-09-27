@@ -314,9 +314,9 @@
 
                 <Button
                     android:id="@+id/switchTasksButton"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:background = "@drawable/roundbutton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:clickable="true"
                     android:onClick="switchTasks"
                     android:text="1" />
@@ -372,9 +372,9 @@
 
                 <Button
                     android:id="@+id/addTaskButton"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:background = "@drawable/roundbutton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:clickable="true"
                     android:onClick="addTask"
                     android:text="+" />
