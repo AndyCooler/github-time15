@@ -12,7 +12,6 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,10 +30,8 @@ import com.mythosapps.time15.util.TimeUtils;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -175,6 +172,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         Set<KindOfDay> tasksThisMonth = new HashSet<>();
         TextView lastSumOfWeekView = null;
         int sumUpToday = 0;
+        int sumWeek = 0;
 
         for (final String dayId : listOfIds) {
             DaysDataNew data = storage.loadDaysDataNew(this, dayId);
@@ -182,8 +180,11 @@ public class MonthOverviewActivity extends AppCompatActivity {
             if (data == null) {
                 if (!TimeUtils.isWeekend(dayId)) {
                     if (TimeUtils.isMonday(dayId)) {
+                        updateSumWeek(lastSumOfWeekView, sumWeek);
+
                         colorize(lastSumOfWeekView);
                         addWeekSeparatorLine(table);
+                        sumWeek = 0;
                     }
 
                     int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
@@ -197,19 +198,23 @@ public class MonthOverviewActivity extends AppCompatActivity {
                         row.addView(createTextView("", rowColor));
                         row.addView(createTextView("", rowColor));
                     }
-                    lastSumOfWeekView = createBalanceView(sumUpToday, dayId);
+                    lastSumOfWeekView = createBalanceView(sumUpToday, sumWeek, dayId);
                     row.addView(lastSumOfWeekView);
 
                     table.addView(row);
                 }
             } else {
                 if (TimeUtils.isMonday(dayId)) {
+                    updateSumWeek(lastSumOfWeekView, sumWeek);
+
+                    sumWeek = 0;
                     colorize(lastSumOfWeekView);
                     addWeekSeparatorLine(table);
                 }
 
                 data.collectTaskNames(tasksThisMonth);
                 sumUpToday += data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
+                sumWeek += data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
 
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
@@ -236,7 +241,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
                     row.addView(createTextView(extraVacationHours, itemColor));
                 }
-                lastSumOfWeekView = createBalanceView(sumUpToday, dayId);
+                lastSumOfWeekView = createBalanceView(sumUpToday, sumWeek, dayId);
                 row.addView(lastSumOfWeekView);
 
                 row.setOnClickListener(new View.OnClickListener() {
@@ -278,6 +283,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     }
 
+    private void updateSumWeek(TextView view, int sumWeek) {
+        if (view != null) {
+            String weekText = Time15.fromMinutes(sumWeek).toDecimalForDisplay();
+            view.setText("(" + weekText + ") " + view.getText());
+        }
+    }
+
     private void colorize(TextView view) {
         if (view != null) {
             view.setTextColor(ColorsUI.DARK_GREY_SAVE_ERROR);
@@ -305,7 +317,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         table.addView(line);
     }
 
-    private TextView createBalanceView(int sumUpToday, String dayId) {
+    private TextView createBalanceView(int sumUpToday, int sumWeek, String dayId) {
         TextView balanceView = new TextView(this);
         //balanceView.setWidth(0);
         balanceView.setGravity(Gravity.RIGHT);
@@ -315,10 +327,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
         //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
         String balanceText = Time15.fromMinutes(sumUpToday).toDecimalForDisplay();
-        balanceView.setText(balanceText);
+
         if (TimeUtils.isLastWorkDayOfMonth(dayId)) {
+            balanceView.setText(balanceText);
+            updateSumWeek(balanceView, sumWeek);
             colorize(balanceView);
         } else {
+            balanceView.setText(balanceText);
             balanceView.setTextColor(ColorsUI.DEACTIVATED);
         }
         return balanceView;
