@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -286,7 +288,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
     private void updateSumWeek(TextView view, int sumWeek) {
         if (view != null) {
             String weekText = Time15.fromMinutes(sumWeek).toDecimalForDisplay();
-            view.setText("(" + weekText + ") " + view.getText());
+            String html = "<b><font color=\"#add8e6\">" + weekText + "</font></b>&nbsp;&nbsp;";
+            view.setText(Html.fromHtml(html + view.getText()));
         }
     }
 
@@ -323,8 +326,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
         balanceView.setGravity(Gravity.RIGHT);
         //balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
         balanceView.setPadding(5, 5, 10, 5);
-
-
         //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
         String balanceText = Time15.fromMinutes(sumUpToday).toDecimalForDisplay();
 
