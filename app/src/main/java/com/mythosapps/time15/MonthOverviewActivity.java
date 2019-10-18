@@ -53,7 +53,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     private String id;
     private Random random = new Random();
 
-    private boolean showSecondTask = true;
+    private boolean showSecondTask = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,8 +225,16 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 String extraVacationHours = "";
                 BeginEndTask task0 = data.getTask(0);
                 BeginEndTask task1 = data.getTask(1);
-                //if (KindOfDay.isBeginEndType(task0.getKindOfDay())) {
-                hours += task0.getTotal().toDecimalForDisplay();// + " h";
+                if (task1 == null) {
+                    hours = task0.getTotal().toDecimalForDisplay()+ "  ";// + " h";
+                } else {
+                    if (task1.getKindOfDay().equals(task0.getKindOfDay())) {
+                        Time15 combined = data.getTotalFor(task0.getKindOfDay());
+                        hours = combined.toDecimalForDisplay() + " " + getString(R.string.display_sum);
+                    } else {
+                        hours = task0.getTotal().toDecimalForDisplay() + " *";
+                    }
+                }
 
                 row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
                 row.addView(createTextView(dayId.substring(0, 2)));
@@ -240,7 +248,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
                         extraVacationHours = task1.getTotal().toDecimalForDisplay();// + " h";
                     }
                     itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
-                    row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
+                    // long version of second task display:
+                    //row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
+                    // compact version of second task display:
+                    row.addView(createTextView(task1 == null ? "" : "(2)", itemColor));
                     row.addView(createTextView(extraVacationHours, itemColor));
                 }
                 lastSumOfWeekView = createBalanceView(sumUpToday, sumWeek, dayId);
@@ -301,9 +312,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private String trimmed(String displayString) {
         if (showSecondTask) {
-            return displayString.length() > 10 ? displayString.substring(0, 10) : displayString;
+            // second task is now compact, so more space for fist task!
+            return displayString.length() > 20 ? displayString.substring(0, 20) : displayString;
         } else {
-            return displayString.length() > 60 ? displayString.substring(0, 60) : displayString;
+            return displayString.length() > 26 ? displayString.substring(0, 26) : displayString;
         }
 
     }
