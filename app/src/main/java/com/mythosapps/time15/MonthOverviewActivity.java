@@ -366,18 +366,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
         textView.setText(text);
         textView.setTextColor(color);
         textView.setBackgroundColor(random.nextInt(4)); // TODO ??
-        ///textView.setGravity(Gravity.LEFT);
-        //textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
-        ///textView.setPadding(10, 5, 5, 5);
         textView.setPadding(5, 3, 5, 2);
         return textView;
     }
 
     private TextView createTextViewInFlow(String text, int color) {
         TextView textView = createTextView0(text, color);
-        // TODO also: entweder mit float Angaben: .1 .1 .5 .1 .2 und wrap content oder aber so
-        // TODO mittels 1 spalte mit weiht =1 und 0dp, rest auf wrap content:
-        //  TODO https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
+        // siehe https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
         textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
         textView.setGravity(Gravity.LEFT);
         return textView;
@@ -385,9 +380,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private TextView createTextViewRight(String text, int color) {
         TextView textView = createTextView0(text, color);
-        // TODO also: entweder mit float Angaben: .1 .1 .5 .1 .2 und wrap content oder aber so
-        // TODO mittels 1 spalte mit weiht =1 und 0dp, rest auf wrap content:
-        //  TODO https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
         textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
         textView.setGravity(Gravity.RIGHT);
         return textView;
@@ -395,15 +387,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private TextView createTextViewMaxWidth(String text, int color) {
         TextView textView = createTextView0(text, color);
-        // TODO also: entweder mit float Angaben: .1 .1 .5 .1 .2 und wrap content oder aber so
-        // TODO mittels 1 spalte mit weiht =1 und 0dp, rest auf wrap content:
-        //  TODO https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
         textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_MAX);
         textView.setGravity(Gravity.LEFT);
         return textView;
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
