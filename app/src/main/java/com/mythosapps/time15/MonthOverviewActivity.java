@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -37,6 +38,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
  * day each day was.
@@ -45,6 +49,9 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mythosapps.time15.MESSAGE";
+
+    private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_FLOW = new TableRow.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+    private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_MAX = new TableRow.LayoutParams(0, WRAP_CONTENT, 1.0f);
 
     // Storage
     private StorageFacade storage;
@@ -161,13 +168,20 @@ public class MonthOverviewActivity extends AppCompatActivity {
         table.removeAllViews();
         //table.setColumnShrinkable(7, true);
         //table.setColumnStretchable(7, true);
+        // use onPostCreate to measure created views and do some more tweaking.. :)
+
+        table.setColumnShrinkable(0, true);
+        table.setColumnShrinkable(1, true);
         if (showSecondTask) {
             table.setColumnStretchable(6, true);
         } else {
-            table.setColumnStretchable(4, true);
+            table.setColumnStretchable(2, true);
         }
+
+
+        //table.setStretchAllColumns(true);
         TableRow row = null;
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1.0f);
 
         List<String> listOfIds = TimeUtils.getListOfIdsOfMonth(id);
 
@@ -192,13 +206,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
                     row = new TableRow(this);
                     row.setLayoutParams(lp);
-                    row.addView(createTextView(TimeUtils.dayOfWeek(dayId), rowColor));
-                    row.addView(createTextView(dayId.substring(0, 2), rowColor));
-                    row.addView(createTextView("", rowColor));
-                    row.addView(createTextView("", rowColor));
+                    row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), rowColor));
+                    row.addView(createTextViewInFlow(dayId.substring(0, 2), rowColor));
+                    row.addView(createTextViewInFlow("", rowColor));
+                    row.addView(createTextViewInFlow("", rowColor));
                     if (showSecondTask) {
-                        row.addView(createTextView("", rowColor));
-                        row.addView(createTextView("", rowColor));
+                        row.addView(createTextViewInFlow("", rowColor));
+                        row.addView(createTextViewInFlow("", rowColor));
                     }
                     lastSumOfWeekView = createBalanceView(sumUpToday, sumWeek, dayId);
                     row.addView(lastSumOfWeekView);
@@ -236,12 +250,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     }
                 }
 
-                row.addView(createTextView(TimeUtils.dayOfWeek(dayId)));
-                row.addView(createTextView(dayId.substring(0, 2)));
+                row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), ColorsUI.DARK_BLUE_DEFAULT));
+                row.addView(createTextViewInFlow(dayId.substring(0, 2), ColorsUI.DARK_BLUE_DEFAULT));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 String kindOf = task0.getKindOfDay().getDisplayString();
-                row.addView(createTextView(trimmed(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf), itemColor));
-                row.addView(createTextView(hours, itemColor));
+                row.addView(createTextViewMaxWidth(trimmed(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf), itemColor));
+                row.addView(createTextViewInFlow(hours, itemColor));
 
                 if (showSecondTask) {
                     if (task1 != null) {
@@ -251,8 +265,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     // long version of second task display:
                     //row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
                     // compact version of second task display:
-                    row.addView(createTextView(task1 == null ? "" : "(2)", itemColor));
-                    row.addView(createTextView(extraVacationHours, itemColor));
+                    row.addView(createTextViewInFlow(task1 == null ? "" : "(2)", itemColor));
+                    row.addView(createTextViewInFlow(extraVacationHours, itemColor));
                 }
                 lastSumOfWeekView = createBalanceView(sumUpToday, sumWeek, dayId);
                 row.addView(lastSumOfWeekView);
@@ -282,13 +296,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
-                row.addView(createTextView("", rowColor));
-                row.addView(createTextView(getString(R.string.display_sum), rowColor));
-                row.addView(createTextView(trimmed(task.getDisplayString()), rowColor));
-                row.addView(createTextView(time15.toDecimalForDisplay() + " h", rowColor));
+                row.addView(createTextViewInFlow("", rowColor));
+                row.addView(createTextViewInFlow(getString(R.string.display_sum), rowColor));
+                row.addView(createTextViewInFlow(trimmed(task.getDisplayString()), rowColor));
+                row.addView(createTextViewInFlow(time15.toDecimalForDisplay() + " h", rowColor));
                 if (showSecondTask) {
-                    row.addView(createTextView("", rowColor));
-                    row.addView(createTextView("", rowColor));
+                    row.addView(createTextViewInFlow("", rowColor));
+                    row.addView(createTextViewInFlow("", rowColor));
                 }
                 table.addView(row);
             }
@@ -311,13 +325,15 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     private String trimmed(String displayString) {
-        if (showSecondTask) {
+
+        return displayString;
+/*        if (showSecondTask) {
             // second task is now compact, so more space for fist task!
             return displayString.length() > 20 ? displayString.substring(0, 20) : displayString;
         } else {
             return displayString.length() > 26 ? displayString.substring(0, 26) : displayString;
         }
-
+*/
     }
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {
@@ -333,39 +349,61 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     private TextView createBalanceView(int sumUpToday, int sumWeek, String dayId) {
-        TextView balanceView = new TextView(this);
-        //balanceView.setWidth(0);
-        balanceView.setGravity(Gravity.RIGHT);
-        //balanceView.setBackgroundColor(ColorsUI.SELECTION_BG);
-        balanceView.setPadding(5, 5, 10, 5);
-        //view.setText(String.convert(TimeUtils.getWeekOfYear(dayId)));
+
         String balanceText = Time15.fromMinutes(sumUpToday).toDecimalForDisplay();
+        int color = TimeUtils.isLastWorkDayOfMonth(dayId) ? ColorsUI.DARK_GREY_SAVE_ERROR : ColorsUI.DEACTIVATED;
+
+        TextView balanceView = createTextViewRight(balanceText, color);
 
         if (TimeUtils.isLastWorkDayOfMonth(dayId)) {
-            balanceView.setText(balanceText);
             updateSumWeek(balanceView, sumWeek);
-            colorize(balanceView);
-        } else {
-            balanceView.setText(balanceText);
-            balanceView.setTextColor(ColorsUI.DEACTIVATED);
         }
         return balanceView;
     }
 
-    private TextView createTextView(String text, int color) {
+    private TextView createTextView0(String text, int color) {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(color);
-        textView.setBackgroundColor(random.nextInt(4));
-        textView.setGravity(Gravity.LEFT);
-        textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
-        textView.setPadding(10, 5, 5, 5);
+        textView.setBackgroundColor(random.nextInt(4)); // TODO ??
+        ///textView.setGravity(Gravity.LEFT);
+        //textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
+        ///textView.setPadding(10, 5, 5, 5);
+        textView.setPadding(5, 3, 5, 2);
         return textView;
     }
 
-    private TextView createTextView(String text) {
-        return createTextView(text, ColorsUI.DARK_BLUE_DEFAULT);
+    private TextView createTextViewInFlow(String text, int color) {
+        TextView textView = createTextView0(text, color);
+        // TODO also: entweder mit float Angaben: .1 .1 .5 .1 .2 und wrap content oder aber so
+        // TODO mittels 1 spalte mit weiht =1 und 0dp, rest auf wrap content:
+        //  TODO https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
+        textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
+        textView.setGravity(Gravity.LEFT);
+        return textView;
     }
+
+    private TextView createTextViewRight(String text, int color) {
+        TextView textView = createTextView0(text, color);
+        // TODO also: entweder mit float Angaben: .1 .1 .5 .1 .2 und wrap content oder aber so
+        // TODO mittels 1 spalte mit weiht =1 und 0dp, rest auf wrap content:
+        //  TODO https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
+        textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
+        textView.setGravity(Gravity.RIGHT);
+        return textView;
+    }
+
+    private TextView createTextViewMaxWidth(String text, int color) {
+        TextView textView = createTextView0(text, color);
+        // TODO also: entweder mit float Angaben: .1 .1 .5 .1 .2 und wrap content oder aber so
+        // TODO mittels 1 spalte mit weiht =1 und 0dp, rest auf wrap content:
+        //  TODO https://developer.android.com/guide/topics/ui/layout/linear#prioritize-weight
+        textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_MAX);
+        textView.setGravity(Gravity.LEFT);
+        return textView;
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
