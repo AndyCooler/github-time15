@@ -29,7 +29,10 @@ public class EditNotePopupUI {
     public EditNotePopupUI(Activity parent, String note) {
         this.parent = parent;
         inputTextField = new EditText(parent);
-        inputTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        inputTextField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        inputTextField.setMinLines(1);
+        inputTextField.setMaxLines(3);
+        inputTextField.setMaxLines(5);
         inputTextField.setText(note);
     }
 

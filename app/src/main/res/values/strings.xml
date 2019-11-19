@@ -35,7 +35,7 @@
     <string name="edit_task_color_green">Grün</string>
     <string name="edit_task_color_gray">Grau</string>
     <string name="edit_task_color_in_month_overview">Farbe in Monatsansicht:</string>
-    <string name="edit_task_new">Neu</string>
+    <string name="edit_task_new">Speichern</string>
     <string name="edit_task_error_task_exists">Aufgabe existiert bereits!</string>
     <string name="edit_task_edit">Ändern</string>
     <string name="edit_task_error_task_not_found">Aufgabe existiert nicht!</string>
