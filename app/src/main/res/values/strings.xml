@@ -48,4 +48,5 @@
     <string name="year_total">Total:</string>
     <string name="display_sum">\u2211</string>
     <string name="main_delete_error">Nichts zu löschen!</string>
+    <string name="menu_unlock">Entsperren</string>
 </resources>

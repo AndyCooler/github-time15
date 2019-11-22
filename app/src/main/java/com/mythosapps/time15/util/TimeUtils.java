@@ -151,4 +151,8 @@ public final class TimeUtils {
         GregorianCalendar cal = toCalendar(id);
         return "" + cal.get(Calendar.YEAR);
     }
+
+    public static boolean isOkayToEdit(String id) {
+        return createID().equals(id);
+    }
 }

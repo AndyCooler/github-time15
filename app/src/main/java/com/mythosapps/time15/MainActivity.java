@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
             verarbeiteKlick(v);
         }
     };
+    private boolean isEditable; // UI is editable on today's date or after unlocking
+    private boolean isUnLockButtonPressed; // pressing unlock makes UI editable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,6 +263,14 @@ public class MainActivity extends AppCompatActivity {
             startMonthOverviewActivity();
             return true;
         }
+        if (id == R.id.action_unlock) {
+            if (!isEditable) {
+                isUnLockButtonPressed = true;
+                switchToID(null, this.id);
+                isUnLockButtonPressed = false;
+            }
+            return true;
+        }
         if (id == R.id.action_about) {
             String about = "Time15 von Andreas, \n";
             about += "Version: " + AppVersion.getVersionName(this) + "\n";
@@ -342,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
     private void switchToID(String fromId, String toId) {
         id = toId;
         setTitle(TimeUtils.getMainTitleString(id));
+        isEditable = TimeUtils.isOkayToEdit(id) || isUnLockButtonPressed;
         originalData = storage.loadDaysDataNew(this, id);
         modifiableData = DaysDataNew.copy(originalData);
         if (modifiableData == null) {
@@ -561,91 +572,94 @@ public class MainActivity extends AppCompatActivity {
      */
     public void verarbeiteKlick(View v) {
 
-        if (KindOfDay.isBeginEndType(kindOfDay)) {
+        if (isEditable) {
 
-        TextView view = (TextView) v;
-        int viewId = view.getId();
-            boolean isBeginnTime = mapBeginValueToView.containsValue(view);
-            boolean isEndeTime = mapEndValueToView.containsValue(view);
-            boolean isBeginn15 = mapBegin15ValueToView.containsValue(view);
-            boolean isEnde15 = mapEnd15ValueToView.containsValue(view);
-        boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
-        boolean isSelected = false;
-        boolean isDeselected = false;
-        if (isBeginnTime) {
-            if (previousSelectionBeginnTime != null && viewId == previousSelectionBeginnTime) {
-                setTransparent(viewId);
-                beginnTime = null;
-                previousSelectionBeginnTime = null;
-                isDeselected = true;
-            } else {
-                setTransparent(previousSelectionBeginnTime);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                beginnTime = Integer.valueOf((String) view.getText());
-                previousSelectionBeginnTime = viewId;
-                isSelected = true;
-            }
-        }
-        if (isEndeTime) {
-            if (previousSelectionEndeTime != null && viewId == previousSelectionEndeTime) {
-                setTransparent(viewId);
-                endeTime = null;
-                previousSelectionEndeTime = null;
-                isDeselected = true;
-            } else {
-                setTransparent(previousSelectionEndeTime);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                endeTime = Integer.valueOf((String) view.getText());
-                previousSelectionEndeTime = viewId;
-                isSelected = true;
-            }
-        }
-        if (isBeginn15) {
-            if (previousSelectionBeginn15 != null && viewId == previousSelectionBeginn15) {
-                setTransparent(viewId);
-                beginn15 = null;
-                previousSelectionBeginn15 = null;
-                isDeselected = true;
-            } else {
-                setTransparent(previousSelectionBeginn15);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                beginn15 = Integer.valueOf((String) view.getText());
-                previousSelectionBeginn15 = viewId;
-                isSelected = true;
-            }
-        }
-        if (isEnde15) {
-            if (previousSelectionEnde15 != null && viewId == previousSelectionEnde15) {
-                setTransparent(viewId);
-                ende15 = null;
-                previousSelectionEnde15 = null;
-                isDeselected = true;
-            } else {
-                setTransparent(previousSelectionEnde15);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                ende15 = Integer.valueOf((String) view.getText());
-                previousSelectionEnde15 = viewId;
-                isSelected = true;
-            }
-        }
-        if (isPauseTime) {
-            if (previousSelectionPauseTime != null && viewId == previousSelectionPauseTime) {
-                setTransparent(viewId);
-                pauseTime = null;
-                previousSelectionPauseTime = null;
-                isDeselected = true;
-            } else {
-                setTransparent(previousSelectionPauseTime);
-                view.setBackgroundColor(ColorsUI.SELECTION_BG);
-                pauseTime = Integer.valueOf((String) view.getText());
-                previousSelectionPauseTime = viewId;
-                isSelected = true;
-            }
-        }
+            if (KindOfDay.isBeginEndType(kindOfDay)) {
 
-        if (isSelected || isDeselected) {
-            save(false);
-        }
+                TextView view = (TextView) v;
+                int viewId = view.getId();
+                boolean isBeginnTime = mapBeginValueToView.containsValue(view);
+                boolean isEndeTime = mapEndValueToView.containsValue(view);
+                boolean isBeginn15 = mapBegin15ValueToView.containsValue(view);
+                boolean isEnde15 = mapEnd15ValueToView.containsValue(view);
+                boolean isPauseTime = viewId == R.id.pauseA || viewId == R.id.pauseB || viewId == R.id.pauseC || viewId == R.id.pauseD;
+                boolean isSelected = false;
+                boolean isDeselected = false;
+                if (isBeginnTime) {
+                    if (previousSelectionBeginnTime != null && viewId == previousSelectionBeginnTime) {
+                        setTransparent(viewId);
+                        beginnTime = null;
+                        previousSelectionBeginnTime = null;
+                        isDeselected = true;
+                    } else {
+                        setTransparent(previousSelectionBeginnTime);
+                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        beginnTime = Integer.valueOf((String) view.getText());
+                        previousSelectionBeginnTime = viewId;
+                        isSelected = true;
+                    }
+                }
+                if (isEndeTime) {
+                    if (previousSelectionEndeTime != null && viewId == previousSelectionEndeTime) {
+                        setTransparent(viewId);
+                        endeTime = null;
+                        previousSelectionEndeTime = null;
+                        isDeselected = true;
+                    } else {
+                        setTransparent(previousSelectionEndeTime);
+                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        endeTime = Integer.valueOf((String) view.getText());
+                        previousSelectionEndeTime = viewId;
+                        isSelected = true;
+                    }
+                }
+                if (isBeginn15) {
+                    if (previousSelectionBeginn15 != null && viewId == previousSelectionBeginn15) {
+                        setTransparent(viewId);
+                        beginn15 = null;
+                        previousSelectionBeginn15 = null;
+                        isDeselected = true;
+                    } else {
+                        setTransparent(previousSelectionBeginn15);
+                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        beginn15 = Integer.valueOf((String) view.getText());
+                        previousSelectionBeginn15 = viewId;
+                        isSelected = true;
+                    }
+                }
+                if (isEnde15) {
+                    if (previousSelectionEnde15 != null && viewId == previousSelectionEnde15) {
+                        setTransparent(viewId);
+                        ende15 = null;
+                        previousSelectionEnde15 = null;
+                        isDeselected = true;
+                    } else {
+                        setTransparent(previousSelectionEnde15);
+                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        ende15 = Integer.valueOf((String) view.getText());
+                        previousSelectionEnde15 = viewId;
+                        isSelected = true;
+                    }
+                }
+                if (isPauseTime) {
+                    if (previousSelectionPauseTime != null && viewId == previousSelectionPauseTime) {
+                        setTransparent(viewId);
+                        pauseTime = null;
+                        previousSelectionPauseTime = null;
+                        isDeselected = true;
+                    } else {
+                        setTransparent(previousSelectionPauseTime);
+                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        pauseTime = Integer.valueOf((String) view.getText());
+                        previousSelectionPauseTime = viewId;
+                        isSelected = true;
+                    }
+                }
+
+                if (isSelected || isDeselected) {
+                    save(false);
+                }
+            }
         }
     }
 
@@ -861,7 +875,7 @@ public class MainActivity extends AppCompatActivity {
     private void setSelected(Integer viewId) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(ColorsUI.SELECTION_BG);
+            view.setBackgroundColor(isEditable ? ColorsUI.SELECTION_BG : ColorsUI.DEACTIVATED);
         }
     }
 
