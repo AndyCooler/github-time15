@@ -341,7 +341,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     private TextView createBalanceView(int sumWeek, String dayId) {
 
         String balanceText = "";
-        TextView balanceView = createTextViewRight(balanceText, ColorsUI.DARK_ORANGE);
+        TextView balanceView = createTextViewRight(balanceText, ColorsUI.PURPLE);
 
         if (TimeUtils.isLastWorkDayOfMonth(dayId)) {
             updateSumWeek(balanceView, sumWeek);

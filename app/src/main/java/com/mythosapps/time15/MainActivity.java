@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mythosapps.time15.MESSAGE";
+    private static final String UNLOCK_SYMBOL = new String(Character.toChars(128275));
 
     // Storage
     private StorageFacade storage;
@@ -263,14 +265,6 @@ public class MainActivity extends AppCompatActivity {
             startMonthOverviewActivity();
             return true;
         }
-        if (id == R.id.action_unlock) {
-            if (!isEditable) {
-                isUnLockButtonPressed = true;
-                switchToID(null, this.id);
-                isUnLockButtonPressed = false;
-            }
-            return true;
-        }
         if (id == R.id.action_about) {
             String about = "Time15 von Andreas, \n";
             about += "Version: " + AppVersion.getVersionName(this) + "\n";
@@ -297,6 +291,28 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void unlock() {
+        //change button
+        Button addTaskButton = (Button)findViewById(R.id.addTaskButton);
+        addTaskButton.setText("+"); // add task symbol +
+        addTaskButton.setBackground(getResources().getDrawable(R.drawable.roundbutton));
+
+        // reinitialize day with id this.id
+        isUnLockButtonPressed = true;
+        switchToID(null, this.id);
+        isUnLockButtonPressed = false;
+    }
+
+    private void lock() {
+        //change button
+        Button addTaskButton = (Button)findViewById(R.id.addTaskButton);
+        addTaskButton.setText(UNLOCK_SYMBOL); // open lock symbol
+        addTaskButton.setBackground(getResources().getDrawable(R.drawable.roundbutton_unlock));
+
+        // reinitialize day with id this.id
+        isUnLockButtonPressed = false;
     }
 
     private void deleteTask() {
@@ -353,6 +369,13 @@ public class MainActivity extends AppCompatActivity {
         id = toId;
         setTitle(TimeUtils.getMainTitleString(id));
         isEditable = TimeUtils.isOkayToEdit(id) || isUnLockButtonPressed;
+        if (isEditable) {
+            if (!isUnLockButtonPressed) {
+                unlock();
+            }
+        } else {
+            lock();
+        }
         originalData = storage.loadDaysDataNew(this, id);
         modifiableData = DaysDataNew.copy(originalData);
         if (modifiableData == null) {
@@ -537,16 +560,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addTask(View v) {
-        if (modifiableData.getNumberOfTasks() > 1) {
-            Toast.makeText(MainActivity.this, R.string.tasks_per_day_limit, Toast.LENGTH_SHORT).show();
+        if (isEditable) {
+            if (modifiableData.getNumberOfTasks() > 1) {
+                Toast.makeText(MainActivity.this, R.string.tasks_per_day_limit, Toast.LENGTH_SHORT).show();
+            } else {
+                taskNo = 1;
+                BeginEndTask task1 = new BeginEndTask();
+                task1.setKindOfDay(KindOfDay.VACATION); // TODO Default Task
+                task1.setTotal(Time15.fromMinutes(0));
+                modifiableData.addTask(task1);
+                resetView();
+                modelToView();
+            }
         } else {
-            taskNo = 1;
-            BeginEndTask task1 = new BeginEndTask();
-            task1.setKindOfDay(KindOfDay.VACATION); // TODO Default Task
-            task1.setTotal(Time15.fromMinutes(0));
-            modifiableData.addTask(task1);
-            resetView();
-            modelToView();
+            unlock();
         }
     }
 
