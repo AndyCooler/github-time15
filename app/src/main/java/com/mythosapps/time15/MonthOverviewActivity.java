@@ -251,7 +251,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextViewInFlow(dayId.substring(0, 2), ColorsUI.DARK_BLUE_DEFAULT));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 String kindOf = task0.getKindOfDay().getDisplayString();
-                row.addView(createTextViewMaxWidth(trimmed(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf), itemColor));
+                row.addView(createTextViewMaxWidth(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf, itemColor));
                 row.addView(createTextViewInFlow(hours, itemColor));
 
                 if (showSecondTask) {
@@ -279,7 +279,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         }
 
         View line = new View(this);
-        line.setBackgroundColor(ColorsUI.DARK_GREY_SAVE_ERROR);
+        line.setBackgroundColor(ColorsUI.PURPLE);
         line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 4));
         table.addView(line);
 
@@ -295,7 +295,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.setLayoutParams(lp);
                 row.addView(createTextViewInFlow("", rowColor));
                 row.addView(createTextViewInFlow(getString(R.string.display_sum), rowColor));
-                row.addView(createTextViewInFlow(trimmed(task.getDisplayString()), rowColor));
+                row.addView(createTextViewInFlow(task.getDisplayString(), rowColor));
                 row.addView(createTextViewInFlow(time15.toDecimalForDisplay() + " h", rowColor));
                 if (showSecondTask) {
                     row.addView(createTextViewInFlow("", rowColor));
@@ -312,18 +312,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
             String weekText = Time15.fromMinutes(sumWeek).toDecimalForDisplay();
             view.setText(weekText);
         }
-    }
-
-    private String trimmed(String displayString) {
-
-        return displayString;
-/*        if (showSecondTask) {
-            // second task is now compact, so more space for fist task!
-            return displayString.length() > 20 ? displayString.substring(0, 20) : displayString;
-        } else {
-            return displayString.length() > 26 ? displayString.substring(0, 26) : displayString;
-        }
-*/
     }
 
     private int calcItemColor(KindOfDay kindOfDay, boolean isComplete) {

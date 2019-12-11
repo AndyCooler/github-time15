@@ -316,18 +316,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deleteTask() {
-        if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
-            Toast.makeText(MainActivity.this.getApplicationContext(), R.string.main_delete_error, Toast.LENGTH_SHORT).show();
-        } else {
-            originalData = null;
-            modifiableData.deleteTask(modifiableData.getTask(taskNo));
-            if (modifiableData.getNumberOfTasks() == 0) {
-                modifiableData = new DaysDataNew(id);
+        if (isEditable) {
+            if (modifiableData == null || modifiableData.getNumberOfTasks() == 0) {
+                Toast.makeText(MainActivity.this.getApplicationContext(), R.string.main_delete_error, Toast.LENGTH_SHORT).show();
+            } else {
+                originalData = null;
+                modifiableData.deleteTask(modifiableData.getTask(taskNo));
+                if (modifiableData.getNumberOfTasks() == 0) {
+                    modifiableData = new DaysDataNew(id);
+                }
+                taskNo = 0;
+                resetView();
+                modelToView();
+                save(true);
             }
-            taskNo = 0;
-            resetView();
-            modelToView();
-            save(true);
+        } else {
+            Toast.makeText(MainActivity.this.getApplicationContext(), R.string.main_delete_unlock_first, Toast.LENGTH_SHORT).show();
         }
     }
 
