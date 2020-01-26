@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mythosapps.time15.storage.ExternalCsvFileStorage;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.types.BeginEndTask;
@@ -29,9 +31,11 @@ import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
+import com.mythosapps.time15.util.EmailUtils;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
@@ -41,6 +45,7 @@ import java.util.Set;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
 
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
@@ -401,13 +406,14 @@ public class MonthOverviewActivity extends AppCompatActivity {
             migrateDataForMonth();
             return true;
         }
+*/
         if (id == R.id.action_send) {
             File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
             String subject = TimeUtils.getMonthYearDisplayString(this.id);
             EmailUtils.sendEmail(this, ExternalCsvFileStorage.getFilename(this.id), storageDir, subject);
             return true;
-        }*/
+        }
         if (id == R.id.action_year) {
             startYearOverviewActivity();
             return true;

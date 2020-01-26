@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.mythosapps.time15"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 14
         versionName "2.2"
