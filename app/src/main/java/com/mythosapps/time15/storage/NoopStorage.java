@@ -3,8 +3,10 @@ package com.mythosapps.time15.storage;
 import android.app.Activity;
 import android.util.Log;
 
+import com.mythosapps.time15.types.BalanceType;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
+import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.TimeUtils;
 import com.mythosapps.time15.util.CsvUtils;
 
@@ -42,14 +44,30 @@ public class NoopStorage implements StorageFacade {
 
 
     @Override
-    public int loadBalance(Activity activity, String id) {
+    public int loadBalance(Activity activity, String id, BalanceType balanceType) {
         int balance = 0;
 
         List<String> idList = TimeUtils.getListOfIdsOfMonth(id);
+        int sumWork = 0;
+        int numDays = 0;
         for (String currentId : idList) {
-            DaysDataNew data = loadDaysDataNew(activity, currentId);
-            if (data != null) {
-                balance += data.getBalance();
+            if (balanceType == BalanceType.BALANCE) {
+                DaysDataNew data = loadDaysDataNew(activity, currentId);
+                if (data != null) {
+                    balance += data.getBalance();
+                }
+            } else if (balanceType == BalanceType.AVERAGE_WORK) {
+                DaysDataNew data = loadDaysDataNew(activity, currentId);
+
+
+                if (data != null) {
+                    Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
+                    if (sumDay.toMinutes() > 0) {
+                        numDays++;
+                    }
+                    sumWork += sumDay.toMinutes();
+                }
+                balance = numDays > 0 ? sumWork / numDays : 0;
             }
         }
         return balance;
