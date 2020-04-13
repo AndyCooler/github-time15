@@ -36,6 +36,9 @@
     <string name="edit_task_color_gray">Grau</string>
     <string name="edit_task_color_in_month_overview">Farbe in Monatsansicht:</string>
     <string name="edit_task_new">Speichern</string>
+    <string name="send_email_title">Backup per Email für Monat</string>
+    <string name="send_email_button">Senden</string>
+    <string name="send_email_correction">Bitte korrekte Email-Adresse eingeben</string>
     <string name="edit_task_error_task_exists">Aufgabe existiert bereits!</string>
     <string name="edit_task_edit">Ändern</string>
     <string name="edit_task_error_task_not_found">Aufgabe existiert nicht!</string>

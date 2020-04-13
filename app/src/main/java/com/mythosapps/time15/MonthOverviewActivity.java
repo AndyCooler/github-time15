@@ -408,10 +408,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         }
 */
         if (id == R.id.action_send) {
-            File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-            String subject = TimeUtils.getMonthYearDisplayString(this.id);
-            EmailUtils.sendEmail(this, ExternalCsvFileStorage.getFilename(this.id), storageDir, subject);
+            sendMail();
             return true;
         }
         if (id == R.id.action_year) {
@@ -421,6 +418,29 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendMail() {
+        final SendEmailPopupUI taskUI = new SendEmailPopupUI(this, TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id));
+
+        taskUI.setOkButton(getString(R.string.send_email_button), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String sendToAddress = taskUI.getInputTextField().getText().toString();
+                if (sendToAddress== null || sendToAddress.isEmpty() || !sendToAddress.contains("@") || !sendToAddress.contains(".")) {
+                    Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), R.string.send_email_correction, Toast.LENGTH_LONG).show();
+                } else {
+
+                    File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+                    String subject = TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id);
+                    EmailUtils.sendEmail(MonthOverviewActivity.this, ExternalCsvFileStorage.getFilename(MonthOverviewActivity.this.id), storageDir, subject);
+                }
+            }
+        });
+        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
+        taskUI.show();
     }
 
     public void startMainActivity(String withId) {
