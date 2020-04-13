@@ -434,8 +434,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
                     File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-                    String subject = TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id);
-                    EmailUtils.sendEmail(MonthOverviewActivity.this, ExternalCsvFileStorage.getFilename(MonthOverviewActivity.this.id), storageDir, subject);
+                    String subject = "Time15 " + TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id);
+                    EmailUtils.sendEmail(MonthOverviewActivity.this, ExternalCsvFileStorage.getFilename(MonthOverviewActivity.this.id), storageDir, subject, sendToAddress);
                 }
             }
         });

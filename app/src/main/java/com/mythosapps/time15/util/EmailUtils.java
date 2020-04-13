@@ -13,7 +13,7 @@ import java.io.File;
 
 public final class EmailUtils {
 
-    public static void sendEmail(Activity activity, String filename, File storageDir, String subject) {
+    public static void sendEmail(Activity activity, String filename, File storageDir, String subject, String sendToAddress) {
 
         // https://stackoverflow.com/questions/48117511/exposed-beyond-app-through-clipdata-item-geturi
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -25,7 +25,7 @@ public final class EmailUtils {
 
         // set the type to 'email'
         emailIntent.setType("vnd.android.cursor.dir/email");
-        String to[] = {"andreas.kohler.76@gmail.com"};
+        String to[] = {sendToAddress};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
 
         // the attachment
