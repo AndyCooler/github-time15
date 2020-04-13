@@ -32,11 +32,10 @@
         android:title="@string/menu_year"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_agenda"></item>
-    <!--    <item
-            android:id="@+id/action_send"
-            android:orderInCategory="500"
-            android:title="Send"
-            app:showAsAction="never"
-            android:icon="@android:drawable/ic_dialog_email"></item>
-            -->
+    <item
+        android:id="@+id/action_send"
+        android:icon="@android:drawable/ic_dialog_email"
+        android:orderInCategory="500"
+        android:title="Email Backup"
+        app:showAsAction="never"></item>
 </menu>
