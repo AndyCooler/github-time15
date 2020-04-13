@@ -4,20 +4,16 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +21,7 @@ import android.widget.Toast;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
+import com.mythosapps.time15.types.BalanceType;
 import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.DaysDataNew;
@@ -52,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
     // Storage
     private StorageFacade storage;
     private ConfigStorageFacade configStorage;
+
+    // Balance Type
+    private static final BalanceType BALANCE_TYPE = BalanceType.AVERAGE_WORK;
+    // U+00F8
+    private static final int AV_CHAR = 0x00F8;
+    private static final String AVERAGE_SIGN = Character.toString((char)AV_CHAR);
+
 
     // View state and view state management
     private String id = null;
@@ -205,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
-            balanceValue = storage.loadBalance(this, intentsId);
+            balanceValue = storage.loadBalance(this, intentsId, BALANCE_TYPE);
             switchToID(null, intentsId);
             updateBalance();
         } else {
@@ -364,8 +368,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBalance() {
         TextView balance = (TextView) findViewById(R.id.balance);
-        String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplay();
-        balance.setText("(" + balanceText + ")");
+
+        if (BALANCE_TYPE == BalanceType.AVERAGE_WORK) {
+            String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
+            balance.setText("("+ AVERAGE_SIGN+ " "+ balanceText + ")");
+        } else {
+            String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplay();
+            balance.setText("(" + balanceText + ")");
+        }
     }
 
 
@@ -391,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
         taskNo = 0;
         resetView();
         if (fromId != null && !TimeUtils.isSameMonth(fromId, id)) {
-            balanceValue = storage.loadBalance(this, id);
+            balanceValue = storage.loadBalance(this, id, BALANCE_TYPE);
             updateBalance();
         }
         modelToView();
@@ -730,13 +740,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (originalData == null) {
-            balanceValue += modifiableData.getBalance();
-        } else {
-            balanceValue -= originalData.getBalance();
-            balanceValue += modifiableData.getBalance();
-        }
-
         int totalNewColor = 0;
         if (storage.saveDaysDataNew(this, modifiableData)) {
             if (modifiableData.getNumberOfTasks() == 0) {
@@ -744,6 +747,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 totalNewColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
             }
+            balanceValue = storage.loadBalance(this, id, BALANCE_TYPE);
         } else {
             totalNewColor = ColorsUI.DARK_GREY_SAVE_ERROR;
         }

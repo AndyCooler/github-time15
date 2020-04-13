@@ -2,6 +2,7 @@ package com.mythosapps.time15.storage;
 
 import android.app.Activity;
 
+import com.mythosapps.time15.types.BalanceType;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 
@@ -33,9 +34,10 @@ public interface StorageFacade {
      *
      * @param activity parent activity
      * @param id       id in a certain month
+     * @param balanceType
      * @return balance of month
      */
-    int loadBalance(Activity activity, String id);
+    int loadBalance(Activity activity, String id, BalanceType balanceType);
 
     /**
      * Load the sum for a task for over the month identified by id.

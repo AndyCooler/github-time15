@@ -109,6 +109,12 @@ public class Time15 {
         return display.endsWith("0") ? display.substring(0, display.length()-1) : display;
     }
 
+    public String toDecimalForDisplayOfAverage() {
+        double d = (double) totalMinutes / (double) 60;
+        String display = String.format(Locale.US, "%.1f", d);
+        return display;
+    }
+
     public int toMinutes() {
         return totalMinutes;
     }
