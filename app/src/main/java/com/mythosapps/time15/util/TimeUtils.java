@@ -42,6 +42,11 @@ public final class TimeUtils {
         return id.substring(3, 5) + "/" + id.substring(6);
     }
 
+    public static String getYearMonthDisplayStringShort(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        return id.substring(6) + "/" + id.substring(3, 5);
+    }
+
     public static String dateForwards(String id) {
         GregorianCalendar cal = toCalendar(id);
         cache.remove(id);

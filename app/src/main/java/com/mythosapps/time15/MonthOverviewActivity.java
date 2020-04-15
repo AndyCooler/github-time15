@@ -420,6 +420,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Menu: Export als csv
     private void sendMail() {
         final SendEmailPopupUI sendEmailPopupUI = new SendEmailPopupUI(this, TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id));
 
@@ -434,7 +435,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
                     File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-                    String subject = "Time15 " + TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id);
+                    String subject = "Time15 csv export " + TimeUtils.getYearMonthDisplayStringShort(MonthOverviewActivity.this.id);
                     EmailUtils.sendEmail(MonthOverviewActivity.this, ExternalCsvFileStorage.getFilename(MonthOverviewActivity.this.id), storageDir, subject, sendToAddress);
                 }
             }

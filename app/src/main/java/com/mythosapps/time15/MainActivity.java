@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (TimeUtils.isLastWorkDayOfMonth(TimeUtils.createID())) {
-            Snackbar.make(findViewById(R.id.total), "Tipp: Nutze 'Email backup' aus dem Menü der Monatsansicht",
+            Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze 'Export als csv' aus dem Menü der Monatsansicht",
                     Snackbar.LENGTH_LONG).show();
         }
     }
