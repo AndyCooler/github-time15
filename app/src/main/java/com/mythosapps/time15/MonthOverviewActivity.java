@@ -421,13 +421,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     private void sendMail() {
-        final SendEmailPopupUI taskUI = new SendEmailPopupUI(this, TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id));
+        final SendEmailPopupUI sendEmailPopupUI = new SendEmailPopupUI(this, TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id));
 
-        taskUI.setOkButton(getString(R.string.send_email_button), new DialogInterface.OnClickListener() {
+        sendEmailPopupUI.setOkButton(getString(R.string.send_email_button), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String sendToAddress = taskUI.getInputTextField().getText().toString();
+                String sendToAddress = sendEmailPopupUI.getInputTextField().getText().toString();
                 if (sendToAddress== null || sendToAddress.isEmpty() || !sendToAddress.contains("@") || !sendToAddress.contains(".")) {
                     Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), R.string.send_email_correction, Toast.LENGTH_LONG).show();
                 } else {
@@ -439,8 +439,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 }
             }
         });
-        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
-        taskUI.show();
+        sendEmailPopupUI.setCancelButton(getString(R.string.edit_task_cancel));
+        sendEmailPopupUI.show();
     }
 
     public void startMainActivity(String withId) {

@@ -144,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         // can: use ProGuard to obfuscate the code
-
-        //setContentView(R.layout.activity_main); // do it again to init scrollViews
     }
 
     // only for UI: sets view's text color to black when active, gray when inactive
@@ -233,6 +231,11 @@ public class MainActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         123);
             }
+        }
+
+        if (TimeUtils.isLastWorkDayOfMonth(TimeUtils.createID())) {
+            Snackbar.make(findViewById(R.id.total), "Tipp: Nutze 'Email backup' aus dem Menü der Monatsansicht",
+                    Snackbar.LENGTH_LONG).show();
         }
     }
 
