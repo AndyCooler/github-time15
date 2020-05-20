@@ -47,9 +47,9 @@
     <string name="tasks_per_day_limit">Nur 2 Aufgaben pro Tag!</string>
     <string name="task_add_by_pressing_plus">Erst mit + eine Aufgabe hinzufügen!</string>
     <string name="year_overview_title">Übersicht</string>
-    <string name="year_days">days</string>
-    <string name="year_hours">hours</string>
-    <string name="year_total">Total:</string>
+    <string name="year_days">Tage</string>
+    <string name="year_hours">h</string>
+    <string name="year_total">Total</string>
     <string name="display_sum">\u2211</string>
     <string name="main_delete_error">Nichts zu löschen!</string>
     <string name="menu_unlock">Entsperren</string>

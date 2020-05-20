@@ -1,6 +1,7 @@
 package com.mythosapps.time15;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -75,7 +76,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     }
 
     private void initialize() {
-        setTitle(getString(R.string.year_overview_title) + TimeUtils.getYearDisplayString(id));
+        setTitle(getString(R.string.year_overview_title) + " " + TimeUtils.getYearDisplayString(id));
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
         List<CharSequence> taskNames = new ArrayList<>();
@@ -99,7 +100,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         TableRow row = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
-        List<String> listOfIds = Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12");
+        List<String> listOfIds = Arrays.asList("Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez");
         String idFirstJan = "01.01." + TimeUtils.getYearDisplayString(id);
         String idFirstOfMonth = idFirstJan;
 
@@ -107,14 +108,22 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         for (final String month : listOfIds) {
             int sumInMinutes = storage.loadTaskSum(this, idFirstOfMonth, selectedTask);
             Time15 time15 = Time15.fromMinutes(sumInMinutes);
+            String hoursPerMonth = time15.toDecimalFormat();
+            while (hoursPerMonth.length() < 7) {
+                hoursPerMonth = " " + hoursPerMonth;
+            }
             totalYear.plus(time15);
             int numDays = 0;
             while (time15.getHours() >= DaysDataNew.DUE_HOURS_PER_DAY) {
                 numDays++;
                 time15.minus(DaysDataNew.DUE_TOTAL_MINUTES);
             }
+            String numDaysString = numDays +"";
+            while (numDaysString.length() < 3) {
+                numDaysString = " " + numDaysString;
+            }
 
-            String display = " : " + numDays + " " + getString(R.string.year_days) + ", " + time15.toDecimalFormat() + " " + getString(R.string.year_hours);
+            String display = " : " + hoursPerMonth + " h = " + numDaysString + " " + getString(R.string.year_days) + " + " + time15.toDecimalFormat() + " " + getString(R.string.year_hours);
 
             row = new TableRow(this);
             row.setLayoutParams(lp);
@@ -136,13 +145,22 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         table.addView(line);
 
         // total over year
+        String hoursPerYear = totalYear.toDecimalFormat();
+        while (hoursPerYear.length() < 7) {
+            hoursPerYear = " " + hoursPerYear;
+        }
+
         int numDays = 0;
         while (totalYear.getHours() >= DaysDataNew.DUE_HOURS_PER_DAY) {
             numDays++;
             totalYear.minus(DaysDataNew.DUE_TOTAL_MINUTES);
         }
+        String numDaysString = numDays +"";
+        while (numDaysString.length() < 3) {
+            numDaysString = " " + numDaysString;
+        }
 
-        String display = " : " + numDays + " " + getString(R.string.year_days) + ", " + totalYear.toDecimalFormat() + " " + getString(R.string.year_hours);
+        String display = " : " + hoursPerYear + " h = " + numDaysString + " " + getString(R.string.year_days) + " + " + totalYear.toDecimalFormat() + " " + getString(R.string.year_hours);
 
         row = new TableRow(this);
         row.setLayoutParams(lp);
@@ -205,6 +223,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         textView.setGravity(Gravity.LEFT);
         textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
         textView.setPadding(10, 5, 5, 5);
+        textView.setTypeface(Typeface.MONOSPACE);
         return textView;
     }
 
