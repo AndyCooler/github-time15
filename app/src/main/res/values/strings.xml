@@ -28,7 +28,7 @@
     <string name="menu_edit">Aufgabe anpassen</string>
     <string name="menu_delete">Eintrag Löschen</string>
     <string name="menu_note">Notiz erfassen</string>
-    <string name="menu_send">Export als csv</string>
+    <string name="menu_send">Export</string>
     <string name="new_task_title">Aufgabe hinzufügen</string>
     <string name="edit_task_title">Aufgabe anpassen</string>
     <string name="edit_task_with_begin_end">Mit Von-Bis Uhrzeit</string>
@@ -37,9 +37,10 @@
     <string name="edit_task_color_gray">Grau</string>
     <string name="edit_task_color_in_month_overview">Farbe in Monatsansicht:</string>
     <string name="edit_task_new">Speichern</string>
-    <string name="send_email_title">Export als csv per Email für Monat</string>
+    <string name="send_email_title">Export als .zip-Datei per Email</string>
     <string name="send_email_button">Senden</string>
     <string name="send_email_correction">Bitte korrekte Email-Adresse eingeben</string>
+    <string name="send_email_zip_problem">Konnte Backup-Datei nicht erstellen.</string>
     <string name="edit_task_error_task_exists">Aufgabe existiert bereits!</string>
     <string name="edit_task_edit">Ändern</string>
     <string name="edit_task_error_task_not_found">Aufgabe existiert nicht!</string>

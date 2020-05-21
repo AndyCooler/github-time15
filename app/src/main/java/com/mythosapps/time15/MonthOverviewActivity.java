@@ -23,6 +23,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mythosapps.time15.storage.ConfigFileStorage;
 import com.mythosapps.time15.storage.ExternalCsvFileStorage;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
@@ -33,15 +34,22 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.EmailUtils;
 import com.mythosapps.time15.util.TimeUtils;
+import com.mythosapps.time15.util.ZipUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.zip.ZipFile;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -61,6 +69,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     // Storage
     private StorageFacade storage;
+    private static final FilenameFilter EXPORT_FILE_FILTER = (dir, name) -> name.endsWith(".csv") || name.equals(ConfigFileStorage.DEFAULT_CONFIG_FILE);
 
     // View state and view state management
     private String id;
@@ -420,9 +429,9 @@ public class MonthOverviewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // Menu: Export als csv
+    // Menu: Export
     private void sendMail() {
-        final SendEmailPopupUI sendEmailPopupUI = new SendEmailPopupUI(this, TimeUtils.getMonthYearDisplayString(MonthOverviewActivity.this.id));
+        final SendEmailPopupUI sendEmailPopupUI = new SendEmailPopupUI(this);
 
         sendEmailPopupUI.setOkButton(getString(R.string.send_email_button), new DialogInterface.OnClickListener() {
 
@@ -435,8 +444,19 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
                     File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-                    String subject = "Time15 csv export " + TimeUtils.getYearMonthDisplayStringShort(MonthOverviewActivity.this.id);
-                    EmailUtils.sendEmail(MonthOverviewActivity.this, ExternalCsvFileStorage.getFilename(MonthOverviewActivity.this.id), storageDir, subject, sendToAddress);
+                    String[] allFiles = storageDir.list(EXPORT_FILE_FILTER);
+                    String backupMoment = new Timestamp(System.currentTimeMillis()).toString().substring(0,19).replaceAll(":","-").replaceFirst(" ", "_");
+                    String zipArchiveFilename = "Time15_Backup_" + backupMoment + ".zip";
+                    try {
+                        ZipUtils.createZipFile(storageDir, zipArchiveFilename, allFiles);
+                    } catch (Exception e) {
+                        Toast.makeText(MonthOverviewActivity.this.getApplicationContext(), R.string.send_email_zip_problem, Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    String subject = "Time15 Export " + backupMoment;
+                    EmailUtils.sendEmail(MonthOverviewActivity.this, zipArchiveFilename, storageDir, subject, sendToAddress);
                 }
             }
         });

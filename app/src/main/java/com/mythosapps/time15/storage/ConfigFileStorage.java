@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ConfigFileStorage extends FileStorage implements ConfigStorageFacade {
 
-    private static final String DEFAULT_CONFIG_FILE = "Time15.conf";
+    public static final String DEFAULT_CONFIG_FILE = "Time15.conf";
 
     private ConfigXmlParser parser = new ConfigXmlParser();
 

@@ -33,7 +33,8 @@ public final class EmailUtils {
 
         // the mail subject
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Time15 backup data " + subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hallo,\n\n das ist eine automatisch generierte Email der Time15 Zeiterfassungs-App. Version: " + AppVersion.getVersionName(activity) + "\n"
+                + "Im Anhang ist ein Backup mit allen Daten, erstellt am " + subject.substring(14).replaceFirst("_", " um ") + " Uhr.\n\nBleib gesund!\nAndreas");
         activity.startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 }

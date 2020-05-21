@@ -21,9 +21,8 @@ public class SendEmailPopupUI {
     private String monthYear;
     private String DEFAULT_TEXT = "<email address>";
 
-    public SendEmailPopupUI(Activity parent, String monthYear) {
+    public SendEmailPopupUI(Activity parent) {
         this.parent = parent;
-        this.monthYear = monthYear;
         inputTextField = new EditText(parent);
         inputTextField.setInputType(InputType.TYPE_CLASS_TEXT);
         inputTextField.setMinLines(1);
@@ -46,7 +45,7 @@ public class SendEmailPopupUI {
 
     private void initializeUI() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-        builder.setTitle(parent.getString(R.string.send_email_title) + " " + monthYear);
+        builder.setTitle(parent.getString(R.string.send_email_title));
 
         LinearLayout linearLayout = new LinearLayout(parent);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
