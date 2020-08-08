@@ -7,8 +7,8 @@ import com.mythosapps.time15.types.BalanceType;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
-import com.mythosapps.time15.util.TimeUtils;
 import com.mythosapps.time15.util.CsvUtils;
+import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +59,6 @@ public class NoopStorage implements StorageFacade {
             } else if (balanceType == BalanceType.AVERAGE_WORK) {
                 DaysDataNew data = loadDaysDataNew(activity, currentId);
 
-
                 if (data != null) {
                     Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
                     if (sumDay.toMinutes() > 0) {
@@ -68,6 +67,15 @@ public class NoopStorage implements StorageFacade {
                     sumWork += sumDay.toMinutes();
                 }
                 balance = numDays > 0 ? sumWork / numDays : 0;
+
+            } else if (balanceType == BalanceType.AVERAGE_WORK_FREELANCE) {
+                DaysDataNew data = loadDaysDataNew(activity, currentId);
+
+                if (data != null) {
+                    Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
+                    sumWork += sumDay.toMinutes();
+                }
+                balance = sumWork / 8;
             }
         }
         return balance;
