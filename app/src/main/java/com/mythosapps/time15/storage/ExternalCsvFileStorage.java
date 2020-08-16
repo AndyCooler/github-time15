@@ -226,22 +226,13 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
                 for (DaysDataNew data : currentMonthsData.values()) {
                     if (data != null) {
                         Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
-                        if (sumDay.toMinutes() > 0) {
+                        if (sumDay.toMinutes() > 0 && !TimeUtils.isWeekend(data.getId())) {
                             numDays++;
                         }
                         sumWork += sumDay.toMinutes();
                     }
                 }
                 return numDays > 0 ? (sumWork / numDays) : 0;
-            } else if (balanceType == BalanceType.AVERAGE_WORK_FREELANCE) {
-                int sumWork = 0;
-                for (DaysDataNew data : currentMonthsData.values()) {
-                    if (data != null) {
-                        Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
-                        sumWork += sumDay.toMinutes();
-                    }
-                }
-                return sumWork / 8;
             }
         }
         return 0; // should be unreachable, balance is relevant in current month

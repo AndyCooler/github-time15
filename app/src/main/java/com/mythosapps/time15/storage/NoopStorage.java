@@ -61,21 +61,12 @@ public class NoopStorage implements StorageFacade {
 
                 if (data != null) {
                     Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
-                    if (sumDay.toMinutes() > 0) {
+                    if (sumDay.toMinutes() > 0 && !TimeUtils.isWeekend(data.getId())) {
                         numDays++;
                     }
                     sumWork += sumDay.toMinutes();
                 }
                 balance = numDays > 0 ? sumWork / numDays : 0;
-
-            } else if (balanceType == BalanceType.AVERAGE_WORK_FREELANCE) {
-                DaysDataNew data = loadDaysDataNew(activity, currentId);
-
-                if (data != null) {
-                    Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
-                    sumWork += sumDay.toMinutes();
-                }
-                balance = sumWork / 8;
             }
         }
         return balance;
