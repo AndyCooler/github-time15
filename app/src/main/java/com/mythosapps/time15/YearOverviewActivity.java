@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
+import com.mythosapps.time15.types.BalanceType;
 import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
@@ -34,6 +35,7 @@ import java.util.Random;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.mythosapps.time15.MainActivity.BALANCE_TYPE;
 
 /**
  * This activity lets the user see the sum of hours spent on tasks each month.
@@ -113,6 +115,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         table.setColumnShrinkable(3, true);
         table.setColumnShrinkable(4, true);
         table.setColumnShrinkable(5, true);
+        table.setColumnShrinkable(6, true);
         //table.setColumnShrinkable(4, true);
 
         //table.setColumnStretchable(2, true);
@@ -126,6 +129,15 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         Time15 totalYear = Time15.fromMinutes(0);
         for (final String month : listOfIds) {
             int sumInMinutes = storage.loadTaskSum(this, idFirstOfMonth, selectedTask);
+            int balanceValue = 0; // in minutes
+            String balanceText = "";
+            if (KindOfDay.WORKDAY.equals(selectedTask)) {
+                balanceValue = storage.loadBalance(this, idFirstOfMonth, BALANCE_TYPE);
+                if (BALANCE_TYPE == BalanceType.AVERAGE_WORK) {
+                    balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
+                    balanceText = "   (" + MainActivity.AVERAGE_SIGN + " " + balanceText + ")";
+                }
+            }
             Time15 time15 = Time15.fromMinutes(sumInMinutes);
             String hoursPerMonth = time15.toDecimalFormat();
             while (hoursPerMonth.length() < 7) {
@@ -143,7 +155,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             row.addView(createTextView(hoursPerMonth));  // Stunden pro Monat
             row.addView(createTextView(" h = "));
             row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
-            row.addView(createTextView(" Tage"));
+            row.addView(createTextView(" Tage "));
+            row.addView(createTextView(balanceText));
             table.addView(row);
             idFirstOfMonth = TimeUtils.monthForwards(idFirstOfMonth);
         }
@@ -171,7 +184,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         row.addView(createTextView(hoursPerYear));  // Stunden pro Monat
         row.addView(createTextView(" h = "));
         row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
-        row.addView(createTextView(" Tage"));
+        row.addView(createTextView(" Tage "));
 
         table.addView(row);
     }

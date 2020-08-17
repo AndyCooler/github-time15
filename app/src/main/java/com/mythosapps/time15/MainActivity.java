@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private ConfigStorageFacade configStorage;
 
     // Balance Type
-    private static final BalanceType BALANCE_TYPE = BalanceType.AVERAGE_WORK;
+    public static final BalanceType BALANCE_TYPE = BalanceType.AVERAGE_WORK;
     // U+00F8
     private static final int AV_CHAR = 0x00F8;
-    private static final String AVERAGE_SIGN = Character.toString((char)AV_CHAR);
+    public static final String AVERAGE_SIGN = Character.toString((char) AV_CHAR);
 
 
     // View state and view state management
