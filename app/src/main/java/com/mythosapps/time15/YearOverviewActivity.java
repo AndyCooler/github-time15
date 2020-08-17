@@ -1,7 +1,6 @@
 package com.mythosapps.time15;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,8 +28,12 @@ import com.mythosapps.time15.util.TimeUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * This activity lets the user see the sum of hours spent on tasks each month.
@@ -47,6 +50,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     private String id;
     private Random random = new Random();
     private KindOfDay selectedTask = KindOfDay.VACATION;
+
+    private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_FLOW = new TableRow.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +77,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         super.onResume();
 
         initialize();
-
     }
 
     private void initialize() {
@@ -96,7 +100,22 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         TableLayout table = (TableLayout) findViewById(R.id.tableViewYear);
         table.removeAllViews();
 
-        table.setColumnStretchable(6, true);
+        /*
+        In general, android:gravity="right" is different from android:layout_gravity="right".
+        The first one affects the position of the text itself within the View,
+          so if you want it to be right-aligned, then layout_width= should be either "fill_parent" or "match_parent".
+        The second one affects the View's position inside its parent,
+          in other words - aligning the object itself (edit box or text view) inside the parent view.
+         */
+        table.setColumnShrinkable(0, true);
+        table.setColumnShrinkable(1, true);
+        table.setColumnShrinkable(2, true);
+        table.setColumnShrinkable(3, true);
+        table.setColumnShrinkable(4, true);
+        table.setColumnShrinkable(5, true);
+        //table.setColumnShrinkable(4, true);
+
+        //table.setColumnStretchable(2, true);
         TableRow row = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
@@ -113,27 +132,18 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
                 hoursPerMonth = " " + hoursPerMonth;
             }
             totalYear.plus(time15);
-            int numDays = 0;
-            while (time15.getHours() >= DaysDataNew.DUE_HOURS_PER_DAY) {
-                numDays++;
-                time15.minus(DaysDataNew.DUE_TOTAL_MINUTES);
-            }
-            String numDaysString = numDays +"";
-            while (numDaysString.length() < 3) {
-                numDaysString = " " + numDaysString;
-            }
-
-            String display = " : " + hoursPerMonth + " h = " + numDaysString + " " + getString(R.string.year_days) + " + " + time15.toDecimalFormat() + " " + getString(R.string.year_hours);
+            double numDays = (double) time15.toMinutes() / (double) DaysDataNew.DUE_TOTAL_MINUTES;
+            String numDaysString = String.format(Locale.US, "%.1f", numDays);
 
             row = new TableRow(this);
             row.setLayoutParams(lp);
 
-            row.addView(createTextView(month));
-            row.addView(createTextView(display));
-            row.addView(createTextView(""));
-            row.addView(createTextView(""));
-            row.addView(createTextView(""));
-            row.addView(createTextView(""));
+            row.addView(createTextView(month)); // Name des Monats
+            row.addView(createTextView(": "));
+            row.addView(createTextView(hoursPerMonth));  // Stunden pro Monat
+            row.addView(createTextView(" h = "));
+            row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
+            row.addView(createTextView(" Tage"));
             table.addView(row);
             idFirstOfMonth = TimeUtils.monthForwards(idFirstOfMonth);
         }
@@ -150,27 +160,19 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             hoursPerYear = " " + hoursPerYear;
         }
 
-        int numDays = 0;
-        while (totalYear.getHours() >= DaysDataNew.DUE_HOURS_PER_DAY) {
-            numDays++;
-            totalYear.minus(DaysDataNew.DUE_TOTAL_MINUTES);
-        }
-        String numDaysString = numDays +"";
-        while (numDaysString.length() < 3) {
-            numDaysString = " " + numDaysString;
-        }
-
-        String display = " : " + hoursPerYear + " h = " + numDaysString + " " + getString(R.string.year_days) + " + " + totalYear.toDecimalFormat() + " " + getString(R.string.year_hours);
+        double numDays = (double) totalYear.toMinutes() / (double) DaysDataNew.DUE_TOTAL_MINUTES;
+        String numDaysString = String.format(Locale.US, "%.1f", numDays);
 
         row = new TableRow(this);
         row.setLayoutParams(lp);
 
-        row.addView(createTextView(getString(R.string.year_total)));
-        row.addView(createTextView(display));
-        row.addView(createTextView(""));
-        row.addView(createTextView(""));
-        row.addView(createTextView(""));
-        row.addView(createTextView(""));
+        row.addView(createTextView("Total")); // Name des Monats
+        row.addView(createTextView(": "));
+        row.addView(createTextView(hoursPerYear));  // Stunden pro Monat
+        row.addView(createTextView(" h = "));
+        row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
+        row.addView(createTextView(" Tage"));
+
         table.addView(row);
     }
 
@@ -219,11 +221,11 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(color);
-        textView.setBackgroundColor(random.nextInt(4));
-        textView.setGravity(Gravity.LEFT);
-        textView.setPadding(5, 5, 5, 5); // 15, 5, 15, 5
-        textView.setPadding(10, 5, 5, 5);
-        textView.setTypeface(Typeface.MONOSPACE);
+        //textView.setPadding(10, 5, 5, 5);
+        textView.setPadding(5, 3, 5, 2);
+        textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
+        textView.setGravity(Gravity.RIGHT);
+        //textView.setTypeface(Typeface.MONOSPACE);
         return textView;
     }
 
