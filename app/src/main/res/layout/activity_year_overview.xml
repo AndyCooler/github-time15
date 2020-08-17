@@ -27,10 +27,12 @@
 
 
             <Spinner
+                android:id="@+id/yearTaskSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/yearTaskSpinner"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:minHeight="40dp"
+                android:background="#add8e6" />
         </LinearLayout>
 
         <ScrollView
