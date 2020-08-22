@@ -260,6 +260,17 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == R.id.action_year_backwards) {
+            this.id = TimeUtils.yearBackwards(this.id);
+            initialize();
+            return true;
+        }
+        if (id == R.id.action_year_forwards) {
+            this.id = TimeUtils.yearForwards(this.id);
+            initialize();
+            return true;
+        }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_month) {
             startMonthOverviewActivity();

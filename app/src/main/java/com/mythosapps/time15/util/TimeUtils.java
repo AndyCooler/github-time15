@@ -75,6 +75,20 @@ public final class TimeUtils {
         return createID(cal);
     }
 
+    public static String yearForwards(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        cache.remove(id);
+        cal.add(GregorianCalendar.YEAR, 1);
+        return createID(cal);
+    }
+
+    public static String yearBackwards(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        cache.remove(id);
+        cal.add(GregorianCalendar.YEAR, -1);
+        return createID(cal);
+    }
+
     public static String dayOfWeek(String id) {
         GregorianCalendar cal = toCalendar(id);
         return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.GERMANY);
@@ -160,4 +174,5 @@ public final class TimeUtils {
     public static boolean isOkayToEdit(String id) {
         return createID().equals(id);
     }
+
 }

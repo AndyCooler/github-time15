@@ -4,6 +4,19 @@
     tools:context="com.mythosapps.time15.YearOverviewActivity">
 
     <item
+        android:id="@+id/action_year_backwards"
+        android:orderInCategory="100"
+        android:title="@string/menu_back"
+        android:icon="@android:drawable/ic_media_rew"
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/action_year_forwards"
+        android:orderInCategory="200"
+        android:title="@string/menu_forward"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_media_ff"></item>
+
+    <item
         android:id="@+id/action_month"
         android:orderInCategory="200"
         android:title="@string/menu_month"
