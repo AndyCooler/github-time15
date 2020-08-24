@@ -93,6 +93,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearTaskSpinner.setAdapter(adapter);
         yearTaskSpinner.setOnItemSelectedListener(this);
+        int postition = adapter.getPosition(selectedTask.getDisplayString());
+        yearTaskSpinner.setSelection(postition);
 
         updateYearOverViewTable();
 
