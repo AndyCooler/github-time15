@@ -51,7 +51,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     // View state and view state management
     private String id;
     private Random random = new Random();
-    private KindOfDay selectedTask = KindOfDay.VACATION;
+    static final KindOfDay INITIAL_TASK = KindOfDay.WORKDAY;
+    private KindOfDay selectedTask = KindOfDay.WORKDAY;
 
     private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_FLOW = new TableRow.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
 
@@ -71,6 +72,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
         id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
+        selectedTask = INITIAL_TASK;
     }
 
 
@@ -292,12 +294,12 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
         Object item = parent.getItemAtPosition(position);
         Log.i(getClass().getName(), "item : " + item == null ? "null" : item.toString());
-        selectedTask = item == null ? KindOfDay.VACATION : KindOfDay.fromString(parent.getItemAtPosition(position).toString());
+        selectedTask = item == null ? INITIAL_TASK : KindOfDay.fromString(parent.getItemAtPosition(position).toString());
         updateYearOverViewTable();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        selectedTask = KindOfDay.VACATION;
+        selectedTask = INITIAL_TASK;
     }
 }
