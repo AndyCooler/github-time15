@@ -43,7 +43,8 @@ public class StorageFactory {
         List<String> ids = TimeUtils.getListOfIdsOfMonth(id);
         int i = 0;
         for (String currentId : ids) {
-            if (!TimeUtils.isWeekend(currentId)) {
+            // zum Test ob Hinweis angezeigt wird wenn eintrag fehlt
+            if (!TimeUtils.isWeekend(currentId) && !TimeUtils.isMonday(currentId)) {
                 DaysDataNew data1 = null;
                 BeginEndTask task0 = null;
                 switch (i++) {

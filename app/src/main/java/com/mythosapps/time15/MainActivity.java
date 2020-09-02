@@ -32,6 +32,7 @@ import com.mythosapps.time15.util.AppVersion;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -230,6 +231,16 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         123);
+            }
+        }
+
+        // Look some days back and check if user forgot to enter their times
+        List<String> lastSevenDays = TimeUtils.getListOfLastSevenDays();
+        for (String lastId : lastSevenDays) {
+            if (storage.loadDaysDataNew(this, lastId) == null) {
+                Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + lastId + " fehlt noch ein Eintrag..",
+                        Snackbar.LENGTH_LONG).show();
+                break;
             }
         }
 

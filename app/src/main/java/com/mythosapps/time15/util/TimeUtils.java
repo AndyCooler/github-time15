@@ -175,4 +175,19 @@ public final class TimeUtils {
         return createID().equals(id);
     }
 
+    public static List<String> getListOfLastSevenDays() {
+        ArrayList<String> result = new ArrayList<String>();
+        GregorianCalendar cal = toCalendar(createID());
+
+        for (int i = 1; i <= 7; i++) {
+            cal = (GregorianCalendar) cal.clone();
+            cal.add(Calendar.HOUR, -24);
+            int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
+                result.add(createID(cal));
+            }
+        }
+
+        return result;
+    }
 }
