@@ -2,7 +2,6 @@ package com.mythosapps.time15;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -10,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.mythosapps.time15.types.KindOfDay;
 

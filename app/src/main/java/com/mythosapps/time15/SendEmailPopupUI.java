@@ -2,10 +2,11 @@ package com.mythosapps.time15;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AlertDialog;
 
 /**
  * Created by andreas on 07.12.18.
