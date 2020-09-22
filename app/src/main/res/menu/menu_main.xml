@@ -51,8 +51,15 @@
         android:icon="@android:drawable/ic_menu_month"></item>
     <item
         android:id="@+id/action_note"
-        android:orderInCategory="520"
+        android:orderInCategory="525"
         android:title="@string/menu_note"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_month"></item>
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="530"
+        android:title="@string/menu_settings"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_month"></item>
+
 </menu>

@@ -309,6 +309,14 @@ public class MainActivity extends AppCompatActivity {
             deleteTask();
             return true;
         }
+        if (id == R.id.action_settings) {
+            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
+                save(false);
+            }
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

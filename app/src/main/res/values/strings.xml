@@ -55,4 +55,5 @@
     <string name="main_delete_error">Nichts zu löschen!</string>
     <string name="menu_unlock">Entsperren</string>
     <string name="main_delete_unlock_first">Erst das Schloss öffnen!</string>
+    <string name="menu_settings">Settings</string>
 </resources>
