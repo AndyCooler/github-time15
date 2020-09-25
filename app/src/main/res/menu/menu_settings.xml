@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mythosapps.time15.SettingsActivity">
+
+    <item
+        android:id="@+id/action_day"
+        android:orderInCategory="300"
+        android:title="@string/menu_day"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_day"></item>
+
+</menu>
