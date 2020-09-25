@@ -3,6 +3,7 @@ package com.mythosapps.time15;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView scrollViewBegin15;
     private ScrollView scrollViewEnd;
     private ScrollView scrollViewEnd15;
+    private SharedPreferences sharedPreferences;
 
     private View.OnClickListener scrollUIListener = new View.OnClickListener() {
 
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         // can: use ProGuard to obfuscate the code
     }
 
@@ -236,12 +240,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Look some days back and check if user forgot to enter their times
-        List<String> lastSevenDays = TimeUtils.getListOfLastSevenDays();
-        for (String lastId : lastSevenDays) {
-            if (storage.loadDaysDataNew(this, lastId) == null) {
-                Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + lastId + " fehlt noch ein Eintrag..",
-                        Snackbar.LENGTH_LONG).show();
-                break;
+        if (sharedPreferences.getBoolean("setting_reminder_popup_active", true)) {
+
+            List<String> lastSevenDays = TimeUtils.getListOfLastSevenDays();
+            for (String lastId : lastSevenDays) {
+                if (storage.loadDaysDataNew(this, lastId) == null) {
+                    Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + lastId + " fehlt noch ein Eintrag..",
+                            Snackbar.LENGTH_LONG).show();
+                    break;
+                }
             }
         }
 
