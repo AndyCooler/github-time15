@@ -10,7 +10,7 @@
         app:useSimpleSummaryProvider="true" />
 
     <androidx.preference.EditTextPreference
-        android:key="backup_email_address"
-        android:title="Email zum Versand von Backups TODO in Code nutzen!"
+        android:key="settings_backup_email_address"
+        android:title="Email Empfänger von Backups"
         app:useSimpleSummaryProvider="true" />
 </androidx.preference.PreferenceScreen>

@@ -2,11 +2,15 @@ package com.mythosapps.time15;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by andreas on 07.12.18.
@@ -28,7 +32,16 @@ public class SendEmailPopupUI {
         inputTextField.setInputType(InputType.TYPE_CLASS_TEXT);
         inputTextField.setMinLines(1);
         inputTextField.setMaxLines(1);
-        inputTextField.setText(DEFAULT_TEXT);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(parent);
+        String email = sharedPreferences.getString("settings_backup_email_address", DEFAULT_TEXT);
+        if (email == null || "".equals(email.trim())) {
+            email = DEFAULT_TEXT;
+        }
+        if (DEFAULT_TEXT.equals(email)) {
+            Snackbar.make(parent.findViewById(R.id.total), "Email Empfänger am besten in Settings eintragen, siehe Menü der Tagesansicht",
+                    Snackbar.LENGTH_LONG).show();
+        }
+        inputTextField.setText(email);
     }
 
     public void setOkButton(String okButtonText, DialogInterface.OnClickListener okButtonListener) {

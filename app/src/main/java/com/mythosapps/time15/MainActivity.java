@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mythosapps.time15.MESSAGE";
     private static final String UNLOCK_SYMBOL = new String(Character.toChars(128275));
+    private static final String SMILEY_SIGN = new String(Character.toChars(128521));
 
     // Storage
     private StorageFacade storage;
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
             List<String> lastSevenDays = TimeUtils.getListOfLastSevenDays();
             for (String lastId : lastSevenDays) {
                 if (storage.loadDaysDataNew(this, lastId) == null) {
-                    Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + lastId + " fehlt noch ein Eintrag..",
+                    Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + lastId + " noch eintragen " + SMILEY_SIGN,
                             Snackbar.LENGTH_LONG).show();
                     break;
                 }
