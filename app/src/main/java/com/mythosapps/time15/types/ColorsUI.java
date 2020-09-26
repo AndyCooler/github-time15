@@ -11,7 +11,7 @@ import java.util.Map;
 public class ColorsUI {
 
     // Colors
-    public static final int DARK_BLUE_DEFAULT = Color.rgb(30, 144, 255);
+    public static final int DARK_BLUE_DEFAULT = Color.rgb(30, 144, 255); // #1E90FF
     public static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(0, 100, 0);
     public static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int SELECTION_NONE_BG = Color.TRANSPARENT;
