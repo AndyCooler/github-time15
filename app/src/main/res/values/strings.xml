@@ -24,13 +24,13 @@
     <string name="menu_today">Heute</string>
     <string name="menu_month">Monat</string>
     <string name="menu_about">Info</string>
-    <string name="menu_new">Aufgabe hinzufügen</string>
-    <string name="menu_edit">Aufgabe anpassen</string>
+    <string name="menu_new">Aufgabentyp hinzufügen</string>
+    <string name="menu_edit">Aufgabentyp anpassen</string>
     <string name="menu_delete">Eintrag Löschen</string>
     <string name="menu_note">Notiz erfassen</string>
-    <string name="menu_send">Export</string>
-    <string name="new_task_title">Aufgabe hinzufügen</string>
-    <string name="edit_task_title">Aufgabe anpassen</string>
+    <string name="menu_send">Backup / Export</string>
+    <string name="new_task_title">Aufgabentyp hinzufügen</string>
+    <string name="edit_task_title">Aufgabentyp anpassen</string>
     <string name="edit_task_with_begin_end">Mit Von-Bis Uhrzeit</string>
     <string name="edit_task_color_blue">Blau</string>
     <string name="edit_task_color_green">Grün</string>
@@ -55,5 +55,5 @@
     <string name="main_delete_error">Nichts zu löschen!</string>
     <string name="menu_unlock">Entsperren</string>
     <string name="main_delete_unlock_first">Erst das Schloss öffnen!</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Settings (neu!)</string>
 </resources>

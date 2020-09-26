@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mythosapps.time15.storage.ConfigFileStorage;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
@@ -32,11 +34,18 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.ScrollViewType;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.AppVersion;
+import com.mythosapps.time15.util.EmailUtils;
 import com.mythosapps.time15.util.TimeUtils;
+import com.mythosapps.time15.util.ZipUtils;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
 
 
 /**
@@ -52,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SMILEY_SIGN = new String(Character.toChars(128521));
 
     // Storage
+    private static final FilenameFilter EXPORT_FILE_FILTER = (dir, name) -> name.endsWith(".csv") || name.equals(ConfigFileStorage.DEFAULT_CONFIG_FILE);
     private StorageFacade storage;
     private ConfigStorageFacade configStorage;
 
@@ -254,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (TimeUtils.isLastWorkDayOfMonth(TimeUtils.createID())) {
-            Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze 'Export als csv' aus dem Menü der Monatsansicht",
+            Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze 'Backup / Export'",
                     Snackbar.LENGTH_LONG).show();
         }
     }
@@ -317,6 +327,10 @@ public class MainActivity extends AppCompatActivity {
             deleteTask();
             return true;
         }
+        if (id == R.id.action_send) {
+            sendMail();
+            return true;
+        }
         if (id == R.id.action_settings) {
             if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
                 save(false);
@@ -370,6 +384,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Menu: Export
+    private void sendMail() {
+        final SendEmailPopupUI sendEmailPopupUI = new SendEmailPopupUI(this);
+
+        sendEmailPopupUI.setOkButton(getString(R.string.send_email_button), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String sendToAddress = sendEmailPopupUI.getInputTextField().getText().toString();
+                if (sendToAddress == null || sendToAddress.isEmpty() || !sendToAddress.contains("@") || !sendToAddress.contains(".")) {
+                    Toast.makeText(MainActivity.this.getApplicationContext(), R.string.send_email_correction, Toast.LENGTH_LONG).show();
+                } else {
+
+                    File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+                    String[] allFiles = storageDir.list(EXPORT_FILE_FILTER);
+                    String backupMoment = new Timestamp(System.currentTimeMillis()).toString().substring(0, 19).replaceAll(":", "-").replaceFirst(" ", "_");
+                    String zipArchiveFilename = "Time15_Backup_" + backupMoment + ".zip";
+                    try {
+                        ZipUtils.createZipFile(storageDir, zipArchiveFilename, allFiles);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this.getApplicationContext(), R.string.send_email_zip_problem, Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    String subject = "Time15 Export " + backupMoment;
+                    EmailUtils.sendEmail(MainActivity.this, zipArchiveFilename, storageDir, subject, sendToAddress);
+                }
+            }
+        });
+        sendEmailPopupUI.setCancelButton(getString(R.string.edit_task_cancel));
+        sendEmailPopupUI.show();
+    }
 
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
