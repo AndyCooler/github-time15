@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
                             Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
                     String[] allFiles = storageDir.list(EXPORT_FILE_FILTER);
                     String backupMoment = new Timestamp(System.currentTimeMillis()).toString().substring(0, 19).replaceAll(":", "-").replaceFirst(" ", "_");
-                    String zipArchiveFilename = "Time15_Backup_" + backupMoment + ".zip";
+                    String zipArchiveFilename = "Time15_Backup_" + backupMoment + ".time15";
                     try {
                         ZipUtils.createZipFile(storageDir, zipArchiveFilename, allFiles);
                     } catch (Exception e) {

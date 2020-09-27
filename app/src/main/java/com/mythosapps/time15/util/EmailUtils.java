@@ -34,7 +34,10 @@ public final class EmailUtils {
         // the mail subject
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Hallo,\n\n das ist eine automatisch generierte Email der Time15 Zeiterfassungs-App. Version: " + AppVersion.getVersionName(activity) + "\n"
-                + "Im Anhang ist ein Backup mit allen Daten, erstellt am " + subject.substring(14).replaceFirst("_", " um ") + " Uhr.\n\nBleib gesund!\nAndreas");
+                + "Im Anhang ist ein Backup mit allen Daten, erstellt am " + subject.substring(14).replaceFirst("_", " um ")
+                + " Uhr.\n Es ist weiterhin eine normale Datei im ZIP Format. Als Endung wurde statt .zip nun .time15 gewählt, um das Wiederherstellen zu erleichtern.\n"
+                + " Die Datei enthält alle erfassten Einträge, für jeden Monat eine .csv Datei."
+                + "\n\nViele Grüße,\nAndreas");
         activity.startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 }
