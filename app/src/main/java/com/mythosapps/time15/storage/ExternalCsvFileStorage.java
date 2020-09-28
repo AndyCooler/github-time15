@@ -192,7 +192,9 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
                 for (String msg : warnings) {
                     warningsMsg.append(msg).append("\n");
                 }
-                Toast.makeText(activity.getApplicationContext(), warningsMsg.toString(), Toast.LENGTH_LONG).show();
+                if (activity != null) {
+                    Toast.makeText(activity.getApplicationContext(), warningsMsg.toString(), Toast.LENGTH_LONG).show();
+                }
             }
             success = true;
         } finally {

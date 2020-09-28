@@ -21,7 +21,9 @@ public class FileStorage {
     protected File storageDir;
 
     protected boolean init(Activity activity) {
-        verifyStoragePermissions(activity);
+        if (activity != null) {
+            verifyStoragePermissions(activity);
+        }
         if (isExternalStorageWritable()) {
             if (isStorageDirPresent()) {
                 storageDir = new File(Environment.getExternalStoragePublicDirectory(
