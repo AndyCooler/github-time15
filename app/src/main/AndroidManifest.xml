@@ -44,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mythosapps.time15.MainActivity" />
         </activity>
-    </application>
 
+        <receiver android:name=".CheckDaysAlarmReceiver"></receiver>
+    </application>
 </manifest>

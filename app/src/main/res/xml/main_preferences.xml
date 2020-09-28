@@ -6,7 +6,13 @@
     <androidx.preference.SwitchPreference
         android:defaultValue="true"
         android:key="setting_reminder_popup_active"
-        android:title="Erinnerung an fehlende Einträge"
+        android:title="Eintrage-Erinnerung in der App"
+        app:useSimpleSummaryProvider="true" />
+
+    <androidx.preference.SwitchPreference
+        android:defaultValue="true"
+        android:key="setting_reminder_notifications_active"
+        android:title="Eintrage-Erinnerung als Notification"
         app:useSimpleSummaryProvider="true" />
 
     <androidx.preference.EditTextPreference

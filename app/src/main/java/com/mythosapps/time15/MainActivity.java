@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int AV_CHAR = 0x00F8;
     public static final String AVERAGE_SIGN = Character.toString((char) AV_CHAR);
 
+    private ReminderAction reminderAction;
 
     // View state and view state management
     private String id = null;
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        reminderAction = new ReminderAction(this);
         // can: use ProGuard to obfuscate the code
     }
 
@@ -253,13 +255,10 @@ public class MainActivity extends AppCompatActivity {
         // Look some days back and check if user forgot to enter their times
         if (sharedPreferences.getBoolean("setting_reminder_popup_active", true)) {
 
-            List<String> lastSevenDays = TimeUtils.getListOfLastSevenDays();
-            for (String lastId : lastSevenDays) {
-                if (storage.loadDaysDataNew(this, lastId) == null) {
-                    Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + lastId + " noch eintragen " + SMILEY_SIGN,
-                            Snackbar.LENGTH_LONG).show();
-                    break;
-                }
+            List<String> missingEntries = reminderAction.remindOfLastWeeksEntries();
+            if (!missingEntries.isEmpty()) {
+                Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + missingEntries.get(0) + " noch eintragen " + SMILEY_SIGN,
+                        Snackbar.LENGTH_LONG).show();
             }
         }
 
