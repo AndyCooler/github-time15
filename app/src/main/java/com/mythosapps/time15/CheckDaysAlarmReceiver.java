@@ -12,6 +12,8 @@ import androidx.preference.PreferenceManager;
 import com.mythosapps.time15.util.NotificationBuilder;
 import com.mythosapps.time15.util.TimeUtils;
 
+import java.util.List;
+
 public class CheckDaysAlarmReceiver extends BroadcastReceiver {
 
     private SharedPreferences sharedPreferences;
@@ -24,14 +26,18 @@ public class CheckDaysAlarmReceiver extends BroadcastReceiver {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
         if (sharedPreferences.getBoolean("setting_reminder_notifications_active", true)) {
-
-            // TODO reminderAction = new ReminderAction(context);
-
-            Notification notification = NotificationBuilder.buildForId(TimeUtils.createID(), context);
-
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-            if (notificationManager.areNotificationsEnabled()) {
-                notificationManager.notify(NotificationBuilder.TIME15_NOTIFICATION_ID, notification);
+            if (notificationManager.areNotificationsEnabled()) { // TODO relates to setting just checked, how to only check one condition?
+
+                if (reminderAction == null) {
+                    reminderAction = new ReminderAction(null);
+                }
+
+                List<String> missingEntries = reminderAction.remindOfLastWeeksEntries();
+                if (!missingEntries.isEmpty()) {
+                    Notification notification = NotificationBuilder.buildForId(TimeUtils.createID(), context);
+                    notificationManager.notify(NotificationBuilder.TIME15_NOTIFICATION_ID, notification);
+                }
             }
         }
     }
