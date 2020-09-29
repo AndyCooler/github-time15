@@ -10,7 +10,7 @@
         app:useSimpleSummaryProvider="true" />
 
     <androidx.preference.SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="setting_reminder_notifications_active"
         android:title="Eintrage-Erinnerung als Notification"
         app:useSimpleSummaryProvider="true" />

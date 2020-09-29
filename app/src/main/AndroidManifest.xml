@@ -45,6 +45,6 @@
                 android:value="com.mythosapps.time15.MainActivity" />
         </activity>
 
-        <receiver android:name=".CheckDaysAlarmReceiver"></receiver>
+        <receiver android:name=".ReminderWorker"></receiver>
     </application>
 </manifest>

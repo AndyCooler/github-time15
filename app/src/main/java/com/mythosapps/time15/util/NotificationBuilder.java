@@ -16,6 +16,7 @@ import com.mythosapps.time15.R;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import static androidx.core.app.NotificationCompat.CATEGORY_REMINDER;
 import static com.mythosapps.time15.MainActivity.EXTRA_MESSAGE;
 
 public class NotificationBuilder {
@@ -51,7 +52,8 @@ public class NotificationBuilder {
                     .setOngoing(false)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setCategory(CATEGORY_REMINDER);
         } else {
             builder.setContentText(contentText);
         }

@@ -1,10 +1,14 @@
 package com.mythosapps.time15;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
 
 public class MainSettingsFragment extends PreferenceFragmentCompat {
+
+    private SharedPreferences.OnSharedPreferenceChangeListener listener =
+            new MainSettingsListener(this);
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -12,4 +16,16 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
+    }
 }
