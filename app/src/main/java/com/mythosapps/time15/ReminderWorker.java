@@ -11,7 +11,6 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.mythosapps.time15.util.NotificationBuilder;
-import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class ReminderWorker extends Worker {
                 if (!missingEntries.isEmpty()) {
                     notificationManager.cancel(NotificationBuilder.TIME15_NOTIFICATION_ID);
 
-                    Notification notification = NotificationBuilder.buildForId(TimeUtils.createID(), getApplicationContext());
+                    Notification notification = NotificationBuilder.buildForId(missingEntries.get(0), getApplicationContext());
                     notificationManager.notify(NotificationBuilder.TIME15_NOTIFICATION_ID, notification);
                 }
             }

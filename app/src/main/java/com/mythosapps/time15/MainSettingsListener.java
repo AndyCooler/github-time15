@@ -29,17 +29,15 @@ public class MainSettingsListener implements SharedPreferences.OnSharedPreferenc
             }
             if (sharedPreferences.getBoolean("setting_reminder_notifications_active", true)) {
 
-               /* WorkContinuation continuation = workManager
-                        .beginUniqueWork(ReminderWorker.REMINDER_ACTION_WORK_NAME,
-                                ExistingWorkPolicy.KEEP,
-                                OneTimeWorkRequest.from(ReminderWorker.class));*/
-                PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(ReminderWorker.class, 20, TimeUnit.SECONDS).build();
+                PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(ReminderWorker.class, 24, TimeUnit.HOURS)
+                        .addTag(ReminderWorker.REMINDER_ACTION_WORK_NAME)
+                        .build();
 
-                workManager.enqueueUniquePeriodicWork(ReminderWorker.REMINDER_ACTION_WORK_NAME, ExistingPeriodicWorkPolicy.REPLACE, periodicWork);
+                workManager.enqueueUniquePeriodicWork(ReminderWorker.REMINDER_ACTION_WORK_NAME, ExistingPeriodicWorkPolicy.KEEP, periodicWork);
                 Snackbar.make(fragment.getActivity().findViewById(R.id.settingsFrame), "Notifications on",
                         Snackbar.LENGTH_LONG).show();
             } else {
-                workManager.cancelUniqueWork(ReminderWorker.REMINDER_ACTION_WORK_NAME);
+                workManager.cancelAllWorkByTag(ReminderWorker.REMINDER_ACTION_WORK_NAME);
                 Snackbar.make(fragment.getActivity().findViewById(R.id.settingsFrame), "Notifications off",
                         Snackbar.LENGTH_LONG).show();
             }
