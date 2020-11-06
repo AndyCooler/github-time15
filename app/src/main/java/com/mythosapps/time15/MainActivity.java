@@ -162,6 +162,16 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         reminderAction = new ReminderAction(this);
+        // Look some days back and check if user forgot to enter their times
+        if (sharedPreferences.getBoolean("setting_reminder_popup_active", true)) {
+
+            List<String> missingEntries = reminderAction.remindOfLastWeeksEntries();
+            if (!missingEntries.isEmpty()) {
+                Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + missingEntries.get(0) + " noch eintragen " + SMILEY_SIGN,
+                        Snackbar.LENGTH_LONG).show();
+            }
+        }
+
         // can: use ProGuard to obfuscate the code
     }
 
@@ -249,16 +259,6 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         123);
-            }
-        }
-
-        // Look some days back and check if user forgot to enter their times
-        if (sharedPreferences.getBoolean("setting_reminder_popup_active", true)) {
-
-            List<String> missingEntries = reminderAction.remindOfLastWeeksEntries();
-            if (!missingEntries.isEmpty()) {
-                Snackbar.make(findViewById(R.id.total), "Erinnerung: Für " + missingEntries.get(0) + " noch eintragen " + SMILEY_SIGN,
-                        Snackbar.LENGTH_LONG).show();
             }
         }
 
