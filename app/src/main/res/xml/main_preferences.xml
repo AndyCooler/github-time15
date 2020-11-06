@@ -4,19 +4,21 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <androidx.preference.SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="setting_reminder_popup_active"
-        android:title="Eintrage-Erinnerung in der App"
+        android:title="Erinnerung in der App"
+        android:summary="falls ein Eintrag fehlt"
         app:useSimpleSummaryProvider="true" />
 
     <androidx.preference.SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="setting_reminder_notifications_active"
-        android:title="Eintrage-Erinnerung als Notification"
+        android:title="Erinnerung per Benachrichtigung"
+        android:summary="falls ein Eintrag fehlt"
         app:useSimpleSummaryProvider="true" />
 
     <androidx.preference.EditTextPreference
         android:key="settings_backup_email_address"
-        android:title="Email Empfänger von Backups"
+        android:title="Email Empfänger für Backup"
         app:useSimpleSummaryProvider="true" />
 </androidx.preference.PreferenceScreen>
