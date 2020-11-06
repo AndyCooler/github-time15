@@ -15,7 +15,8 @@ public class ColorsUI {
     public static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(0, 100, 0);
     public static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int SELECTION_NONE_BG = Color.TRANSPARENT;
-    public static final int SELECTION_BG = Color.rgb(173, 216, 230);//#add8e6
+    //public static final int SELECTION_BG = Color.rgb(173, 216, 230);//#add8e6
+    public static final int SELECTION_BG = Color.rgb(156, 206, 255);//#D79CCEFF
     public static final int DEACTIVATED = Color.LTGRAY;
     public static final int RED_FLAGGED = Color.RED;
     public static final int ACTIVATED = Color.BLACK;
@@ -24,7 +25,7 @@ public class ColorsUI {
     public static final Map<Integer, Integer> colorToChoice = new HashMap<>();
     // holo dark orange:
     public static final int DARK_ORANGE = Color.rgb(255, 255, 136); //#ffff8800
-    public static final int PURPLE = Color.rgb(128,10,128); //#800080
+    public static final int PURPLE = Color.rgb(128, 10, 128); //#800080
 
     static {
         choiceToColor.put(0, ColorsUI.DARK_BLUE_DEFAULT);
