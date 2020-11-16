@@ -262,15 +262,94 @@
                 android:layout_height="match_parent"
                 android:gravity="bottom|center_horizontal"
                 android:orientation="horizontal">
-<!--
-                <Space
-                    android:id="@+id/spacer"
-                    android:layout_width="match_parent"
+                <!--
+                                <Space
+                                    android:id="@+id/spacer"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="fill_vertical"
+                                    android:minHeight="10dp"
+                                    android:visibility="visible" />
+                -->
+
+                <HorizontalScrollView
+                    android:id="@+id/scrollTasks"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="fill_vertical"
-                    android:minHeight="10dp"
-                    android:visibility="visible" />
--->
+                    android:layout_weight="4"
+                    android:fillViewport="true"
+                    android:scrollbars="none">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupTasksId"
+                        app:singleLine="true"
+                        app:singleSelection="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        app:chipSpacingHorizontal="20dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_1"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:checked="true"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/main_default_task" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_2"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Urlaub" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_3"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Krank" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_4"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Elternzeit" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_5"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Kind krank" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_6"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Feiertag" />
+
+                        <!-- Chips can be declared here, or added dynamically.
+                        TODO  https://material.io/develop/android/components/chips#using-chips
+                        -->
+
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
+                <!--
                 <TextView
                     android:id="@+id/kindOfDay"
                     android:layout_width="0dp"
@@ -279,11 +358,12 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:maxLength="22"
-                    android:singleLine="true"
+
                     android:text="@string/main_default_task"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:background="@drawable/bg_arches_plus"
+
                     android:textColor="#1E90FF" />
+-->
 
 <!--
                 <Space

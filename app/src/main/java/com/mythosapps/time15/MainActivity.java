@@ -21,6 +21,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 import com.mythosapps.time15.storage.ConfigFileStorage;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
@@ -144,7 +146,26 @@ public class MainActivity extends AppCompatActivity {
             KindOfDay.initializeFromConfig(configStorage, this);
         }
 
-        TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
+        //TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
+        ChipGroup chipGroup = (ChipGroup) findViewById(R.id.chipGroupTasksId);
+        //kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
+        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup chipGroup, int selection) {
+                Chip selectedChip = null;
+                if (selection == View.NO_ID) {
+                    selectedChip = (Chip) findViewById(R.id.chip_1);
+                    chipGroup.check(R.id.chip_1);
+                } else {
+                    selectedChip = (Chip) findViewById(selection);
+                }
+                kindOfDay = selectedChip.getText().toString();
+                activateKindOfDay(KindOfDay.fromString(kindOfDay));
+                if (selectedChip != null)
+                    Toast.makeText(getApplicationContext(), "Chip is " + selectedChip.getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
         ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000, 8, ScrollViewType.BEGIN);
@@ -157,8 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
         scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
-
-        kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         reminderAction = new ReminderAction(this);
@@ -531,11 +550,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void toggleKindOfDay(View v) {
-        KindOfDay newKindOfDay = KindOfDay.toggle(kindOfDay);
-        activateKindOfDay(newKindOfDay);
-    }
-
     private void activateKindOfDay(KindOfDay newKindOfDay) {
         kindOfDay = newKindOfDay.getDisplayString();
         if (newKindOfDay.isBeginEndType()) {
@@ -645,9 +659,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void aktualisiereKindOfDay(int color) {
-        TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
-        day.setTextColor(color);
+        //TextView day = (TextView) findViewById(R.id.kindOfDay);
+        ChipGroup chipGroup = (ChipGroup) findViewById(R.id.chipGroupTasksId);
+/* wird durch resetView dann alles auf Arbeit zurücksetzen, daher nicht machen, setten tut der Benutzer ja schon!
+        if ("Arbeit".equals(kindOfDay)) {
+            chipGroup.check(R.id.chip_1);
+        } else if ("Urlaub".equals(kindOfDay)) {
+            chipGroup.check(R.id.chip_2);
+        } else {
+            chipGroup.check(R.id.chip_3);
+        }
+        */
+
+        int selection = chipGroup.getCheckedChipId();
+        Chip selectedChip = null;
+        if (selection == View.NO_ID) {
+            selectedChip = (Chip) findViewById(R.id.chip_1);
+        } else {
+            selectedChip = (Chip) findViewById(selection);
+        }
+        selectedChip.setTextColor(color);
         //setSelected(R.id.kindOfDay);
     }
 
