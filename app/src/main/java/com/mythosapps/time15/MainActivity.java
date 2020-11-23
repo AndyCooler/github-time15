@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.chip.Chip;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private ReminderAction reminderAction;
 
     // View state and view state management
+    private SharedViewModel model;
     private String id = null;
     private int taskNo = 0;
     private Integer beginnTime = null; //value
@@ -146,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
             KindOfDay.initializeFromConfig(configStorage, this);
         }
 
+        model = new ViewModelProvider(this).get(SharedViewModel.class);
+
         //TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
         ChipGroup chipGroup = (ChipGroup) findViewById(R.id.chipGroupTasksId);
         //kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
@@ -159,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     selectedChip = (Chip) findViewById(selection);
                 }
+                model.selectKindOfDay(KindOfDay.fromString(selectedChip.getText().toString()));
+                // TODO nach und nach macht model.selectKindOfDay die Variablen zum view state management überflüssig..
                 kindOfDay = selectedChip.getText().toString();
                 activateKindOfDay(KindOfDay.fromString(kindOfDay));
                 if (selectedChip != null)
