@@ -404,8 +404,36 @@ public class MonthOverviewActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_month_vacation) {
+            menuEditMultiDayVacation();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void menuEditMultiDayVacation() {
+        final MultiDayTaskPopupUI taskUI = new MultiDayTaskPopupUI(this);
+
+        taskUI.setOkButton(getString(R.string.edit_task_new), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String von = taskUI.getInputBeginn().getText().toString();
+                String bis = taskUI.getInputBeginn().getText().toString();
+
+                MonthOverviewActivity.this.saveMultiDayVacation(von, bis);
+            }
+        });
+        taskUI.setCancelButton(getString(R.string.edit_task_cancel));
+        taskUI.show();
+
+    }
+
+    private void saveMultiDayVacation(String von, String bis) {
+
+        DaysDataNew daysDataNew = new DaysDataNew(von);
     }
 
     public void startMainActivity(String withId) {
