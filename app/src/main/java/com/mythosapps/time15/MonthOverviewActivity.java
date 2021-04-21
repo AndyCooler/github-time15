@@ -448,7 +448,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     DaysDataNew data = new DaysDataNew(id);
                     BeginEndTask task = new BeginEndTask();
                     task.setKindOfDay(KindOfDay.VACATION);
-                    task.setTotal(new Time15(8, 0));
+                    task.setTotal(new Time15(KindOfDay.DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES));
                     data.addTask(task);
                     newData.add(data);
                     count++;
