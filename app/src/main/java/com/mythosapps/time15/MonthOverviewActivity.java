@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.types.BeginEndTask;
@@ -32,6 +33,7 @@ import com.mythosapps.time15.util.TimeUtils;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -421,7 +423,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String von = taskUI.getInputBeginn().getText().toString();
-                String bis = taskUI.getInputBeginn().getText().toString();
+                String bis = taskUI.getInputEnde().getText().toString();
 
                 MonthOverviewActivity.this.saveMultiDayVacation(von, bis);
             }
@@ -433,7 +435,37 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private void saveMultiDayVacation(String von, String bis) {
 
-        DaysDataNew daysDataNew = new DaysDataNew(von);
+        try {
+            String id = von;
+            int count = 0;
+            ArrayList<DaysDataNew> newData = new ArrayList<>();
+            while (count < 16) {
+                if (!TimeUtils.isWeekend(id)) {
+                    if (storage.loadDaysDataNew(this, id) != null) {
+                        Snackbar.make(findViewById(R.id.tableView), "Bereits eingetragen: " + id, Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                    DaysDataNew data = new DaysDataNew(id);
+                    BeginEndTask task = new BeginEndTask();
+                    task.setKindOfDay(KindOfDay.VACATION);
+                    task.setTotal(new Time15(8, 0));
+                    data.addTask(task);
+                    newData.add(data);
+                    count++;
+                }
+                if (id.equals(bis)) {
+                    break;
+                }
+                id = TimeUtils.dateForwards(id);
+            }
+            for (DaysDataNew data : newData) {
+                storage.saveDaysDataNew(this, data);
+            }
+            initialize();
+            Snackbar.make(findViewById(R.id.tableView), "Urlaub eingetragen: " + count + " Tage", Snackbar.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Snackbar.make(findViewById(R.id.tableView), "Hat leider nicht geklappt.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void startMainActivity(String withId) {
