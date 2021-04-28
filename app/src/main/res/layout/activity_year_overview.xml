@@ -34,7 +34,7 @@
                 android:minHeight="40dp"
                 android:text="@string/main_default_task"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:background="@drawable/bg_arches_plus"
+                android:background="@drawable/bg_arches_ext"
                 android:textColor="#1E90FF" />
 
         </LinearLayout>

@@ -433,6 +433,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     }
 
+    // TODO Idee: anzeigen welche KW es ist in MonthOverview
+
     private void saveMultiDayVacation(String von, String bis) {
 
         try {
