@@ -310,6 +310,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     private void updateSumWeek(TextView view, int sumWeek) {
         if (view != null) {
             String weekText = Time15.fromMinutes(sumWeek).toDecimalForDisplay();
+            view.setTextColor(ColorsUI.PURPLE);
             view.setText(weekText);
         }
     }
@@ -333,9 +334,21 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
         if (TimeUtils.isLastWorkDayOfMonth(dayId)) {
             updateSumWeek(balanceView, sumWeek);
+        } else if (TimeUtils.isMonday(dayId)) {
+            balanceView.setTextColor(ColorsUI.LIGHT_GREY);
+            balanceView.setText(TimeUtils.getCalendarWeekDisplayString(dayId));
         }
         return balanceView;
     }
+
+    private TextView createCalendarWeekView(String dayId) {
+
+        String text = TimeUtils.getYearDisplayString(id);
+        TextView calendarWeekView = createTextViewRight(text, ColorsUI.DARK_BLUE_DEFAULT);
+
+        return calendarWeekView;
+    }
+
 
     private TextView createTextView0(String text, int color) {
         TextView textView = new TextView(this);

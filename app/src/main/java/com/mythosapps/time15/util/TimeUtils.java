@@ -171,6 +171,14 @@ public final class TimeUtils {
         return "" + cal.get(Calendar.YEAR);
     }
 
+    public static String getCalendarWeekDisplayString(String id) {
+        // siehe https://stackoverflow.com/questions/4608470/why-dec-31-2010-returns-1-as-week-of-year
+        // siehe https://www.java-forum.org/thema/problem-mit-erster-kalenderwoche.143817/
+        GregorianCalendar cal = toCalendar(id);
+        cal.setMinimalDaysInFirstWeek(4); // Donnerstag immer in erster Kalenderwoche in DE
+        return "KW " + cal.get(Calendar.WEEK_OF_YEAR);
+    }
+
     public static boolean isOkayToEdit(String id) {
         return createID().equals(id);
     }
