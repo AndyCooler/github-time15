@@ -341,15 +341,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
         return balanceView;
     }
 
-    private TextView createCalendarWeekView(String dayId) {
-
-        String text = TimeUtils.getYearDisplayString(id);
-        TextView calendarWeekView = createTextViewRight(text, ColorsUI.DARK_BLUE_DEFAULT);
-
-        return calendarWeekView;
-    }
-
-
     private TextView createTextView0(String text, int color) {
         TextView textView = new TextView(this);
         textView.setText(text);
