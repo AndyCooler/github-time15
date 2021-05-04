@@ -296,11 +296,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 row.addView(createTextViewInFlow("", rowColor));
                 row.addView(createTextViewInFlow(getString(R.string.display_sum), rowColor));
                 row.addView(createTextViewInFlow(task.getDisplayString(), rowColor));
-                row.addView(createTextViewInFlow(time15.toDecimalForDisplay() + " h", rowColor));
                 if (showSecondTask) {
                     row.addView(createTextViewInFlow("", rowColor));
                     row.addView(createTextViewInFlow("", rowColor));
                 }
+                row.addView(createTextViewInFlow(time15.toDecimalForDisplay(), rowColor));
+                row.addView(createTextViewInFlow(" h", rowColor));
                 table.addView(row);
             }
         }

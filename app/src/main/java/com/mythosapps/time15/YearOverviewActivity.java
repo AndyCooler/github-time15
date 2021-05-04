@@ -132,6 +132,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         String idFirstOfMonth = idFirstJan;
 
         Time15 totalYear = Time15.fromMinutes(0);
+        int balanceYear = 0;
+        int balanceYearCountingMonths = 0;
         for (final String month : listOfIds) {
             int sumInMinutes = storage.loadTaskSum(this, idFirstOfMonth, selectedTask);
             int balanceValue = 0; // in minutes
@@ -151,6 +153,11 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             totalYear.plus(time15);
             double numDays = (double) time15.toMinutes() / (double) DaysDataNew.DUE_TOTAL_MINUTES;
             String numDaysString = String.format(Locale.US, "%.1f", numDays);
+
+            if (balanceValue > 0) {
+                balanceYearCountingMonths++;
+                balanceYear += balanceValue;
+            }
 
             row = new TableRow(this);
             row.setLayoutParams(lp);
@@ -181,6 +188,9 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         double numDays = (double) totalYear.toMinutes() / (double) DaysDataNew.DUE_TOTAL_MINUTES;
         String numDaysString = String.format(Locale.US, "%.1f", numDays);
 
+        String balanceYearText = Time15.fromMinutes(balanceYear / balanceYearCountingMonths).toDecimalForDisplayOfAverage();
+        balanceYearText = "   (" + MainActivity.AVERAGE_SIGN + " " + balanceYearText + ")";
+
         row = new TableRow(this);
         row.setLayoutParams(lp);
 
@@ -190,6 +200,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         row.addView(createTextView(" h = "));
         row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
         row.addView(createTextView(" Tage "));
+        row.addView(createTextView(balanceYearText));
 
         table.addView(row);
     }
