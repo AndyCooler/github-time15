@@ -16,8 +16,8 @@ android {
         applicationId "com.mythosapps.time15"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 22
-        versionName "2.9.1"
+        versionCode 23
+        versionName "2.9.2"
 //        jackOptions {
 //            enabled true
 //        }
