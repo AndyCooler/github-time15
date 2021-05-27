@@ -12,7 +12,7 @@
         android:orderInCategory="200"
         android:title="@string/menu_today"
         app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_today"></item>
+        android:icon="@android:drawable/ic_menu_compass"></item>
     <item
         android:id="@+id/action_forwards"
         android:orderInCategory="300"
