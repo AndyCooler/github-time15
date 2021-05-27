@@ -188,7 +188,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         double numDays = (double) totalYear.toMinutes() / (double) DaysDataNew.DUE_TOTAL_MINUTES;
         String numDaysString = String.format(Locale.US, "%.1f", numDays);
 
-        String balanceYearText = Time15.fromMinutes(balanceYear / balanceYearCountingMonths).toDecimalForDisplayOfAverage();
+        String balanceYearText = balanceYearCountingMonths == 0 ? Time15.fromMinutes(0).toDecimalForDisplayOfAverage()
+                : Time15.fromMinutes(balanceYear / balanceYearCountingMonths).toDecimalForDisplayOfAverage();
         balanceYearText = "   (" + MainActivity.AVERAGE_SIGN + " " + balanceYearText + ")";
 
         row = new TableRow(this);
