@@ -11,8 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ import com.mythosapps.time15.util.ZipUtils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +56,7 @@ import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
  * Main activity lets the user choose the time they start working and the time they stop working.
  * They can also choose the kind of day: work day, vacation, holiday etc.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 // before material design toolbar: was extends AppCompatActivity
 
     // Navigation
@@ -144,7 +148,15 @@ public class MainActivity extends AppCompatActivity {
             KindOfDay.initializeFromConfig(configStorage, this);
         }
 
-        TextView kindOfDayView = (TextView) findViewById(R.id.kindOfDay);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, KindOfDay.dataList());
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+
+        //kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         scrollViewBegin = (ScrollView) findViewById(R.id.scrollBegin);
         ScrollViewUI.populateHoursUI(scrollUIListener, this, scrollViewBegin, mapBeginValueToView, 1000, 8, ScrollViewType.BEGIN);
@@ -158,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         scrollViewEnd15 = (ScrollView) findViewById(R.id.scrollEnd15);
         ScrollViewUI.populateFifteensUI(scrollUIListener, this, scrollViewEnd15, mapEnd15ValueToView, 4000);
 
-        kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         reminderAction = new ReminderAction(this);
@@ -645,9 +656,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void aktualisiereKindOfDay(int color) {
-        TextView day = (TextView) findViewById(R.id.kindOfDay);
-        day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
-        day.setTextColor(color);
+        //TextView day = (TextView) findViewById(R.id.kindOfDay);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        int i = 0;
+        Object item = spinner.getAdapter().getItem(i);
+        ArrayList<View> outViews = new ArrayList<>();
+        spinner.findViewsWithText(outViews, kindOfDay, View.FIND_VIEWS_WITH_TEXT);
+        spinner.setSelection(KindOfDay.fromString(kindOfDay).index());
+        //day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
+        //day.setTextColor(color);
+
         //setSelected(R.id.kindOfDay);
     }
 
@@ -997,5 +1015,20 @@ public class MainActivity extends AppCompatActivity {
             TextView view = (TextView) findViewById(viewId);
             view.setTextColor(activated ? ColorsUI.ACTIVATED : ColorsUI.DEACTIVATED);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+
+        activateKindOfDay(KindOfDay.fromString(item));
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }

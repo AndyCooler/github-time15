@@ -219,4 +219,16 @@ public class KindOfDay {
                 "        <beginEndType>" + isBeginEndType() + "</beginEndType>\n" +
                 "    </task>\n";
     }
+
+    public int index() {
+        return list.indexOf(this);
+    }
+
+    public static List<String> dataList() {
+        ArrayList<String> result = new ArrayList<>();
+        for (KindOfDay task : list) {
+            result.add(task.getDisplayString());
+        }
+        return result;
+    }
 }
