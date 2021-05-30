@@ -1023,8 +1023,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         activateKindOfDay(KindOfDay.fromString(item));
         // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
-
+        //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
 
     @Override
