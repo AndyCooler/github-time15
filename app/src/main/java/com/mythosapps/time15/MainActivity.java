@@ -44,7 +44,6 @@ import com.mythosapps.time15.util.ZipUtils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,11 +149,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, KindOfDay.dataList());
+        List<String> list = KindOfDay.dataList();
+        if (list.isEmpty()) {
+            list.add(KindOfDay.DEFAULT_WORK);
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_text, list);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
+        int position = dataAdapter.getPosition(kindOfDay);
+        spinner.setSelection(position);
 
         //kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
@@ -656,17 +661,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void aktualisiereKindOfDay(int color) {
-        //TextView day = (TextView) findViewById(R.id.kindOfDay);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         int i = 0;
-        Object item = spinner.getAdapter().getItem(i);
-        ArrayList<View> outViews = new ArrayList<>();
-        spinner.findViewsWithText(outViews, kindOfDay, View.FIND_VIEWS_WITH_TEXT);
-        spinner.setSelection(KindOfDay.fromString(kindOfDay).index());
-        //day.setText("<< " + KindOfDay.fromString(kindOfDay).getDisplayString() + " >>");
-        //day.setTextColor(color);
-
-        //setSelected(R.id.kindOfDay);
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
+        int position = adapter.getPosition(kindOfDay);
+        spinner.setSelection(position);
     }
 
     public void addTask(View v) {

@@ -27,7 +27,6 @@ import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
 import com.mythosapps.time15.util.TimeUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -88,19 +87,14 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         setTitle(getString(R.string.year_overview_title) + " " + TimeUtils.getYearDisplayString(id));
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
-        List<CharSequence> taskNames = new ArrayList<>();
-        for (KindOfDay task : KindOfDay.list) {
-            taskNames.add(task.getDisplayString());
-        }
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, taskNames);
+        yearTaskSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_text, KindOfDay.dataList());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearTaskSpinner.setAdapter(adapter);
-        yearTaskSpinner.setOnItemSelectedListener(this);
-        int postition = adapter.getPosition(selectedTask.getDisplayString());
-        yearTaskSpinner.setSelection(postition);
+        int position = adapter.getPosition(selectedTask.getDisplayString());
+        yearTaskSpinner.setSelection(position);
 
         updateYearOverViewTable();
-
     }
 
     private void updateYearOverViewTable() {
