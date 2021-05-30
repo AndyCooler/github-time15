@@ -114,16 +114,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         The second one affects the View's position inside its parent,
           in other words - aligning the object itself (edit box or text view) inside the parent view.
          */
-        table.setColumnShrinkable(0, true);
-        table.setColumnShrinkable(1, true);
-        table.setColumnShrinkable(2, true);
-        table.setColumnShrinkable(3, true);
-        table.setColumnShrinkable(4, true);
-        table.setColumnShrinkable(5, true);
-        table.setColumnShrinkable(6, true);
-        //table.setColumnShrinkable(4, true);
+        table.setStretchAllColumns(true);
 
-        //table.setColumnStretchable(2, true);
         TableRow row = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
@@ -131,10 +123,27 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         String idFirstJan = "01.01." + TimeUtils.getYearDisplayString(id);
         String idFirstOfMonth = idFirstJan;
 
+        row = new TableRow(this);
+        row.setLayoutParams(lp);
+
+        row.addView(createTextView(" ")); // Name des Monats
+        row.addView(createTextView("h pro Monat"));  // Stunden pro Monat
+        row.addView(createTextView("in Tagen"));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
+        row.addView(createTextView("h im Durchschnitt"));
+        table.addView(row);
+
+        // separator line
+        View line = new View(this);
+        line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
+        line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
+        table.addView(line);
+
         Time15 totalYear = Time15.fromMinutes(0);
         int balanceYear = 0;
         int balanceYearCountingMonths = 0;
+        int monthId = 0;
         for (final String month : listOfIds) {
+            monthId++;
             int sumInMinutes = storage.loadTaskSum(this, idFirstOfMonth, selectedTask);
             int balanceValue = 0; // in minutes
             String balanceText = "";
@@ -142,7 +151,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
                 balanceValue = storage.loadBalance(this, idFirstOfMonth, BALANCE_TYPE);
                 if (BALANCE_TYPE == BalanceType.AVERAGE_WORK) {
                     balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
-                    balanceText = "   (" + MainActivity.AVERAGE_SIGN + " " + balanceText + ")";
+                    balanceText = MainActivity.AVERAGE_SIGN + " " + balanceText;
                 }
             }
             Time15 time15 = Time15.fromMinutes(sumInMinutes);
@@ -163,21 +172,29 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             row.setLayoutParams(lp);
 
             row.addView(createTextView(month)); // Name des Monats
-            row.addView(createTextView(": "));
             row.addView(createTextView(hoursPerMonth));  // Stunden pro Monat
-            row.addView(createTextView(" h = "));
             row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
-            row.addView(createTextView(" Tage "));
             row.addView(createTextView(balanceText));
+            int finalMonthId = monthId;
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String targetId = "01." + (finalMonthId < 10 ? "0" + finalMonthId : "" + finalMonthId) + "." + TimeUtils.getYearDisplayString(id);
+                    Intent intent = new Intent(YearOverviewActivity.this, MonthOverviewActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, targetId);
+                    startActivity(intent);
+                }
+            });
+
             table.addView(row);
             idFirstOfMonth = TimeUtils.monthForwards(idFirstOfMonth);
         }
 
         // separator line
-        View line = new View(this);
-        line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
-        line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
-        table.addView(line);
+        View line2 = new View(this);
+        line2.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
+        line2.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
+        table.addView(line2);
 
         // total over year
         String hoursPerYear = totalYear.toDecimalFormat();
@@ -190,17 +207,14 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
         String balanceYearText = balanceYearCountingMonths == 0 ? Time15.fromMinutes(0).toDecimalForDisplayOfAverage()
                 : Time15.fromMinutes(balanceYear / balanceYearCountingMonths).toDecimalForDisplayOfAverage();
-        balanceYearText = "   (" + MainActivity.AVERAGE_SIGN + " " + balanceYearText + ")";
+        balanceYearText = MainActivity.AVERAGE_SIGN + " " + balanceYearText;
 
         row = new TableRow(this);
         row.setLayoutParams(lp);
 
         row.addView(createTextView("Total")); // Name des Monats
-        row.addView(createTextView(": "));
         row.addView(createTextView(hoursPerYear));  // Stunden pro Monat
-        row.addView(createTextView(" h = "));
         row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
-        row.addView(createTextView(" Tage "));
         row.addView(createTextView(balanceYearText));
 
         table.addView(row);
@@ -251,8 +265,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(color);
-        //textView.setPadding(10, 5, 5, 5);
-        textView.setPadding(5, 3, 5, 2);
+        textView.setPadding(10, 4, 40, 2);
         textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
         textView.setGravity(Gravity.RIGHT);
         //textView.setTypeface(Typeface.MONOSPACE);
