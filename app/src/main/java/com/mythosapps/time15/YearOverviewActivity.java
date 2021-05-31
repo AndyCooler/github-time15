@@ -113,7 +113,9 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         TableRow row = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
 
-        List<String> listOfIds = Arrays.asList("Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez");
+        //List<String> listOfIds = Arrays.asList("Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez");
+        List<String> listOfIds = Arrays.asList("Januar",
+                "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember");
         String idFirstJan = "01.01." + TimeUtils.getYearDisplayString(id);
         String idFirstOfMonth = idFirstJan;
 
@@ -165,7 +167,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             row = new TableRow(this);
             row.setLayoutParams(lp);
 
-            row.addView(createTextView(month)); // Name des Monats
+            row.addView(createTextView(month, ColorsUI.DARK_BLUE_DEFAULT, Gravity.LEFT)); // Name des Monats
             row.addView(createTextView(hoursPerMonth));  // Stunden pro Monat
             row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
             row.addView(createTextView(balanceText));
@@ -206,7 +208,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         row = new TableRow(this);
         row.setLayoutParams(lp);
 
-        row.addView(createTextView("Total")); // Name des Monats
+        row.addView(createTextView("Total", ColorsUI.DARK_BLUE_DEFAULT, Gravity.LEFT)); // Name des Monats
         row.addView(createTextView(hoursPerYear));  // Stunden pro Monat
         row.addView(createTextView(numDaysString));  // Tage pro Monat, gerundet auf 1 Nachkommastelle
         row.addView(createTextView(balanceYearText));
@@ -255,19 +257,19 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         return balanceView;
     }
 
-    private TextView createTextView(String text, int color) {
+    private TextView createTextView(String text, int color, int gravity) {
         TextView textView = new TextView(this);
         textView.setText(text);
         textView.setTextColor(color);
         textView.setPadding(10, 4, 40, 2);
         textView.setLayoutParams(TEXTVIEW_LAYOUT_PARAMS_FLOW);
-        textView.setGravity(Gravity.RIGHT);
+        textView.setGravity(gravity);
         //textView.setTypeface(Typeface.MONOSPACE);
         return textView;
     }
 
     private TextView createTextView(String text) {
-        return createTextView(text, ColorsUI.DARK_BLUE_DEFAULT);
+        return createTextView(text, ColorsUI.DARK_BLUE_DEFAULT, Gravity.RIGHT);
     }
 
     @Override
