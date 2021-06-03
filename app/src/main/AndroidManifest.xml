@@ -44,7 +44,5 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mythosapps.time15.MainActivity" />
         </activity>
-
-        <receiver android:name=".ReminderWorker"></receiver>
     </application>
 </manifest>
