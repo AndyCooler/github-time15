@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Integer previousSelectionEnde15 = null; //viewId
     private String previousSelectionKindOfDays = null;
     private boolean isPaused = false;
+    private boolean isCreateComplete = false;
     // here are the maps from value to viewId that enable re-use of 4 TextViews for full range 0-24
     // TODO for ScrollView, just extend initialization to full range of values
     // TODO later: maps can be avoided by makeing better use of TextView (has ID, has value, so
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isCreateComplete = false;
         String intentsId = getIntentsId();
         storage = StorageFactory.getDataStorage();
         configStorage = StorageFactory.getConfigStorage();
@@ -498,6 +500,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             balanceValue = storage.loadBalance(this, id, BALANCE_TYPE);
             updateBalance();
         }
+        isCreateComplete = true;
         modelToView();
     }
 
@@ -1021,7 +1024,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
 
-        activateKindOfDay(KindOfDay.fromString(item));
+        if (isCreateComplete) {
+            activateKindOfDay(KindOfDay.fromString(item));
+        }
         // Showing selected spinner item
         //Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
