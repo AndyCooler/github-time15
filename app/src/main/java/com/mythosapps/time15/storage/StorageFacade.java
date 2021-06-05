@@ -11,6 +11,20 @@ import com.mythosapps.time15.types.KindOfDay;
  */
 public interface StorageFacade {
 
+    // TODO targeting api level 30, should use scoped storage:
+    // Documents/Time15 is already an app-specific/app-private directory on internal storage
+    // for which no permissions are necessary in android manifest.
+    // But: Let the User approve to use this directory, by presenting them ACTION_DIRECTORY_TREE
+    // system file picker, initialized with the Documents/Time15 directory.
+    // (Basically let the User choose whatever directory they want to use as a device backup dir,
+    // but warn them that moving existing files from Documents/Time15 directory to a different
+    // directory is not supported (why offer it?). I.e. if they choose a different directory,
+    // all existing data will be invisible and they have to move it on their own. If they are
+    // new to the app, then no worries anyways.)
+    // Finally, persist the URI (the directory) the user has granted access to using the
+    // ACTION_DIRECTORY_TREE system file picker in order for the choice to survive device restarts.
+    // Of course, put all this under Settings UI.
+
     /**
      * Save a day's data.
      *
