@@ -669,6 +669,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner.getAdapter();
         int position = adapter.getPosition(kindOfDay);
         spinner.setSelection(position);
+
+        spinner.setEnabled(isEditable);
+        spinner.setClickable(isEditable);
+        TextView view = (TextView) spinner.getChildAt(0);
+        if (view != null) {
+            view.setTextColor(isEditable ? ColorsUI.ACTIVATED : ColorsUI.DEACTIVATED);
+        }
     }
 
     public void addTask(View v) {

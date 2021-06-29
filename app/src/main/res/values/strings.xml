@@ -58,4 +58,5 @@
     <string name="menu_settings">Settings (neu!)</string>
     <string name="multi_task_from">Beginnt am:</string>
     <string name="multi_task_to">Endet am:</string>
+    <string name="menu_cloud">Cloud Storage Available</string>
 </resources>

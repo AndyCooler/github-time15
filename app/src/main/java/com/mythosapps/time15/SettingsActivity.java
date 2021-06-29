@@ -9,7 +9,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.mythosapps.time15.storage.CloudStorage;
+
 public class SettingsActivity extends AppCompatActivity {
+
+    private CloudStorage cloudStorage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +30,13 @@ public class SettingsActivity extends AppCompatActivity {
         //settingsFragment. ...
         getSupportFragmentManager().beginTransaction().add(R.id.settingsFrame, settingsFragment).commit();
 
+        cloudStorage = new CloudStorage();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cloudStorage.disconnect();
     }
 
     @Override
@@ -46,6 +57,10 @@ public class SettingsActivity extends AppCompatActivity {
         if (id == R.id.action_day) {
             startMainActivity("");
             return true;
+        }
+
+        if (id == R.id.action_check_cloud_available) {
+            cloudStorage.checkCloudBackupAccessible(this, findViewById(R.id.settingsFrame));
         }
 
         return super.onOptionsItemSelected(item);

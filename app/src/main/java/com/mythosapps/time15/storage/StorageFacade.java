@@ -12,6 +12,7 @@ import com.mythosapps.time15.types.KindOfDay;
 public interface StorageFacade {
 
     // TODO targeting api level 30, should use scoped storage:
+    // TODO shoud upload to my website as backup
     // Documents/Time15 is already an app-specific/app-private directory on internal storage
     // for which no permissions are necessary in android manifest.
     // But: Let the User approve to use this directory, by presenting them ACTION_DIRECTORY_TREE
