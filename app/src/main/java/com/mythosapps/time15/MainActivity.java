@@ -806,6 +806,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     save(false);
                 }
             }
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.main_delete_unlock_first, Toast.LENGTH_SHORT).show();
         }
     }
 
