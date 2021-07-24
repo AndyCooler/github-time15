@@ -22,9 +22,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mythosapps.time15.storage.CloudBackup;
 import com.mythosapps.time15.storage.ConfigFileStorage;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
 import com.mythosapps.time15.storage.StorageFacade;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final FilenameFilter EXPORT_FILE_FILTER = (dir, name) -> name.endsWith(".csv") || name.equals(ConfigFileStorage.DEFAULT_CONFIG_FILE);
     private StorageFacade storage;
     private ConfigStorageFacade configStorage;
+    private CloudBackup cloudBackup;
 
     // Balance Type
     public static final BalanceType BALANCE_TYPE = BalanceType.AVERAGE_WORK;
@@ -190,7 +193,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
 
+        cloudBackup = new CloudBackup();
+
+        String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+        if ("none".equals(cloudBackupId)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("settings_cloud_backup_id", AppVersion.generateUniqueId());
+            editor.commit();
+        }
+
         // can: use ProGuard to obfuscate the code
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cloudBackup.disconnect();
     }
 
     // only for UI: sets view's text color to black when active, gray when inactive
@@ -227,6 +245,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        // TODO jede Activity instance ist noch immer wieder neu, das muss gelöst werden sonst ist die anzeige hier nicht konsistent
+        boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
+        if (cloudBackupActivated) {
+            if (menu != null) {
+                Boolean cloudAvailable = cloudBackup.isAvailable();
+                if (null == cloudAvailable || Boolean.FALSE.equals(cloudAvailable)) {
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_off_24));
+                } else {
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_24));
+                }
+            }
+        }
+
         return true;
     }
 
@@ -281,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         if (TimeUtils.isLastWorkDayOfMonth(TimeUtils.createID())) {
-            Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze 'Backup / Export'",
+            Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze Email Backup im Menü oder aktiviere Cloud Backup in den Settings",
                     Snackbar.LENGTH_LONG).show();
         }
     }
@@ -323,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             String about = "Time15 von Andreas, \n";
             about += "Version: " + AppVersion.getVersionName(this) + "\n";
             about += "Build-ID:" + AppVersion.getVersionCode(this) + "\n";
-            about += "Code: Andreas. Viele viele Tests: Julian";
+            about += "Code: Andreas. Viele viele Tests: Julian" + "\n";
 
             Toast.makeText(getApplicationContext(), about, Toast.LENGTH_SHORT).show();
             return true;
@@ -354,6 +385,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_cloud_status) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
+            String status;
+            if (cloudBackupActivated) {
+                cloudBackup.requestAvailability(this, findViewById(R.id.addTaskButton));
+            } else {
+                status = "Cloud Backup (experimentell)\n";
+                status += "Selbst Einschalten erforderlich\n";
+                status += "im Menü unter Settings";
+                Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

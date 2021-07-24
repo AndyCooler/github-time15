@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import java.util.UUID;
+
 /**
  * Created by andreas on 16.01.17.
  */
@@ -37,4 +39,10 @@ public class AppVersion {
         }
         return String.valueOf(version);
     }
+
+    public static String generateUniqueId() {
+        String uniqueID = UUID.randomUUID().toString();
+        return uniqueID;
+    }
+
 }

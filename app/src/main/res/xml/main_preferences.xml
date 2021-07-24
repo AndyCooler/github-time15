@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-    <androidx.preference.SwitchPreference
-        android:defaultValue="false"
-        android:key="setting_reminder_popup_active"
-        android:title="Erinnerung in der App"
-        android:summary="falls ein Eintrag fehlt"
-        app:useSimpleSummaryProvider="true" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <PreferenceCategory android:title="Erinnerung an vergessene Einträge">
 
-    <androidx.preference.SwitchPreference
-        android:defaultValue="true"
-        android:key="setting_reminder_notifications_active"
-        android:title="Erinnerung per Benachrichtigung"
-        android:summary="falls ein Eintrag fehlt"
-        app:useSimpleSummaryProvider="true" />
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="setting_reminder_popup_active"
+            android:title="Erinnerung in der App"
+            app:useSimpleSummaryProvider="true" />
 
-    <androidx.preference.EditTextPreference
-        android:key="settings_backup_email_address"
-        android:title="Email Empfänger für Backup"
-        app:useSimpleSummaryProvider="true" />
+        <androidx.preference.SwitchPreference
+            android:defaultValue="true"
+            android:key="setting_reminder_notifications_active"
+            android:title="Erinnerung per Benachrichtigung"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Email Backup">
+        <androidx.preference.EditTextPreference
+            android:key="settings_backup_email_address"
+            android:title="Email Empfänger"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Cloud Backup">
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="settings_cloud_backup"
+            android:summary="Cloud Server: mythosapps.com"
+            android:title="Cloud Backup einschalten"
+            app:useSimpleSummaryProvider="true" />
+
+        <androidx.preference.EditTextPreference
+            android:key="settings_cloud_backup_id"
+            android:title="Cloud Backup ID für deine Daten"
+            android:enabled="false"
+            app:useSimpleSummaryProvider="true" />
+
+        <androidx.preference.SwitchPreference
+            android:defaultValue="false"
+            android:key="settings_cloud_backup_id_editable"
+            android:summary="IDEE : Wenn dies dein weiteres Gerät ist, und du hier noch keine Daten eingetragen hast, kannst du die ID aus der App von deinem ersten Gerät hier eintragen, um die Daten zu übernehmen"
+            android:title="Cloud Backup ID selbst eintragen"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

@@ -20,7 +20,8 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
+        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
