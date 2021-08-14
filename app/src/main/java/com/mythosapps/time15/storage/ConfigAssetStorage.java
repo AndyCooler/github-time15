@@ -39,10 +39,10 @@ public class ConfigAssetStorage implements ConfigStorageFacade {
             InputStream stream = null;
             if (saveActionProcessed) {
                 stream = new ByteArrayInputStream(saveActionXml.getBytes());
-                Log.i(getClass().getName(), "Loading from cached XML.");
+                //Log.i(getClass().getName(), "Loading from cached XML.");
                 result = parser.parse(stream);
             } else {
-                Log.i(getClass().getName(), "Loading from AssetStorage.");
+                //Log.i(getClass().getName(), "Loading from AssetStorage.");
                 AssetManager manager = activity.getAssets();
             stream = manager.open(resourceFileName);
             result = parser.parse(stream);
@@ -55,7 +55,7 @@ public class ConfigAssetStorage implements ConfigStorageFacade {
         } catch (IOException e) {
             Log.e("Error: ", e.getMessage());
         }
-        Log.i(getClass().getName(), "Loaded " + result.size() + " entries from AssetStorage.");
+        //Log.i(getClass().getName(), "Loaded " + result.size() + " entries from AssetStorage.");
         return result;
     }
 

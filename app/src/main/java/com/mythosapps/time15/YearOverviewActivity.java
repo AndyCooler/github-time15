@@ -79,6 +79,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("time15", "Instance : " + this.toString());
 
         initialize();
     }
@@ -178,6 +179,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
                     String targetId = "01." + (finalMonthId < 10 ? "0" + finalMonthId : "" + finalMonthId) + "." + TimeUtils.getYearDisplayString(id);
                     Intent intent = new Intent(YearOverviewActivity.this, MonthOverviewActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, targetId);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
                 }
             });
@@ -308,7 +310,14 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override

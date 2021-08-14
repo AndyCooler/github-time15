@@ -2,6 +2,7 @@ package com.mythosapps.time15;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,6 +41,18 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("time15", "Instance : " + this.toString());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_settings, menu);
@@ -68,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void startMainActivity(String withId) {
         Intent intent = new Intent(this, MainActivity.class);
-        //intent.putExtra(EXTRA_MESSAGE, withId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 }

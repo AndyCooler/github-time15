@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isCreateComplete = false;
-        String intentsId = getIntentsId();
         storage = StorageFactory.getDataStorage();
         configStorage = StorageFactory.getConfigStorage();
         setContentView(R.layout.activity_main);
@@ -238,14 +238,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 return withId;
             }
         }
-        return TimeUtils.createID(); // today's id
+        return null;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        // TODO jede Activity instance ist noch immer wieder neu, das muss gelöst werden sonst ist die anzeige hier nicht konsistent
         boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
         if (cloudBackupActivated) {
             if (menu != null) {
@@ -278,11 +283,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
         super.onResume();
-        String intentsId = isPaused ? id : getIntentsId();
-        isPaused = false;
+
+        Log.i("time15", "Instance : " + this.toString() + " : isPaused: " + isPaused);
+        String intentsId = getIntentsId();
         if (intentsId == null) {
-            intentsId = TimeUtils.createID(); // today's id
+            intentsId = id == null ? TimeUtils.createID() : id;
         }
+        isPaused = false;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             balanceValue = storage.loadBalance(this, intentsId, BALANCE_TYPE);
@@ -484,6 +491,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 

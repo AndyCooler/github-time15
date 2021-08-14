@@ -88,7 +88,7 @@ public class KindOfDay {
             listNames.add(task.getDisplayString());
             Log.i(KindOfDay.class.getName(), "Added task " + task.getDisplayString() + ".");
         } else {
-            Log.i(KindOfDay.class.getName(), "Skipped task " + task.getDisplayString() + ".");
+            //Log.i(KindOfDay.class.getName(), "Skipped task " + task.getDisplayString() + ".");
         }
     }
 

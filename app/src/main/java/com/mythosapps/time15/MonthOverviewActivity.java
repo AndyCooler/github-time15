@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -158,6 +159,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.i("time15", "Instance : " + this.toString());
         initialize();
 
     }
@@ -478,13 +480,21 @@ public class MonthOverviewActivity extends AppCompatActivity {
     public void startMainActivity(String withId) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, withId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 
     public void startYearOverviewActivity() {
         Intent intent = new Intent(this, YearOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
 

@@ -1,7 +1,6 @@
 package com.mythosapps.time15.storage;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.mythosapps.time15.types.BalanceType;
 import com.mythosapps.time15.types.DaysDataNew;
@@ -22,7 +21,7 @@ public class NoopStorage implements StorageFacade {
 
     @Override
     public boolean saveDaysDataNew(Activity activity, DaysDataNew data) {
-        Log.i(getClass().getName(), "Saved data: " + CsvUtils.toCsvLine(data));
+        //Log.i(getClass().getName(), "Saved data: " + CsvUtils.toCsvLine(data));
         cache.put(data.getId(), data.getNumberOfTasks() == 0 ? null : CsvUtils.toCsvLine(data));
         return true;
     }
@@ -30,9 +29,9 @@ public class NoopStorage implements StorageFacade {
     @Override
     public DaysDataNew loadDaysDataNew(Activity activity, String id) {
         if (cache.get(id) == null) {
-            Log.i(getClass().getName(), "No data with id " + id);
+            //Log.i(getClass().getName(), "No data with id " + id);
         } else {
-            Log.i(getClass().getName(), "Loaded data " + cache.get(id));
+            //Log.i(getClass().getName(), "Loaded data " + cache.get(id));
         }
         try {
             return cache.get(id) == null ? null : CsvUtils.fromCsvLine(cache.get(id));
