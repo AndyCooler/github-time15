@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     };
     private boolean isEditable; // UI is editable on today's date or after unlocking
     private boolean isUnLockButtonPressed; // pressing unlock makes UI editable
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         cloudBackup = new CloudBackup();
+        cloudBackup.requestAvailability(this, null);
 
         String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
         if ("none".equals(cloudBackupId)) {
@@ -206,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         cloudBackup.disconnect();
     }
 
@@ -251,18 +253,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
-        if (cloudBackupActivated) {
-            if (menu != null) {
-                Boolean cloudAvailable = cloudBackup.isAvailable();
-                if (null == cloudAvailable || Boolean.FALSE.equals(cloudAvailable)) {
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_off_24));
-                } else {
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_24));
-                }
-            }
-        }
-
+        this.menu = menu;
+        updateCloudMenuItem();
         return true;
     }
 
@@ -290,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             intentsId = id == null ? TimeUtils.createID() : id;
         }
         isPaused = false;
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             balanceValue = storage.loadBalance(this, intentsId, BALANCE_TYPE);
@@ -321,6 +314,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (TimeUtils.isLastWorkDayOfMonth(TimeUtils.createID())) {
             Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze Email Backup im Menü oder aktiviere Cloud Backup in den Settings",
                     Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void updateCloudMenuItem() {
+        boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
+        if (cloudBackupActivated) {
+            if (menu != null) {
+                Boolean cloudAvailable = cloudBackup.isAvailable();
+                if (null == cloudAvailable || Boolean.FALSE.equals(cloudAvailable)) {
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_off_24));
+                } else {
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_24));
+                }
+            }
         }
     }
 
@@ -555,6 +562,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         isCreateComplete = true;
         modelToView();
+
+        updateCloudMenuItem(); // TODO let a coroutine perform this update, at the moment some user-interaction is required for the icon to update
     }
 
     public void dateForwards() {

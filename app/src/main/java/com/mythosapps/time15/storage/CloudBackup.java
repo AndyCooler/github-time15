@@ -60,14 +60,20 @@ public class CloudBackup {
                     public void onResponse(String response) {
                         if (null != response) {
                             try {
-                                Snackbar.make(view, "Cloud Backup: " + response, Snackbar.LENGTH_LONG).show();
+                                if (view != null) {
+                                    Snackbar.make(view, "Cloud Backup: " + response, Snackbar.LENGTH_LONG).show();
+                                }
                                 available = true;
                             } catch (Exception e) {
-                                Snackbar.make(view, "Cloud Backup: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                if (view != null) {
+                                    Snackbar.make(view, "Cloud Backup: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                }
                                 available = false;
                             }
                         } else {
-                            Snackbar.make(view, "Cloud Backup: none.", Snackbar.LENGTH_LONG).show();
+                            if (view != null) {
+                                Snackbar.make(view, "Cloud Backup: none.", Snackbar.LENGTH_LONG).show();
+                            }
                             available = false;
                         }
                     }
@@ -75,7 +81,9 @@ public class CloudBackup {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Snackbar.make(view, "Cloud Backup: VE: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                if (view != null) {
+                    Snackbar.make(view, "Cloud Backup: VE: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                }
                 available = false;
             }
         });
