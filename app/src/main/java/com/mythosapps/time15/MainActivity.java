@@ -413,6 +413,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 status += "im Menü unter Settings";
                 Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
             }
+            updateCloudMenuItem();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -871,6 +872,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             Toast.makeText(getApplicationContext(), R.string.main_delete_unlock_first, Toast.LENGTH_SHORT).show();
         }
+
+        updateCloudMenuItem();
     }
 
     private void aktualisiereTotal(int color) {
