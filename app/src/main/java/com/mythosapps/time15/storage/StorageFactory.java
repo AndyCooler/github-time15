@@ -30,12 +30,12 @@ public class StorageFactory {
     }
 
     private static StorageFacade createStorage() {
-        if (Build.FINGERPRINT.contains("generic")) {
+       /* TODO wieder ausbauen if (Build.FINGERPRINT.contains("generic")) {
             StorageFacade storage = new NoopStorage(); // running on emulator
             String id = TimeUtils.createID();
             createTestData(id, storage);
             return storage;
-        }
+        }*/
         return new ExternalCsvFileStorage();
     }
 

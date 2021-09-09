@@ -20,7 +20,7 @@ public class FileStorage {
 
     protected File storageDir;
 
-    protected boolean init(Activity activity) {
+    public boolean init(Activity activity) {
         if (activity != null) {
             verifyStoragePermissions(activity);
         }
@@ -100,6 +100,11 @@ public class FileStorage {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+    public static File getStorageDir() {
+        return new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
     }
 
 }

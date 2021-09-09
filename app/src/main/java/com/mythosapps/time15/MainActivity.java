@@ -1,5 +1,7 @@
 package com.mythosapps.time15;
 
+import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
+
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,7 +30,6 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mythosapps.time15.storage.CloudBackup;
-import com.mythosapps.time15.storage.ConfigFileStorage;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
@@ -45,13 +46,9 @@ import com.mythosapps.time15.util.TimeUtils;
 import com.mythosapps.time15.util.ZipUtils;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
 
 
 /**
@@ -67,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final String SMILEY_SIGN = new String(Character.toChars(128521));
 
     // Storage
-    private static final FilenameFilter EXPORT_FILE_FILTER = (dir, name) -> name.endsWith(".csv") || name.equals(ConfigFileStorage.DEFAULT_CONFIG_FILE);
     private StorageFacade storage;
     private ConfigStorageFacade configStorage;
     private CloudBackup cloudBackup;
@@ -325,7 +321,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (null == cloudAvailable || Boolean.FALSE.equals(cloudAvailable)) {
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_off_24));
                 } else {
-                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_24));
+                    Boolean cloudBackupSuccess = cloudBackup.isBackupSuccess();
+                    if (Boolean.FALSE.equals(cloudBackupSuccess)) {
+                        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_queue_24));
+                    } else if (Boolean.TRUE.equals(cloudBackupSuccess)) {
+                        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_done_24));
+                    } else {
+                        menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_24));
+                    }
                 }
             }
         }
@@ -390,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
         if (id == R.id.action_send) {
-            sendMail();
+            performEmailBackup();
             return true;
         }
         if (id == R.id.action_settings) {
@@ -401,14 +404,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             startActivity(intent);
             return true;
         }
-        if (id == R.id.action_cloud_status) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (id == R.id.action_cloud_backup) {
             boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
-            String status;
+            if (cloudBackupActivated) {
+                if (menu != null) {
+                    menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_queue_24));
+                }
+                cloudBackup.requestBackup(findViewById(R.id.addTaskButton));
+                updateCloudMenuItem();
+            } else {
+                String status = "Cloud Backup (experimentell)\n";
+                status += "Selbst Einschalten erforderlich\n";
+                status += "im Menü unter Settings";
+                Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
+        if (id == R.id.action_cloud_status) {
+            boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
             if (cloudBackupActivated) {
                 cloudBackup.requestAvailability(this, findViewById(R.id.addTaskButton));
             } else {
-                status = "Cloud Backup (experimentell)\n";
+                String status = "Cloud Backup (experimentell)\n";
                 status += "Selbst Einschalten erforderlich\n";
                 status += "im Menü unter Settings";
                 Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
@@ -421,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void unlock() {
         //change button
-        Button addTaskButton = (Button)findViewById(R.id.addTaskButton);
+        Button addTaskButton = (Button) findViewById(R.id.addTaskButton);
         addTaskButton.setText("+"); // add task symbol +
         addTaskButton.setBackground(getResources().getDrawable(R.drawable.roundbutton));
 
@@ -433,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void lock() {
         //change button
-        Button addTaskButton = (Button)findViewById(R.id.addTaskButton);
+        Button addTaskButton = (Button) findViewById(R.id.addTaskButton);
         addTaskButton.setText(UNLOCK_SYMBOL); // open lock symbol
         addTaskButton.setBackground(getResources().getDrawable(R.drawable.roundbutton_unlock));
 
@@ -461,8 +480,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    // Menu: Export
-    private void sendMail() {
+    // Menu: Email backup
+    private void performEmailBackup() {
         final SendEmailPopupUI sendEmailPopupUI = new SendEmailPopupUI(this);
 
         sendEmailPopupUI.setOkButton(getString(R.string.send_email_button), new DialogInterface.OnClickListener() {
@@ -476,8 +495,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-                    String[] allFiles = storageDir.list(EXPORT_FILE_FILTER);
-                    String backupMoment = new Timestamp(System.currentTimeMillis()).toString().substring(0, 19).replaceAll(":", "-").replaceFirst(" ", "_");
+                    String[] allFiles = storageDir.list(ZipUtils.EXPORT_FILE_FILTER);
+                    String backupMoment = TimeUtils.createMoment();
                     String zipArchiveFilename = "Time15_Backup_" + backupMoment + ".time15";
                     try {
                         ZipUtils.createZipFile(storageDir, zipArchiveFilename, allFiles);
@@ -528,7 +547,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         if (BALANCE_TYPE == BalanceType.AVERAGE_WORK) {
             String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
-            balance.setText("("+ AVERAGE_SIGN+ " "+ balanceText + ")");
+            balance.setText("(" + AVERAGE_SIGN + " " + balanceText + ")");
         } else {
             String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplay();
             balance.setText("(" + balanceText + ")");
@@ -645,7 +664,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newNote = taskUI.getInputTextField().getText().toString();
-                if (newNote== null || newNote.isEmpty()) {
+                if (newNote == null || newNote.isEmpty()) {
                     MainActivity.this.note = null;
                 } else {
                     MainActivity.this.note = newNote.replaceAll(",", ";");
@@ -969,9 +988,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
-        System.out.println("viewToModel.note="+note);
+        System.out.println("viewToModel.note=" + note);
         task0.setNote(note);
-        if (task0.getKindOfDay().isBeginEndType()) {
+        if (task0.getKindOfDay().isBeginEndType()) { // TODO NPE hier schon gesehen
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
             task0.setEnd(endeTime);

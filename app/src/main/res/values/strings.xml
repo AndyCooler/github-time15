@@ -30,6 +30,7 @@
     <string name="menu_delete">Eintrag Löschen</string>
     <string name="menu_note">Notiz erfassen</string>
     <string name="menu_send">Email Backup</string>
+    <string name="menu_cloud_backup">Cloud Backup</string>
     <string name="new_task_title">Aufgabentyp hinzufügen</string>
     <string name="edit_task_title">Aufgabentyp anpassen</string>
     <string name="edit_task_with_begin_end">Mit Von-Bis Uhrzeit</string>
@@ -42,6 +43,7 @@
     <string name="send_email_button">Senden</string>
     <string name="send_email_correction">Bitte korrekte Email-Adresse eingeben</string>
     <string name="send_email_zip_problem">Konnte Backup-Datei nicht erstellen.</string>
+    <string name="cloud_backup_requires_o">Cloud Backup ab Android 8</string>
     <string name="edit_task_error_task_exists">Aufgabe existiert bereits!</string>
     <string name="edit_task_edit">Ändern</string>
     <string name="edit_task_error_task_not_found">Aufgabe existiert nicht!</string>

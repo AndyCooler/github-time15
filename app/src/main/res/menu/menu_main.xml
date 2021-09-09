@@ -18,7 +18,7 @@
         android:id="@+id/action_today"
         android:orderInCategory="200"
         android:title="@string/menu_today"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         android:icon="@android:drawable/ic_menu_compass"></item>
     <item
         android:id="@+id/action_forwards"
@@ -67,6 +67,12 @@
         android:icon="@android:drawable/ic_dialog_email"
         android:orderInCategory="527"
         android:title="@string/menu_send"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/action_cloud_backup"
+        android:icon="@android:drawable/ic_menu_send"
+        android:orderInCategory="528"
+        android:title="@string/menu_cloud_backup"
         app:showAsAction="never"></item>
     <item
         android:id="@+id/action_about"

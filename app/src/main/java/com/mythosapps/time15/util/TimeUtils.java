@@ -1,5 +1,6 @@
 package com.mythosapps.time15.util;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -197,5 +198,9 @@ public final class TimeUtils {
         }
 
         return result;
+    }
+
+    public static String createMoment() {
+        return new Timestamp(System.currentTimeMillis()).toString().substring(0, 19).replaceAll(":", "-").replaceFirst(" ", "_");
     }
 }
