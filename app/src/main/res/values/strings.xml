@@ -58,7 +58,7 @@
     <string name="main_delete_error">Nichts zu löschen!</string>
     <string name="menu_unlock">Entsperren</string>
     <string name="main_delete_unlock_first">Erst das Schloss öffnen!</string>
-    <string name="menu_settings">Settings (neu!)</string>
+    <string name="menu_settings">Settings</string>
     <string name="multi_task_from">Beginnt am:</string>
     <string name="multi_task_to">Endet am:</string>
     <string name="menu_cloud">Cloud Storage Available</string>
