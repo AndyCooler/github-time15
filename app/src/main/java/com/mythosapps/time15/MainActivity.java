@@ -254,7 +254,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         this.menu = menu;
-        updateCloudMenuItem();
         return true;
     }
 
@@ -335,6 +334,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 }
             }
+        } else {
+            menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_off_24));
         }
     }
 
@@ -588,7 +589,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         isCreateComplete = true;
         modelToView();
 
-        updateCloudMenuItem(); // TODO let a coroutine perform this update, at the moment some user-interaction is required for the icon to update
+        timer.schedule(new UpdateCloudMenuItemTask(), TIMER_DELAY);
     }
 
     public void dateForwards() {
@@ -896,8 +897,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             Toast.makeText(getApplicationContext(), R.string.main_delete_unlock_first, Toast.LENGTH_SHORT).show();
         }
-
-        updateCloudMenuItem();
     }
 
     private void aktualisiereTotal(int color) {
