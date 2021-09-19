@@ -49,6 +49,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public final static String EXTRA_MESSAGE = "com.mythosapps.time15.MESSAGE";
     private static final String UNLOCK_SYMBOL = new String(Character.toChars(128275));
     private static final String SMILEY_SIGN = new String(Character.toChars(128521));
+    private static final long TIMER_DELAY = 3000;
 
     // Storage
     private StorageFacade storage;
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private boolean isEditable; // UI is editable on today's date or after unlocking
     private boolean isUnLockButtonPressed; // pressing unlock makes UI editable
     private Menu menu;
+    private Timer timer = new java.util.Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -412,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_queue_24));
                 }
                 cloudBackup.requestBackup(findViewById(R.id.addTaskButton));
-                updateCloudMenuItem();
+                timer.schedule(new UpdateCloudMenuItemTask(), TIMER_DELAY);
             } else {
                 String status = "Cloud Backup (experimentell)\n";
                 status += "Selbst Einschalten erforderlich\n";
@@ -426,6 +430,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
             if (cloudBackupActivated) {
                 cloudBackup.requestAvailability(this, findViewById(R.id.addTaskButton));
+                timer.schedule(new UpdateCloudMenuItemTask(), TIMER_DELAY);
             } else {
                 String status = "Cloud Backup (experimentell)\n";
                 status += "Selbst Einschalten erforderlich\n";
@@ -1126,5 +1131,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    class UpdateCloudMenuItemTask extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateCloudMenuItem();
+                }
+            });
+        }
     }
 }
