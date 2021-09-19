@@ -194,9 +194,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
 
-        cloudBackup = new CloudBackup();
-        cloudBackup.requestAvailability(this, null);
-
         String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
         if ("none".equals(cloudBackupId)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -204,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             editor.commit();
         }
 
+        cloudBackup = new CloudBackup();
+        cloudBackup.requestAvailability(this, null, cloudBackupId);
         // can: use ProGuard to obfuscate the code
     }
 
@@ -416,7 +415,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (menu != null) {
                     menu.getItem(0).setIcon(ContextCompat.getDrawable(this, R.drawable.ic_baseline_cloud_queue_24));
                 }
-                cloudBackup.requestBackup(findViewById(R.id.addTaskButton));
+                String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+                cloudBackup.requestBackup(findViewById(R.id.addTaskButton), cloudBackupId);
                 timer.schedule(new UpdateCloudMenuItemTask(), TIMER_DELAY);
             } else {
                 String status = "Cloud Backup (experimentell)\n";
@@ -430,7 +430,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (id == R.id.action_cloud_status) {
             boolean cloudBackupActivated = sharedPreferences.getBoolean("settings_cloud_backup", false);
             if (cloudBackupActivated) {
-                cloudBackup.requestAvailability(this, findViewById(R.id.addTaskButton));
+                String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+                cloudBackup.requestAvailability(this, findViewById(R.id.addTaskButton), cloudBackupId);
                 timer.schedule(new UpdateCloudMenuItemTask(), TIMER_DELAY);
             } else {
                 String status = "Cloud Backup (experimentell)\n";

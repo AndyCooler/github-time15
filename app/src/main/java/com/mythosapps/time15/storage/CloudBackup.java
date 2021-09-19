@@ -35,7 +35,7 @@ public class CloudBackup {
 
     private static final String BASE_URL = "https://mythosapps.com/time15app";
 
-    private static final String OP_CLOUD_AVAILABLE = "/hello/world";
+    private static final String OP_CLOUD_AVAILABLE = "/hello/";
 
     private static final String OP_CLOUD_STORE = "/store";
 
@@ -64,15 +64,20 @@ public class CloudBackup {
         available = false;
     }
 
+    public void requestAvailability(Activity activity, View view) {
+        requestAvailability(activity, view, "world");
+    }
+
     /**
      * Check if Cloud is available at all.
      */
-    // TODO change so that #requestAvailability first checks if cloud is available at all, and second checks when the last successful backup took place, and return whatever info is available,
+    // TODO change so that #requestAvailability first checks if cloud is available at all,
+    //  and second checks when the last successful backup took place, and return whatever info is available,
     //  because all that info is shown in a Snackbar anyways. This way, the user can always check the state of their cloud storage.
-    public void requestAvailability(Activity activity, View view) {
+    public void requestAvailability(Activity activity, View view, String cloudId) {
         this.activity = activity;
 
-        String url = BASE_URL + OP_CLOUD_AVAILABLE;
+        String url = BASE_URL + OP_CLOUD_AVAILABLE + cloudId;
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -113,7 +118,7 @@ public class CloudBackup {
     /**
      * Store zip file in Cloud. Touch a file that shows date "last-updated". Save dateTime and result in memberVar. POST: (dateTime, user'S app ID, filename of zip, zip content) -> (true/false)
      */
-    public boolean requestBackup(View view) {
+    public boolean requestBackup(View view, String cloudBackupId) {
         if (!available) {
             Snackbar.make(view, "Cloud Upload Error: Cloud not available", Snackbar.LENGTH_LONG).show();
             return false;
@@ -141,7 +146,7 @@ public class CloudBackup {
         try {
             request.getHeaders().put("backupMoment", backupMoment);
             request.getHeaders().put("zipArchiveFilename", zipArchiveFilename);
-            // TODO send cloud ID as request header parameter so cloud can store into a directory for the ID
+            request.getHeaders().put("cloudBackupId", cloudBackupId);
         } catch (AuthFailureError authFailureError) {
             Snackbar.make(view, "Cloud Upload Error: Cannot add backupMoment", Snackbar.LENGTH_LONG).show();
             authFailureError.printStackTrace();
