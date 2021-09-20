@@ -7,6 +7,9 @@
         <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/drawable/ic_baseline_cloud_done_24.xml" value="0.2953125" />
         <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/drawable/ic_baseline_cloud_off_24.xml" value="0.2953125" />
         <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/drawable/ic_baseline_cloud_queue_24.xml" value="0.2953125" />
+        <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/drawable/roundbutton.xml" value="0.3828125" />
+        <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/drawable/roundbutton_unlock.xml" value="0.3828125" />
+        <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/layout/activity_main.xml" value="0.21603260869565216" />
         <entry key="..\:/Users/Andreas/StudioProjects/github-time15/app/src/main/res/menu/menu_main.xml" value="0.2791666666666667" />
       </map>
     </option>
@@ -55,7 +58,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
