@@ -7,6 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -798,6 +802,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void aktualisiereTaskNo() {
         Button switchTasksButton = (Button) findViewById(R.id.switchTasksButton);
         switchTasksButton.setText(String.valueOf(taskNo + 1));
+        setColorOfButton(switchTasksButton, modifiableData.getNumberOfTasks() > 1 ? ColorsUI.SELECTION_BG_BUTTON : ColorsUI.LIGHT_GREY_BUTTON);
+    }
+
+    private void setColorOfButton(Button button, int color) {
+        Drawable background = button.getBackground();
+        if (background instanceof ShapeDrawable) {
+            ((ShapeDrawable) background).getPaint().setColor(color);
+        } else if (background instanceof GradientDrawable) {
+            ((GradientDrawable) background).setColor(color);
+        } else if (background instanceof ColorDrawable) {
+            ((ColorDrawable) background).setColor(color);
+        }
     }
 
     /**
