@@ -1011,7 +1011,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
         System.out.println("viewToModel.note=" + note);
         task0.setNote(note);
-        if (task0.getKindOfDay().isBeginEndType()) { // TODO NPE hier schon gesehen
+        if (task0.getKindOfDay().isBeginEndType()) { // TODO NPE hier schon gesehen, wird aber paar zeilen darüber gesetzt..
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
             task0.setEnd(endeTime);

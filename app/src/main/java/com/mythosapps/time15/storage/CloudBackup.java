@@ -128,7 +128,7 @@ public class CloudBackup {
         byte[] zipBytes = null;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                zipBytes = ZipUtils.backupToBytes(backupMoment);
+                zipBytes = ZipUtils.backupToBytes(backupMoment, activity);
             } else {
                 Snackbar.make(view, "Cloud Upload Error: " + R.string.cloud_backup_requires_o, Snackbar.LENGTH_LONG).show();
                 return false;

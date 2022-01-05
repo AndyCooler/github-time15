@@ -1,5 +1,6 @@
 package com.mythosapps.time15.util;
 
+import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
 
@@ -58,9 +59,9 @@ public class ZipUtils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static byte[] backupToBytes(String backupMoment) throws Exception {
+    public static byte[] backupToBytes(String backupMoment, Activity activity) throws Exception {
 
-        File storageDir = FileStorage.getStorageDir();
+        File storageDir = FileStorage.getStorageDir(activity);
         String tempFileName = backupToZip(storageDir, "toBytes_" + backupMoment);
 
         File tempFile = new File(storageDir, tempFileName);

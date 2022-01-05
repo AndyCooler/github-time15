@@ -3,7 +3,9 @@ package com.mythosapps.time15.storage;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
@@ -21,16 +23,15 @@ public class FileStorage {
     protected File storageDir;
 
     public boolean init(Activity activity) {
-        if (activity != null) {
+        if (activity != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             verifyStoragePermissions(activity);
         }
         if (isExternalStorageWritable()) {
-            if (isStorageDirPresent()) {
-                storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+            if (isStorageDirPresent(activity)) {
+                storageDir = getStorageDir(activity);
                 return true;
             } else {
-                storageDir = createStorageDir();
+                storageDir = createStorageDir(activity);
                 if (storageDir == null) {
                 } else {
                     initialized = true;
@@ -39,6 +40,19 @@ public class FileStorage {
             }
         }
         return false;
+    }
+
+    public static File getStorageDir(Activity activity) {
+        File dir = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            dir = new File(activity.getExternalFilesDir(null), STORAGE_DIR);
+            Toast.makeText(activity.getApplicationContext(), "Scoped storage", Toast.LENGTH_SHORT).show();
+        } else {
+            dir = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+            Toast.makeText(activity.getApplicationContext(), "Legacy storage", Toast.LENGTH_SHORT).show();
+        }
+        return dir;
     }
 
     /* Checks if external storage is available for read and write */
@@ -50,20 +64,18 @@ public class FileStorage {
         return false;
     }
 
-    protected boolean isStorageDirPresent() {
+    protected boolean isStorageDirPresent(Activity activity) {
 
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+        File file = getStorageDir(activity);
         if (file.exists()) {
             return true;
         }
         return false;
     }
 
-    public File createStorageDir() {
+    public File createStorageDir(Activity activity) {
 
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
+        File file = getStorageDir(activity);
         if (file.mkdirs()) {
         } else {
         }
@@ -101,10 +113,4 @@ public class FileStorage {
             );
         }
     }
-
-    public static File getStorageDir() {
-        return new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-    }
-
 }
