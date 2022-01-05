@@ -1,13 +1,11 @@
 package com.mythosapps.time15.storage;
 
-import android.os.Build;
 import android.util.Log;
 
 import com.mythosapps.time15.types.BeginEndTask;
 import com.mythosapps.time15.types.DaysDataNew;
 import com.mythosapps.time15.types.KindOfDay;
 import com.mythosapps.time15.types.Time15;
-import com.mythosapps.time15.util.ConfigXmlParser;
 import com.mythosapps.time15.util.TimeUtils;
 
 import java.util.List;
@@ -119,10 +117,11 @@ public class StorageFactory {
     }
 
     private static ConfigStorageFacade createConfigStorage() {
-        if (Build.FINGERPRINT.contains("generic")) {
+        /* TODO wieder ausbauen für lokale tests if (Build.FINGERPRINT.contains("generic")) {
             ConfigAssetStorage storage = new ConfigAssetStorage(new ConfigXmlParser()); // running on emulator
             return storage;
         }
+         */
         return new ConfigFileStorage();
     }
 }

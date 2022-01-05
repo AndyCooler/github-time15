@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -152,9 +153,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         initMapWithIds(mapPauseValueToViewId, R.id.pauseA, R.id.pauseB, R.id.pauseC, R.id.pauseD);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             KindOfDay.initializeFromConfig(configStorage, this);
+        } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                KindOfDay.initializeFromConfig(configStorage, this);
+            }
         }
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -285,34 +290,38 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         isPaused = false;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            balanceValue = storage.loadBalance(this, intentsId, BALANCE_TYPE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             switchToID(null, intentsId);
             updateBalance();
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Provide an additional rationale to the user if the permission was not granted
-                // and the user would benefit from additional context for the use of the permission.
-                // Display a SnackBar with cda button to request the missing permission.
-                Snackbar.make(findViewById(R.id.total), "App liest und schreibt .csv Dateien",
-                        Snackbar.LENGTH_INDEFINITE).setAction("ok", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        // Request the permission
-                        ActivityCompat.requestPermissions(MainActivity.this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                123);
-                    }
-                }).show();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                balanceValue = storage.loadBalance(this, intentsId, BALANCE_TYPE);
+                switchToID(null, intentsId);
+                updateBalance();
             } else {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        123);
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    // Provide an additional rationale to the user if the permission was not granted
+                    // and the user would benefit from additional context for the use of the permission.
+                    // Display a SnackBar with cda button to request the missing permission.
+                    Snackbar.make(findViewById(R.id.total), "App liest und schreibt .csv Dateien",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ok", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request the permission
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                    123);
+                        }
+                    }).show();
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            123);
+                }
             }
         }
-
         if (TimeUtils.isLastWorkDayOfMonth(TimeUtils.createID())) {
             Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze Email Backup im Menü oder aktiviere Cloud Backup in den Settings",
                     Snackbar.LENGTH_LONG).show();
@@ -1138,7 +1147,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
 
-        if (isCreateComplete) {
+        if (isCreateComplete && item != null) {
             activateKindOfDay(KindOfDay.fromString(item));
         }
         // Showing selected spinner item

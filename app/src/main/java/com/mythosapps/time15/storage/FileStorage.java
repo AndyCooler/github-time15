@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
@@ -46,11 +45,11 @@ public class FileStorage {
         File dir = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             dir = new File(activity.getExternalFilesDir(null), STORAGE_DIR);
-            Toast.makeText(activity.getApplicationContext(), "Scoped storage", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity.getApplicationContext(), "Scoped storage", Toast.LENGTH_SHORT).show();
         } else {
             dir = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOCUMENTS) + File.separator + STORAGE_DIR);
-            Toast.makeText(activity.getApplicationContext(), "Legacy storage", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity.getApplicationContext(), "Legacy storage", Toast.LENGTH_SHORT).show();
         }
         return dir;
     }
