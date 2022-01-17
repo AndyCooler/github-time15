@@ -2,11 +2,13 @@ package com.mythosapps.time15;
 
 import android.content.SharedPreferences;
 
+import androidx.preference.Preference;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mythosapps.time15.storage.CloudBackup;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +43,31 @@ public class MainSettingsListener implements SharedPreferences.OnSharedPreferenc
                 Snackbar.make(fragment.getActivity().findViewById(R.id.settingsFrame), "Notifications off",
                         Snackbar.LENGTH_LONG).show();
             }
+        }
+        if ("settings_cloud_backup_id_editable".equals(key)) {
+            if (sharedPreferences.getBoolean("settings_cloud_backup_id_editable", false)) {
+                Preference pref = fragment.getPreferenceScreen().findPreference("settings_cloud_backup_id");
+                if (!pref.isEnabled()) {
+                    pref.setEnabled(true);
+                    Snackbar.make(fragment.getActivity().findViewById(R.id.settingsFrame), "Achtung: Damit überschreibst du Daten auf diesem Gerät.",
+                            Snackbar.LENGTH_LONG).show();
+                }
+            } else {
+                Preference pref = fragment.getPreferenceScreen().findPreference("settings_cloud_backup_id");
+                if (pref.isEnabled()) {
+                    pref.setEnabled(false);
+                }
+            }
+        }
 
+        if ("settings_cloud_backup_id".equals(key)) {
+            Preference pref = fragment.getPreferenceScreen().findPreference("settings_cloud_backup_id");
+
+            CloudBackup cloudBackup = ((SettingsActivity) fragment.getActivity()).getCloudBackup();
+            //TODO cloudBackup.holeNeuestenStand(ID);
+            //TODO ExternalCsvFileStorage.saveWholeMonth()
+            //TODO ConfigStorage.initFromConfig..
+            fragment.onResume();
         }
     }
 }

@@ -21,6 +21,9 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     public void onResume() {
         super.onResume();
         SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        //Preference pref = getPreferenceScreen().findPreference("settings_cloud_backup_id");
+        //pref.setEnabled(false);
+        //sharedPreferences.edit().putBoolean("settings_cloud_backup_id_editable", false).apply();
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
     }
 

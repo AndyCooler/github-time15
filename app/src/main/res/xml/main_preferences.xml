@@ -36,13 +36,13 @@
         <androidx.preference.EditTextPreference
             android:key="settings_cloud_backup_id"
             android:title="Cloud Backup ID für deine Daten"
-            android:enabled="false"
+            android:enabled="true"
             app:useSimpleSummaryProvider="true" />
 
         <androidx.preference.SwitchPreference
             android:defaultValue="false"
             android:key="settings_cloud_backup_id_editable"
-            android:summary="IDEE : Wenn dies dein weiteres Gerät ist, und du hier noch keine Daten eingetragen hast, kannst du die ID aus der App von deinem ersten Gerät hier eintragen, um die Daten zu übernehmen"
+            android:summary="IDEE : Wenn dies dein weiteres Gerät ist, und du hier noch keine Daten eingetragen hast, kannst du die ID aus der App von deinem ersten Gerät hier eintragen, um die Daten zu übernehmen. ACHTUNG: Damit überschreibst du Daten auf diesem Gerät mit Daten, die in der Cloud zu der neuen ID hinterlegt sind."
             android:title="Cloud Backup ID selbst eintragen"
             app:useSimpleSummaryProvider="true" />
 
