@@ -1,6 +1,7 @@
 package com.mythosapps.time15;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private CloudBackup cloudBackup;
 
+    private MainSettingsFragment settingsFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         //If you want to insert data in your settings
-        MainSettingsFragment settingsFragment = new MainSettingsFragment();
+        settingsFragment = new MainSettingsFragment();
         settingsFragment.setHasOptionsMenu(true);
         //settingsFragment. ...
         getSupportFragmentManager().beginTransaction().add(R.id.settingsFrame, settingsFragment).commit();
@@ -73,7 +76,9 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_check_cloud_available) {
-            cloudBackup.requestAvailability(this, findViewById(R.id.settingsFrame));
+            SharedPreferences sharedPreferences = settingsFragment.getPreferenceManager().getSharedPreferences();
+            String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+            cloudBackup.requestAvailability(this, findViewById(R.id.settingsFrame), cloudBackupId);
         }
 
         return super.onOptionsItemSelected(item);

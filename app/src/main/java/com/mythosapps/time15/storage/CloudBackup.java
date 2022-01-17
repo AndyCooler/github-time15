@@ -64,16 +64,9 @@ public class CloudBackup {
         available = false;
     }
 
-    public void requestAvailability(Activity activity, View view) {
-        requestAvailability(activity, view, "world");
-    }
-
     /**
      * Check if Cloud is available at all.
      */
-    // TODO change so that #requestAvailability first checks if cloud is available at all,
-    //  and second checks when the last successful backup took place, and return whatever info is available,
-    //  because all that info is shown in a Snackbar anyways. This way, the user can always check the state of their cloud storage.
     public void requestAvailability(Activity activity, View view, String cloudId) {
         this.activity = activity;
 
@@ -155,6 +148,18 @@ public class CloudBackup {
         request.addMarker(REQUEST_TAG);
         getRequestQueue().add(request);
         return true;
+    }
+
+    /**
+     * Store zip file in Cloud. Touch a file that shows date "last-updated". Save dateTime and result in memberVar. POST: (dateTime, user'S app ID, filename of zip, zip content) -> (true/false)
+     */
+    public boolean requestRestore(View view, String cloudBackupId) {
+        if (!available) {
+            Snackbar.make(view, "Cloud Upload Error: Cloud not available", Snackbar.LENGTH_LONG).show();
+            return false;
+        }
+        String backupMoment = TimeUtils.createMoment();
+        return false;
     }
 
     private RequestQueue getRequestQueue() {

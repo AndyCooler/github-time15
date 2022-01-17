@@ -61,13 +61,15 @@ public class MainSettingsListener implements SharedPreferences.OnSharedPreferenc
         }
 
         if ("settings_cloud_backup_id".equals(key)) {
-            Preference pref = fragment.getPreferenceScreen().findPreference("settings_cloud_backup_id");
-
             CloudBackup cloudBackup = ((SettingsActivity) fragment.getActivity()).getCloudBackup();
+            String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+            cloudBackup.requestRestore(fragment.getView(), cloudBackupId);
             //TODO cloudBackup.holeNeuestenStand(ID);
             //TODO ExternalCsvFileStorage.saveWholeMonth()
             //TODO ConfigStorage.initFromConfig..
-            fragment.onResume();
+
+
+            //fragment.onResume();
         }
     }
 }
