@@ -81,6 +81,12 @@ public class SettingsActivity extends AppCompatActivity {
             cloudBackup.requestAvailability(this, findViewById(R.id.settingsFrame), cloudBackupId);
         }
 
+        if (id == R.id.action_check_cloud_restore) {
+            SharedPreferences sharedPreferences = settingsFragment.getPreferenceManager().getSharedPreferences();
+            String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+            cloudBackup.requestRestore(this, findViewById(R.id.settingsFrame), cloudBackupId);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

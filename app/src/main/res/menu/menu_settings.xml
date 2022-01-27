@@ -5,6 +5,14 @@
 
 
     <item
+        android:id="@+id/action_check_cloud_restore"
+        android:orderInCategory="300"
+        android:title="@string/menu_cloud_restore"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_rotate"></item>
+
+
+    <item
         android:id="@+id/action_check_cloud_available"
         android:orderInCategory="300"
         android:title="@string/menu_cloud"

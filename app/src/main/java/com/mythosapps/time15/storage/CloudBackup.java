@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,7 +27,7 @@ import com.mythosapps.time15.util.ZipUtils;
  * This can take place on demand (as with email backup) or automatically based on an interval.
  * TODO I plan automatic because it doesnt' disrupt the user experience, in the same way that email
  * backup does. This can be configured in in the settings dialog.
- * TODO See StorageFacade: Use scoped-storage instead of file system storage. Together with cloud
+ * Using scoped-storage instead of file system storage. Together with cloud
  * backup, this makes for a good backup mechanism as data remains local (and within app scope),
  * but pushed to the cloud frequently.
  */
@@ -151,15 +153,67 @@ public class CloudBackup {
     }
 
     /**
-     * Store zip file in Cloud. Touch a file that shows date "last-updated". Save dateTime and result in memberVar. POST: (dateTime, user'S app ID, filename of zip, zip content) -> (true/false)
+     * Restore zip file from Cloud. POST: (user'S app ID) -> (zip content)
      */
-    public boolean requestRestore(View view, String cloudBackupId) {
+    public boolean requestRestore(FragmentActivity activity, View view, String cloudBackupId) {
+        this.activity = activity;
         if (!available) {
             Snackbar.make(view, "Cloud Upload Error: Cloud not available", Snackbar.LENGTH_LONG).show();
             return false;
         }
-        String backupMoment = TimeUtils.createMoment();
-        return false;
+        String url = BASE_URL + OP_CLOUD_AVAILABLE + cloudBackupId;
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        if (null != response) {
+                            try {
+                                if (view != null) {
+                                    // Zeige den Timestamp des letzten Cloud Backup an und frage ob dieser Stand wiederherzustellen ist
+                                    //Snackbar.make(view, "Cloud Restore: " + response, Snackbar.LENGTH_LONG).show();
+                                    String url = response;
+                                    //String filename = url.substring(url.lastIndexOf("/"));
+
+                                    // TODO restore
+                                    Snackbar snackbar = Snackbar.make(view, "Folgenden Stand aus Cloud wiederherstellen? " + url,
+                                            Snackbar.LENGTH_LONG).setAction("OK", v -> {
+                                        //TODO cloudBackup.holeNeuestenStand(ID);
+                                        //TODO ExternalCsvFileStorage.saveWholeMonth()
+                                        //TODO ConfigStorage.initFromConfig..
+                                        Snackbar.make(view, "woow", Snackbar.LENGTH_LONG).show();
+                                    });
+                                    snackbar.show();
+
+
+                                }
+                                available = true;
+                            } catch (Exception e) {
+                                if (view != null) {
+                                    Snackbar.make(view, "Cloud Restore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                }
+                                available = false;
+                            }
+                        } else {
+                            if (view != null) {
+                                Snackbar.make(view, "Cloud Restore: none.", Snackbar.LENGTH_LONG).show();
+                            }
+                            available = false;
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (view != null) {
+                    Snackbar.make(view, "Cloud Backup: VE: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                }
+                available = false;
+            }
+        });
+        request.addMarker(REQUEST_TAG);
+        getRequestQueue().add(request);
+
+        return true;
     }
 
     private RequestQueue getRequestQueue() {

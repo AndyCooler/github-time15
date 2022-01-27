@@ -8,7 +8,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.mythosapps.time15.storage.CloudBackup;
 
 import java.util.concurrent.TimeUnit;
 
@@ -61,15 +60,10 @@ public class MainSettingsListener implements SharedPreferences.OnSharedPreferenc
         }
 
         if ("settings_cloud_backup_id".equals(key)) {
-            CloudBackup cloudBackup = ((SettingsActivity) fragment.getActivity()).getCloudBackup();
-            String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
-            cloudBackup.requestRestore(fragment.getView(), cloudBackupId);
-            //TODO cloudBackup.holeNeuestenStand(ID);
-            //TODO ExternalCsvFileStorage.saveWholeMonth()
-            //TODO ConfigStorage.initFromConfig..
-
-
-            //fragment.onResume();
+            //CloudBackup cloudBackup = ((SettingsActivity) fragment.getActivity()).getCloudBackup();
+            //String cloudBackupId = sharedPreferences.getString("settings_cloud_backup_id", "none");
+            // --> siehe action in Settings Menu
+            fragment.onResume();
         }
     }
 }
