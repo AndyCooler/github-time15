@@ -3,6 +3,7 @@ package com.mythosapps.time15.util;
 import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -11,12 +12,15 @@ import com.mythosapps.time15.storage.FileStorage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
@@ -69,5 +73,42 @@ public class ZipUtils {
         tempFile.delete();
 
         return result;
+    }
+
+    public static void restoreFromBytes(byte[] zipBytes, Activity activity) {
+        File storageDir = FileStorage.getStorageDir(activity);
+
+        int numEntries = 0;
+        int numExists = 0;
+        ZipEntry next = null;
+        try (ZipInputStream in = new ZipInputStream(new ByteArrayInputStream(zipBytes))) {
+            next = in.getNextEntry();
+            while (next != null) {
+                String filename = next.getName();
+                File file = new File(storageDir, filename);
+                if (file.exists()) {
+                    numExists++;
+                } else {
+                    byte data[] = new byte[BUFFER];
+                    int count;
+                    try (FileOutputStream fo = new FileOutputStream(file)) {
+                        while ((count = in.read(data)) != -1) {
+                            fo.write(data, 0, count);
+                        }
+                    }
+                    in.closeEntry();
+                }
+
+                numEntries++;
+                next = in.getNextEntry();
+//                if (numEntries > 3) {
+//                    break; // TODO remove!!!!!
+//                }
+            }
+            Toast.makeText(activity.getApplicationContext(), "Found " + numEntries + " # total, " + numExists + " #exists", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity.getApplicationContext(), "Found " + storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

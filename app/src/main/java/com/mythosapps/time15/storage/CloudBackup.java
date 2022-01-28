@@ -37,6 +37,8 @@ public class CloudBackup {
 
     private static final String BASE_URL = "https://mythosapps.com/time15app";
 
+    private static final String CLOUD_FILE_URL = "https://mythosapps.com/time15app/cloud/";
+
     private static final String OP_CLOUD_AVAILABLE = "/hello/";
 
     private static final String OP_CLOUD_STORE = "/store";
@@ -161,7 +163,7 @@ public class CloudBackup {
             Snackbar.make(view, "Cloud Upload Error: Cloud not available", Snackbar.LENGTH_LONG).show();
             return false;
         }
-        String url = BASE_URL + OP_CLOUD_AVAILABLE + cloudBackupId;
+        final String url = BASE_URL + OP_CLOUD_AVAILABLE + cloudBackupId;
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -174,17 +176,18 @@ public class CloudBackup {
                                     String url = response;
                                     //String filename = url.substring(url.lastIndexOf("/"));
 
-                                    // TODO restore
                                     Snackbar snackbar = Snackbar.make(view, "Folgenden Stand aus Cloud wiederherstellen? " + url,
                                             Snackbar.LENGTH_LONG).setAction("OK", v -> {
-                                        //TODO cloudBackup.holeNeuestenStand(ID);
-                                        //TODO ExternalCsvFileStorage.saveWholeMonth()
-                                        //TODO ConfigStorage.initFromConfig..
-                                        Snackbar.make(view, "woow", Snackbar.LENGTH_LONG).show();
+                                        try {
+                                            String retrievingFrom = CLOUD_FILE_URL + cloudBackupId + "/latest.zip";
+                                            new CloudDownload(activity, view).execute(retrievingFrom);
+
+                                        } catch (Exception de) {
+                                            Snackbar.make(view, "Fehlgeschlagen: " + de.getMessage(), Snackbar.LENGTH_LONG).show();
+                                            de.printStackTrace();
+                                        }
                                     });
                                     snackbar.show();
-
-
                                 }
                                 available = true;
                             } catch (Exception e) {
