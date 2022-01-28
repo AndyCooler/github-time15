@@ -3,7 +3,6 @@ package com.mythosapps.time15.util;
 import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -75,11 +74,11 @@ public class ZipUtils {
         return result;
     }
 
-    public static void restoreFromBytes(byte[] zipBytes, Activity activity) {
+    public static String restoreFromBytes(byte[] zipBytes, Activity activity) {
         File storageDir = FileStorage.getStorageDir(activity);
 
-        int numEntries = 0;
-        int numExists = 0;
+        int numRestored = 0;
+        int numSkipped = 0;
         ZipEntry next = null;
         try (ZipInputStream in = new ZipInputStream(new ByteArrayInputStream(zipBytes))) {
             next = in.getNextEntry();
@@ -87,7 +86,7 @@ public class ZipUtils {
                 String filename = next.getName();
                 File file = new File(storageDir, filename);
                 if (file.exists()) {
-                    numExists++;
+                    numSkipped++;
                 } else {
                     byte data[] = new byte[BUFFER];
                     int count;
@@ -97,18 +96,16 @@ public class ZipUtils {
                         }
                     }
                     in.closeEntry();
+                    numRestored++;
                 }
-
-                numEntries++;
                 next = in.getNextEntry();
-//                if (numEntries > 3) {
-//                    break; // TODO remove!!!!!
-//                }
             }
-            Toast.makeText(activity.getApplicationContext(), "Found " + numEntries + " # total, " + numExists + " #exists", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity.getApplicationContext(), "Found " + numEntries + " # total, " + numExists + " #exists", Toast.LENGTH_SHORT).show();
             //Toast.makeText(activity.getApplicationContext(), "Found " + storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            return "Erfolg! Monate " + numRestored + " / " + numSkipped + " (restored / skipped)";
         } catch (IOException e) {
             e.printStackTrace();
+            return " Error: " + e.getMessage();
         }
     }
 }

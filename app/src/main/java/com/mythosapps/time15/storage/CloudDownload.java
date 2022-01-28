@@ -120,8 +120,8 @@ public class CloudDownload extends AsyncTask<String, String, String> {
             return;
         }
 
-        ZipUtils.restoreFromBytes(zipBytes, activity);
-        Snackbar.make(view, "Restore success! " + zipBytes.length, Snackbar.LENGTH_LONG).show();
-        //TODO ConfigStorage.initFromConfig..
+        String restoreResult = ZipUtils.restoreFromBytes(zipBytes, activity);
+        Snackbar.make(view, "Restore success! " + restoreResult, Snackbar.LENGTH_LONG).show();
+        //TODO ConfigStorage.initFromConfig.. as config is overwritten by restore!
     }
 }
