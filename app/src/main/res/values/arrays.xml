@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="balanceArrayDisplay">
+        <item>Arbeit Gesamt/Tag</item>
+        <item>Durchschnitt Arbeit/Monat</item>
+        <item>Durchschnitt Soll/Monat</item>
+    </string-array>
+    <string-array name="balanceArrayValues">
+        <item>TOTAL_WORK</item>
+        <item>AVERAGE_WORK</item>
+        <item>BALANCE</item>
+    </string-array>
+</resources>

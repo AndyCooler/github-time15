@@ -47,4 +47,14 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Info unter der Stundenzahl">
+        <androidx.preference.ListPreference
+            android:defaultValue="TOTAL_WORK"
+            android:entries="@array/balanceArrayDisplay"
+            android:entryValues="@array/balanceArrayValues"
+            android:key="settings_balance_type"
+            android:enabled="true"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

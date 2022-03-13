@@ -213,31 +213,44 @@ public class ExternalCsvFileStorage extends FileStorage implements StorageFacade
         String monthYear = TimeUtils.getMonthYearOfID(id);
 
         loadDaysDataNew(activity, id); // update cache to month in id
+        int balance = 0;
         if (monthYear.equals(currentMonthYear)) {
-            if (balanceType == BalanceType.BALANCE) {
-                int balance = 0;
-                for (DaysDataNew data : currentMonthsData.values()) {
-                    if (data != null) {
-                        balance += data.getBalance();
-                    }
-                }
-                return balance;
-            } else if (balanceType == BalanceType.AVERAGE_WORK) {
-                int sumWork = 0;
-                int numDays = 0;
-                for (DaysDataNew data : currentMonthsData.values()) {
-                    if (data != null) {
-                        Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
-                        if (sumDay.toMinutes() > 0 && !TimeUtils.isWeekend(data.getId())) {
-                            numDays++;
+            switch (balanceType) {
+                case BALANCE: {
+                    for (DaysDataNew data : currentMonthsData.values()) {
+                        if (data != null) {
+                            balance += data.getBalance();
                         }
-                        sumWork += sumDay.toMinutes();
                     }
+                    break;
                 }
-                return numDays > 0 ? (sumWork / numDays) : 0;
+                case AVERAGE_WORK: {
+                    int sumWork = 0;
+                    int numDays = 0;
+                    for (DaysDataNew data : currentMonthsData.values()) {
+                        if (data != null) {
+                            Time15 sumDay = data.getTotalFor(KindOfDay.WORKDAY);
+                            if (sumDay.toMinutes() > 0 && !TimeUtils.isWeekend(data.getId())) {
+                                numDays++;
+                            }
+                            sumWork += sumDay.toMinutes();
+                        }
+                    }
+                    balance = numDays > 0 ? (sumWork / numDays) : 0;
+                    break;
+                }
+                case TOTAL_WORK: {
+                    DaysDataNew data = currentMonthsData.get(id);
+                    if (data != null) {
+                        balance = data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
+                    } else {
+                        balance = 0;
+                    }
+                    break;
+                }
             }
         }
-        return 0; // should be unreachable, balance is relevant in current month
+        return balance;
     }
 
     public static String getFilename(String id) {

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private CloudBackup cloudBackup;
 
     // Balance Type
-    public static final BalanceType BALANCE_TYPE = BalanceType.AVERAGE_WORK;
+    public BalanceType balanceType = BalanceType.TOTAL_WORK;
     // U+00F8
     private static final int AV_CHAR = 0x00F8;
     public static final String AVERAGE_SIGN = Character.toString((char) AV_CHAR);
@@ -289,16 +289,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             intentsId = id == null ? TimeUtils.createID() : id;
         }
         isPaused = false;
+        String balanceTypeSetting = sharedPreferences.getString("settings_balance_type", "TOTAL_WORK");
+        balanceType = BalanceType.valueOf(balanceTypeSetting);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             switchToID(null, intentsId);
-            updateBalance();
         } else {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                balanceValue = storage.loadBalance(this, intentsId, BALANCE_TYPE);
+                balanceValue = storage.loadBalance(this, intentsId, balanceType);
                 switchToID(null, intentsId);
-                updateBalance();
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -565,13 +565,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void updateBalance() {
         TextView balance = (TextView) findViewById(R.id.balance);
 
-        if (BALANCE_TYPE == BalanceType.AVERAGE_WORK) {
-            String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
-            balance.setText("(" + AVERAGE_SIGN + " " + balanceText + ")");
-        } else {
-            String balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplay();
-            balance.setText("(" + balanceText + ")");
+        String balanceText = "";
+        switch (balanceType) {
+            case AVERAGE_WORK: {
+                balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
+                balanceText = "(" + AVERAGE_SIGN + " " + balanceText + ")";
+                break;
+            }
+            case BALANCE: {
+                balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplay();
+                balanceText = "(" + balanceText + ")";
+                break;
+            }
+            case TOTAL_WORK: {
+                if (modifiableData != null && modifiableData.getNumberOfTasks() > 1) {
+                    balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplay();
+                    balanceText = "(" + getString(R.string.display_sum) + " " + balanceText + ")";
+                }
+                break;
+            }
+            default: {
+                break;
+            }
         }
+        balance.setText(balanceText);
     }
 
 
@@ -596,10 +613,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         taskNo = 0;
         resetView();
-        if (fromId != null && !TimeUtils.isSameMonth(fromId, id)) {
-            balanceValue = storage.loadBalance(this, id, BALANCE_TYPE);
-            updateBalance();
-        }
+        balanceValue = storage.loadBalance(this, id, balanceType);
+        updateBalance();
         isCreateComplete = true;
         modelToView();
 
@@ -968,7 +983,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             } else {
                 totalNewColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
             }
-            balanceValue = storage.loadBalance(this, id, BALANCE_TYPE);
+            balanceValue = storage.loadBalance(this, id, balanceType);
         } else {
             totalNewColor = ColorsUI.DARK_GREY_SAVE_ERROR;
         }

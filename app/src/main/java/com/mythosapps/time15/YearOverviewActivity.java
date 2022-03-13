@@ -1,6 +1,10 @@
 package com.mythosapps.time15;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
@@ -32,10 +37,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.mythosapps.time15.MainActivity.BALANCE_TYPE;
 
 /**
  * This activity lets the user see the sum of hours spent on tasks each month.
@@ -53,6 +54,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     private Random random = new Random();
     static final KindOfDay INITIAL_TASK = KindOfDay.WORKDAY;
     private KindOfDay selectedTask = KindOfDay.WORKDAY;
+    private SharedPreferences sharedPreferences;
+    private BalanceType balanceType;
 
     private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_FLOW = new TableRow.LayoutParams(WRAP_CONTENT, MATCH_PARENT);
 
@@ -62,6 +65,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         setContentView(R.layout.activity_year_overview);
 
         storage = StorageFactory.getDataStorage();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarYear);
         setSupportActionBar(toolbar);
@@ -71,10 +75,8 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         String type = intent.getType();
 
         id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
         selectedTask = INITIAL_TASK;
     }
-
 
     @Override
     protected void onResume() {
@@ -86,6 +88,11 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
     private void initialize() {
         setTitle(getString(R.string.year_overview_title) + " " + TimeUtils.getYearDisplayString(id));
+        String balanceTypeSetting = sharedPreferences.getString("settings_balance_type", "TOTAL_WORK");
+        balanceType = BalanceType.valueOf(balanceTypeSetting);
+        if (balanceType == BalanceType.TOTAL_WORK) {
+            balanceType = BalanceType.AVERAGE_WORK; // ansonsten ist es 0 wir wollen in der Jahresansicht in jedem Fall einen Durchschnitt
+        }
 
         Spinner yearTaskSpinner = (Spinner) findViewById(R.id.yearTaskSpinner);
         yearTaskSpinner.setOnItemSelectedListener(this);
@@ -145,11 +152,9 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
             int balanceValue = 0; // in minutes
             String balanceText = "";
             if (KindOfDay.WORKDAY.equals(selectedTask)) {
-                balanceValue = storage.loadBalance(this, idFirstOfMonth, BALANCE_TYPE);
-                if (BALANCE_TYPE == BalanceType.AVERAGE_WORK) {
-                    balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
-                    balanceText = MainActivity.AVERAGE_SIGN + " " + balanceText;
-                }
+                balanceValue = storage.loadBalance(this, idFirstOfMonth, balanceType);
+                balanceText = Time15.fromMinutes(balanceValue).toDecimalForDisplayOfAverage();
+                balanceText = MainActivity.AVERAGE_SIGN + " " + balanceText;
             }
             Time15 time15 = Time15.fromMinutes(sumInMinutes);
             String hoursPerMonth = time15.toDecimalFormat();

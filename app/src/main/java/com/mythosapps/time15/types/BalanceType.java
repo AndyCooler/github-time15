@@ -18,5 +18,10 @@ public enum BalanceType {
      * It's like BALANCE, but shows you not the deviation from the 8 hours day, but instead the
      * hours achived on work days on average.
      */
-    AVERAGE_WORK;
+    AVERAGE_WORK,
+
+    /**
+     * No balance, just sum of task 'work' of that day.
+     */
+    TOTAL_WORK;
 }

@@ -1,5 +1,8 @@
 package com.mythosapps.time15;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,9 +42,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * This activity lets the user see on how many days they were working in a month, and what kind of
@@ -439,8 +439,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
         taskUI.show();
 
     }
-
-    // TODO Idee: anzeigen welche KW es ist in MonthOverview
 
     private void saveMultiDayVacation(String von, String bis) {
 
