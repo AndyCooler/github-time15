@@ -1,6 +1,7 @@
 package com.mythosapps.time15;
 
 import static com.mythosapps.time15.storage.FileStorage.STORAGE_DIR;
+import static com.mythosapps.time15.types.KindOfDay.DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -293,12 +294,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         balanceType = BalanceType.valueOf(balanceTypeSetting);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            switchToID(null, intentsId);
+            switchToID(null, intentsId, null);
         } else {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 balanceValue = storage.loadBalance(this, intentsId, balanceType);
-                switchToID(null, intentsId);
+                switchToID(null, intentsId, null);
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -466,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // reinitialize day with id this.id
         isUnLockButtonPressed = true;
-        switchToID(null, this.id);
+        switchToID(null, this.id, taskNo);
         isUnLockButtonPressed = false;
     }
 
@@ -592,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-    private void switchToID(String fromId, String toId) {
+    private void switchToID(String fromId, String toId, Integer taskNumber) {
         id = toId;
         setTitle(TimeUtils.getMainTitleString(id));
         isEditable = TimeUtils.isOkayToEdit(id) || isUnLockButtonPressed;
@@ -611,29 +612,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             task0.setKindOfDay(KindOfDay.WORKDAY);
             modifiableData.addTask(task0);
         }
-        taskNo = 0;
+        if (taskNumber != null) {
+            taskNo = taskNumber;
+        } else {
+            taskNo = 0;
+        }
         resetView();
         balanceValue = storage.loadBalance(this, id, balanceType);
         updateBalance();
-        isCreateComplete = true;
         modelToView();
+        isCreateComplete = true;
 
         timer.schedule(new UpdateCloudMenuItemTask(), TIMER_DELAY);
     }
 
     public void dateForwards() {
         saveKindOfDay();
-        switchToID(id, TimeUtils.dateForwards(id));
+        switchToID(id, TimeUtils.dateForwards(id), null);
     }
 
     public void dateBackwards() {
         saveKindOfDay();
-        switchToID(id, TimeUtils.dateBackwards(id));
+        switchToID(id, TimeUtils.dateBackwards(id), null);
     }
 
     public void dateToday() {
         saveKindOfDay();
-        switchToID(id, TimeUtils.createID());
+        switchToID(id, TimeUtils.createID(), null);
     }
 
     // ensures that begin hour is visible
@@ -683,8 +688,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             endeTime = null;
             ende15 = null;
             pauseTime = null;
-            numberTaskHours = KindOfDay.DEFAULT_DUE_TIME_PER_DAY_IN_HOURS;
-            numberTaskMinutes = 0;
         }
         viewToModel();
         resetView();
@@ -803,7 +806,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 taskNo = 1;
                 BeginEndTask task1 = new BeginEndTask();
                 task1.setKindOfDay(KindOfDay.VACATION); // TODO Default Task
-                task1.setTotal(Time15.fromMinutes(0));
+                task1.setTotal(Time15.fromMinutes(DEFAULT_DUE_TIME_PER_DAY_IN_MINUTES));
                 modifiableData.addTask(task1);
                 resetView();
                 modelToView();
@@ -992,7 +995,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         aktualisiereKindOfDay(totalNewColor);
         originalData = modifiableData;
         modifiableData = DaysDataNew.copy(originalData);
-        modelToView(); // can: shouldn't be necessary
+        //modelToView(); // can: shouldn't be necessary
         updateBalance();
     }
 
@@ -1054,7 +1057,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void modelToView() {
         if (modifiableData.getTask(taskNo) == null) {
-            setBeginEndSelectionActivated(true);
+            setBeginEndSelectionActivated(true); // seems like the right place to initialize kindOfDay for task with taskNo here
             return;
         }
         BeginEndTask task = modifiableData.getTask(taskNo);
