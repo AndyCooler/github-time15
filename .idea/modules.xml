@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/github-time15.iml" filepath="$PROJECT_DIR$/github-time15.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/github-time15.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/github-time15.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/github-time15.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/github-time15.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/github-time15.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/github-time15.app.unitTest.iml" />
     </modules>
   </component>
 </project>
