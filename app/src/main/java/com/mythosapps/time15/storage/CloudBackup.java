@@ -18,15 +18,20 @@ import com.mythosapps.time15.R;
 import com.mythosapps.time15.util.TimeUtils;
 import com.mythosapps.time15.util.ZipUtils;
 
+import java.time.LocalDate;
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Cloud backup is a class that offers a backup on a remote server, i.e. in the cloud.
  * It is different from StorageFacade in that it doesn't save every small input the user makes
  * in a store. It is exactly the same functionality as email backup. What means backup? Backup means
  * all data is exported to outside the app, so that the user knows all their data is backed up
  * and they don't need to worry about losing it.
+ * Cloud backup must be activated first in settings using settings_cloud_backup. Then a
+ * settings_cloud_backup_id is generated automatically when the app launches again.
  * This can take place on demand (as with email backup) or automatically based on an interval.
- * TODO I plan automatic because it doesnt' disrupt the user experience, in the same way that email
- * backup does. This can be configured in in the settings dialog.
+ * This can be configured in in the settings dialog using settings_cloud_backup_frequency.
  * Using scoped-storage instead of file system storage. Together with cloud
  * backup, this makes for a good backup mechanism as data remains local (and within app scope),
  * but pushed to the cloud frequently.
@@ -43,15 +48,36 @@ public class CloudBackup {
 
     private static final String OP_CLOUD_STORE = "/store";
 
+    private static final long TIMER_DELAY = 500;
+
+    /**
+     * From settings.
+     */
+    private final Boolean activated;
+    /**
+     * From settings.
+     */
+    private final Integer backupFrequency;
+
     private RequestQueue requestQueue;
 
     private Activity activity;
 
+    private Timer timer = new java.util.Timer();
+
     // null (never requested or request pending), true (available), false (unavailable)
     private static Boolean available;
 
+    // null (never requested or request pending or unavailable), date of last backup (available)
+    private static LocalDate lastBackupDate;
+
     // null (never requested, request pending or failed to send request), true (response reported success), false (response reported failure)
     public static Boolean backupSuccess;
+
+    public CloudBackup(Boolean activated, Integer backupFrequency) {
+        this.activated = activated;
+        this.backupFrequency = backupFrequency;
+    }
 
     public Boolean isAvailable() {
         return available;
@@ -84,7 +110,23 @@ public class CloudBackup {
                                 if (view != null) {
                                     Snackbar.make(view, "Cloud Backup: " + response, Snackbar.LENGTH_LONG).show();
                                 }
-                                available = true;
+                                if (response.startsWith("Stand: ")) {
+                                    available = true;
+                                    LocalDate now = LocalDate.now();
+                                    lastBackupDate = LocalDate.parse(response.substring(7, 17));
+                                    if (backupFrequency != null && backupFrequency > 0 && lastBackupDate.plusDays(backupFrequency).isBefore(now)) {
+                                        timer.schedule(new CloudBackup.RequestBackupAsyncTask(cloudId), TIMER_DELAY);
+                                    }
+                                } else if (response.startsWith("Backup noch nicht erstellt")) {
+                                    available = true;
+                                    lastBackupDate = LocalDate.now();
+                                    if (backupFrequency != null && backupFrequency > 0) {
+                                        timer.schedule(new CloudBackup.RequestBackupAsyncTask(cloudId), TIMER_DELAY);
+                                    }
+                                } else {
+                                    available = false;
+                                    lastBackupDate = null;
+                                }
                             } catch (Exception e) {
                                 if (view != null) {
                                     Snackbar.make(view, "Cloud Backup: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
@@ -225,5 +267,19 @@ public class CloudBackup {
             requestQueue = Volley.newRequestQueue(activity);
         }
         return requestQueue;
+    }
+
+    class RequestBackupAsyncTask extends TimerTask {
+
+        private String requestCloudId;
+
+        public RequestBackupAsyncTask(String requestCloudId) {
+            this.requestCloudId = requestCloudId;
+        }
+
+        @Override
+        public void run() {
+            CloudBackup.this.requestBackup(null, requestCloudId);
+        }
     }
 }

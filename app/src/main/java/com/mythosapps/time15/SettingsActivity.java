@@ -34,7 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         //settingsFragment. ...
         getSupportFragmentManager().beginTransaction().add(R.id.settingsFrame, settingsFragment).commit();
 
-        cloudBackup = new CloudBackup();
+        cloudBackup = new CloudBackup(null, null);
     }
 
     @Override

@@ -211,7 +211,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             editor.commit();
         }
 
-        cloudBackup = new CloudBackup();
+        cloudBackup = new CloudBackup(sharedPreferences.getBoolean("settings_cloud_backup", false),
+                sharedPreferences.getInt("settings_cloud_backup_frequency", 0));
         cloudBackup.requestAvailability(this, null, cloudBackupId);
         // can: use ProGuard to obfuscate the code
     }

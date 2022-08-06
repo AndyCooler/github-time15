@@ -33,6 +33,14 @@
             android:title="Cloud Backup einschalten"
             app:useSimpleSummaryProvider="true" />
 
+        <androidx.preference.SeekBarPreference
+            android:key="settings_cloud_backup_frequency"
+            android:title="Automat. Backup alle N Tage (0 = kein)"
+            android:defaultValue="0"
+            android:max="60"
+            app:showSeekBarValue="true"
+            app:min="0" />
+
         <androidx.preference.EditTextPreference
             android:key="settings_cloud_backup_id"
             android:title="Cloud Backup ID für deine Daten"
