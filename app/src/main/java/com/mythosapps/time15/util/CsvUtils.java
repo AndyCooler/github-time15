@@ -43,13 +43,17 @@ public final class CsvUtils {
                 } else {
                     s.append(new Time15(taskB.getEnd(), taskB.getEnd15()).toDisplayString()).append(",");
                 }
-                if (taskB.getPause() == null) {
-                    s.append(",");
-                } else {
-                    s.append(Time15.fromMinutes(taskB.getPause()).toDisplayString()).append(",");
-                }
+            if (taskB.getPause() == null) {
+                s.append(",");
+            } else {
+                s.append(Time15.fromMinutes(taskB.getPause()).toDisplayString()).append(",");
+            }
             s.append(taskB.getTotal().toDecimalFormat()).append(",");
-            s.append(taskB.getNote() == null ? "" : taskB.getNote()).append(",");
+            String note = taskB.getNote() == null ? "" : taskB.getNote();
+            if (i == 0 && data.getHomeOffice()) {
+                note += "[HO]"; // home office
+            }
+            s.append(note).append(",");
         }
         return s.toString();
     }
@@ -73,6 +77,10 @@ public final class CsvUtils {
                 errMsg = "Spalten B bis G müssen vorhanden sein!";
             }
             BeginEndTask task0 = toBeginEndTask(id, line[1], line[2], line[3], line[4], line[5], line[6]);
+            if (task0.getNote() != null && task0.getNote().endsWith("[HO]")) { // home office
+                data.setHomeOffice(true);
+                task0.setNote(task0.getNote().substring(0, task0.getNote().length() - 4));
+            }
             data.addTask(task0);
 
             if (line.length >= CSV_LINE_LENGTH_B) {

@@ -2,7 +2,6 @@ package com.mythosapps.time15.types;
 
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 /**
  * Created by andreas on 12.03.16.
@@ -14,6 +13,8 @@ public class DaysDataNew {
     public static final int DUE_TOTAL_MINUTES = DUE_HOURS_PER_DAY * 60;
 
     private String id;
+
+    private boolean homeOffice;
 
     private final ArrayList<BeginEndTask> tasks;
 
@@ -36,6 +37,7 @@ public class DaysDataNew {
                 tasks.add(data.getTask(i).copy());
             }
         }
+        setHomeOffice(data.getHomeOffice());
     }
 
     /**
@@ -56,6 +58,14 @@ public class DaysDataNew {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setHomeOffice(boolean homeOffice) {
+        this.homeOffice = homeOffice;
+    }
+
+    public boolean getHomeOffice() {
+        return homeOffice;
     }
 
     public void addTask(BeginEndTask task) {
@@ -130,7 +140,7 @@ public class DaysDataNew {
     public boolean equals(Object o) {
         if (o != null && o instanceof DaysDataNew) {
             DaysDataNew d = (DaysDataNew) o;
-            if (d.id == null || !d.id.equals(id) || d.getNumberOfTasks() != getNumberOfTasks()) {
+            if (d.id == null || !d.id.equals(id) || d.homeOffice != homeOffice || d.getNumberOfTasks() != getNumberOfTasks()) {
                 return false;
             } else {
                 for (int i = 0; i < getNumberOfTasks(); i++) {

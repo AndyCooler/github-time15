@@ -23,8 +23,10 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Integer beginn15 = null; //value
     private Integer ende15 = null; //value
     private String note = null; // value
+    private boolean homeOffice = false; // value
     private String kindOfDay = KindOfDay.WORKDAY.toString();
     private String kindOfDayEdited = null;
     private Integer previousSelectionBeginnTime = null; //viewId
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Integer previousSelectionBeginn15 = null; //viewId
     private Integer previousSelectionEnde15 = null; //viewId
     private String previousSelectionKindOfDays = null;
+    private boolean hasToggledHomeOffice = false;
     private boolean isPaused = false;
     private boolean isCreateComplete = false;
     // here are the maps from value to viewId that enable re-use of 4 TextViews for full range 0-24
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ScrollView scrollViewBegin15;
     private ScrollView scrollViewEnd;
     private ScrollView scrollViewEnd15;
+    private Switch onOffSwitch;
     private SharedPreferences sharedPreferences;
 
     private View.OnClickListener scrollUIListener = new View.OnClickListener() {
@@ -176,6 +181,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setAdapter(dataAdapter);
         int position = dataAdapter.getPosition(kindOfDay);
         spinner.setSelection(position);
+
+        onOffSwitch = (Switch) findViewById(R.id.home_office_switch);
+        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                homeOffice = isChecked;
+                hasToggledHomeOffice = true;
+            }
+        });
 
         //kindOfDayView.setOnClickListener(v -> toggleKindOfDay(v));
 
@@ -380,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
         if (id == R.id.action_month) {
-            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
+            if (isStateChangedByUser()) {
                 save(false);
             }
             startMonthOverviewActivity();
@@ -416,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
         if (id == R.id.action_settings) {
-            if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
+            if (isStateChangedByUser()) {
                 save(false);
             }
             Intent intent = new Intent(this, SettingsActivity.class);
@@ -668,9 +682,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void saveKindOfDay() {
-        if (!previousSelectionKindOfDays.equals(kindOfDay)) { // TODO check is initial state
+        if (isStateChangedByUser()) {
             save(false);
         }
+    }
+
+    private boolean isStateChangedByUser() {
+        return !previousSelectionKindOfDays.equals(kindOfDay) || hasToggledHomeOffice;
     }
 
     public void toggleKindOfDay(View v) {
@@ -994,6 +1012,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
+        onOffSwitch.setEnabled(isEditable);
+        onOffSwitch.setClickable(isEditable);
         originalData = modifiableData;
         modifiableData = DaysDataNew.copy(originalData);
         //modelToView(); // can: shouldn't be necessary
@@ -1037,7 +1057,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
-        System.out.println("viewToModel.note=" + note);
         task0.setNote(note);
         if (task0.getKindOfDay().isBeginEndType()) { // TODO NPE hier schon gesehen, wird aber paar zeilen darüber gesetzt..
             task0.setBegin(beginnTime);
@@ -1053,6 +1072,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             task0.setEnd15(null);
             task0.setPause(null);
             task0.setTotal(new Time15(numberTaskHours == null ? 0 : numberTaskHours, numberTaskMinutes == null ? 0 : numberTaskMinutes));
+        }
+        if (hasToggledHomeOffice) {
+            modifiableData.setHomeOffice(homeOffice);
         }
     }
 
@@ -1106,9 +1128,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (previousSelectionKindOfDays == null) {
             previousSelectionKindOfDays = kindOfDay;
         }
+        homeOffice = modifiableData.getHomeOffice();
         aktualisiereTaskNo();
         aktualisiereTotal(totalNewColor);
         aktualisiereKindOfDay(totalNewColor);
+        onOffSwitch.setChecked(homeOffice);
+        onOffSwitch.setEnabled(isEditable);
+        onOffSwitch.setClickable(isEditable);
+        hasToggledHomeOffice = false;
     }
 
     private void resetView() {
@@ -1126,6 +1153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         pauseTime = null;
         kindOfDay = KindOfDay.WORKDAY.toString(); // TODO Default kind of day
         note = null;
+        homeOffice = false;
         aktualisiereKindOfDay(ColorsUI.DARK_BLUE_DEFAULT);
         aktualisiereTotal(ColorsUI.DARK_BLUE_DEFAULT);
         previousSelectionPauseTime = null;
@@ -1138,6 +1166,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         numberTaskMinutes = null;
         setTransparent(R.id.total);
         setTransparent(R.id.total15);
+        onOffSwitch.setChecked(false);
+        onOffSwitch.setEnabled(isEditable);
+        onOffSwitch.setClickable(isEditable);
+        hasToggledHomeOffice = false;
     }
 
     private void setTransparent(Integer viewId) {
