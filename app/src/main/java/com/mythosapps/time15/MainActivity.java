@@ -837,6 +837,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void switchTasks(View v) {
         if (modifiableData.getNumberOfTasks() == 2) {
+            saveKindOfDay();
             resetView();
             taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
             modelToView();

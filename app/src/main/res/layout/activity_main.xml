@@ -18,30 +18,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="0dp"
         android:orientation="vertical">
         <!--
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/note"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:gravity="left"
-                android:text="Note"
+                    <EditText
+                        android:id="@+id/note"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:gravity="left"
+                        android:text="Note"
 
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        </LinearLayout>
--->
+                </LinearLayout>
+        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,6 +149,7 @@
             android:id="@+id/pauseLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/title"
             android:orientation="horizontal">
 
             <TextView
@@ -156,7 +157,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:background="@drawable/title"
                 android:gravity="center_horizontal"
                 android:text="@string/main_pause"
                 android:textAppearance="?android:attr/textAppearanceLarge"
@@ -170,6 +170,24 @@
                             android:layout_weight="1"
                             android:gravity="center_horizontal" />
                             -->
+
+            <TextView
+                android:id="@+id/switchText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\@Home"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#1E90FF"
+                android:layout_marginRight="10dp" />
+
+            <Switch
+                android:id="@+id/home_office_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:buttonTint="@color/common_google_signin_btn_text_light_default" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -225,30 +243,30 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="48sp" />
             <!--
-            <TextView
-                android:id="@+id/pauseE"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="verarbeiteKlick"
-                android:text="60"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
+                        <TextView
+                            android:id="@+id/pauseE"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:onClick="verarbeiteKlick"
+                            android:text="60"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/pauseF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="verarbeiteKlick"
-                android:text="75"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="30sp" />
--->
+                        <TextView
+                            android:id="@+id/pauseF"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:onClick="verarbeiteKlick"
+                            android:text="75"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="30sp" />
+            -->
         </LinearLayout>
 
         <LinearLayout
@@ -263,19 +281,19 @@
                 android:gravity="bottom|center_horizontal"
                 android:orientation="horizontal">
                 <!--
-                <Space
-                    android:id="@+id/spacer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="fill_vertical"
-                    android:minHeight="10dp"
-                    android:visibility="visible" />
--->
+                                <Space
+                                    android:id="@+id/spacer"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="fill_vertical"
+                                    android:minHeight="10dp"
+                                    android:visibility="visible" />
+                -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
+                    android:layout_marginRight="100dp"
+                    android:layout_marginLeft="100dp"
                     android:layout_weight=".28"
                     android:background="@drawable/spinner_border"
                     android:orientation="horizontal">
@@ -286,9 +304,9 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
                         android:background="@android:color/transparent"
                         android:gravity="center"
+                        android:layout_marginLeft="5dp"
                         android:spinnerMode="dropdown" />
 
                     <ImageView
@@ -300,21 +318,6 @@
                         android:src="@drawable/ic_drop" />
 
                 </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/switchText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="\@Home"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#1E90FF"
-                    android:layout_marginRight="10dp" />
-
-                <Switch
-                    android:id="@+id/home_office_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@color/common_google_signin_btn_text_light_default" />
 
                 <!--
                                 <Space
@@ -362,8 +365,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="fill_horizontal"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="fill_horizontal">
 
                     <TextView
                         android:id="@+id/total"
@@ -374,11 +377,10 @@
                         android:gravity="right"
                         android:onClick="toggleTotal"
                         android:text="0"
-                        android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#1E90FF"
+                        android:textAlignment="gravity"
                         android:textSize="48sp" />
-
                     <TextView
                         android:id="@+id/total15"
                         android:layout_width="match_parent"
@@ -388,9 +390,9 @@
                         android:gravity="left"
                         android:onClick="toggleTotal15"
                         android:text=".0"
-                        android:textAlignment="gravity"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#1E90FF"
+                        android:textAlignment="gravity"
                         android:textSize="48sp" />
                 </LinearLayout>
 
@@ -405,9 +407,9 @@
 
                 <Button
                     android:id="@+id/addTaskButton"
+                    android:background="@drawable/roundbutton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:background="@drawable/roundbutton"
                     android:clickable="true"
                     android:onClick="addTask"
                     android:text="+" />
