@@ -169,8 +169,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
         TableLayout table = (TableLayout) findViewById(R.id.tableView);
         table.removeAllViews();
-        //table.setColumnShrinkable(7, true);
-        //table.setColumnStretchable(7, true);
         // use onPostCreate to measure created views and do some more tweaking.. :)
 
         table.setColumnShrinkable(0, true);
@@ -181,8 +179,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
             table.setColumnStretchable(2, true);
         }
 
-
-        //table.setStretchAllColumns(true);
         TableRow row = null;
         TableRow.LayoutParams lp = new TableRow.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 1.0f);
 
@@ -191,6 +187,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         Set<KindOfDay> tasksThisMonth = new HashSet<>();
         TextView lastSumOfWeekView = null;
         int sumWeek = 0;
+        int sumHomeOfficeDays = 0;
 
         for (final String dayId : listOfIds) {
             DaysDataNew data = storage.loadDaysDataNew(this, dayId);
@@ -221,6 +218,9 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     table.addView(row);
                 }
             } else {
+                if (data.getHomeOffice()) {
+                    sumHomeOfficeDays++;
+                }
                 if (TimeUtils.isMonday(dayId)) {
                     updateSumWeek(lastSumOfWeekView, sumWeek);
 
@@ -249,11 +249,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     }
                 }
 
-                row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), ColorsUI.DARK_BLUE_DEFAULT));
+                row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), data.getHomeOffice() ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT));
                 row.addView(createTextViewInFlow(dayId.substring(0, 2), ColorsUI.DARK_BLUE_DEFAULT));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 String kindOf = task0.getKindOfDay().getDisplayString();
-                row.addView(createTextViewMaxWidth(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (task0.getNote() == null ? kindOf : task0.getNote()) : kindOf, itemColor));
+                boolean isNoteEmpty = task0.getNote() == null || "".equals(task0.getNote());
+                row.addView(createTextViewMaxWidth(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (isNoteEmpty ? kindOf : task0.getNote()) : kindOf, itemColor));
                 row.addView(createTextViewInFlow(hours, itemColor));
 
                 if (showSecondTask) {
@@ -307,6 +308,15 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 table.addView(row);
             }
         }
+        int rowColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
+        row = new TableRow(this);
+        row.setLayoutParams(lp);
+        row.addView(createTextViewInFlow("", rowColor));
+        row.addView(createTextViewInFlow(getString(R.string.display_sum), rowColor));
+        row.addView(createTextViewInFlow("Home Office Tage", rowColor));
+        row.addView(createTextViewInFlow("" + sumHomeOfficeDays, rowColor));
+        row.addView(createTextViewInFlow("", rowColor));
+        table.addView(row);
 
     }
 
