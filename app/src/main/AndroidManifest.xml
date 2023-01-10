@@ -24,7 +24,8 @@
         <activity
             android:name=".MonthOverviewActivity"
             android:label="Time15 Month Overview"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mythosapps.time15.MainActivity" />
@@ -32,7 +33,8 @@
         <activity
             android:name=".YearOverviewActivity"
             android:label="Time15 Year Overview"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mythosapps.time15.MainActivity" />
@@ -40,7 +42,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mythosapps.time15.MainActivity" />
