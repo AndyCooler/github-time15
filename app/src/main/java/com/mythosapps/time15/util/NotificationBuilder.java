@@ -1,5 +1,8 @@
 package com.mythosapps.time15.util;
 
+import static androidx.core.app.NotificationCompat.CATEGORY_REMINDER;
+import static com.mythosapps.time15.MainActivity.EXTRA_MESSAGE;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,9 +18,6 @@ import com.mythosapps.time15.R;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
-import static androidx.core.app.NotificationCompat.CATEGORY_REMINDER;
-import static com.mythosapps.time15.MainActivity.EXTRA_MESSAGE;
 
 public class NotificationBuilder {
 
@@ -40,7 +40,7 @@ public class NotificationBuilder {
         if (builder == null) {
             Intent intent = new Intent(context, MainActivity.class);
             intent.putExtra(EXTRA_MESSAGE, id);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 123, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 123, intent, PendingIntent.FLAG_IMMUTABLE);
 
             builder = new NotificationCompat.Builder(context, Context.NOTIFICATION_SERVICE)
                     .setSmallIcon(icon)
