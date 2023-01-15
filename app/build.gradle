@@ -60,5 +60,3 @@ dependencies {
     androidTestImplementation('junit:junit-dep:4.11')
     //androidTestCompile 'org.testng:testng:6.9.6'
 }
-
-apply plugin: 'com.google.gms.google-services'
