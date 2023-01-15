@@ -1058,8 +1058,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         task0.setKindOfDay(KindOfDay.fromString(kindOfDay));
+        if (task0.getKindOfDay() == null) {
+            // wenn irgendwas mit dem laden der configuration nicht gklappt hat z.b.
+            // NPE hier schon gesehen, wenn es nicht gesetzt war das wird wohl der grund sein
+            task0.setKindOfDay(KindOfDay.WORKDAY);
+        }
         task0.setNote(note);
-        if (task0.getKindOfDay().isBeginEndType()) { // TODO NPE hier schon gesehen, wird aber paar zeilen darüber gesetzt..
+        if (task0.getKindOfDay().isBeginEndType()) {
             task0.setBegin(beginnTime);
             task0.setBegin15(beginn15);
             task0.setEnd(endeTime);
