@@ -286,8 +286,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             String[] permissions,
             int[] grantResults
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 123) {
-            // Request for camera permission.
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 KindOfDay.initializeFromConfig(configStorage, this);
                 onResume();
