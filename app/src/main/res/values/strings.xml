@@ -65,6 +65,6 @@
     <string name="menu_cloud_restore">aus Cloud wiederherstellen</string>
     <string name="bill_rate">Stundensatz:</string>
     <string name="bill_netto">Netto:</string>
-    <string name="bill_tax">USt 15%:</string>
+    <string name="bill_tax">USt 19%:</string>
     <string name="bill_brutto">Brutto:</string>
 </resources>

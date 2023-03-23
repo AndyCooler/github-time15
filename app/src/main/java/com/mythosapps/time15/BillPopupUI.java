@@ -38,12 +38,15 @@ public class BillPopupUI {
         stundensatz.setMaxLines(1);
         stundensatz.setText("85");
         nettoBetrag = new EditText(parent);
+        nettoBetrag.setEnabled(false);
         nettoBetrag.setMinLines(1);
         nettoBetrag.setMaxLines(1);
         steuerBetrag = new EditText(parent);
+        steuerBetrag.setEnabled(false);
         steuerBetrag.setMinLines(1);
         steuerBetrag.setMaxLines(1);
         bruttoBetrag = new EditText(parent);
+        bruttoBetrag.setEnabled(false);
         bruttoBetrag.setMinLines(1);
         bruttoBetrag.setMaxLines(1);
         if (billableMinutes != null) {

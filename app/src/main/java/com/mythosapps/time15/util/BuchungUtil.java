@@ -11,17 +11,17 @@ public final class BuchungUtil {
 
     public static String getNettoForDisplay(double rate, int billableMinutes) {
         form.setCurrency(Currency.getInstance(currency));
-        return form.format(rate * (billableMinutes / 60));
+        return form.format(rate * billableMinutes / 60);
     }
 
     public static String getTaxForDisplay(double rate, int billableMinutes) {
         form.setCurrency(Currency.getInstance(currency));
-        return form.format(0.19 * rate * (billableMinutes / 60));
+        return form.format(0.19 * rate * billableMinutes / 60);
     }
 
     public static String getBruttoForDisplay(double rate, int billableMinutes) {
         form.setCurrency(Currency.getInstance(currency));
-        return form.format(1.19 * rate * (billableMinutes / 60));
+        return form.format(1.19 * rate * billableMinutes / 60);
     }
 
 }
