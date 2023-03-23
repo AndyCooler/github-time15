@@ -1,8 +1,9 @@
 package types;
 
+import static org.junit.Assert.assertEquals;
+
 import com.mythosapps.time15.util.BuchungUtil;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -13,15 +14,19 @@ public class BuchungUtilTest {
     @Test
     public void testBruttoNettoTax() {
 
-        Assert.assertEquals(new String[]{"85.000,00 €", "0.0", "0.0"}, bruttoNettoTax(85.0, 1000));
+        assertEquals(testValues("85.000,00", "16.150,00", "101.150,00"), bruttoNettoTax(85.0, 1000));
+    }
+
+    private String[] testValues(String netto, String tax, String brutto) {
+        return new String[]{netto + " €", tax + " €", brutto + " €"};
     }
 
     private String[] bruttoNettoTax(double rate, int stunden) {
         int billableMinutes = stunden * 60;
         return new String[]{
                 BuchungUtil.getNettoForDisplay(rate, billableMinutes),
-                "0.0",
-                "0.0"
+                BuchungUtil.getTaxForDisplay(rate, billableMinutes),
+                BuchungUtil.getBruttoForDisplay(rate, billableMinutes),
         };
     }
 }
