@@ -21,8 +21,8 @@ public class BuchungUtilTest {
         return new String[]{netto + " €", tax + " €", brutto + " €"};
     }
 
-    private String[] bruttoNettoTax(double rate, int stunden) {
-        int billableMinutes = stunden * 60;
+    private String[] bruttoNettoTax(double rate, double stunden) {
+        int billableMinutes = (int) (stunden * 60);
         return new String[]{
                 BuchungUtil.getNettoForDisplay(rate, billableMinutes),
                 BuchungUtil.getTaxForDisplay(rate, billableMinutes),
