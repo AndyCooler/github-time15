@@ -50,9 +50,6 @@ public class BillPopupUI {
         bruttoBetrag.setMinLines(1);
         bruttoBetrag.setMaxLines(1);
         if (billableMinutes != null) {
-            System.out.println("netto: " + rate * billableMinutes);
-        }
-        if (billableMinutes != null) {
             nettoBetrag.setText(BuchungUtil.getNettoForDisplay(rate, billableMinutes));
             steuerBetrag.setText(BuchungUtil.getTaxForDisplay(rate, billableMinutes));
             bruttoBetrag.setText(BuchungUtil.getBruttoForDisplay(rate, billableMinutes));

@@ -291,10 +291,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
             if (tasksThisMonth.contains(task)) {
                 int sumInMinutes = storage.loadTaskSum(this, id, task);
                 Time15 time15 = Time15.fromMinutes(sumInMinutes);
-                System.out.println("task: '" + task + "' vs. '" + KindOfDay.WORKDAY + "'");
                 if (KindOfDay.WORKDAY.equals(task)) {
                     billableMinutes = sumInMinutes;
-                    System.out.println("yeah!! " + billableMinutes);
                 }
 
                 int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
