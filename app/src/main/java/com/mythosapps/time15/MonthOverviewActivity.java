@@ -62,6 +62,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private boolean showSecondTask = false;
     private Integer billableMinutes;
+    private double rate = 100.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -543,9 +544,14 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     public void billButtonClicked(View v) {
-        final BillPopupUI taskUI = new BillPopupUI(this, billableMinutes);
+        final BillPopupUI taskUI = new BillPopupUI(this, billableMinutes, rate);
 
-        taskUI.setOkButton(getString(R.string.dialog_ok));
+        taskUI.setOkButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                rate = taskUI.getRate();
+            }
+        });
         taskUI.show();
     }
 

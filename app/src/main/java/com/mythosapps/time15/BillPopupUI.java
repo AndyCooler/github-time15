@@ -1,7 +1,12 @@
 package com.mythosapps.time15;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +24,7 @@ public class BillPopupUI {
     private final Activity parent;
     private final Integer billableMinutes;
 
-    private double rate = 85.0;
+    private double rate;
     private String okButtonText;
     private DialogInterface.OnClickListener okButtonListener;
 
@@ -30,13 +35,25 @@ public class BillPopupUI {
 
     private TextView bruttoBetrag;
 
-    public BillPopupUI(Activity parent, Integer billableMinutes) {
+    public BillPopupUI(Activity parent, Integer billableMinutes, double rate) {
         this.parent = parent;
         this.billableMinutes = billableMinutes;
+        this.rate = rate;
         stundensatz = new EditText(parent);
         stundensatz.setMinLines(1);
         stundensatz.setMaxLines(1);
-        stundensatz.setText("85");
+        stundensatz.setText(String.valueOf(rate));
+        stundensatz.addTextChangedListener(new MyTextWatcher());
+        stundensatz.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focused) {
+                InputMethodManager keyboard = (InputMethodManager) parent.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (focused)
+                    keyboard.showSoftInput(stundensatz, 0);
+                else
+                    keyboard.hideSoftInputFromWindow(stundensatz.getWindowToken(), 0);
+            }
+        });
         nettoBetrag = new EditText(parent);
         nettoBetrag.setEnabled(false);
         nettoBetrag.setMinLines(1);
@@ -49,6 +66,10 @@ public class BillPopupUI {
         bruttoBetrag.setEnabled(false);
         bruttoBetrag.setMinLines(1);
         bruttoBetrag.setMaxLines(1);
+        calc(billableMinutes);
+    }
+
+    private void calc(Integer billableMinutes) {
         if (billableMinutes != null) {
             nettoBetrag.setText(BuchungUtil.getNettoForDisplay(rate, billableMinutes));
             steuerBetrag.setText(BuchungUtil.getTaxForDisplay(rate, billableMinutes));
@@ -56,7 +77,7 @@ public class BillPopupUI {
         }
     }
 
-    public void setOkButton(String okButtonText) {
+    public void setOkButton(String okButtonText, DialogInterface.OnClickListener okButtonListener) {
         this.okButtonText = okButtonText;
         this.okButtonListener = okButtonListener;
     }
@@ -105,5 +126,32 @@ public class BillPopupUI {
         builder.setPositiveButton(okButtonText, okButtonListener);
 
         builder.show();
+    }
+
+    public double getRate() {
+        return rate;
+    }
+
+    private class MyTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // do nothing
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // do nothing
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            try {
+                System.out.println("afterTextChanged");
+                rate = Double.valueOf(stundensatz.getText().toString());
+                calc(billableMinutes);
+            } catch (NumberFormatException e) {
+                // ignore
+            }
+        }
     }
 }
