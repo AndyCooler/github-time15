@@ -40,7 +40,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -60,9 +59,9 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     // View state and view state management
     private String id;
-    private Random random = new Random();
 
     private boolean showSecondTask = false;
+    private Integer billableMinutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -292,6 +291,11 @@ public class MonthOverviewActivity extends AppCompatActivity {
             if (tasksThisMonth.contains(task)) {
                 int sumInMinutes = storage.loadTaskSum(this, id, task);
                 Time15 time15 = Time15.fromMinutes(sumInMinutes);
+                System.out.println("task: '" + task + "' vs. '" + KindOfDay.WORKDAY + "'");
+                if (KindOfDay.WORKDAY.equals(task)) {
+                    billableMinutes = sumInMinutes;
+                    System.out.println("yeah!! " + billableMinutes);
+                }
 
                 int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
                 row = new TableRow(this);
@@ -538,6 +542,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 + "\n\nGood: " + TextUtils.join(",", good) + "\nBad: " + TextUtils.join(",", bad);
         Toast.makeText(MonthOverviewActivity.this, success + goodBad, Toast.LENGTH_LONG).show();
 */
+    }
+
+    public void billButtonClicked(View v) {
+        final BillPopupUI taskUI = new BillPopupUI(this, billableMinutes);
+
+        taskUI.setOkButton(getString(R.string.dialog_ok));
+        taskUI.show();
     }
 
 }

@@ -63,4 +63,8 @@
     <string name="multi_task_to">Endet am:</string>
     <string name="menu_cloud">Cloud Storage Available</string>
     <string name="menu_cloud_restore">aus Cloud wiederherstellen</string>
+    <string name="bill_rate">Stundensatz:</string>
+    <string name="bill_netto">Netto:</string>
+    <string name="bill_tax">USt 15%:</string>
+    <string name="bill_brutto">Brutto:</string>
 </resources>

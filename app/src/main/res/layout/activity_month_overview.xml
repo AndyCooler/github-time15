@@ -29,13 +29,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TableLayout
                     android:id="@+id/tableView"
                     android:layout_width="match_parent"
-                    android:layout_height="fill_parent"></TableLayout>
+                    android:layout_height="wrap_content"></TableLayout>
 
+                <Button
+                    android:id="@+id/billButton"
+                    android:background="@drawable/roundbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="100dp"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    android:onClick="billButtonClicked"
+                    android:text="Rechnung" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

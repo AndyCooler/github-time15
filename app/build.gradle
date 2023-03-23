@@ -55,7 +55,9 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'androidx.work:work-runtime:2.7.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation project(path: ':app')
+    androidTestImplementation project(path: ':app')
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    //testCompile 'junit:junit:4.12'
     androidTestImplementation('junit:junit-dep:4.11')
 }
