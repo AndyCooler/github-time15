@@ -488,6 +488,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
         }
     }
 
+    public void startMainActivity(View view) {
+        startMainActivity(this.id);
+    }
+
     public void startMainActivity(String withId) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, withId);
@@ -500,6 +504,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, id);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+
+    public void startYearOverviewActivity(View view) {
+        startYearOverviewActivity();
     }
 
     @Override

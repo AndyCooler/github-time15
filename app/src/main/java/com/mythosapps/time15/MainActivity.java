@@ -394,10 +394,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
         if (id == R.id.action_month) {
-            if (isStateChangedByUser()) {
-                save(false);
-            }
-            startMonthOverviewActivity();
+            startMonthOverviewActivity(null);
             return true;
         }
         if (id == R.id.action_about) {
@@ -551,8 +548,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sendEmailPopupUI.show();
     }
 
-    public void startMonthOverviewActivity() {
+    public void startMonthOverviewActivity(View v) {
+        if (isStateChangedByUser()) {
+            save(false);
+        }
         Intent intent = new Intent(this, MonthOverviewActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
+    public void startYearOverviewActivity(View view) {
+        Intent intent = new Intent(this, YearOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

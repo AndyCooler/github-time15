@@ -319,6 +319,17 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         startActivity(intent);
     }
 
+    public void startMonthOverviewActivity(View view) {
+        startMonthOverviewActivity();
+    }
+
+    public void startMainActivity(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(EXTRA_MESSAGE, id);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);

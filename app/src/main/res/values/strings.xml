@@ -13,6 +13,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_task_editor">TaskEditorActivity</string>
 
+    <string name="tab_day">Tag</string>
+    <string name="tab_month">Monat</string>
+    <string name="tab_year">Jahr</string>
     <string name="main_begin">Beginn</string>
     <string name="main_end">Ende</string>
     <string name="main_pause">Pause</string>
