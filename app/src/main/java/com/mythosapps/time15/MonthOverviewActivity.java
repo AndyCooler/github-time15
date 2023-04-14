@@ -160,8 +160,23 @@ public class MonthOverviewActivity extends AppCompatActivity {
         super.onResume();
 
         Log.i("time15", "Instance : " + this.toString());
+        String intentsId = getIntentsId();
+        if (intentsId != null) {
+            id = intentsId;
+        }
         initialize();
 
+    }
+
+    private String getIntentsId() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            String withId = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+            if (withId != null) {
+                return withId;
+            }
+        }
+        return null;
     }
 
     private void initialize() {
@@ -421,10 +436,6 @@ public class MonthOverviewActivity extends AppCompatActivity {
             return true;
         }
 */
-        if (id == R.id.action_year) {
-            startYearOverviewActivity();
-            return true;
-        }
 
         if (id == R.id.action_month_vacation) {
             menuEditMultiDayVacation();

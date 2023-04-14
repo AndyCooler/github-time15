@@ -28,18 +28,6 @@
         app:showAsAction="always"
         android:icon="@android:drawable/ic_media_ff"></item>
     <item
-        android:id="@+id/action_day"
-        android:orderInCategory="300"
-        android:title="@string/menu_day"
-        app:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_day"></item>
-    <item
-        android:id="@+id/action_year"
-        android:orderInCategory="400"
-        android:title="@string/menu_year"
-        app:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_agenda"></item>
-    <item
         android:id="@+id/action_bill"
         android:orderInCategory="500"
         android:title="@string/menu_bill"

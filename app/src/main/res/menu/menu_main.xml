@@ -27,12 +27,6 @@
         app:showAsAction="always"
         android:icon="@android:drawable/ic_media_ff"></item>
     <item
-        android:id="@+id/action_month"
-        android:orderInCategory="400"
-        android:title="@string/menu_month"
-        app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_month"></item>
-    <item
         android:id="@+id/action_new"
         android:orderInCategory="510"
         android:title="@string/menu_new"

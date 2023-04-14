@@ -394,10 +394,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             dateToday();
             return true;
         }
-        if (id == R.id.action_month) {
-            startMonthOverviewActivity(null);
-            return true;
-        }
         if (id == R.id.action_about) {
             String about = "Time15 von Andreas, \n";
             about += "Version: " + AppVersion.getVersionName(this) + "\n";

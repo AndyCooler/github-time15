@@ -305,10 +305,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
         }
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_month) {
-            startMonthOverviewActivity();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
