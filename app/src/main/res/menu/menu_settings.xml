@@ -24,7 +24,7 @@
         android:orderInCategory="300"
         android:title="@string/menu_day"
         app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_day"></item>
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"></item>
 
 
 </menu>
