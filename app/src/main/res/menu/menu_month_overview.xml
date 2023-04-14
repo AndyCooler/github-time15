@@ -31,12 +31,12 @@
         android:id="@+id/action_day"
         android:orderInCategory="300"
         android:title="@string/menu_day"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_day"></item>
     <item
         android:id="@+id/action_year"
         android:orderInCategory="400"
         android:title="@string/menu_year"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_agenda"></item>
 </menu>

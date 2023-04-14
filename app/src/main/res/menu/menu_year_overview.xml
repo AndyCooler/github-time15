@@ -20,7 +20,7 @@
         android:id="@+id/action_month"
         android:orderInCategory="200"
         android:title="@string/menu_month"
-        app:showAsAction="always"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_month"></item>
 
 </menu>

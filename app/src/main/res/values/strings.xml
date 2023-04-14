@@ -23,10 +23,10 @@
     <string name="menu_cloud_status">Status Cloud Backup</string>
     <string name="menu_back">Zurück</string>
     <string name="menu_forward">Vorwärts</string>
-    <string name="menu_day">Day</string>
-    <string name="menu_year">Jahr</string>
-    <string name="menu_today">Heute</string>
-    <string name="menu_month">Monat</string>
+    <string name="menu_day">Tab Tag</string>
+    <string name="menu_year">Tab Jahr</string>
+    <string name="menu_today">Tab Heute</string>
+    <string name="menu_month">Tab Monat</string>
     <string name="menu_about">Info</string>
     <string name="menu_new">Aufgabentyp hinzufügen</string>
     <string name="menu_edit">Aufgabentyp anpassen</string>
