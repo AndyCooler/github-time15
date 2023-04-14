@@ -243,23 +243,6 @@
                             android:gravity="center_horizontal" />
                             -->
 
-            <TextView
-                android:id="@+id/switchText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\@Home"
-                android:gravity="center_vertical"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#1E90FF"
-                android:layout_marginRight="10dp" />
-
-            <Switch
-                android:id="@+id/home_office_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                 />
-
         </LinearLayout>
 
         <LinearLayout
@@ -364,8 +347,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="100dp"
-                    android:layout_marginLeft="100dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_weight=".28"
                     android:background="@drawable/spinner_border"
                     android:orientation="horizontal">
@@ -391,6 +374,23 @@
 
                 </RelativeLayout>
 
+
+                <TextView
+                    android:id="@+id/switchText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\@Home"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#1E90FF"
+                    android:layout_marginRight="10dp" />
+
+                <Switch
+                    android:id="@+id/home_office_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="20dp" />
                 <!--
                                 <Space
                                     android:id="@+id/spacer2"
