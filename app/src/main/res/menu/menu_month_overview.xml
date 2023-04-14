@@ -39,4 +39,10 @@
         android:title="@string/menu_year"
         app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_agenda"></item>
+    <item
+        android:id="@+id/action_bill"
+        android:orderInCategory="500"
+        android:title="@string/menu_bill"
+        app:showAsAction="never"
+        android:icon="@android:drawable/ic_menu_add"></item>
 </menu>

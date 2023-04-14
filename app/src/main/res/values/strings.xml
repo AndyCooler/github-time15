@@ -70,4 +70,5 @@
     <string name="bill_netto">Netto:</string>
     <string name="bill_tax">USt 19%:</string>
     <string name="bill_brutto">Brutto:</string>
+    <string name="menu_bill">Rechnung</string>
 </resources>

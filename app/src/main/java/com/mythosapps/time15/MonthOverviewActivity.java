@@ -431,6 +431,10 @@ public class MonthOverviewActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.action_bill) {
+            billButtonClicked();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -565,7 +569,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 */
     }
 
-    public void billButtonClicked(View v) {
+    public void billButtonClicked() {
         final BillPopupUI taskUI = new BillPopupUI(this, billableMinutes, rate);
 
         taskUI.setOkButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
