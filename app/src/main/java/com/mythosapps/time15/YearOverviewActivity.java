@@ -184,7 +184,7 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
                     String targetId = "01." + (finalMonthId < 10 ? "0" + finalMonthId : "" + finalMonthId) + "." + TimeUtils.getYearDisplayString(id);
                     Intent intent = new Intent(YearOverviewActivity.this, MonthOverviewActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, targetId);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                 }
             });
@@ -315,8 +315,9 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     public void startMonthOverviewActivity() {
         Intent intent = new Intent(this, MonthOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     public void startMonthOverviewActivity(View view) {
@@ -326,8 +327,21 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     public void startMainActivity(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
     }
 
     @Override

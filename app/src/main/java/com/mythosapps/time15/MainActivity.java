@@ -371,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onPause() {
         super.onPause();
         isPaused = true;
+        overridePendingTransition(0, 0);
     }
 
     @Override
@@ -554,15 +555,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         Intent intent = new Intent(this, MonthOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     public void startYearOverviewActivity(View view) {
         Intent intent = new Intent(this, YearOverviewActivity.class);
         intent.putExtra(EXTRA_MESSAGE, id);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
     }
 
     private void initMapWithIds(Map map, int... viewIds) {

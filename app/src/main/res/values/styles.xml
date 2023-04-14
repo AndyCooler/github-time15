@@ -5,6 +5,8 @@
         <!-- Customize your theme here. -->
         <!--<item name="android:textColorPrimary">@android:color/white</item>-->
 
+        <item name="android:windowActivityTransitions">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
     <!-- ToolBar -->
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
