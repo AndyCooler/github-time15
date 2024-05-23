@@ -58,7 +58,7 @@
                     android:id="@+id/dayTabView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#1E90FF"
+                    android:background="#536DFE"
                     android:gravity="center_horizontal"
                     android:text="@string/tab_day"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -86,7 +86,7 @@
                     android:onClick="startMonthOverviewActivity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#1E90FF"
+                    android:background="#536DFE"
                     android:gravity="center_horizontal"
                     android:text="@string/tab_month"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -106,7 +106,7 @@
                     android:onClick="startYearOverviewActivity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#1E90FF"
+                    android:background="#536DFE"
                     android:gravity="center_horizontal"
                     android:text="@string/tab_year"
                     android:textAppearance="?android:attr/textAppearanceLarge"
@@ -128,7 +128,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/main_begin"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#1E90FF" />
+                android:textColor="#536DFE" />
 
             <TextView
                 android:id="@+id/endeView"
@@ -139,7 +139,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/main_end"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#1E90FF" />
+                android:textColor="#536DFE" />
 
         </LinearLayout>
 
@@ -232,7 +232,7 @@
                 android:gravity="center_horizontal"
                 android:text="@string/main_pause"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#1E90FF" />
+                android:textColor="#536DFE" />
             <!--
                         <TextView
                             android:layout_width="0dp"
@@ -382,7 +382,7 @@
                     android:text="\@Home"
                     android:gravity="center_vertical"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#1E90FF"
+                    android:textColor="#536DFE"
                     android:layout_marginRight="10dp" />
 
                 <Switch
@@ -450,7 +450,7 @@
                         android:onClick="toggleTotal"
                         android:text="0"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="#1E90FF"
+                        android:textColor="#536DFE"
                         android:textAlignment="gravity"
                         android:textSize="48sp" />
                     <TextView
@@ -463,7 +463,7 @@
                         android:onClick="toggleTotal15"
                         android:text=".0"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="#1E90FF"
+                        android:textColor="#536DFE"
                         android:textAlignment="gravity"
                         android:textSize="48sp" />
                 </LinearLayout>
