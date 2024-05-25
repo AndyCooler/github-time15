@@ -1017,11 +1017,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (modifiableData.getNumberOfTasks() == 0) {
                 totalNewColor = ColorsUI.DARK_BLUE_DEFAULT;
             } else {
-                totalNewColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
+                totalNewColor = KindOfDay.fromString(kindOfDay).isBeginEndType() ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.LIGHT_GREEN_SAVE_SUCCESS;
             }
             balanceValue = storage.loadBalance(this, id, balanceType);
         } else {
-            totalNewColor = ColorsUI.DARK_GREY_SAVE_ERROR;
+            totalNewColor = KindOfDay.fromString(kindOfDay).isBeginEndType() ? ColorsUI.DARK_GREY_SAVE_ERROR : ColorsUI.LIGHT_GREY_SAVE_ERROR;
         }
 
         aktualisiereTotal(totalNewColor);
@@ -1104,7 +1104,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         BeginEndTask task = modifiableData.getTask(taskNo);
         boolean isLoadedData = originalData != null;
-        int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
 
         if (task.getKindOfDay().isBeginEndType()) {
             setBeginEndSelectionActivated(true);
@@ -1132,6 +1131,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             setTransparent(R.id.total);
             setTransparent(R.id.total15);
+            int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
+            aktualisiereTotal(totalNewColor);
         } else {
 
             setBeginEndSelectionActivated(false);
@@ -1140,6 +1141,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             setSelected(R.id.total);
             setSelected(R.id.total15);
+            int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREEN_SAVE_SUCCESS : Color.WHITE;
+            aktualisiereTotal(totalNewColor);
         }
         previousSelectionKindOfDays = kindOfDay;
         kindOfDay = task.getKindOfDay().toString();
@@ -1149,8 +1152,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         homeOffice = modifiableData.getHomeOffice();
         aktualisiereTaskNo();
-        aktualisiereTotal(totalNewColor);
-        aktualisiereKindOfDay(totalNewColor);
+        aktualisiereKindOfDay(0);
         onOffSwitch.setChecked(homeOffice);
         onOffSwitch.setEnabled(isEditable);
         onOffSwitch.setClickable(isEditable);

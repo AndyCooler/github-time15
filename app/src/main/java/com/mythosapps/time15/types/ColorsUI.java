@@ -13,7 +13,9 @@ public class ColorsUI {
     // Colors
     public static final int DARK_BLUE_DEFAULT = Color.rgb(83, 109, 254); // #536DFE
     public static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(0, 100, 0);
+    public static final int LIGHT_GREEN_SAVE_SUCCESS = Color.rgb(165, 250, 188);
     public static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
+    public static final int LIGHT_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int LIGHT_GREY = Color.LTGRAY;
     public static final int LIGHT_GREY_BUTTON = Color.rgb(221, 221, 221);
     public static final int SELECTION_NONE_BG = Color.TRANSPARENT;

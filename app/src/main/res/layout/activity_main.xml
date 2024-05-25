@@ -336,176 +336,190 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="fill_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:background="@mipmap/ic_launcher_background">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:orientation="horizontal">
-                <!--
-                                <Space
-                                    android:id="@+id/spacer"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="fill_vertical"
-                                    android:minHeight="10dp"
-                                    android:visibility="visible" />
-                -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight=".28"
-                    android:background="@drawable/spinner_border"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:spinnerMode="dropdown" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_drop" />
-
-                </RelativeLayout>
-
-
-                <TextView
-                    android:id="@+id/switchText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="\@Home"
-                    android:gravity="center_vertical"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#536DFE"
-                    android:layout_marginRight="10dp" />
-
-                <Switch
-                    android:id="@+id/home_office_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginRight="20dp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="fill_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/switchTasksButton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/roundbutton"
-                    android:clickable="true"
-                    android:onClick="switchTasks"
-                    android:text="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:gravity="fill_vertical"
+                android:orientation="horizontal"
+                android:background="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="fill_horizontal">
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|center_horizontal"
+                    android:orientation="horizontal">
+                    <!--
+                                    <Space
+                                        android:id="@+id/spacer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="fill_vertical"
+                                        android:minHeight="10dp"
+                                        android:visibility="visible" />
+                    -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight=".28"
+                        android:background="@drawable/spinner_border"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:spinnerMode="dropdown" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_drop" />
+
+                    </RelativeLayout>
+
 
                     <TextView
-                        android:id="@+id/total"
+                        android:id="@+id/switchText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="\@Home"
+                        android:gravity="center_vertical"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="#536DFE"
+                        android:layout_marginRight="10dp" />
+
+                    <Switch
+                        android:id="@+id/home_office_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginRight="20dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="fill_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF">
+
+                    <Button
+                        android:id="@+id/switchTasksButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/roundbutton"
+                        android:clickable="true"
+                        android:onClick="switchTasks"
+                        android:text="1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="fill_horizontal">
+
+                        <TextView
+                            android:id="@+id/total"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:gravity="right"
+                            android:onClick="toggleTotal"
+                            android:text="0"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#536DFE"
+                            android:textAlignment="gravity"
+                            android:textSize="48sp" />
+
+                        <TextView
+                            android:id="@+id/total15"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:gravity="left"
+                            android:onClick="toggleTotal15"
+                            android:text=".0"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#536DFE"
+                            android:textAlignment="gravity"
+                            android:textSize="48sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF">
+
+                    <Button
+                        android:id="@+id/addTaskButton"
+                        android:background="@drawable/roundbutton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:clickable="true"
-                        android:gravity="right"
-                        android:onClick="toggleTotal"
-                        android:text="0"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="#536DFE"
-                        android:textAlignment="gravity"
-                        android:textSize="48sp" />
-                    <TextView
-                        android:id="@+id/total15"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:clickable="true"
-                        android:gravity="left"
-                        android:onClick="toggleTotal15"
-                        android:text=".0"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="#536DFE"
-                        android:textAlignment="gravity"
-                        android:textSize="48sp" />
+                        android:onClick="addTask"
+                        android:text="+" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/addTaskButton"
-                    android:background="@drawable/roundbutton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:clickable="true"
-                    android:onClick="addTask"
-                    android:text="+" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/balance"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:gravity="top|center_horizontal"
-                android:text="(0)"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="#FFFFFF">
+
+                <TextView
+                    android:id="@+id/balance"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:gravity="top|center_horizontal"
+                    android:text="(0)"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
         </LinearLayout>
         <!--
         <LinearLayout
