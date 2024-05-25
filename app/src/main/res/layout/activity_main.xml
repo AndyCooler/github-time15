@@ -227,7 +227,7 @@
                 android:id="@+id/pauseLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/title"
+                android:background="#FFFFFF"
                 android:orientation="horizontal">
 
                 <TextView
@@ -239,7 +239,7 @@
                     android:text="@string/main_pause"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="#536DFE"
-                    android:background="#FFFFFF" />
+                    android:background="@drawable/title" />
                 <!--
                             <TextView
                                 android:layout_width="0dp"
