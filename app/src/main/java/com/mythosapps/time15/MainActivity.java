@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -903,7 +904,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         isDeselected = true;
                     } else {
                         setTransparent(previousSelectionBeginnTime);
-                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        setSelected(viewId);
                         beginnTime = Integer.valueOf((String) view.getText());
                         previousSelectionBeginnTime = viewId;
                         isSelected = true;
@@ -917,7 +918,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         isDeselected = true;
                     } else {
                         setTransparent(previousSelectionEndeTime);
-                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        setSelected(viewId);
                         endeTime = Integer.valueOf((String) view.getText());
                         previousSelectionEndeTime = viewId;
                         isSelected = true;
@@ -931,7 +932,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         isDeselected = true;
                     } else {
                         setTransparent(previousSelectionBeginn15);
-                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        setSelected(viewId);
                         beginn15 = Integer.valueOf((String) view.getText());
                         previousSelectionBeginn15 = viewId;
                         isSelected = true;
@@ -945,7 +946,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         isDeselected = true;
                     } else {
                         setTransparent(previousSelectionEnde15);
-                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        setSelected(viewId);
                         ende15 = Integer.valueOf((String) view.getText());
                         previousSelectionEnde15 = viewId;
                         isSelected = true;
@@ -959,7 +960,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         isDeselected = true;
                     } else {
                         setTransparent(previousSelectionPauseTime);
-                        view.setBackgroundColor(ColorsUI.SELECTION_BG);
+                        setSelected(viewId);
                         pauseTime = Integer.valueOf((String) view.getText());
                         previousSelectionPauseTime = viewId;
                         isSelected = true;
@@ -1193,14 +1194,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void setTransparent(Integer viewId) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(ColorsUI.SELECTION_NONE_BG);
+            view.setBackgroundColor(Color.WHITE);
+            view.setTextColor(Color.BLACK);
         }
     }
 
     private void setSelected(Integer viewId) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(isEditable ? ColorsUI.SELECTION_BG : ColorsUI.DEACTIVATED);
+            view.setBackgroundColor(isEditable ? ColorsUI.SELECTION_NONE_BG : ColorsUI.DEACTIVATED);
+            view.setTextColor(Color.WHITE);
         }
     }
 

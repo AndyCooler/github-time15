@@ -146,184 +146,196 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:background="@mipmap/ic_launcher_background">
 
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/scrollBegin"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fillViewport="true"
-                android:scrollbars="none">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/scrollBegin"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:fillViewport="true"
+                    android:scrollbars="none">
 
-                </LinearLayout>
-            </ScrollView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/scrollBegin15"
-                android:layout_width="wrap_content"
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/scrollBegin15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fillViewport="true"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/scrollEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fillViewport="true"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/scrollEnd15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fillViewport="true"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pauseLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fillViewport="true"
-                android:scrollbars="none">
+                android:background="@drawable/title"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/pauseView"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    android:text="@string/main_pause"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#536DFE"
+                    android:background="#FFFFFF" />
+                <!--
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:id="@+id/spaceView"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal" />
+                                -->
 
-                </LinearLayout>
-            </ScrollView>
+            </LinearLayout>
 
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/scrollEnd"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fillViewport="true"
-                android:scrollbars="none">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/pauseA"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:onClick="verarbeiteKlick"
+                    android:text="30"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="#FFFFFF"
+                    android:textSize="48sp" />
 
-                </LinearLayout>
-            </ScrollView>
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/scrollEnd15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fillViewport="true"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/pauseB"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:onClick="verarbeiteKlick"
+                    android:text="45"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="#FFFFFF"
+                    android:textSize="48sp" />
 
-                </LinearLayout>
-            </ScrollView>
+                <TextView
+                    android:id="@+id/pauseC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="verarbeiteKlick"
+                    android:text="60"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="#FFFFFF"
+                    android:textSize="48sp" />
+
+                <TextView
+                    android:id="@+id/pauseD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="verarbeiteKlick"
+                    android:text="90"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="#FFFFFF"
+                    android:textSize="48sp" />
+                <!--
+                            <TextView
+                                android:id="@+id/pauseE"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:onClick="verarbeiteKlick"
+                                android:text="60"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:id="@+id/pauseF"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:gravity="center"
+                                android:onClick="verarbeiteKlick"
+                                android:text="75"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textSize="30sp" />
+                -->
+            </LinearLayout>
+
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/pauseLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/title"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/pauseView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:gravity="center_horizontal"
-                android:text="@string/main_pause"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#536DFE" />
-            <!--
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:id="@+id/spaceView"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal" />
-                            -->
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/pauseA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="verarbeiteKlick"
-                android:text="30"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="48sp" />
-
-            <TextView
-                android:id="@+id/pauseB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="verarbeiteKlick"
-                android:text="45"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="48sp" />
-
-            <TextView
-                android:id="@+id/pauseC"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="verarbeiteKlick"
-                android:text="60"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="48sp" />
-
-            <TextView
-                android:id="@+id/pauseD"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="verarbeiteKlick"
-                android:text="90"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="48sp" />
-            <!--
-                        <TextView
-                            android:id="@+id/pauseE"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:gravity="center"
-                            android:onClick="verarbeiteKlick"
-                            android:text="60"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textSize="30sp" />
-
-                        <TextView
-                            android:id="@+id/pauseF"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:clickable="true"
-                            android:gravity="center"
-                            android:onClick="verarbeiteKlick"
-                            android:text="75"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textSize="30sp" />
-            -->
-        </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -391,15 +403,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_marginRight="20dp" />
-                <!--
-                                <Space
-                                    android:id="@+id/spacer2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="fill_vertical"
-                                    android:minHeight="10dp"
-                                    android:visibility="visible" />
-                                    -->
             </LinearLayout>
 
         </LinearLayout>
@@ -504,6 +507,21 @@
                 android:text="(0)"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
-    </LinearLayout>
+        <!--
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="fill_vertical"
+            android:orientation="horizontal">
 
+            <Space
+                android:id="@+id/spacer2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="fill_vertical"
+                android:minHeight="10dp"
+                android:visibility="visible" />
+        </LinearLayout>
+-->
+    </LinearLayout>
 </RelativeLayout>

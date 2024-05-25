@@ -1,6 +1,7 @@
 package com.mythosapps.time15;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -74,6 +75,7 @@ public final class ScrollViewUI {
             view.setOnClickListener(listener);
             view.setClickable(true);
             view.setGravity(Gravity.CENTER);
+            view.setBackgroundColor(Color.WHITE);
             layoutView.addView(view);
             mapValueToView.put(i, view);
         }
@@ -123,6 +125,7 @@ public final class ScrollViewUI {
             view.setOnClickListener(listener);
             view.setClickable(true);
             view.setGravity(Gravity.CENTER);
+            view.setBackgroundColor(Color.WHITE);
             layoutView.addView(view);
             mapValueToView.put(i, view);
         }
