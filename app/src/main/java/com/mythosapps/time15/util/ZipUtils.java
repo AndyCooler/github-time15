@@ -85,6 +85,10 @@ public class ZipUtils {
             while (next != null) {
                 String filename = next.getName();
                 File file = new File(storageDir, filename);
+                String canonicalPath = file.getCanonicalPath();
+                if (!canonicalPath.startsWith(storageDir.getCanonicalPath())) {
+                    throw new IOException("security exception: Zip Path Traversal Vulnerability");
+                }
                 if (file.exists()) {
                     numSkipped++;
                 } else {
