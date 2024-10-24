@@ -41,19 +41,19 @@ public class KindOfDay {
     public static final Set<String> listNames = new HashSet<>();
 
     // Constants for testing
-    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_BLUE_DEFAULT, true);
+    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_GREEN_SAVE_SUCCESS, true);
 
-    public static final KindOfDay HOLIDAY = new KindOfDay(DEFAULT_HOLIDAY, ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
+    public static final KindOfDay HOLIDAY = new KindOfDay(DEFAULT_HOLIDAY, ColorsUI.DARK_GREEN, false);
 
-    public static final KindOfDay VACATION = new KindOfDay(DEFAULT_VACATION, ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
+    public static final KindOfDay VACATION = new KindOfDay(DEFAULT_VACATION, ColorsUI.DARK_GREEN, false);
 
-    public static final KindOfDay SICKDAY = new KindOfDay(DEFAULT_SICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, false);
+    public static final KindOfDay SICKDAY = new KindOfDay(DEFAULT_SICKDAY, ColorsUI.DARK_BLUE_DEFAULT, false);
 
-    public static final KindOfDay KIDSICKDAY = new KindOfDay(DEFAULT_KIDSICKDAY, ColorsUI.DARK_GREY_SAVE_ERROR, false);
+    public static final KindOfDay KIDSICKDAY = new KindOfDay(DEFAULT_KIDSICKDAY, ColorsUI.DARK_BLUE_DEFAULT, false);
 
-    public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
+    public static final KindOfDay PARENTAL_LEAVE = new KindOfDay(DEFAULT_PARENTAL_LEAVE, ColorsUI.DARK_GREEN, false);
 
-    public static final KindOfDay TEST_NEW = new KindOfDay("TestNew", ColorsUI.DARK_GREEN_SAVE_SUCCESS, false);
+    public static final KindOfDay TEST_NEW = new KindOfDay("TestNew", ColorsUI.DARK_GREEN, false);
 
 
     public static void initializeFromConfig(ConfigStorageFacade configStorage, Activity activity) {
@@ -199,7 +199,7 @@ public class KindOfDay {
 
     public static KindOfDay convert(String displayString, Integer begin, Integer end) {
         Log.i(KindOfDay.class.getName(), "Converting task " + displayString + ".");
-        KindOfDay newType = new KindOfDay(displayString, ColorsUI.DARK_BLUE_DEFAULT, begin != null && end != null);
+        KindOfDay newType = new KindOfDay(displayString, ColorsUI.DARK_GREEN_SAVE_SUCCESS, begin != null && end != null);
         addTaskType(newType);
         return newType;
     }

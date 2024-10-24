@@ -216,7 +216,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                         sumWeek = 0;
                     }
 
-                    int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
+                    int rowColor = ColorsUI.DARK_GREEN_SAVE_SUCCESS;
                     row = new TableRow(this);
                     row.setLayoutParams(lp);
                     row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), rowColor));
@@ -264,7 +264,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     }
                 }
 
-                row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), data.getHomeOffice() ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT));
+                row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), data.getHomeOffice() ? ColorsUI.DARK_GREEN : ColorsUI.DARK_GREEN_SAVE_SUCCESS));
                 row.addView(createTextViewInFlow(dayId.substring(0, 2), ColorsUI.DARK_BLUE_DEFAULT));
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 String kindOf = task0.getKindOfDay().getDisplayString();

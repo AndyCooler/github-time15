@@ -11,9 +11,10 @@ import java.util.Map;
 public class ColorsUI {
 
     // Colors
-    public static final int DARK_BLUE_DEFAULT = Color.rgb(83, 109, 254); // #536DFE
-    public static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(0, 100, 0);
-    public static final int LIGHT_GREEN_SAVE_SUCCESS = Color.rgb(165, 250, 188);
+    public static final int DARK_BLUE_DEFAULT = Color.DKGRAY;
+    public static final int DARK_GREEN = Color.rgb(0, 100, 0);
+    public static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(83, 109, 254); // #536DFE  lila-hellblau, standardfarbe
+    public static final int LIGHT_GREEN_SAVE_SUCCESS = Color.rgb(156, 206, 255); // #8c9dfa light grey
     public static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int LIGHT_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int LIGHT_GREY = Color.LTGRAY;
