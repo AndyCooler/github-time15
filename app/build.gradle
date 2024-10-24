@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 34
-    buildToolsVersion '29.0.2'
+    buildToolsVersion '34.0.0'
 
     defaultConfig {
         applicationId "com.mythosapps.time15"
@@ -39,6 +39,7 @@ android {
     }
     productFlavors {
     }
+    namespace 'com.mythosapps.time15'
 }
 
 dependencies {
@@ -48,16 +49,17 @@ dependencies {
     // Set this dependency if you want to use Hamcrest matching
     //testCompile 'org.hamcrest:hamcrest-library:1.1'
 
-    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'androidx.work:work-runtime:2.7.1'
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     testImplementation 'junit:junit:4.12'
     testImplementation project(path: ':app')
     androidTestImplementation project(path: ':app')
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.2'
     androidTestImplementation('junit:junit-dep:4.11')
 }
