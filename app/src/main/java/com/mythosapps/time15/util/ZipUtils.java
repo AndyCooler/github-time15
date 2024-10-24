@@ -19,6 +19,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -107,6 +108,9 @@ public class ZipUtils {
             //Toast.makeText(activity.getApplicationContext(), "Found " + numEntries + " # total, " + numExists + " #exists", Toast.LENGTH_SHORT).show();
             //Toast.makeText(activity.getApplicationContext(), "Found " + storageDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
             return "Erfolg! Monate " + numRestored + " / " + numSkipped + " (restored / skipped)";
+        } catch (ZipException e) {
+            e.printStackTrace();
+            return " Error: " + e.getMessage();
         } catch (IOException e) {
             e.printStackTrace();
             return " Error: " + e.getMessage();
