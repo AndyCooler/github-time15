@@ -342,6 +342,7 @@
             android:layout_height="wrap_content"
             android:gravity="fill_vertical"
             android:orientation="vertical"
+            android:layout_marginTop="20dp"
             android:background="@mipmap/ic_launcher_background">
 
             <LinearLayout

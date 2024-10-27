@@ -311,7 +311,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     billableMinutes = sumInMinutes;
                 }
 
-                int rowColor = ColorsUI.DARK_BLUE_DEFAULT;
+                int rowColor = ColorsUI.DEFAULT_LILA_BLUE;
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
                 row.addView(createTextViewInFlow("", rowColor));
@@ -353,7 +353,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private void addWeekSeparatorLine(TableLayout table) {
         View line = new View(this);
-        line.setBackgroundColor(ColorsUI.DARK_BLUE_DEFAULT);
+        line.setBackgroundColor(ColorsUI.DEFAULT_LILA_BLUE);
         line.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 2));
         table.addView(line);
     }
