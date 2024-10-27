@@ -13,8 +13,8 @@ public class ColorsUI {
     // Colors
     public static final int DARK_BLUE_DEFAULT = Color.DKGRAY;
     public static final int DARK_GREEN = Color.rgb(0, 100, 0);
-    public static final int DARK_GREEN_SAVE_SUCCESS = Color.rgb(83, 109, 254); // #536DFE  lila-hellblau, standardfarbe
-    public static final int LIGHT_GREEN_SAVE_SUCCESS = Color.rgb(156, 206, 255); // #8c9dfa light grey
+    public static final int DEFAULT_LILA_BLUE = Color.rgb(83, 109, 254); // #536DFE  lila-blue, standardfarbe
+    public static final int LIGHT_GREY_SAVE_SUCCESS = Color.rgb(156, 206, 255); // #8c9dfa light grey
     public static final int DARK_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int LIGHT_GREY_SAVE_ERROR = Color.DKGRAY;
     public static final int LIGHT_GREY = Color.LTGRAY;
@@ -34,10 +34,10 @@ public class ColorsUI {
 
     static {
         choiceToColor.put(0, ColorsUI.DARK_BLUE_DEFAULT);
-        choiceToColor.put(1, ColorsUI.DARK_GREEN_SAVE_SUCCESS);
+        choiceToColor.put(1, ColorsUI.DEFAULT_LILA_BLUE);
         choiceToColor.put(2, ColorsUI.DARK_GREY_SAVE_ERROR);
         colorToChoice.put(ColorsUI.DARK_BLUE_DEFAULT, 0);
-        colorToChoice.put(ColorsUI.DARK_GREEN_SAVE_SUCCESS, 1);
+        colorToChoice.put(ColorsUI.DEFAULT_LILA_BLUE, 1);
         colorToChoice.put(ColorsUI.DARK_GREY_SAVE_ERROR, 2);
     }
 }

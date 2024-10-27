@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+import com.mythosapps.time15.types.ColorsUI;
 import com.mythosapps.time15.types.KindOfDay;
 
 import org.w3c.dom.Document;
@@ -49,6 +50,9 @@ public class ConfigXmlParser {
             Element e = (Element) nodeList.item(i);
             String displayString = getValue(e, XML_NAME);
             int color = Integer.valueOf(getValue(e, XML_COLOR));
+            if (color == -14774017) { // migration lighter blue to lila-blue
+                color = ColorsUI.DEFAULT_LILA_BLUE;
+            }
             boolean beginEndType = Boolean.valueOf(getValue(e, XML_BEGIN_END));
 
             KindOfDay task = new KindOfDay(displayString, color, beginEndType);

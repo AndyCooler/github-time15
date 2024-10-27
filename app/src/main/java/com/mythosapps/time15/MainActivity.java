@@ -761,7 +761,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             private void updateTask() {
                 int colorChosen = taskUI.getInputRadioButtonGroup().getCheckedRadioButtonId();
-                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
+                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DEFAULT_LILA_BLUE : ColorsUI.DARK_GREY_SAVE_ERROR);
 
                 KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, taskColor, taskUI.getCheckBox().isChecked()));
                 KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
@@ -797,7 +797,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             private void updateTask() {
                 int colorChosen = taskUI.getInputRadioButtonGroup().getCheckedRadioButtonId();
-                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_GREY_SAVE_ERROR);
+                int taskColor = colorChosen == 0 ? ColorsUI.DARK_BLUE_DEFAULT : (colorChosen == 1 ? ColorsUI.DEFAULT_LILA_BLUE : ColorsUI.DARK_GREY_SAVE_ERROR);
 
                 KindOfDay.replaceTaskType(new KindOfDay(kindOfDayEdited, taskColor, taskUI.getCheckBox().isChecked()));
                 KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
@@ -1017,7 +1017,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if (modifiableData.getNumberOfTasks() == 0) {
                 totalNewColor = ColorsUI.DARK_BLUE_DEFAULT;
             } else {
-                totalNewColor = KindOfDay.fromString(kindOfDay).isBeginEndType() ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.LIGHT_GREEN_SAVE_SUCCESS;
+                totalNewColor = KindOfDay.fromString(kindOfDay).isBeginEndType() ? ColorsUI.DEFAULT_LILA_BLUE : ColorsUI.LIGHT_GREY_SAVE_SUCCESS;
             }
             balanceValue = storage.loadBalance(this, id, balanceType);
         } else {
@@ -1131,7 +1131,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             setTransparent(R.id.total);
             setTransparent(R.id.total15);
-            int totalNewColor = isLoadedData ? ColorsUI.DARK_GREEN_SAVE_SUCCESS : ColorsUI.DARK_BLUE_DEFAULT;
+            int totalNewColor = isLoadedData ? ColorsUI.DEFAULT_LILA_BLUE : ColorsUI.DARK_BLUE_DEFAULT;
             aktualisiereTotal(totalNewColor);
         } else {
 
@@ -1141,7 +1141,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             setSelected(R.id.total);
             setSelected(R.id.total15);
-            int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREEN_SAVE_SUCCESS : Color.WHITE;
+            int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREY_SAVE_SUCCESS : Color.WHITE;
             aktualisiereTotal(totalNewColor);
         }
         previousSelectionKindOfDays = kindOfDay;

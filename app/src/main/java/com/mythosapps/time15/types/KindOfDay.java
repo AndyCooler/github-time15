@@ -41,7 +41,7 @@ public class KindOfDay {
     public static final Set<String> listNames = new HashSet<>();
 
     // Constants for testing
-    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DARK_GREEN_SAVE_SUCCESS, true);
+    public static final KindOfDay WORKDAY = new KindOfDay(DEFAULT_WORK, ColorsUI.DEFAULT_LILA_BLUE, true);
 
     public static final KindOfDay HOLIDAY = new KindOfDay(DEFAULT_HOLIDAY, ColorsUI.DARK_GREEN, false);
 
@@ -199,7 +199,7 @@ public class KindOfDay {
 
     public static KindOfDay convert(String displayString, Integer begin, Integer end) {
         Log.i(KindOfDay.class.getName(), "Converting task " + displayString + ".");
-        KindOfDay newType = new KindOfDay(displayString, ColorsUI.DARK_GREEN_SAVE_SUCCESS, begin != null && end != null);
+        KindOfDay newType = new KindOfDay(displayString, ColorsUI.DEFAULT_LILA_BLUE, begin != null && end != null);
         addTaskType(newType);
         return newType;
     }
