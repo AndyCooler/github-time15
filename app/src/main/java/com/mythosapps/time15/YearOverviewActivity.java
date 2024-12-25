@@ -36,7 +36,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * This activity lets the user see the sum of hours spent on tasks each month.
@@ -51,7 +50,6 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
 
     // View state and view state management
     private String id;
-    private Random random = new Random();
     static final KindOfDay INITIAL_TASK = KindOfDay.WORKDAY;
     private KindOfDay selectedTask = KindOfDay.WORKDAY;
     private SharedPreferences sharedPreferences;
