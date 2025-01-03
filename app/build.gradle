@@ -3,10 +3,13 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'MyAndroidKey'
-            keyPassword 'wes1Coas1'
-            storeFile file('android.jks')
-            storePassword 'starwars76'
+            // The if check before accessing the properties is to ensure that properties are present globally or the build will fail.
+            if (project.hasProperty('RELEASE_STORE_FILE')) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
         }
     }
     compileSdkVersion 34
