@@ -37,6 +37,7 @@ public final class ScrollViewUI {
         return visible;
     }
 
+    // only scrolls so far as all children are visible
     public static void scrollToChild(ScrollView scrollView, int childNumber, ScrollViewType type) {
 
         if (type == ScrollViewType.BEGIN) {

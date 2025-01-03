@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ScrollView scrollViewEnd15;
     private Switch onOffSwitch;
     private SharedPreferences sharedPreferences;
+    private boolean flagJustCreated = true;
 
     private View.OnClickListener scrollUIListener = new View.OnClickListener() {
 
@@ -305,6 +306,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (intentsId == null) {
             intentsId = id == null ? TimeUtils.createID() : id;
         }
+        if (flagJustCreated) {
+            // flagJustCreated = false;
+            // // German timezone
+            // ZoneId zoneId = ZoneId.of("Europe/Berlin");
+            //LocalTime time = LocalTime.now(zoneId);
+            //int hour = time.getHour();
+            // scroll to current hour in scrollViewBegin
+            // ScrollViewUI.scrollToChild(scrollViewBegin, hour, ScrollViewType.BEGIN);
+        }
+
         isPaused = false;
         String balanceTypeSetting = sharedPreferences.getString("settings_balance_type", "TOTAL_WORK");
         balanceType = BalanceType.valueOf(balanceTypeSetting);
