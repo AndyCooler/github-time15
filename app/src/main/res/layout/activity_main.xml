@@ -377,8 +377,37 @@
             android:background="@mipmap/ic_launcher_background">
 
             <LinearLayout
+                android:id="@+id/workLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/workView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    android:text="@string/main_task"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#536DFE"
+                    android:background="@drawable/title" />
+                <!--
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:id="@+id/spaceView"
+                                android:layout_weight="1"
+                                android:gravity="center_horizontal" />
+                                -->
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
                 android:gravity="fill_vertical"
                 android:orientation="horizontal"
                 android:background="#FFFFFF">

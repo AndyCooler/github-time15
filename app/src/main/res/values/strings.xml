@@ -19,6 +19,7 @@
     <string name="main_begin">Beginn</string>
     <string name="main_end">Ende</string>
     <string name="main_pause">Pause</string>
+    <string name="main_task">Aufgabe</string>
     <string name="main_default_task">Arbeit</string>
     <string name="menu_cloud_status">Status Cloud Backup</string>
     <string name="menu_back">Zurück</string>
