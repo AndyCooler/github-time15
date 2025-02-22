@@ -1,6 +1,5 @@
 package com.mythosapps.time15.types;
 
-import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -134,6 +133,10 @@ public class Time15 {
 
     public void minus(int minutes) {
         totalMinutes -= minutes;
+    }
+
+    public boolean isBefore(Time15 other) {
+        return totalMinutes < other.totalMinutes;
     }
 
     @Override

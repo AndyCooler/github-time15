@@ -1,10 +1,5 @@
 package com.mythosapps.time15.types;
 
-import android.util.Log;
-
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-
 /**
  * Created by andreas on 11.03.16.
  */
@@ -188,7 +183,52 @@ public class BeginEndTask {
         return equal;
     }
 
+    public String getBeginString() {
+        return isBeginEndTimeComplete() ? formatTime(begin, begin15) : "";
+    }
+
+    public String getEndString() {
+        return isBeginEndTimeComplete() ? formatTime(end, end15) : "";
+    }
+
+    private String formatTime(Integer begin, Integer begin15) {
+        return String.format("%02d:%02d", begin, begin15);
+    }
+
     private boolean safeEquals(Object a, Object b) {
         return (a == null) ? (b == null) : ((b != null) && a.equals(b));
+    }
+
+    public Integer minutesBetween(BeginEndTask task1) {
+        if (!isBeginEndTimeComplete() || task1 == null || !task1.isBeginEndTimeComplete()) {
+            return null;
+        }
+        // in Time15 format zur leichteren Berechnung
+        Time15 beginTime0 = new Time15(begin, begin15);
+        Time15 endTime0 = new Time15(end, end15);
+        Time15 beginTime1 = new Time15(task1.begin, task1.begin15);
+        Time15 endTime1 = new Time15(task1.end, task1.end15);
+
+        // berechne welcher von beiden ist earlier
+        Time15 earlierEndTime = null;
+        Time15 laterBeginTime = null;
+        if (beginTime0.isBefore(beginTime1)) {
+            earlierEndTime = endTime0;
+            laterBeginTime = beginTime1;
+            if (beginTime1.isBefore(endTime0)) {
+                return null; // overlapping tasks
+            }
+        } else {
+            earlierEndTime = endTime1;
+            laterBeginTime = beginTime0;
+            if (beginTime0.isBefore(endTime1)) {
+                return null; // overlapping tasks
+            }
+        }
+        return laterBeginTime.toMinutes() - earlierEndTime.toMinutes();
+    }
+
+    public int getPauseSafe() {
+        return pause == null ? 0 : pause;
     }
 }

@@ -60,7 +60,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     // View state and view state management
     private String id;
 
-    private boolean showSecondTask = false;
+    private boolean showSecondTask = true;
     private Integer billableMinutes;
     private double rate = 100.0;
 
@@ -189,7 +189,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         table.setColumnShrinkable(0, true);
         table.setColumnShrinkable(1, true);
         if (showSecondTask) {
-            table.setColumnStretchable(6, true);
+            table.setColumnStretchable(2, true);
         } else {
             table.setColumnStretchable(2, true);
         }
@@ -222,11 +222,12 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     row.addView(createTextViewInFlow(TimeUtils.dayOfWeek(dayId), rowColor));
                     row.addView(createTextViewInFlow(dayId.substring(0, 2), rowColor));
                     row.addView(createTextViewInFlow("", rowColor));
-                    row.addView(createTextViewInFlow("", rowColor));
                     if (showSecondTask) {
                         row.addView(createTextViewInFlow("", rowColor));
                         row.addView(createTextViewInFlow("", rowColor));
+                        row.addView(createTextViewInFlow("", rowColor));
                     }
+                    row.addView(createTextViewInFlow("", rowColor));
                     lastSumOfWeekView = createBalanceView(sumWeek, dayId);
                     row.addView(lastSumOfWeekView);
 
@@ -254,13 +255,13 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 BeginEndTask task0 = data.getTask(0);
                 BeginEndTask task1 = data.getTask(1);
                 if (task1 == null) {
-                    hours = task0.getTotal().toDecimalForDisplay()+ "  ";// + " h";
+                    hours = "  " + task0.getTotal().toDecimalForDisplay();// + " h";
                 } else {
                     if (task1.getKindOfDay().equals(task0.getKindOfDay())) {
                         Time15 combined = data.getTotalFor(task0.getKindOfDay());
-                        hours = combined.toDecimalForDisplay() + " " + getString(R.string.display_sum);
+                        hours = " " + getString(R.string.display_sum) + combined.toDecimalForDisplay();
                     } else {
-                        hours = task0.getTotal().toDecimalForDisplay() + " *";
+                        hours = " *" + task0.getTotal().toDecimalForDisplay();
                     }
                 }
 
@@ -269,20 +270,17 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 int itemColor = calcItemColor(task0.getKindOfDay(), task0.isComplete());
                 String kindOf = task0.getKindOfDay().getDisplayString();
                 boolean isNoteEmpty = task0.getNote() == null || "".equals(task0.getNote());
-                row.addView(createTextViewMaxWidth(KindOfDay.DEFAULT_WORK.equals(kindOf) ? (isNoteEmpty ? kindOf : task0.getNote()) : kindOf, itemColor));
-                row.addView(createTextViewInFlow(hours, itemColor));
+                boolean isWork = KindOfDay.DEFAULT_WORK.equals(kindOf);
+                row.addView(createTextViewMaxWidth(isWork ? (isNoteEmpty ? kindOf : task0.getNote()) : kindOf, itemColor));
 
                 if (showSecondTask) {
-                    if (task1 != null) {
-                        extraVacationHours = task1.getTotal().toDecimalForDisplay();// + " h";
-                    }
-                    itemColor = calcItemColor(task1 == null ? task0.getKindOfDay() : task1.getKindOfDay(), task1 == null ? task0.isComplete() : task1.isComplete());
-                    // long version of second task display:
-                    //row.addView(createTextView(task1 == null ? "" : trimmed(task1.getKindOfDay().getDisplayString()), itemColor));
-                    // compact version of second task display:
-                    row.addView(createTextViewInFlow(task1 == null ? "" : "(2)", itemColor));
-                    row.addView(createTextViewInFlow(extraVacationHours, itemColor));
+                    row.addView(createTextViewInFlow(workStart(data, isWork), ColorsUI.DEFAULT_LILA_BLUE));
+                    row.addView(createTextViewInFlow(workEnd(data, isWork), ColorsUI.DEFAULT_LILA_BLUE));
+                    row.addView(createTextViewInFlow(workPause(data, isWork), ColorsUI.DEACTIVATED));
                 }
+
+                row.addView(createTextViewInFlow(hours, itemColor));
+
                 lastSumOfWeekView = createBalanceView(sumWeek, dayId);
                 row.addView(lastSumOfWeekView);
 
@@ -320,6 +318,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 if (showSecondTask) {
                     row.addView(createTextViewInFlow("", rowColor));
                     row.addView(createTextViewInFlow("", rowColor));
+                    row.addView(createTextViewInFlow("", rowColor));
                 }
                 row.addView(createTextViewInFlow(time15.toDecimalForDisplay(), rowColor));
                 row.addView(createTextViewInFlow(" h", rowColor));
@@ -336,6 +335,45 @@ public class MonthOverviewActivity extends AppCompatActivity {
         row.addView(createTextViewInFlow("", rowColor));
         table.addView(row);
 
+    }
+
+    private String workStart(DaysDataNew data, boolean isWork) {
+        if (isWork) {
+            return data.getTask(0).getBeginString();
+        } else {
+            return "";
+        }
+    }
+
+    private String workEnd(DaysDataNew data, boolean isWork) {
+        if (isWork) {
+            if (data.getTask(1) != null && data.getTask(1).getKindOfDay().equals(KindOfDay.WORKDAY)) {
+                return data.getTask(1).getEndString();
+            } else {
+                return data.getTask(0).getEndString();
+            }
+        } else {
+            return "";
+        }
+    }
+
+    private String workPause(DaysDataNew data, boolean isWork) {
+        if (isWork) {
+            int minutes = 0;
+            if (data.getTask(1) != null && data.getTask(1).getKindOfDay().equals(KindOfDay.WORKDAY)) {
+                minutes = data.getTask(0).getPauseSafe() + data.getTask(1).getPauseSafe();
+                Integer minutesBetweenTasks = data.getTask(0).minutesBetween(data.getTask(1));
+                if (minutesBetweenTasks == null) {
+                    return ""; // some overlap or something
+                }
+                minutes += minutesBetweenTasks;
+            } else {
+                minutes = data.getTask(0).getPauseSafe();
+            }
+            return new Time15(minutes).toDisplayString();
+        } else {
+            return "";
+        }
     }
 
     private void updateSumWeek(TextView view, int sumWeek) {
