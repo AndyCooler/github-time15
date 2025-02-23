@@ -6,6 +6,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mythosapps.time15.storage.StorageFacade;
@@ -62,7 +64,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
 
     private boolean showSecondTask = true;
     private Integer billableMinutes;
-    private double rate = 100.0;
+    private double rate;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +95,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         } else {
             id = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         }
-
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     private void importData(Uri data) {
@@ -619,6 +622,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     public void billButtonClicked() {
+        rate = Integer.valueOf(sharedPreferences.getString("settings_rate_per_hour", "100"));
+
         final BillPopupUI taskUI = new BillPopupUI(this, billableMinutes, rate);
 
         taskUI.setOkButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {

@@ -57,6 +57,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Rechnung und Stundensatz">
+        <androidx.preference.EditTextPreference
+            android:key="settings_rate_per_hour"
+            android:title="Stundensatz netto in EUR"
+            android:inputType="number"
+            android:defaultValue="100"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+
     <PreferenceCategory android:title="Info unter der Stundenzahl">
         <androidx.preference.ListPreference
             android:defaultValue="TOTAL_WORK"
