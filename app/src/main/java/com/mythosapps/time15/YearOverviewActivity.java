@@ -14,15 +14,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.mythosapps.time15.storage.StorageFacade;
 import com.mythosapps.time15.storage.StorageFactory;
 import com.mythosapps.time15.types.BalanceType;
@@ -60,13 +65,28 @@ public class YearOverviewActivity extends AppCompatActivity implements AdapterVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_year_overview);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbarYear);
+        setSupportActionBar(toolbar); // Call this BEFORE applying insets that change layout params
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.topMargin = insets.top;
+            v.setLayoutParams(mlp);
+            return windowInsets;
+        });
+        LinearLayout mainContent = findViewById(R.id.linearLayoutYear);
+        ViewCompat.setOnApplyWindowInsetsListener(mainContent, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Toolbar's margin handles top inset. Apply others here.
+            v.setPadding(insets.left, v.getPaddingTop(), insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         storage = StorageFactory.getDataStorage();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarYear);
-        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         String action = intent.getAction();

@@ -6,11 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.mythosapps.time15.storage.CloudBackup;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -22,11 +28,25 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_settings);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSettings);
-        setSupportActionBar(toolbar);
-
+        MaterialToolbar toolbar = findViewById(R.id.toolbarSettings);
+        setSupportActionBar(toolbar); // Call this BEFORE applying insets that change layout params
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.topMargin = insets.top;
+            v.setLayoutParams(mlp);
+            return windowInsets;
+        });
+        FrameLayout mainContent = findViewById(R.id.settingsFrame);
+        ViewCompat.setOnApplyWindowInsetsListener(mainContent, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Toolbar's margin handles top inset. Apply others here.
+            v.setPadding(insets.left, v.getPaddingTop(), insets.right, insets.bottom);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         //If you want to insert data in your settings
         settingsFragment = new MainSettingsFragment();
