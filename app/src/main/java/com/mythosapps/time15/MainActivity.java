@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -43,6 +44,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.mythosapps.time15.storage.CloudBackup;
 import com.mythosapps.time15.storage.ConfigStorageFacade;
@@ -190,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 KindOfDay.initializeFromConfig(configStorage, this);
             }
         }
+
+        setColorOfButton(findViewById(R.id.addTaskButton), ColorsUI.SELECTION_BG_BUTTON);
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
@@ -506,6 +510,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Button addTaskButton = (Button) findViewById(R.id.addTaskButton);
         addTaskButton.setText("+"); // add task symbol +
         addTaskButton.setBackground(getResources().getDrawable(R.drawable.roundbutton));
+        setColorOfButton(findViewById(R.id.addTaskButton), ColorsUI.SELECTION_BG_BUTTON);
 
         // reinitialize day with id this.id
         isUnLockButtonPressed = true;
@@ -518,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Button addTaskButton = (Button) findViewById(R.id.addTaskButton);
         addTaskButton.setText(UNLOCK_SYMBOL); // open lock symbol
         addTaskButton.setBackground(getResources().getDrawable(R.drawable.roundbutton_unlock));
+        setColorOfButton(findViewById(R.id.addTaskButton), ColorsUI.LIGHT_GREY_BUTTON);
 
         // reinitialize day with id this.id
         isUnLockButtonPressed = false;
@@ -898,13 +904,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void setColorOfButton(Button button, int color) {
-        Drawable background = button.getBackground();
-        if (background instanceof ShapeDrawable) {
-            ((ShapeDrawable) background).getPaint().setColor(color);
-        } else if (background instanceof GradientDrawable) {
-            ((GradientDrawable) background).setColor(color);
-        } else if (background instanceof ColorDrawable) {
-            ((ColorDrawable) background).setColor(color);
+        if (button == null) return;
+        if (button instanceof MaterialButton) {
+            // Best way for MaterialButtons
+            ((MaterialButton) button).setBackgroundTintList(ColorStateList.valueOf(color));
+        } else {
+            // For standard Buttons
+            Drawable background = button.getBackground();
+            if (background != null) {
+                Drawable mutableBackground = background.mutate(); // Modify a mutable copy
+
+                if (mutableBackground instanceof ShapeDrawable) {
+                    ((ShapeDrawable) mutableBackground).getPaint().setColor(color);
+                    // No need to call button.setBackground again if you modified the existing one
+                } else if (mutableBackground instanceof GradientDrawable) {
+                    ((GradientDrawable) mutableBackground).setColor(color);
+                } else if (mutableBackground instanceof ColorDrawable) {
+                    ((ColorDrawable) mutableBackground).setColor(color);
+                } else {
+                    // Fallback: If the drawable is complex or unknown,
+                    // replace its background with a solid color.
+                    // This will remove any existing complex drawable (like ripples from a theme).
+                    button.setBackgroundColor(color);
+                }
+            } else {
+                // If there's no background at all, just set the color
+                button.setBackgroundColor(color);
+            }
         }
     }
 
