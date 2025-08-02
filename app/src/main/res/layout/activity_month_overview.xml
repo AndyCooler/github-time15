@@ -9,8 +9,7 @@
         android:id="@+id/status_bar_background_month"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#536DFE"
-        android:elevation="4dp" />
+        android:background="#536DFE" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarMonth"
@@ -19,8 +18,7 @@
         android:layout_below="@id/status_bar_background_month"
         app:popupTheme="@style/ThemeOverlay.App.PopupMenu"
         app:contentInsetEnd="0dp"
-        app:contentInsetStart="0dp"
-        android:elevation="4dp" />
+        app:contentInsetStart="0dp" />
 
     <LinearLayout
         android:id="@+id/linearLayoutMonth"

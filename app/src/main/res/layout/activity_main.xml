@@ -9,8 +9,7 @@
         android:id="@+id/status_bar_background"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#536DFE"
-        android:elevation="4dp" />
+        android:background="#536DFE" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -18,8 +17,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_below="@id/status_bar_background"
         app:contentInsetEnd="0dp"
-        app:contentInsetStart="0dp"
-        android:elevation="4dp" />
+        app:contentInsetStart="0dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

@@ -23,6 +23,7 @@
 
         <!-- 3. Theme for the Popup Menu (overflow) -->
         <item name="popupTheme">@style/ThemeOverlay.App.PopupMenu</item>
+        <item name="android:elevation">0dp</item>
     </style>
 
     <!-- Theme Overlay for the Toolbar's CONTENTS (Title, Navigation Icon, Action Icons) -->
