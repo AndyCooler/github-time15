@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -31,20 +32,18 @@ public class SettingsActivity extends AppCompatActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_settings);
 
+        View statusBarBackground = findViewById(R.id.status_bar_background_settings);
         MaterialToolbar toolbar = findViewById(R.id.toolbarSettings);
-        setSupportActionBar(toolbar); // Call this BEFORE applying insets that change layout params
-        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+        setSupportActionBar(toolbar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView().getRootView(), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            mlp.topMargin = insets.top;
-            v.setLayoutParams(mlp);
-            return windowInsets;
-        });
-        FrameLayout mainContent = findViewById(R.id.settingsFrame);
-        ViewCompat.setOnApplyWindowInsetsListener(mainContent, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Toolbar's margin handles top inset. Apply others here.
-            v.setPadding(insets.left, v.getPaddingTop(), insets.right, insets.bottom);
+            // Set height of the fake status bar background
+            ViewGroup.LayoutParams statusBarParams = statusBarBackground.getLayoutParams();
+            statusBarParams.height = insets.top;
+            statusBarBackground.setLayoutParams(statusBarParams);
+            FrameLayout mainContent = findViewById(R.id.settingsFrame);
+            mainContent.setPadding(insets.left, mainContent.getPaddingTop(), insets.right, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
 

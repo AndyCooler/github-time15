@@ -165,20 +165,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        View statusBarBackground = findViewById(R.id.status_bar_background);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar); // Call this BEFORE applying insets that change layout params
-        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, windowInsets) -> {
+        setSupportActionBar(toolbar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView().getRootView(), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            mlp.topMargin = insets.top;
-            v.setLayoutParams(mlp);
-            return windowInsets;
-        });
-        LinearLayout mainContent = findViewById(R.id.linearLayout);
-        ViewCompat.setOnApplyWindowInsetsListener(mainContent, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Toolbar's margin handles top inset. Apply others here.
-            v.setPadding(insets.left, v.getPaddingTop(), insets.right, insets.bottom);
+            // Set height of the fake status bar background
+            ViewGroup.LayoutParams statusBarParams = statusBarBackground.getLayoutParams();
+            statusBarParams.height = insets.top;
+            statusBarBackground.setLayoutParams(statusBarParams);
+            LinearLayout mainContent = findViewById(R.id.linearLayout);
+            mainContent.setPadding(insets.left, mainContent.getPaddingTop(), insets.right, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
 

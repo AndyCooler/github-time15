@@ -5,10 +5,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <View
+        android:id="@+id/status_bar_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#536DFE"
+        android:elevation="4dp" />
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_below="@id/status_bar_background"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
         android:elevation="4dp" />
