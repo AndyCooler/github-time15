@@ -61,8 +61,8 @@
         <androidx.preference.EditTextPreference
             android:key="settings_rate_per_hour"
             android:title="Stundensatz netto in EUR"
-            android:inputType="number"
-            android:defaultValue="100"
+            android:inputType="numberDecimal"
+            android:defaultValue="100.0"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 

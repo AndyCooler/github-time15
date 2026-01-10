@@ -640,7 +640,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
     }
 
     public void billButtonClicked() {
-        rate = Integer.valueOf(sharedPreferences.getString("settings_rate_per_hour", "100"));
+        rate = Double.parseDouble(sharedPreferences.getString("settings_rate_per_hour", "100"));
 
         final BillPopupUI taskUI = new BillPopupUI(this, billableMinutes, rate);
 
