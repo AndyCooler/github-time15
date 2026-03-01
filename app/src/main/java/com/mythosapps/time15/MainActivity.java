@@ -1251,7 +1251,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         hasToggledHomeOffice = false;
     }
 
-    private void setTransparent(Integer viewId) {
+    private void setTransparent(Integer viewId) { // make non-transparent
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
             view.setBackgroundColor(ContextCompat.getColor(this, R.color.item_background_unselected));
@@ -1259,7 +1259,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    private void setSelected(Integer viewId) {
+    private void setSelected(Integer viewId) { // make transparent
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
             view.setBackgroundColor(isEditable ? ContextCompat.getColor(this, R.color.item_background_selected) : ColorsUI.DEACTIVATED);

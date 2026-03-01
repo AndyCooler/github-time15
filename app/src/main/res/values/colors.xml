@@ -5,7 +5,7 @@
     <color name="colorOnPrimary">#FFFFFF</color>
 
     <color name="app_background">#FFFFFF</color>
-    <color name="section_background">#FFFFFF</color>
+    <color name="section_background">@android:color/transparent</color>
     <color name="spacer_background">#FFFFFF</color>
     <color name="spinner_background">#FFFFFF</color>
 
@@ -13,7 +13,7 @@
     <color name="item_background_selected">@android:color/transparent</color>
 
     <color name="item_text_unselected">#000000</color>
-    <color name="item_text_selected">#536DFE</color>
+    <color name="item_text_selected">#FFFFFF</color>
     <color name="text_color_primary">#000000</color>
 
     <color name="label_text_color">#536DFE</color>

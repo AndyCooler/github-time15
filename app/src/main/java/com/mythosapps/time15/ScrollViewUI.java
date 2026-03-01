@@ -10,6 +10,8 @@ import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.mythosapps.time15.types.ScrollViewType;
 import com.mythosapps.time15.util.SwipeDetector;
 
@@ -75,6 +77,7 @@ public final class ScrollViewUI {
             view.setOnClickListener(listener);
             view.setClickable(true);
             view.setGravity(Gravity.CENTER);
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.item_background_unselected));
             layoutView.addView(view);
             mapValueToView.put(i, view);
         }
@@ -124,6 +127,7 @@ public final class ScrollViewUI {
             view.setOnClickListener(listener);
             view.setClickable(true);
             view.setGravity(Gravity.CENTER);
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.item_background_unselected));
             layoutView.addView(view);
             mapValueToView.put(i, view);
         }

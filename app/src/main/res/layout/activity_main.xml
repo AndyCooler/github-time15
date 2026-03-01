@@ -377,13 +377,13 @@
             android:layout_height="wrap_content"
             android:gravity="fill_vertical"
             android:orientation="vertical"
-            android:background="@color/section_background">
+            android:background="@color/spacer_background">
 
             <LinearLayout
                 android:id="@+id/workLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/section_background"
+                android:background="@color/spacer_background"
                 android:orientation="horizontal">
 
                 <TextView
@@ -587,7 +587,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="3"
             android:orientation="horizontal"
             android:background="@color/spacer_background">
