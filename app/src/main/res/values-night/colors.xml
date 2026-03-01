@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="design_snackbar_background_color" tools:override="true">#536DFE</color>
+
+    <color name="app_background">#000000</color>
+    <color name="section_background">#000000</color>
+    <color name="spacer_background">#000000</color>
+
+    <color name="item_text_unselected">#FFFFFF</color>
+</resources>

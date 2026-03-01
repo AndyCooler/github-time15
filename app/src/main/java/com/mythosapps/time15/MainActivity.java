@@ -1254,23 +1254,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void setTransparent(Integer viewId) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(Color.WHITE);
-            view.setTextColor(Color.BLACK);
+            view.setBackgroundColor(ContextCompat.getColor(this, R.color.item_background_unselected));
+            view.setTextColor(ContextCompat.getColor(this, R.color.item_text_unselected));
         }
     }
 
     private void setSelected(Integer viewId) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(isEditable ? ColorsUI.SELECTION_NONE_BG : ColorsUI.DEACTIVATED);
-            view.setTextColor(Color.WHITE);
+            view.setBackgroundColor(isEditable ? ContextCompat.getColor(this, R.color.item_background_selected) : ColorsUI.DEACTIVATED);
+            view.setTextColor(ContextCompat.getColor(this, R.color.item_text_selected));
         }
     }
 
     private void setActivation(Integer viewId, boolean activated) {
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setTextColor(activated ? ColorsUI.ACTIVATED : ColorsUI.DEACTIVATED);
+            view.setTextColor(activated ? ContextCompat.getColor(this, R.color.item_text_unselected) : ColorsUI.DEACTIVATED);
         }
     }
 

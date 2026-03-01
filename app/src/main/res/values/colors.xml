@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <color name="design_snackbar_background_color" tools:override="true">#536DFE</color>
+    <color name="colorPrimary">#536DFE</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <color name="app_background">#FFFFFF</color>
+    <color name="section_background">#FFFFFF</color>
+    <color name="spacer_background">#FFFFFF</color>
+
+    <color name="item_background_unselected">@android:color/transparent</color>
+    <color name="item_text_unselected">#000000</color>
+
+    <color name="item_background_selected">#536DFE</color>
+    <color name="item_text_selected">#FFFFFF</color>
+
+    <color name="label_text_color">#536DFE</color>
 </resources>
