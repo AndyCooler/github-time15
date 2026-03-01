@@ -1,6 +1,11 @@
 package com.mythosapps.time15.types;
 
+import android.content.Context;
 import android.graphics.Color;
+
+import androidx.core.content.ContextCompat;
+
+import com.mythosapps.time15.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +30,10 @@ public class ColorsUI {
     public static final int DEACTIVATED = Color.LTGRAY;
     public static final int RED_FLAGGED = Color.RED;
     public static final int ACTIVATED = Color.BLACK;
+
+    public static int getActivatedColor(Context context) {
+        return ContextCompat.getColor(context, R.color.text_color_primary);
+    }
 
     public static final Map<Integer, Integer> choiceToColor = new HashMap<>();
     public static final Map<Integer, Integer> colorToChoice = new HashMap<>();

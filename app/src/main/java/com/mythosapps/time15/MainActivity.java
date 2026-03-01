@@ -864,7 +864,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setClickable(isEditable);
         TextView view = (TextView) spinner.getChildAt(0);
         if (view != null) {
-            view.setTextColor(isEditable ? ColorsUI.ACTIVATED : ColorsUI.DEACTIVATED);
+            view.setTextColor(isEditable ? ColorsUI.getActivatedColor(this) : ColorsUI.DEACTIVATED);
         }
     }
 
