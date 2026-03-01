@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@mipmap/ic_launcher_background"
     tools:context=".MainActivity">
 
     <View
@@ -230,7 +230,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/spacer_background">
 
                 <Space
                     android:id="@+id/spacer1"
@@ -245,6 +246,7 @@
                 android:id="@+id/pauseLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/section_background"
                 android:orientation="horizontal">
 
                 <TextView
@@ -284,6 +286,7 @@
                     android:onClick="verarbeiteKlick"
                     android:text="30"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="@color/item_background_unselected"
                     android:textSize="48sp" />
 
                 <TextView
@@ -296,6 +299,7 @@
                     android:onClick="verarbeiteKlick"
                     android:text="45"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="@color/item_background_unselected"
                     android:textSize="48sp" />
 
                 <TextView
@@ -308,6 +312,7 @@
                     android:onClick="verarbeiteKlick"
                     android:text="60"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="@color/item_background_unselected"
                     android:textSize="48sp" />
 
                 <TextView
@@ -320,6 +325,7 @@
                     android:onClick="verarbeiteKlick"
                     android:text="90"
                     android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="@color/item_background_unselected"
                     android:textSize="48sp" />
                 <!--
                             <TextView
@@ -354,7 +360,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/spacer_background">
 
             <Space
                 android:id="@+id/spacer2"
@@ -370,13 +377,13 @@
             android:layout_height="wrap_content"
             android:gravity="fill_vertical"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
             android:background="@color/section_background">
 
             <LinearLayout
                 android:id="@+id/workLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/section_background"
                 android:orientation="horizontal">
 
                 <TextView
@@ -405,7 +412,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="6dp"
                 android:gravity="fill_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/section_background">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -482,8 +490,10 @@
                 <LinearLayout
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
+
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/section_background">
 
                     <Button
                         android:id="@+id/switchTasksButton"
@@ -541,8 +551,10 @@
                 <LinearLayout
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
+
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/section_background">
 
                     <Button
                         android:id="@+id/addTaskButton"
@@ -560,7 +572,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@color/section_background">
 
                 <TextView
                     android:id="@+id/balance"
@@ -576,7 +589,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/spacer_background">
 
             <Space
                 android:id="@+id/spacer3"
