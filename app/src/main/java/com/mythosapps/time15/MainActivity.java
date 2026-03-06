@@ -1197,9 +1197,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             numberTaskHours = task.getTotal().getHours();
             numberTaskMinutes = task.getTotal().getMinutes();
 
-            setSelected(R.id.total);
-            setSelected(R.id.total15);
-            int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREY_SAVE_SUCCESS : Color.WHITE;
+            if (isEditable) {
+                setSelected(R.id.total);
+                setSelected(R.id.total15);
+            } else {
+                setTransparent(R.id.total);
+                setTransparent(R.id.total15);
+            }
+            //int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREY_SAVE_SUCCESS : Color.WHITE;
+            int totalNewColor = isEditable ? Color.WHITE : ColorsUI.LIGHT_GREY_SAVE_SUCCESS;
             aktualisiereTotal(totalNewColor);
         }
         previousSelectionKindOfDays = kindOfDay;

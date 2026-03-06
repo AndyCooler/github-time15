@@ -377,13 +377,13 @@
             android:layout_height="wrap_content"
             android:gravity="fill_vertical"
             android:orientation="vertical"
-            android:background="@color/spacer_background">
+            android:background="@color/item_background_unselected">
 
             <LinearLayout
                 android:id="@+id/workLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/spacer_background"
+                android:background="@color/item_background_unselected"
                 android:orientation="horizontal">
 
                 <TextView
@@ -413,7 +413,7 @@
                 android:paddingTop="6dp"
                 android:gravity="fill_vertical"
                 android:orientation="horizontal"
-                android:background="@color/section_background">
+                android:background="@color/item_background_unselected">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -493,7 +493,7 @@
 
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@color/section_background">
+                    android:background="@color/item_background_unselected">
 
                     <Button
                         android:id="@+id/switchTasksButton"
@@ -554,7 +554,7 @@
 
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@color/section_background">
+                    android:background="@color/item_background_unselected">
 
                     <Button
                         android:id="@+id/addTaskButton"
@@ -573,7 +573,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:background="@color/section_background">
+                android:background="@color/item_background_unselected">
 
                 <TextView
                     android:id="@+id/balance"
@@ -587,7 +587,7 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
             android:orientation="horizontal"
             android:background="@color/spacer_background">

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Edge-to-edge items -->
@@ -6,38 +6,29 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
 
+        <!-- Ensure dark icons on light background for navigation bar (API 27+) -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+
         <!-- This applies the default style to ALL MaterialToolbars in your app -->
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
-
-        <!-- ... other AppTheme items ... -->
     </style>
 
     <!-- Default Toolbar Style -->
     <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
-        <!-- 1. Set the Toolbar's Background Color -->
-        <item name="android:background">#536DFE</item> <!-- Your dark blue -->
-
-        <!-- 2. Theme for Toolbar's CONTENTS (title, icons) -->
-        <!-- This tells the Toolbar to use ThemeOverlay.App.ToolbarContent for its children -->
+        <item name="android:background">#536DFE</item>
         <item name="android:theme">@style/ThemeOverlay.App.ToolbarContent</item>
-
-        <!-- 3. Theme for the Popup Menu (overflow) -->
         <item name="popupTheme">@style/ThemeOverlay.App.PopupMenu</item>
         <item name="android:elevation">0dp</item>
     </style>
 
-    <!-- Theme Overlay for the Toolbar's CONTENTS (Title, Navigation Icon, Action Icons) -->
+    <!-- Theme Overlay for Toolbar CONTENTS -->
     <style name="ThemeOverlay.App.ToolbarContent" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <!-- This parent (Dark.ActionBar) already sets light text/icon colors. -->
-        <!-- Explicitly setting just in case, though parent should handle it: -->
-        <item name="android:textColorPrimary">@android:color/white</item> <!-- For the title -->
-        <item name="colorControlNormal">@android:color/white
-        </item>      <!-- For nav icon and action icons -->
-        <item name="actionMenuTextColor">@android:color/white
-        </item>         <!-- For overflow menu text -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
-    <!-- Theme Overlay for the Popup Menu (Overflow Menu) -->
+    <!-- Theme Overlay for Popup Menu -->
     <style name="ThemeOverlay.App.PopupMenu" parent="ThemeOverlay.MaterialComponents.Light">
         <item name="android:background">#536DFE</item>
         <item name="android:textColorPrimary">@android:color/white</item>

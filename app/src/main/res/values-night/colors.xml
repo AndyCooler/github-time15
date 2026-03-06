@@ -3,7 +3,7 @@
     <color name="design_snackbar_background_color" tools:override="true">#536DFE</color>
 
     <color name="app_background">#000000</color>
-    <color name="section_background">#000000</color>
+    <color name="section_background">@android:color/transparent</color>
     <color name="spacer_background">#000000</color>
     <color name="spinner_background">#000000</color>
 
