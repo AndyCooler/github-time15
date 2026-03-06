@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background"
+    android:background="@mipmap/ic_launcher_background"
     tools:context="com.mythosapps.time15.YearOverviewActivity">
 
     <View
@@ -25,14 +25,15 @@
         android:id="@+id/linearLayoutYear"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/toolbarYear"
         android:layout_centerInParent="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/app_background">
 
             <LinearLayout
                 android:id="@+id/dayLayout"
@@ -105,59 +106,77 @@
             android:id="@+id/scrollView2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true">
+            android:layout_alignParentLeft="true"
+            android:background="@color/app_background">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TableLayout
                     android:id="@+id/tableViewYear"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"></TableLayout>
+
+
+                <Space
+                    android:id="@+id/spacer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="fill_vertical"
+                    android:minHeight="70dp"
+                    android:visibility="visible"
+                    android:background="@color/app_background" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="100dp"
+                    android:layout_marginLeft="100dp"
+                    android:layout_weight=".28"
+                    android:background="@drawable/spinner_border"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/yearTaskSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_drop" />
+
+                </RelativeLayout>
             </LinearLayout>
         </ScrollView>
 
-        <Space
-            android:id="@+id/spacer2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="fill_vertical"
-            android:minHeight="70dp"
-            android:visibility="visible" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="100dp"
-            android:layout_marginLeft="100dp"
-            android:layout_weight=".28"
-            android:background="@drawable/spinner_border"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:background="@color/spacer_background">
 
-            <Spinner
-                android:id="@+id/yearTaskSpinner"
+            <Space
+                android:id="@+id/spacer3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:gravity="center"
-                android:layout_marginLeft="5dp"
-                android:spinnerMode="dropdown" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_drop" />
-
-        </RelativeLayout>
-
-
+                android:layout_height="match_parent"
+                android:gravity="fill_vertical"
+                android:minHeight="10dp"
+                android:visibility="visible" />
+        </LinearLayout>
     </LinearLayout>
 
 
