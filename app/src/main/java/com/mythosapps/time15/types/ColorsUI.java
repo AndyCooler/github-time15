@@ -39,7 +39,7 @@ public class ColorsUI {
     public static final Map<Integer, Integer> colorToChoice = new HashMap<>();
     // holo dark orange:
     public static final int DARK_ORANGE = Color.rgb(255, 255, 136); //#ffff8800
-    public static final int PURPLE = Color.rgb(128, 10, 128); //#800080
+    public static final int PURPLE = Color.rgb(106, 61, 232); //#6A3DE8
 
     static {
         choiceToColor.put(0, ColorsUI.DARK_BLUE_DEFAULT);
