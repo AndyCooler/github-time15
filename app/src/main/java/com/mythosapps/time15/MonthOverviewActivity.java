@@ -58,8 +58,8 @@ public class MonthOverviewActivity extends AppCompatActivity {
     // Navigation
     public final static String EXTRA_MESSAGE = "com.mythosapps.time15.MESSAGE";
 
-    private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_FLOW = new TableRow.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-    private static ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_MAX = new TableRow.LayoutParams(0, WRAP_CONTENT, 1.0f);
+    private static final ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_FLOW = new TableRow.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+    private static final ViewGroup.LayoutParams TEXTVIEW_LAYOUT_PARAMS_MAX = new TableRow.LayoutParams(0, WRAP_CONTENT, 1.0f);
 
     // Storage
     private StorageFacade storage;

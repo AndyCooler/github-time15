@@ -66,6 +66,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -117,18 +118,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private boolean hasToggledHomeOffice = false;
     private boolean isPaused = false;
     private boolean isCreateComplete = false;
-    // here are the maps from value to viewId that enable re-use of 4 TextViews for full range 0-24
-    // TODO for ScrollView, just extend initialization to full range of values
-    // TODO later: maps can be avoided by makeing better use of TextView (has ID, has value, so
-    // no need for mappings as we now use the full range)
-
-    // TODO ScrollView#requestChildFocus(View) scroll bis ein child View sichtbar wird,
-    // TODO oder #scrollTo #smoothScrollTo mit int Y. Param Y fuer scrollTO ist getTop() oder getBottom() von TextView
-    private HashMap<Integer, TextView> mapBeginValueToView = new HashMap<>();
-    private HashMap<Integer, TextView> mapBegin15ValueToView = new HashMap<>();
-    private HashMap<Integer, TextView> mapEndValueToView = new HashMap<>();
-    private HashMap<Integer, TextView> mapEnd15ValueToView = new HashMap<>();
-    private HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
+    private final HashMap<Integer, TextView> mapBeginValueToView = new HashMap<>();
+    private final HashMap<Integer, TextView> mapBegin15ValueToView = new HashMap<>();
+    private final HashMap<Integer, TextView> mapEndValueToView = new HashMap<>();
+    private final HashMap<Integer, TextView> mapEnd15ValueToView = new HashMap<>();
+    private final HashMap<Integer, Integer> mapPauseValueToViewId = new HashMap<Integer, Integer>();
     private int balanceValue;
     private DaysDataNew originalData;
     private DaysDataNew modifiableData;
@@ -704,7 +698,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void dateToday() {
         saveKindOfDay();
-        switchToID(id, TimeUtils.createID(), null);
+        String newId = TimeUtils.createID();
+        if (!Objects.equals(id, newId)) {
+            Snackbar.make(findViewById(R.id.total), "Zeige Einträge für heute", Snackbar.LENGTH_LONG).show();
+        }
+        switchToID(id, newId, null);
     }
 
     // ensures that begin hour is visible
@@ -803,7 +801,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 KindOfDay.addTaskType(new KindOfDay(kindOfDayEdited, taskColor, taskUI.getCheckBox().isChecked()));
                 KindOfDay.saveToExternalConfig(configStorage, MainActivity.this);
-
+                KindOfDay.initializeFromConfig(configStorage, MainActivity.this);
                 activateKindOfDay(KindOfDay.fromString(kindOfDayEdited));
             }
 
