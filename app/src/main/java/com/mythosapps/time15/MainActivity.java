@@ -954,12 +954,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 boolean isDeselected = false;
                 if (isBeginnTime) {
                     if (previousSelectionBeginnTime != null && viewId == previousSelectionBeginnTime) {
-                        setTransparent(viewId);
+                        setDeselected(viewId);
                         beginnTime = null;
                         previousSelectionBeginnTime = null;
                         isDeselected = true;
                     } else {
-                        setTransparent(previousSelectionBeginnTime);
+                        setDeselected(previousSelectionBeginnTime);
                         setSelected(viewId);
                         beginnTime = Integer.valueOf((String) view.getText());
                         previousSelectionBeginnTime = viewId;
@@ -968,12 +968,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 if (isEndeTime) {
                     if (previousSelectionEndeTime != null && viewId == previousSelectionEndeTime) {
-                        setTransparent(viewId);
+                        setDeselected(viewId);
                         endeTime = null;
                         previousSelectionEndeTime = null;
                         isDeselected = true;
                     } else {
-                        setTransparent(previousSelectionEndeTime);
+                        setDeselected(previousSelectionEndeTime);
                         setSelected(viewId);
                         endeTime = Integer.valueOf((String) view.getText());
                         previousSelectionEndeTime = viewId;
@@ -982,12 +982,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 if (isBeginn15) {
                     if (previousSelectionBeginn15 != null && viewId == previousSelectionBeginn15) {
-                        setTransparent(viewId);
+                        setDeselected(viewId);
                         beginn15 = null;
                         previousSelectionBeginn15 = null;
                         isDeselected = true;
                     } else {
-                        setTransparent(previousSelectionBeginn15);
+                        setDeselected(previousSelectionBeginn15);
                         setSelected(viewId);
                         beginn15 = Integer.valueOf((String) view.getText());
                         previousSelectionBeginn15 = viewId;
@@ -996,12 +996,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 if (isEnde15) {
                     if (previousSelectionEnde15 != null && viewId == previousSelectionEnde15) {
-                        setTransparent(viewId);
+                        setDeselected(viewId);
                         ende15 = null;
                         previousSelectionEnde15 = null;
                         isDeselected = true;
                     } else {
-                        setTransparent(previousSelectionEnde15);
+                        setDeselected(previousSelectionEnde15);
                         setSelected(viewId);
                         ende15 = Integer.valueOf((String) view.getText());
                         previousSelectionEnde15 = viewId;
@@ -1010,12 +1010,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 if (isPauseTime) {
                     if (previousSelectionPauseTime != null && viewId == previousSelectionPauseTime) {
-                        setTransparent(viewId);
+                        setDeselected(viewId);
                         pauseTime = null;
                         previousSelectionPauseTime = null;
                         isDeselected = true;
                     } else {
-                        setTransparent(previousSelectionPauseTime);
+                        setDeselected(previousSelectionPauseTime);
                         setSelected(viewId);
                         pauseTime = Integer.valueOf((String) view.getText());
                         previousSelectionPauseTime = viewId;
@@ -1185,8 +1185,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             setSelected(previousSelectionBeginnTime);
             setSelected(previousSelectionBeginn15);
 
-            setTransparent(R.id.total);
-            setTransparent(R.id.total15);
+            setDeselected(R.id.total);
+            setDeselected(R.id.total15);
             int totalNewColor = isLoadedData ? ColorsUI.DEFAULT_LILA_BLUE : ColorsUI.DARK_BLUE_DEFAULT;
             aktualisiereTotal(totalNewColor);
         } else {
@@ -1195,16 +1195,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             numberTaskHours = task.getTotal().getHours();
             numberTaskMinutes = task.getTotal().getMinutes();
 
+            //int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREY_SAVE_SUCCESS : Color.WHITE;
+            int totalNewColor = isEditable ? Color.WHITE : ColorsUI.LIGHT_GREY_SAVE_SUCCESS;
+            aktualisiereTotal(totalNewColor);
             if (isEditable) {
                 setSelected(R.id.total);
                 setSelected(R.id.total15);
             } else {
-                setTransparent(R.id.total);
-                setTransparent(R.id.total15);
+                setDeselected(R.id.total);
+                setDeselected(R.id.total15);
             }
-            //int totalNewColor = isLoadedData ? ColorsUI.LIGHT_GREY_SAVE_SUCCESS : Color.WHITE;
-            int totalNewColor = isEditable ? Color.WHITE : ColorsUI.LIGHT_GREY_SAVE_SUCCESS;
-            aktualisiereTotal(totalNewColor);
         }
         previousSelectionKindOfDays = kindOfDay;
         kindOfDay = task.getKindOfDay().toString();
@@ -1223,11 +1223,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void resetView() {
 
-        setTransparent(previousSelectionPauseTime);
-        setTransparent(previousSelectionEnde15);
-        setTransparent(previousSelectionEndeTime);
-        setTransparent(previousSelectionBeginnTime);
-        setTransparent(previousSelectionBeginn15);
+        setDeselected(previousSelectionPauseTime);
+        setDeselected(previousSelectionEnde15);
+        setDeselected(previousSelectionEndeTime);
+        setDeselected(previousSelectionBeginnTime);
+        setDeselected(previousSelectionBeginn15);
 
         beginnTime = null;
         beginn15 = null;
@@ -1247,15 +1247,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         previousSelectionKindOfDays = kindOfDay;
         numberTaskHours = null;
         numberTaskMinutes = null;
-        setTransparent(R.id.total);
-        setTransparent(R.id.total15);
+        setDeselected(R.id.total);
+        setDeselected(R.id.total15);
         onOffSwitch.setChecked(false);
         onOffSwitch.setEnabled(isEditable);
         onOffSwitch.setClickable(isEditable);
         hasToggledHomeOffice = false;
     }
 
-    private void setTransparent(Integer viewId) { // make non-transparent
+    private void setDeselected(Integer viewId) { // make non-transparent
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
             view.setBackgroundColor(ContextCompat.getColor(this, R.color.item_background_unselected));
@@ -1266,7 +1266,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void setSelected(Integer viewId) { // make transparent
         if (viewId != null) {
             TextView view = (TextView) findViewById(viewId);
-            view.setBackgroundColor(isEditable ? ContextCompat.getColor(this, R.color.item_background_selected) : ColorsUI.DEACTIVATED);
+            boolean isTotalView = viewId == R.id.total || viewId == R.id.total15;
+            int bgColor = isTotalView ? ColorsUI.PURPLE : ContextCompat.getColor(this, R.color.item_background_selected);
+            bgColor = isEditable ? bgColor : ColorsUI.DEACTIVATED;
+            view.setBackgroundColor(bgColor);
             view.setTextColor(ContextCompat.getColor(this, R.color.item_text_selected));
         }
     }
