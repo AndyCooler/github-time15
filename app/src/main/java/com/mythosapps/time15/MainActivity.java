@@ -30,12 +30,12 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ScrollView scrollViewBegin15;
     private ScrollView scrollViewEnd;
     private ScrollView scrollViewEnd15;
-    private Switch onOffSwitch;
+    private SwitchCompat onOffSwitch;
     private SharedPreferences sharedPreferences;
     private boolean flagJustCreated = true;
 
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int position = dataAdapter.getPosition(kindOfDay);
         spinner.setSelection(position);
 
-        onOffSwitch = (Switch) findViewById(R.id.home_office_switch);
+        onOffSwitch = (SwitchCompat) findViewById(R.id.home_office_switch);
         onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

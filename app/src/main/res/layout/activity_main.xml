@@ -469,13 +469,14 @@
                         android:textColor="#536DFE"
                         android:layout_marginRight="10dp" />
 
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/home_office_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:layout_marginRight="20dp"
-                        android:buttonTint="@color/cardview_light_background" />
+                        android:gravity="center_vertical"
+                        app:thumbTint="@color/switch_thumb_color"
+                        app:trackTint="@color/switch_track_color" />
                 </LinearLayout>
 
             </LinearLayout>
