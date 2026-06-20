@@ -23,7 +23,10 @@ public final class BuchungUtil {
 
     public static String getBruttoForDisplay(double rate, int billableMinutes) {
         form.setCurrency(Currency.getInstance(currency));
-        return form.format(round(119 * rate * billableMinutes / 60 / 100, 2));
+        return form.format(
+                round(rate * billableMinutes / 60, 2)
+                        + round(19 * rate * billableMinutes / 60 / 100, 2)
+        );
     }
 
     private static double round(double value, int places) {
