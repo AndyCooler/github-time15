@@ -405,6 +405,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onPause() {
         super.onPause();
+        saveKindOfDayAndHomeOffice();
         isPaused = true;
         overridePendingTransition(0, 0);
     }
@@ -691,17 +692,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void dateForwards() {
-        saveKindOfDay();
+        saveKindOfDayAndHomeOffice();
         switchToID(id, TimeUtils.dateForwards(id), null);
     }
 
     public void dateBackwards() {
-        saveKindOfDay();
+        saveKindOfDayAndHomeOffice();
         switchToID(id, TimeUtils.dateBackwards(id), null);
     }
 
     public void dateToday() {
-        saveKindOfDay();
+        saveKindOfDayAndHomeOffice();
         String newId = TimeUtils.createID();
         if (!Objects.equals(id, newId)) {
             Snackbar.make(findViewById(R.id.total), "Zeige Einträge für heute", Snackbar.LENGTH_LONG).show();
@@ -734,7 +735,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return newValue;
     }
 
-    private void saveKindOfDay() {
+    private void saveKindOfDayAndHomeOffice() {
         if (isStateChangedByUser()) {
             save(false);
         }
@@ -890,7 +891,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void switchTasks(View v) {
         if (modifiableData.getNumberOfTasks() == 2) {
-            saveKindOfDay();
+            saveKindOfDayAndHomeOffice();
             resetView();
             taskNo = (taskNo + 1) % modifiableData.getNumberOfTasks();
             modelToView();
