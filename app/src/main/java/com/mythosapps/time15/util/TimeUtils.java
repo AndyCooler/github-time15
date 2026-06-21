@@ -167,6 +167,18 @@ public final class TimeUtils {
         return id.equals(maxId);
     }
 
+    public static boolean isWorkDayBeforeTenthOfMonth(String id) {
+        GregorianCalendar cal = toCalendar(id);
+        int tenth = 10;
+        cal = (GregorianCalendar) cal.clone();
+        cal.set(Calendar.DAY_OF_MONTH, tenth);
+        String workDayBeforeTenth = createID(cal);
+        while (isWeekend(workDayBeforeTenth)) {
+            workDayBeforeTenth = dateBackwards(workDayBeforeTenth);
+        }
+        return id.equals(workDayBeforeTenth);
+    }
+
     public static String getYearDisplayString(String id) {
         GregorianCalendar cal = toCalendar(id);
         return "" + cal.get(Calendar.YEAR);

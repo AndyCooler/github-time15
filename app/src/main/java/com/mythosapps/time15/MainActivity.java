@@ -373,6 +373,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Snackbar.make(findViewById(R.id.total), "Tipp: Für ein Backup, nutze Email Backup im Menü oder aktiviere Cloud Backup in den Settings",
                     Snackbar.LENGTH_LONG).show();
         }
+        if (TimeUtils.isWorkDayBeforeTenthOfMonth(TimeUtils.createID())) {
+            Snackbar.make(findViewById(R.id.total), "Tipp: USt Voranmeldung schon abgegeben?",
+                    Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void updateCloudMenuItem() {
