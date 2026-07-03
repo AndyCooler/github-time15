@@ -224,6 +224,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
         TextView lastSumOfWeekView = null;
         int sumWeek = 0;
         int sumHomeOfficeDays = 0;
+        int prognosisHours = 0;
 
         for (final String dayId : listOfIds) {
             DaysDataNew data = storage.loadDaysDataNew(this, dayId);
@@ -253,6 +254,7 @@ public class MonthOverviewActivity extends AppCompatActivity {
                     row.addView(lastSumOfWeekView);
 
                     table.addView(row);
+                    prognosisHours += DaysDataNew.DUE_TOTAL_MINUTES;
                 }
             } else {
                 if (data.getHomeOffice()) {
@@ -266,7 +268,9 @@ public class MonthOverviewActivity extends AppCompatActivity {
                 }
 
                 data.collectTaskNames(tasksThisMonth);
-                sumWeek += data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
+                int sumDay = data.getTotalFor(KindOfDay.WORKDAY).toMinutes();
+                sumWeek += sumDay;
+                prognosisHours += sumDay;
 
                 row = new TableRow(this);
                 row.setLayoutParams(lp);
@@ -347,15 +351,35 @@ public class MonthOverviewActivity extends AppCompatActivity {
             }
         }
         int rowColor = ColorsUI.DEFAULT_LILA_BLUE;
+        // Home Office Tage
         row = new TableRow(this);
         row.setLayoutParams(lp);
         row.addView(createTextViewInFlow("", rowColor));
         row.addView(createTextViewInFlow(getString(R.string.display_sum), rowColor));
-        row.addView(createTextViewInFlow("Home Office Tage", rowColor));
+        row.addView(createTextViewMaxWidth("Home Office Tage", rowColor));
+        if (showSecondTask) {
+            row.addView(createTextViewInFlow("", rowColor));
+            row.addView(createTextViewInFlow("", rowColor));
+            row.addView(createTextViewInFlow("", rowColor));
+        }
         row.addView(createTextViewInFlow("" + sumHomeOfficeDays, rowColor));
         row.addView(createTextViewInFlow("", rowColor));
         table.addView(row);
-
+        // Prognose fuer aktuellen Monat
+        Time15 prognosis15 = Time15.fromMinutes(prognosisHours);
+        row = new TableRow(this);
+        row.setLayoutParams(lp);
+        row.addView(createTextViewInFlow("", rowColor));
+        row.addView(createTextViewInFlow(getString(R.string.display_sum), rowColor));
+        row.addView(createTextViewMaxWidth("Prognose", rowColor));
+        if (showSecondTask) {
+            row.addView(createTextViewInFlow("", rowColor));
+            row.addView(createTextViewInFlow("", rowColor));
+            row.addView(createTextViewInFlow("", rowColor));
+        }
+        row.addView(createTextViewInFlow(prognosis15.toDecimalForDisplay(), rowColor));
+        row.addView(createTextViewInFlow(" h", rowColor));
+        table.addView(row);
     }
 
     private String workStart(DaysDataNew data, boolean isWork) {
